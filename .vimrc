@@ -1,6 +1,8 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" .vimrc
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vundle
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -16,6 +18,9 @@ Plugin 'VundleVim/Vundle.vim'
 
 "" Easy commenting.
 Plugin 'scrooloose/nerdcommenter'
+
+"" Ruby magic.
+Bundle 'vim-ruby/vim=ruby'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -48,25 +53,33 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Section: VimRuby
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax on             " Enable syntax highlighting
+filetype on           " Enable filetype detection
+filetype indent on    " Enable filetype-specific indenting
+filetype plugin on    " Enable filetype-specific plugins
 
 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Normal backspace when vim version is too 'lightweight'.
 set backspace=indent,eol,start
 
+" Some buffer magic.
+set hidden
 
 " Colourful syntax.
-syntax on
+"syntax on " Already set in Section: VimRuby.
 "syntax enable
 "colorscheme monokai
 
 set number
 
-" Tabs.
+" Tabs and indentation.
 set expandtab
 set shiftwidth=4
 set tabstop=4
