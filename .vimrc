@@ -1,9 +1,9 @@
 " .vimrc
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vundle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -53,6 +53,7 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Section: VimRuby
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -63,9 +64,14 @@ filetype plugin on    " Enable filetype-specific plugins
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Section: NERDcommenter
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let NERDSpaceDelims=1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Normal backspace when vim version is too 'lightweight'.
 set backspace=indent,eol,start
 
