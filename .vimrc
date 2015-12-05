@@ -20,7 +20,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 
 "" Ruby magic.
-Bundle 'vim-ruby/vim=ruby'
+Bundle 'vim-ruby/vim-ruby'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
