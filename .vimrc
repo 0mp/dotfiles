@@ -2,7 +2,9 @@
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vundle
+" Section: Vundle
+"
+" Plugin installation: $ vim +PluginInstall +qall
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
 filetype off                  " required
