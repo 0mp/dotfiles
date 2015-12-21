@@ -1,11 +1,9 @@
-" .vimrc
+" .vimrc file
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Section: Vundle
-"
-" Plugin installation: $ vim +PluginInstall +qall
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""      Section: Vundle
+"""""""""""""""""""""""
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -18,34 +16,23 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-"" Easy commenting.
-Plugin 'scrooloose/nerdcommenter'
-
-"" Ruby magic.
 Bundle 'vim-ruby/vim-ruby'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-"Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-"Plugin 'L9'
-" Git plugin not hosted on GitHub
-"Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-"Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Avoid a name conflict with L9
-"Plugin 'user/L9', {'name': 'newL9'}
+Plugin 'ervandew/supertab'
+
+Plugin 'scrooloose/nerdcommenter'
+
+Plugin 'tpope/vim-repeat'
+
+Plugin 'dahu/vim-fanfingtastic'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
-"
+
+
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
@@ -56,45 +43,110 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Section: VimRuby
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""      Subsection: VimRuby
 syntax on             " Enable syntax highlighting
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Section: NERDcommenter
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""      Subsection: NERDcommenter
 let NERDSpaceDelims=1
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Normal backspace when vim version is too 'lightweight'.
-set backspace=indent,eol,start
 
-" Some buffer magic.
-set hidden
+""      Section: Everything
+"""""""""""""""""""""""""""
+" Mouse scrolling.
+set mouse=a
 
-" Colourful syntax.
-"syntax on " Already set in Section: VimRuby.
-"syntax enable
-"colorscheme monokai
+" Jump to where I left off last time.
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+          \| exe "normal! g'\"" | endif
+endif
 
-set number
 
-" Tabs and indentation.
-set expandtab
-set shiftwidth=4
-set tabstop=4
-set autoindent
+""      Subsection: Write and quit.
+" Sudo saving.
+cmap w!! w !sudo tee % >/dev/null
 
+" :W is just as good as :w.
+cmap W w
+
+" :wq shall be responsive even if you shout.
+cmap Wq wq
+cmap wQ wq
+cmap WQ wq
+
+" Finally, :Q is not worse than :q, is it?
+cmap Q q
+
+
+""      Subsection: Messing with shortcuts.
 " Leader needs some space.
 let mapleader = " "
 
-" Mouse scrolling.
-set mouse=a
+" Toggle paste mode.
+nnoremap <leader>p :set paste!<CR>
+
+
+""      Subsection: Appearance customisations.
+set number
+" Show cursor positions in the status bar.
+set ruler
+
+" Highlight current line
+set cursorline
+
+" Cursor line in the middle.
+set scrolloff=7
+
+" Highlight the 81th column.
+let &colorcolumn=0
+nnoremap <leader>h :call ColorColumnToggle()<CR>
+function! ColorColumnToggle()
+    if &colorcolumn
+        setlocal colorcolumn=0
+    else
+        setlocal colorcolumn=81
+    endif
+endfunction
+
+
+""      Subsection: Files-related magic.
+" Does some magic with buffers.
+set hidden
+
+" You're right Adam, no one needs it!
+set nobackup
+set noswapfile
+
+
+""      Subsection: Syntax highlighting.
+syntax enable
+colorscheme monokai
+
+" Support markdown syntax higlight for .md files.
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+
+""      Subsection: Indentation.
+set expandtab
+set shiftwidth=4
+set tabstop=4
+
+set autoindent
+set smartindent
+
+" Round up indentation.
+set shiftround
+
+
+""      Subsection: Searching
+" Show search matches during typing.
+set incsearch
+
+" Ignore case if search pattern is all lowercase, case-sensitive otherwise.
+set smartcase
+
