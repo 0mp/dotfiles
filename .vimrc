@@ -66,6 +66,9 @@ if has("autocmd")
           \| exe "normal! g'\"" | endif
 endif
 
+set history=500
+set undolevels=500
+
 
 ""      Subsection: Write and quit.
 " Sudo saving.
