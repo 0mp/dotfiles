@@ -66,6 +66,9 @@ if has("autocmd")
           \| exe "normal! g'\"" | endif
 endif
 
+" Make backspace work like in most other apps.
+set backspace=2 
+
 set history=500
 set undolevels=500
 
