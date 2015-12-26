@@ -55,6 +55,8 @@ let NERDSpaceDelims=1
 
 
 
+
+
 ""      Section: Everything
 """""""""""""""""""""""""""
 " Mouse scrolling.
@@ -71,6 +73,8 @@ set backspace=2
 
 set history=500
 set undolevels=500
+
+set encoding=utf-8
 
 
 ""      Subsection: Write and quit.
@@ -89,12 +93,14 @@ cmap WQ wq
 cmap Q q
 
 
+
 ""      Subsection: Messing with shortcuts.
 " Leader needs some space.
 let mapleader = " "
 
 " Toggle paste mode.
 nnoremap <leader>p :set paste!<CR>
+
 
 
 ""      Subsection: Appearance customisations.
@@ -120,6 +126,7 @@ function! ColorColumnToggle()
 endfunction
 
 
+
 ""      Subsection: Files-related magic.
 " Does some magic with buffers.
 set hidden
@@ -129,12 +136,14 @@ set nobackup
 set noswapfile
 
 
+
 ""      Subsection: Syntax highlighting.
 syntax enable
 colorscheme monokai
 
 " Support markdown syntax higlight for .md files.
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
 
 
 ""      Subsection: Indentation.
@@ -147,6 +156,7 @@ set smartindent
 
 " Round up indentation.
 set shiftround
+
 
 
 ""      Subsection: Searching
