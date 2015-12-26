@@ -101,6 +101,9 @@ let mapleader = " "
 " Toggle paste mode.
 nnoremap <leader>p :set paste!<CR>
 
+" Shortcut for wrapping.
+cmap sw set wrap!
+
 
 
 ""      Subsection: Appearance customisations.
