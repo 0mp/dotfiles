@@ -102,7 +102,10 @@ let mapleader = " "
 nnoremap <leader>p :set paste!<CR>
 
 " Shortcut for wrapping.
-cmap sw set wrap!
+" cmap sw set wrap!
+
+" Toggle wrapping.
+nnoremap <leader>w :set wrap!<CR>
 
 
 
