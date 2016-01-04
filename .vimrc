@@ -150,9 +150,23 @@ au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
 
 ""      Subsection: Indentation.
-set expandtab
 set shiftwidth=4
 set tabstop=4
+set expandtab
+
+" Toggle between tabs and spaces.
+function! TabToggle()
+  if &expandtab
+    set shiftwidth=8
+    set tabstop=8
+    set noexpandtab
+  else
+    set shiftwidth=4
+    set tabstop=4
+    set expandtab
+  endif
+endfunction
+nnoremap <leader>t :call TabToggle()<CR>
 
 set autoindent
 set smartindent
@@ -162,7 +176,7 @@ set shiftround
 
 
 
-""      Subsection: Searching
+""      Subsection Searching
 " Show search matches during typing.
 set incsearch
 
