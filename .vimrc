@@ -142,6 +142,25 @@ set nobackup
 set noswapfile
 
 
+""		Subsection: Persistant undo history.
+set undofile
+
+" Ensure that .vimundo exists.
+function! EnsureDirExists (dir)
+  if !isdirectory(a:dir)
+    if exists("*mkdir")
+      call mkdir(a:dir,'p')
+      echo "The " . a:dir . " directory for persistant undo history has been created."
+    else
+      echo "Please create the " . a:dir . " directory for persistant undo history manually."
+    endif
+  endif
+endfunction
+
+call EnsureDirExists($HOME . '/.vimundo')
+set undodir=~/.vimundo/
+
+
 
 ""      Subsection: Syntax highlighting.
 syntax enable
