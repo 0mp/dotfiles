@@ -131,6 +131,14 @@ function! ColorColumnToggle()
     endif
 endfunction
 
+" Don't let tmux mess the background colour.
+" @XXX It might break some shortcuts though.
+" Source: http://stackoverflow.com/questions/6427650/vim-in-tmux-background-color-changes-when-paging
+if !has("gui_running")
+    set term=screen-256color
+    " set term=xterm
+endif
+
 
 
 ""      Subsection: Files-related magic.
