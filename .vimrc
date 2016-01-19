@@ -1,7 +1,5 @@
 " .vimrc file
 
-
-
 ""      Section: Cheatsheet
 """""""""""""""""""""""""""
 " Open many files at once.
@@ -9,8 +7,9 @@
 "
 "   :n *.c
 "   :tab ball
-
-
+"
+" Copy text to the system clipboard.
+" "*y
 
 
 
@@ -55,6 +54,7 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 
+
 ""      Subsection: VimRuby
 syntax on             " Enable syntax highlighting
 filetype on           " Enable filetype detection
@@ -64,8 +64,6 @@ filetype plugin on    " Enable filetype-specific plugins
 
 ""      Subsection: NERDcommenter
 let NERDSpaceDelims=1
-
-
 
 
 
@@ -81,12 +79,13 @@ if has("autocmd")
 endif
 
 " Make backspace work like in most other apps.
-set backspace=2 
+set backspace=2
 
 set history=500
 set undolevels=500
 
 set encoding=utf-8
+
 
 
 ""      Subsection: Write and quit.
@@ -165,6 +164,7 @@ set nobackup
 set noswapfile
 
 
+
 ""		Subsection: Persistant undo history.
 set undofile
 
@@ -221,10 +221,27 @@ set shiftround
 
 
 
-""      Subsection Searching
+""      Subsection: Searching
 " Show search matches during typing.
 set incsearch
 
 " Ignore case if search pattern is all lowercase, case-sensitive otherwise.
 set smartcase
 
+
+
+""      Subsection: Private mode
+" Ensure private editing.
+" Usage: vim -c 'call Private()'
+function Private()
+    echo "Private mode is on!"
+    set history=0
+    set nobackup
+    set nomodeline
+    set noshelltemp
+    set noswapfile
+    set noundofile
+    set nowritebackup
+    set secure
+    set viminfo=""
+endfunction
