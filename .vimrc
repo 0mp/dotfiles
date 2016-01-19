@@ -92,6 +92,9 @@ cmap WQ wq
 " Finally, :Q is not worse than :q, is it?
 cmap Q q
 
+" Remove trailing whitespace on file save.
+autocmd BufWritePre * :%s/\s\+$//e
+
 
 
 ""      Subsection: Messing with shortcuts.
