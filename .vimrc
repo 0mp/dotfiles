@@ -2,6 +2,18 @@
 
 
 
+""      Section: Cheatsheet
+"""""""""""""""""""""""""""
+" Open many files at once.
+"   vim -p file01 file02 *.c
+"
+"   :n *.c
+"   :tab ball
+
+
+
+
+
 ""      Section: Vundle
 """""""""""""""""""""""
 set nocompatible              " be iMproved, required
