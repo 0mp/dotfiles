@@ -235,9 +235,11 @@ set smartcase
 
 ""      Subsection: Private mode
 " Ensure private editing.
-" Usage: vim -c 'call Private()'
-function Private()
+" Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
+" Usage: Just run `vimp`.
+if v:progname == "vimp"
     echo "Private mode is on!"
+    colorscheme slate
     set history=0
     set nobackup
     set nomodeline
@@ -247,4 +249,4 @@ function Private()
     set nowritebackup
     set secure
     set viminfo=""
-endfunction
+endif
