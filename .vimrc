@@ -115,6 +115,9 @@ let mapleader = " "
 " Toggle paste mode.
 nnoremap <leader>p :set paste!<CR>
 
+" One clipboard is enough for me.
+set clipboard=unnamed
+
 " Shortcut for wrapping.
 " cmap sw set wrap!
 
