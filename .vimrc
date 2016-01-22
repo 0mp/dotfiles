@@ -10,6 +10,12 @@
 "
 " Copy text to the system clipboard.
 " "*y
+"
+" Reload files in tabs.
+" :tabdo e!
+"
+" Reload files in buffers
+" :bufdo e
 
 
 
@@ -250,3 +256,15 @@ if v:progname == "vimp"
     set secure
     set viminfo=""
 endif
+
+
+""      Subsection: Git
+" Pull and refresh files.
+fun! PullAndRefresh()
+  set noconfirm
+  !git pull
+  bufdo e!
+  set confirm
+endfun
+
+nmap <leader>gr call PullAndRefresh()
