@@ -14,8 +14,9 @@
 " Reload files in tabs.
 " :tabdo e!
 "
-" Reload files in buffers
+" Reload files in buffers.
 " :bufdo e
+"
 
 
 
@@ -42,6 +43,8 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-repeat'
 
 Plugin 'dahu/vim-fanfingtastic'
+
+Plugin 'CycleColor' " Cycles through available colorschemes.
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
