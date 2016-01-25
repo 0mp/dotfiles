@@ -250,12 +250,19 @@ set shiftround
 
 
 
+""      Subsection: Buffers
+" Cycle through buffers.
+nnoremap £ :bNext<CR>
+
+
+
 ""      Subsection: Searching
 " Show search matches during typing.
 set incsearch
 
 " Ignore case if search pattern is all lowercase, case-sensitive otherwise.
 set smartcase
+set ignorecase
 
 
 
