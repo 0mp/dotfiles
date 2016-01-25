@@ -207,8 +207,14 @@ set undodir=~/.vimundo/
 syntax enable
 colorscheme monokai
 
+" Well ...
+nnoremap <leader><leader>hackingtime :colorscheme monochrome<CR> :echo "Hack the planet!"<CR>
+
 " Support markdown syntax higlight for .md files.
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+" Show all the whitespace characters. Toggle with :set list!
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
 
 
 
@@ -216,18 +222,23 @@ au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 set shiftwidth=4
 set tabstop=4
 set expandtab
+set softtabstop=4
 
 " Toggle between tabs and spaces.
 function! TabToggle()
-  if &expandtab
-    set shiftwidth=8
-    set tabstop=8
-    set noexpandtab
-  else
-    set shiftwidth=4
-    set tabstop=4
-    set expandtab
-  endif
+    if &expandtab
+        set shiftwidth=8
+        set tabstop=8
+        set softtabstop=8
+        set noexpandtab
+        echo 'Using tabs for indentation from now on.'
+    else
+        set shiftwidth=4
+        set tabstop=4
+        set softtabstop=4
+        set expandtab
+        echo 'Using spaces for indentation from now on.'
+    endif
 endfunction
 nnoremap <leader>t :call TabToggle()<CR>
 
