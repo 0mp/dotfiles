@@ -140,6 +140,9 @@ set number
 " Show cursor positions in the status bar.
 set ruler
 
+" Always show tabline.
+set showtabline=2
+
 " Highlight current line
 set cursorline
 
@@ -174,6 +177,9 @@ set hidden
 " You're right Adam, no one needs it!
 set nobackup
 set noswapfile
+
+" Autorefresh files.
+:set autoread
 
 
 
