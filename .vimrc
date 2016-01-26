@@ -179,7 +179,7 @@ set nobackup
 set noswapfile
 
 " Autorefresh files.
-:set autoread
+set autoread
 
 
 
