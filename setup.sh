@@ -4,7 +4,7 @@ DOTDIR=$PWD
 BACKUPDIR="$DOTDIR/backup"
 PS3='> '
 # DOTLIST=`find . -maxdepth 1 -type f -name '.*' -exec basename {} \;`
-DOTLIST=".vimrc .tmux.conf"
+DOTLIST=".vimrc .tmux.conf .tmux-osx.conf"
 
 echo "DISCLAIMER: This script will:"
 echo "(1) Try to backup your dotfiles from this list:"
@@ -26,13 +26,13 @@ echo "-> Backup ..."
 if [ -d "$BACKUPDIR" ]; then
     echo "It looks like some of your dotfiles have already been backed up."
     echo "What would you like me to do then?"
-    echo '(m) Backup all the missing dotfile!' 
-    echo '(r) Rebackup my dotfiles!' 
+    echo '(m) Backup all the missing dotfile!'
+    echo '(r) Rebackup my dotfiles!'
     echo "(p) I don't care about backups. Proceed!"
-    echo "(e) Stop this script! It's a trap!"
+    echo "(e) It's a trap! Stop this script I say!"
     while read REPLY; do
         case $REPLY in
-            m|M) 
+            m|M)
                 for DOTFILE in $DOTLIST; do
                     if [ -f $BACKUPDIR/$DOTFILE ]; then
                         continue
@@ -51,7 +51,7 @@ if [ -d "$BACKUPDIR" ]; then
                 break;;
             e|E)
                 exit 1;;
-            *) 
+            *)
                 echo Huh?;;
         esac
     done
