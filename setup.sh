@@ -2,9 +2,11 @@
 
 DOTDIR=$PWD
 BACKUPDIR="$DOTDIR/backup"
-PS3='> '
+PROMPT='=> '
 # DOTLIST=`find . -maxdepth 1 -type f -name '.*' -exec basename {} \;`
-DOTLIST=".vimrc .tmux.conf .tmux-osx.conf"
+DOTLIST=".vimrc .tmux.conf .tmux-osx.conf .gitconfig"
+
+FILE_GITCONFIG="$DOTDIR/.gitconfig"
 
 echo "DISCLAIMER: This script will:"
 echo "(1) Try to backup your dotfiles from this list:"
@@ -12,7 +14,7 @@ echo $DOTLIST | tr " " "\n"
 echo "(2) Remove these dotfiles from $HOME"
 echo "(3) Create links to dotfiles in $DOTDIR directory."
 echo "Would you like to proceed? (y/n)"
-while read REPLY; do
+while echo -n "$PROMPT"; read REPLY; do
     case $REPLY in
         y|Y) echo Watch out guys, we’re dealing with a badass over here!; break;;
         n|N) echo Bye!; exit 1;;
@@ -30,7 +32,8 @@ if [ -d "$BACKUPDIR" ]; then
     echo '(r) Rebackup my dotfiles!'
     echo "(p) I don't care about backups. Proceed!"
     echo "(e) It's a trap! Stop this script I say!"
-    while read REPLY; do
+
+    while echo -n "$PROMPT"; read REPLY; do
         case $REPLY in
             m|M)
                 for DOTFILE in $DOTLIST; do
@@ -57,6 +60,7 @@ if [ -d "$BACKUPDIR" ]; then
     done
 else
     mkdir $BACKUPDIR
+
     for DOTFILE in $DOTLIST; do
         cp $HOME/$DOTFILE $BACKUPDIR/$DOTFILE && echo Copied $HOME/$DOTFILE to $BACKUPDIR/$DOTFILE.
     done
@@ -73,6 +77,26 @@ echo "-> Creating links to my dotfiles ..."
 for DOTFILE in $DOTLIST; do
     ln -s -v -i $DOTDIR/$DOTFILE $HOME
 done
+echo
+
+echo "-> Personalising .gitconfig ..."
+echo "Would you like to add your name and email to .gitconfig? (y/n)"
+while echo -n "$PROMPT"; read REPLY; do
+    case $REPLY in
+        y|Y) echo OK.; REPLY='y'; break;;
+        n|N) echo "Fine. I hope you know what you're doing."; REPLY='n' ; break;;
+        *) echo Huh?;;
+    esac
+done
+if [ "$REPLY" = 'y' ]; then
+    echo -n 'User name: '
+    read GITUSERNAME
+    sed -i -e "s/<inset_your_user_name_here>/$GITUSERNAME/" $FILE_GITCONFIG
+
+    echo -n 'Email: '
+    read GITEMAIL
+    sed -i -e "s/<insert_your_email_here>/$GITEMAIL/" $FILE_GITCONFIG
+fi
 
 echo "-> Done."
 

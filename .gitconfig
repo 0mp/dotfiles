@@ -1,0 +1,33 @@
+[user]
+    name = <inset_your_user_name_here>
+    email = <insert_your_email_here>
+
+[push]
+    default = simple
+
+[core]
+    excludesfile = ~/.gitignore_global
+    editor = vim
+
+[difftool "sourcetree"]
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path =
+
+[mergetool "sourcetree"]
+    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
+
+[credential]
+    helper = osxkeychain
+
+[help]
+    autocorrect = 1
+
+[alias]
+    graph = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+    fullgraph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+    st = status
+    co = checkout
+    br = branch
+    up = rebase
+    ci = commit
