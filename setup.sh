@@ -83,7 +83,7 @@ echo "-> Personalising .gitconfig ..."
 echo "Would you like to add your name and email to .gitconfig? (y/n)"
 while echo -n "$PROMPT"; read REPLY; do
     case $REPLY in
-        y|Y) echo OK.; REPLY='y'; break;;
+        y|Y) REPLY='y'; break;;
         n|N) echo "Fine. I hope you know what you're doing."; REPLY='n' ; break;;
         *) echo Huh?;;
     esac
@@ -97,6 +97,7 @@ if [ "$REPLY" = 'y' ]; then
     read GITEMAIL
     sed -i -e "s/<insert_your_email_here>/$GITEMAIL/" $FILE_GITCONFIG
 fi
+echo
 
 echo "-> Done."
 
