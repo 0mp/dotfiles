@@ -133,6 +133,9 @@ set clipboard=unnamed
 " Toggle wrapping.
 nnoremap <leader>w :set wrap!<CR>
 
+" Fight the <esc> <shift>-o delay.
+set timeout timeoutlen=1000 ttimeoutlen=100
+
 
 
 ""      Subsection: Appearance customisations.
