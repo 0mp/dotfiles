@@ -133,6 +133,18 @@ set clipboard=unnamed
 " Toggle wrapping.
 nnoremap <leader>w :set wrap!<CR>
 
+" Move cursor by display lines when wrapping
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+nnoremap <Down> gj
+nnoremap <Up> gk
+vnoremap <Down> gj
+vnoremap <Up> gk
+inoremap <Down> <C-o>gj
+inoremap <Up> <C-o>gk
+
 " Fight the <esc> <shift>-o delay.
 set timeout timeoutlen=1000 ttimeoutlen=100
 
