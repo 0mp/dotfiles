@@ -157,7 +157,9 @@ set timeout timeoutlen=1000 ttimeoutlen=100
 
 
 ""      Subsection: Appearance customisations.
+set relativenumber
 set number
+
 " Show cursor positions in the status bar.
 set ruler
 
