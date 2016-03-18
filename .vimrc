@@ -237,7 +237,7 @@ nnoremap <leader><leader>hackingtime :colorscheme monochrome<CR> :echo "Hack the
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
 " Show all the whitespace characters. Toggle with :set list!
-set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+set listchars=eol:$,tab:>·,trail:~,extends:>,precedes:<,space:_
 
 
 
