@@ -4,7 +4,7 @@ DOTDIR=$PWD
 BACKUPDIR="$DOTDIR/backup"
 PROMPT='=> '
 # DOTLIST=`find . -maxdepth 1 -type f -name '.*' -exec basename {} \;`
-DOTLIST=".vimrc .tmux.conf .tmux-osx.conf .gitconfig"
+DOTLIST=".vimrc .tmux.conf .tmux-osx.conf .tmux-linux.conf .gitconfig"
 
 FILE_GITCONFIG="$DOTDIR/.gitconfig"
 
