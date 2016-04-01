@@ -1,24 +1,9 @@
-[user]
-    name = <inset_your_user_name_here>
-    email = <insert_your_email_here>
-
 [push]
     default = simple
 
 [core]
     excludesfile = ~/.gitignore_global
     editor = vim
-
-[difftool "sourcetree"]
-    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-    path =
-
-[mergetool "sourcetree"]
-    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-    trustExitCode = true
-
-[credential]
-    helper = osxkeychain
 
 [help]
     autocorrect = 1
