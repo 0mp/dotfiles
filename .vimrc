@@ -319,4 +319,5 @@ endfun
 
 nmap <leader>gr call PullAndRefresh()
 
-source .vimrc.local
+" Source local Vim configuration
+source /home/matangi/.dotfiles/.vimrc.local

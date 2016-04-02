@@ -91,6 +91,10 @@ manage_gitconfig() {
     fi
 }
 
+add_vimrclocal() {
+    touch "$DOTDIR/.vimrc.local"
+    printf "\n\" Source local Vim configuration\nsource %s/.vimrc.local\n" "$DOTDIR" >> "$DOTDIR/.vimrc"
+}
 case "$1" in
     backup)
         perform_backup
@@ -102,12 +106,16 @@ case "$1" in
         perform_backup
         make_symbolic_links
         manage_gitconfig
+        add_vimrclocal
         ;;
     link)
         make_symbolic_links
         ;;
+    vimrclocal)
+        add_vimrclocal
+        ;;
     *)
-        echo "Usage: ./manage.sh [backup|gitconfig|install|link]"
+        echo "Usage: ./manage.sh [backup|gitconfig|install|link|vimrclocal]"
         exit 1
         ;;
 esac
