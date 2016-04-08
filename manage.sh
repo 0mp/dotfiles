@@ -95,6 +95,12 @@ add_vimrclocal() {
     touch "$DOTDIR/.vimrc.local"
     printf "\n\" Source local Vim configuration\nsource %s/.vimrc.local\n" "$DOTDIR" >> "$DOTDIR/.vimrc"
 }
+
+set_up_vim() {
+    git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+    cp "$DOTDIR/.vim/colors/" "$HOME/.vim/colors"
+}
+
 case "$1" in
     backup)
         perform_backup
@@ -107,15 +113,19 @@ case "$1" in
         make_symbolic_links
         manage_gitconfig
         add_vimrclocal
+        set_up_vim
         ;;
     link)
         make_symbolic_links
+        ;;
+    vim)
+        set_up_vim
         ;;
     vimrclocal)
         add_vimrclocal
         ;;
     *)
-        echo "Usage: ./manage.sh [backup|gitconfig|install|link|vimrclocal]"
+        echo "Usage: ./manage.sh [backup|gitconfig|install|link|vim|vimrclocal]"
         exit 1
         ;;
 esac
