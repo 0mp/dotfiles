@@ -308,13 +308,6 @@ if v:progname == "vimp"
 endif
 
 
-""      Subsection: Git
-" Pull and refresh files.
-fun! PullAndRefresh()
-  set noconfirm
-  !git pull
-  bufdo e!
-  set confirm
-endfun
 
-nmap <leader>gr call PullAndRefresh()
+""      Subsection: Python
+au! FileType python setl nosmartindent
