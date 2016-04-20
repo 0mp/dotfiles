@@ -315,8 +315,3 @@ endif
 
 ""      Subsection: Python
 au! FileType python setl nosmartindent
-
-
-
-""      Subsection: Local .vimrc
-source /Users/mpiotrowski/.dotfiles/.vimrc.local
