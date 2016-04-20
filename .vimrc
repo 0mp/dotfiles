@@ -236,6 +236,10 @@ nnoremap <leader><leader>hackingtime :colorscheme monochrome<CR> :echo "Hack the
 " Support markdown syntax higlight for .md files.
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
+" Help Vim detect CUDA source files.
+au BufNewFile,BufFilePre,BufRead *.cu set filetype=cuda
+au BufNewFile,BufFilePre,BufRead *.cuh set filetype=cuda
+
 " Show all the whitespace characters. Toggle with :set list!
 set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
 
@@ -311,3 +315,8 @@ endif
 
 ""      Subsection: Python
 au! FileType python setl nosmartindent
+
+
+
+""      Subsection: Local .vimrc
+source /Users/mpiotrowski/.dotfiles/.vimrc.local

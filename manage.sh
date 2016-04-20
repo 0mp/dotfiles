@@ -93,7 +93,7 @@ manage_gitconfig() {
 
 add_vimrclocal() {
     touch "$DOTDIR/.vimrc.local"
-    printf "\n\" Source local Vim configuration\nsource %s/.vimrc.local\n" "$DOTDIR" >> "$DOTDIR/.vimrc"
+    printf "\n\n\n\"\"      Subsection: Local .vimrc\nsource %s/.vimrc.local\n" "$DOTDIR" >> "$DOTDIR/.vimrc"
 }
 
 set_up_vim() {
