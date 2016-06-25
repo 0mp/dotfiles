@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 DOTDIR=$PWD
 BACKUPDIR="$DOTDIR/backup"
@@ -98,7 +98,7 @@ add_vimrclocal() {
 
 set_up_vim() {
     git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
-    cp "$DOTDIR/.vim/colors/" "$HOME/.vim/colors"
+    cp -r "$DOTDIR/.vim/colors/" "$HOME/.vim/colors"
 }
 
 case "$1" in
