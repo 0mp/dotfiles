@@ -91,6 +91,12 @@ manage_gitconfig() {
     fi
 }
 
+update() {
+    git stash
+    git pull --rebase
+    git stash apply
+}
+
 add_vimrclocal() {
     touch "$DOTDIR/.vimrc.local"
     printf "\n\n\n\"\"      Subsection: Local .vimrc\nsource %s/.vimrc.local\n" "$DOTDIR" >> "$DOTDIR/.vimrc"
@@ -117,6 +123,9 @@ case "$1" in
         ;;
     link)
         make_symbolic_links
+        ;;
+    update)
+        update
         ;;
     vim)
         set_up_vim
