@@ -3,38 +3,40 @@
 ""      Section: Cheatsheet
 """""""""""""""""""""""""""
 " Open many files at once.
+"
 "   vim -p file01 file02 *.c
 "
 "   :n *.c
 "   :tab ball
 "
 " Copy text to the system clipboard.
-" "*y
+"
+"   "*y
 "
 " Reload files in tabs.
-" :tabdo e!
+"
+"   :tabdo e!
 "
 " Reload files in buffers.
-" :bufdo e
 "
-
-
+"   :bufdo e
+"
 
 ""      Section: Vundle
 """""""""""""""""""""""
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
+" Set the runtime path to include Vundle and initialize.
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
+" Alternatively, pass a path where Vundle should install plugins.
 "call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
+" Let Vundle manage Vundle, required.
 Plugin 'VundleVim/Vundle.vim'
 
-Bundle 'vim-ruby/vim-ruby'
+" Bundle 'vim-ruby/vim-ruby'
 
 Plugin 'ervandew/supertab'
 
@@ -62,19 +64,14 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-
-
 ""      Subsection: VimRuby
 syntax on             " Enable syntax highlighting
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
 
-
 ""      Subsection: NERDcommenter
 let NERDSpaceDelims=1
-
-
 
 ""      Section: Everything
 """""""""""""""""""""""""""
@@ -95,22 +92,20 @@ set undolevels=500
 
 set encoding=utf-8
 
-
-
 ""      Subsection: Write and quit.
 " Sudo saving.
 cmap w!! w !sudo tee % >/dev/null
 
-" :W is just as good as :w.
-cmap W w
+" " :W is just as good as :w.
+" cmap W w
 
-" :wq shall be responsive even if you shout.
-cmap Wq wq
-cmap wQ wq
-cmap WQ wq
+" " :wq shall be responsive even if you shout.
+" cmap Wq wq
+" cmap wQ wq
+" cmap WQ wq
 
-" Finally, :Q is not worse than :q, is it?
-cmap Q q
+" " Finally, :Q is not worse than :q, is it?
+" cmap Q q
 
 " Remove trailing whitespace on file save.
 function! <SID>StripTrailingWhitespaces()
@@ -120,8 +115,6 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfun
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
-
-
 
 ""      Subsection: Messing with shortcuts.
 " Leader needs some space.
@@ -133,11 +126,11 @@ nnoremap <leader>p :set paste!<CR>
 " One clipboard is enough for me.
 set clipboard=unnamed
 
-" Shortcut for wrapping.
-" cmap sw set wrap!
-
 " Toggle wrapping.
 nnoremap <leader>w :set wrap!<CR>
+
+" Disable the Ex mode.
+map Q <Nop>
 
 " Move cursor by display lines when wrapping
 nnoremap j gj
@@ -153,8 +146,6 @@ inoremap <Up> <C-o>gk
 
 " Fight the <esc> <shift>-o delay.
 set timeout timeoutlen=1000 ttimeoutlen=100
-
-
 
 ""      Subsection: Appearance customisations.
 set relativenumber
@@ -291,6 +282,9 @@ set incsearch
 set smartcase
 set ignorecase
 
+" Turn off highlighting.
+nnoremap <leader>n :nohl<CR>
+
 
 
 ""      Subsection: Private mode
@@ -315,3 +309,19 @@ endif
 
 ""      Subsection: Python
 au! FileType python setl nosmartindent
+
+
+""      Section: Platform specific settings.
+let os = substitute(system('uname'), "\n", "", "")
+if os == "FreeBSD"
+
+    colorscheme monochrome
+    set clipboard=unnamedplus
+    silent call TabToggle()
+
+    " Disable full autocomplete in the last line mode.
+    set wildmode=list:longest,full
+
+    " YAML support
+    autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+endif
