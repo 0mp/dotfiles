@@ -333,7 +333,9 @@ nnoremap <silent> K :silent ! sh -c
 " TODO: Set signcolumn back to auto when you remove all the higlight signs.
 " Very useful command to list all the currently used highlights:
 "   so $VIMRUNTIME/syntax/hitest.vim
-set signcolumn=no
+if v:version >= 800
+    set signcolumn=no
+endif
 hi SignHighlightRow ctermbg=49 guibg='#00ffaf'
 sign define wholeline linehl=SignHighlightRow
 let s:sign_highlight_row_counter = 1
