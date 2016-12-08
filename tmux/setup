@@ -15,9 +15,9 @@ echo Set up tmux
 gFILES='tmux.conf'
 
 if [ "$(uname)" = Darwin ]; then
-    gFILES="$gFILES tmux-osx.conf'
+    gFILES="$gFILES tmux-osx.conf"
 elif [ "$(uname)" = Linux ]; then
-    gFILES="$gFILES tmux-linux.conf'
+    gFILES="$gFILES tmux-linux.conf"
 fi
 
 # Back up.
