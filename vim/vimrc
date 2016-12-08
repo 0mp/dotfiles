@@ -1,0 +1,370 @@
+" .vimrc file
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Cheatsheet
+"
+" Open many files at once.
+"
+"   vim -p file01 file02 *.c
+"
+"   :n *.c
+"   :tab ball
+"
+" Copy text to the system clipboard.
+"
+"   "*y
+"
+" Reload files in tabs.
+"
+"   :tabdo e!
+"
+" Reload files in buffers.
+"
+"   :bufdo e
+"
+" Very useful command to list all the currently used highlights:
+"   so $VIMRUNTIME/syntax/hitest.vim
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Vundle
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" Set the runtime path to include Vundle and initialize.
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" Alternatively, pass a path where Vundle should install plugins.
+"call vundle#begin('~/some/path/here')
+
+" Let Vundle manage Vundle, required.
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'ervandew/supertab'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-repeat'
+Plugin 'dahu/vim-fanfingtastic'
+Plugin 'CycleColor' " Cycles through available colorschemes.
+Plugin 'localrc.vim' " Use .lvimrc for local configuration.
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" Put your non-Plugin stuff after this line
+
+filetype on           " Enable filetype detection
+filetype plugin on    " Enable filetype-specific plugins
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Plugins configuration
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let NERDSpaceDelims=1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Miscellenous
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Mouse scrolling.
+set mouse=a
+
+" One clipboard is enough for me.
+set clipboard=unnamed
+
+" Make backspace work like in most other apps.
+set backspace=2
+
+" Persistant undo history.
+set undofile
+
+" Ensure that .vimundo exists.
+function! EnsureDirExists(dir)
+  if !isdirectory(a:dir)
+    if exists("*mkdir")
+      call mkdir(a:dir,'p')
+      echo "The " . a:dir .
+                  \ " directory for persistant undo history has been created."
+    else
+      echo "Please create the " . a:dir .
+                  \ " directory for persistant undo history manually."
+    endif
+  endif
+endfunction
+
+call EnsureDirExists($HOME . '/.vimundo')
+set undodir=~/.vimundo/
+
+" Show all the whitespace characters. Toggle with :set list!
+set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
+
+" Show search matches during typing.
+set incsearch
+
+" Ignore case if search pattern is all lowercase, case-sensitive otherwise.
+set smartcase
+set ignorecase
+
+" Turn off highlighting.
+nnoremap <leader>n :nohl<CR>
+
+" Look for the tags up in the directory tree.
+set tags=./tags;/
+
+" Disable full autocomplete in the last line mode.
+set wildmode=list:longest,full
+
+" Ensure private editing.
+" Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
+" Usage: Just run `vimp`.
+if v:progname == "vimp"
+    echo "Private mode is on!"
+    colorscheme slate
+    set history=0
+    set nobackup
+    set nomodeline
+    set noshelltemp
+    set noswapfile
+    set noundofile
+    set nowritebackup
+    set secure
+    set viminfo=""
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Files & buffers
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set history=500
+set undolevels=500
+
+set encoding=utf-8
+
+" Does some magic with buffers.
+set hidden
+
+" You're right Adam, no one needs it!
+set nobackup
+set noswapfile
+
+" Cycle through buffers.
+nnoremap £ :bNext<CR>
+
+" Support markdown syntax higlight for .md files.
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+" Help Vim detect CUDA source files.
+au BufNewFile,BufFilePre,BufRead *.cu set filetype=cuda
+au BufNewFile,BufFilePre,BufRead *.cuh set filetype=cuda
+
+" Python
+au! FileType python setl nosmartindent
+
+" YAML
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Automagic
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Jump to where I left off last time.
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+          \| exe "normal! g'\"" | endif
+endif
+
+" Remove trailing whitespace on file save.
+function! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+" Autorefresh files.
+set autoread
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Mappings
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leader needs some space.
+let mapleader = " "
+
+" Sudo saving.
+cmap w!! w !sudo tee % >/dev/null
+
+" Toggle paste mode.
+nnoremap <leader>p<leader> :set paste!<CR>
+
+" Save.
+nnoremap <leader>w<leader> :w <CR>
+nnoremap <leader>ww :set wrap! <CR>
+
+" Disable the Ex mode.
+map Q <Nop>
+
+" Move cursor by display lines when wrapping
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+nnoremap <Down> gj
+nnoremap <Up> gk
+vnoremap <Down> gj
+vnoremap <Up> gk
+inoremap <Down> <C-o>gj
+inoremap <Up> <C-o>gk
+
+" Fight the <esc> <shift>-o delay.
+set timeout timeoutlen=1000 ttimeoutlen=100
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Visuals
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set relativenumber
+set number
+
+" Show cursor positions in the status bar.
+set ruler
+
+" Always show the tabline.
+set showtabline=2
+
+" Highlight the current line.
+set cursorline
+
+set scrolloff=7
+
+" Highlight the 81th column.
+let &colorcolumn=0
+nnoremap <leader>h :call ColorColumnToggle()<CR>
+function! ColorColumnToggle()
+    if &colorcolumn
+        setlocal colorcolumn=0
+    else
+        setlocal colorcolumn=81
+    endif
+endfunction
+
+" Don't let tmux mess the background colour.
+" XXX: It might break some shortcuts though.
+" Source: http://stackoverflow.com/q/6427650/4694621
+if !has("gui_running")
+    set term=screen-256color
+    " set term=xterm
+endif
+
+syntax enable
+colorscheme xxx2
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Style
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set shiftwidth=4
+set tabstop=4
+set expandtab
+set softtabstop=4
+
+" Toggle between tabs and spaces.
+function! TabToggle()
+    if &expandtab
+        set shiftwidth=8
+        set tabstop=8
+        set softtabstop=8
+        set noexpandtab
+        echo 'Using tabs for indentation from now on.'
+    else
+        set shiftwidth=4
+        set tabstop=4
+        set softtabstop=4
+        set expandtab
+        echo 'Using spaces for indentation from now on.'
+    endif
+endfunction
+nnoremap <leader>t :call TabToggle()<CR>
+
+set autoindent
+set smartindent
+
+" Round up indentation.
+set shiftround
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Homebrewed hacks
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Look for help everywhere you can.
+" FIXME
+nnoremap <silent> K :silent ! sh -c
+            \ '
+            \ (set -o pipefail; help <cword> 2>/dev/null <CR>\| less --no-init
+            \                                        --raw-control-chars
+            \                                        --quit-at-eof) \|\|
+            \ man <cword>
+            \ '
+            \ redraw! <CR>
+
+" Sign highlight lines.
+" TODO: Set signcolumn back to auto when you remove all the higlight signs.
+if v:version >= 800
+    set signcolumn=auto
+    let s:sign_highlight_counter = 0
+endif
+
+hi SignHighlightRow ctermbg=49 guibg='#00ffaf'
+
+sign define wholeline linehl=SignHighlightRow
+
+let s:sign_highlight_serial = 1
+
+function PlaceSignHighlight()
+    let l:linenum  = line(".")
+    let s:sign_highlight_serial = s:sign_highlight_serial + 1
+    exe ":sign place " . s:sign_highlight_serial .
+                \ " line=" . l:linenum .
+                \ " name=wholeline file=" . expand("%:p")
+    if v:version >= 800
+        set signcolumn=no
+        let s:sign_highlight_counter = s:sign_highlight_counter + 1
+    endif
+endfunction
+
+function UnplaceSignHighlight()
+    let l:linenum   = line(".")
+    redir! > /tmp/sign-highlight.txt
+    silent :exe ":sign place file=" . expand("%:p")
+    redir END
+    let l:id = system("cat /tmp/sign-highlight.txt | " .
+                \ "grep line=" . l:linenum . " | head -1 ")
+    let l:id = system("cut -d= -f3 | cut -d' ' -f1 | tr -d '\n'", l:id)
+
+    if l:id
+        exe ":sign unplace " . l:id . " file=" . expand("%:p")
+    endif
+    if v:version >= 800
+        let s:sign_highlight_counter = s:sign_highlight_counter - 1
+        if s:sign_highlight_counter == '0'
+            set signcolumn=auto
+        endif
+    endif
+endfunction
+
+map <leader>ghh :call PlaceSignHighlight()<CR>
+map <leader>ghc :call UnplaceSignHighlight()<CR>
