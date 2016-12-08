@@ -1,7 +1,9 @@
 " .vimrc file
 
-""      Section: Cheatsheet
-"""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Cheatsheet
+"
 " Open many files at once.
 "
 "   vim -p file01 file02 *.c
@@ -21,9 +23,16 @@
 "
 "   :bufdo e
 "
+" Very useful command to list all the currently used highlights:
+"   so $VIMRUNTIME/syntax/hitest.vim
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""      Section: Vundle
-"""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Vundle
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -36,63 +45,142 @@ call vundle#begin()
 " Let Vundle manage Vundle, required.
 Plugin 'VundleVim/Vundle.vim'
 
-" Bundle 'vim-ruby/vim-ruby'
-
 Plugin 'ervandew/supertab'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-repeat'
 Plugin 'dahu/vim-fanfingtastic'
 Plugin 'CycleColor' " Cycles through available colorschemes.
-
-Plugin '0mp/vim-local' " An empty plugin for local configurations.
+Plugin 'localrc.vim' " Use .lvimrc for local configuration.
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-
-
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-""      Subsection: VimRuby
-syntax on             " Enable syntax highlighting
 filetype on           " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
 
-""      Subsection: NERDcommenter
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Plugins configuration
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let NERDSpaceDelims=1
 
-""      Section: Everything
-"""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Miscellenous
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mouse scrolling.
 set mouse=a
 
-" Jump to where I left off last time.
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-          \| exe "normal! g'\"" | endif
-endif
+" One clipboard is enough for me.
+set clipboard=unnamed
 
 " Make backspace work like in most other apps.
 set backspace=2
 
+" Persistant undo history.
+set undofile
+
+" Ensure that .vimundo exists.
+function! EnsureDirExists(dir)
+  if !isdirectory(a:dir)
+    if exists("*mkdir")
+      call mkdir(a:dir,'p')
+      echo "The " . a:dir .
+                  \ " directory for persistant undo history has been created."
+    else
+      echo "Please create the " . a:dir .
+                  \ " directory for persistant undo history manually."
+    endif
+  endif
+endfunction
+
+call EnsureDirExists($HOME . '/.vimundo')
+set undodir=~/.vimundo/
+
+" Show all the whitespace characters. Toggle with :set list!
+set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
+
+" Show search matches during typing.
+set incsearch
+
+" Ignore case if search pattern is all lowercase, case-sensitive otherwise.
+set smartcase
+set ignorecase
+
+" Turn off highlighting.
+nnoremap <leader>n :nohl<CR>
+
+" Look for the tags up in the directory tree.
+set tags=./tags;/
+
+" Disable full autocomplete in the last line mode.
+set wildmode=list:longest,full
+
+" Ensure private editing.
+" Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
+" Usage: Just run `vimp`.
+if v:progname == "vimp"
+    echo "Private mode is on!"
+    colorscheme slate
+    set history=0
+    set nobackup
+    set nomodeline
+    set noshelltemp
+    set noswapfile
+    set noundofile
+    set nowritebackup
+    set secure
+    set viminfo=""
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Files & buffers
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set history=500
 set undolevels=500
 
 set encoding=utf-8
 
-""      Subsection: Write and quit.
-" Sudo saving.
-cmap w!! w !sudo tee % >/dev/null
+" Does some magic with buffers.
+set hidden
+
+" You're right Adam, no one needs it!
+set nobackup
+set noswapfile
+
+" Cycle through buffers.
+nnoremap £ :bNext<CR>
+
+" Support markdown syntax higlight for .md files.
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+" Help Vim detect CUDA source files.
+au BufNewFile,BufFilePre,BufRead *.cu set filetype=cuda
+au BufNewFile,BufFilePre,BufRead *.cuh set filetype=cuda
+
+" Python
+au! FileType python setl nosmartindent
+
+" YAML
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Automagic
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Jump to where I left off last time.
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+          \| exe "normal! g'\"" | endif
+endif
 
 " Remove trailing whitespace on file save.
 function! <SID>StripTrailingWhitespaces()
@@ -103,15 +191,22 @@ function! <SID>StripTrailingWhitespaces()
 endfun
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
-""      Subsection: Messing with shortcuts.
+" Autorefresh files.
+set autoread
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Mappings
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader needs some space.
 let mapleader = " "
 
+" Sudo saving.
+cmap w!! w !sudo tee % >/dev/null
+
 " Toggle paste mode.
 nnoremap <leader>p<leader> :set paste!<CR>
-
-" One clipboard is enough for me.
-set clipboard=unnamed
 
 " Save.
 nnoremap <leader>w<leader> :w <CR>
@@ -135,20 +230,23 @@ inoremap <Up> <C-o>gk
 " Fight the <esc> <shift>-o delay.
 set timeout timeoutlen=1000 ttimeoutlen=100
 
-""      Subsection: Appearance customisations.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Visuals
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set relativenumber
 set number
 
 " Show cursor positions in the status bar.
 set ruler
 
-" Always show tabline.
+" Always show the tabline.
 set showtabline=2
 
-" Highlight current line
+" Highlight the current line.
 set cursorline
 
-" Cursor line in the middle.
 set scrolloff=7
 
 " Highlight the 81th column.
@@ -163,65 +261,21 @@ function! ColorColumnToggle()
 endfunction
 
 " Don't let tmux mess the background colour.
-" @XXX It might break some shortcuts though.
-" Source: http://stackoverflow.com/questions/6427650/vim-in-tmux-background-color-changes-when-paging
+" XXX: It might break some shortcuts though.
+" Source: http://stackoverflow.com/q/6427650/4694621
 if !has("gui_running")
     set term=screen-256color
     " set term=xterm
 endif
 
-
-
-""      Subsection: Files-related magic.
-" Does some magic with buffers.
-set hidden
-
-" You're right Adam, no one needs it!
-set nobackup
-set noswapfile
-
-" Autorefresh files.
-set autoread
-
-
-
-""		Subsection: Persistant undo history.
-set undofile
-
-" Ensure that .vimundo exists.
-function! EnsureDirExists (dir)
-  if !isdirectory(a:dir)
-    if exists("*mkdir")
-      call mkdir(a:dir,'p')
-      echo "The " . a:dir . " directory for persistant undo history has been created."
-    else
-      echo "Please create the " . a:dir . " directory for persistant undo history manually."
-    endif
-  endif
-endfunction
-
-call EnsureDirExists($HOME . '/.vimundo')
-set undodir=~/.vimundo/
-
-
-
-""      Subsection: Syntax highlighting.
 syntax enable
 colorscheme xxx2
 
-" Support markdown syntax higlight for .md files.
-au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-
-" Help Vim detect CUDA source files.
-au BufNewFile,BufFilePre,BufRead *.cu set filetype=cuda
-au BufNewFile,BufFilePre,BufRead *.cuh set filetype=cuda
-
-" Show all the whitespace characters. Toggle with :set list!
-set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
-
-
-
-""      Subsection: Indentation.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Style
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set shiftwidth=4
 set tabstop=4
 set expandtab
@@ -251,69 +305,12 @@ set smartindent
 " Round up indentation.
 set shiftround
 
-
-
-""      Subsection: Buffers
-" Cycle through buffers.
-nnoremap £ :bNext<CR>
-
-
-
-""      Subsection: Searching
-" Show search matches during typing.
-set incsearch
-
-" Ignore case if search pattern is all lowercase, case-sensitive otherwise.
-set smartcase
-set ignorecase
-
-" Turn off highlighting.
-nnoremap <leader>n :nohl<CR>
-
-
-
-""      Subsection: Tags
-" Look for the tags up in the directory tree.
-set tags=./tags;/
-
-
-""      Subsection: Private mode
-" Ensure private editing.
-" Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
-" Usage: Just run `vimp`.
-if v:progname == "vimp"
-    echo "Private mode is on!"
-    colorscheme slate
-    set history=0
-    set nobackup
-    set nomodeline
-    set noshelltemp
-    set noswapfile
-    set noundofile
-    set nowritebackup
-    set secure
-    set viminfo=""
-endif
-
-""      Subsection: Python
-au! FileType python setl nosmartindent
-
-
-""      Section: Platform specific settings.
-let os = substitute(system('uname'), "\n", "", "")
-if os == "FreeBSD"
-
-    colorscheme monochrome
-    set clipboard=unnamedplus
-    silent call TabToggle()
-
-    " YAML support
-    autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-endif
-
-" Disable full autocomplete in the last line mode.
-set wildmode=list:longest,full
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Homebrewed hacks
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Look for help everywhere you can.
 nnoremap <silent> K :silent ! sh -c
             \ '
             \ (set -o pipefail; help <cword> \| less --no-init
@@ -323,16 +320,18 @@ nnoremap <silent> K :silent ! sh -c
             \ '
             \ <CR> :redraw! <CR>
 
-""      Subsection: Sign highlight lines.
+" Sign highlight lines.
 " TODO: Set signcolumn back to auto when you remove all the higlight signs.
-" Very useful command to list all the currently used highlights:
-"   so $VIMRUNTIME/syntax/hitest.vim
 if v:version >= 800
     set signcolumn=no
 endif
+
 hi SignHighlightRow ctermbg=49 guibg='#00ffaf'
+
 sign define wholeline linehl=SignHighlightRow
+
 let s:sign_highlight_row_counter = 1
+
 function PlaceSignHighlight()
     let l:linenum   = line(".")
     let s:sign_highlight_row_counter = s:sign_highlight_row_counter + 1
@@ -340,6 +339,7 @@ function PlaceSignHighlight()
                 \ " line=" . l:linenum .
                 \ " name=wholeline file=" . expand("%:p")
 endfunction
+
 function UnplaceSignHighlight()
     let l:linenum   = line(".")
     redir! > /tmp/sign-highlight.txt
@@ -353,5 +353,6 @@ function UnplaceSignHighlight()
         exe ":sign unplace " . l:id . " file=" . expand("%:p")
     endif
 endfunction
+
 map <leader>ghh :call PlaceSignHighlight()<CR>
 map <leader>ghc :call UnplaceSignHighlight()<CR>
