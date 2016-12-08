@@ -311,33 +311,39 @@ set shiftround
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Look for help everywhere you can.
+" FIXME
 nnoremap <silent> K :silent ! sh -c
             \ '
-            \ (set -o pipefail; help <cword> \| less --no-init
+            \ (set -o pipefail; help <cword> 2>/dev/null <CR>\| less --no-init
             \                                        --raw-control-chars
             \                                        --quit-at-eof) \|\|
-            \ man <cword> \|\|
+            \ man <cword>
             \ '
-            \ <CR> :redraw! <CR>
+            \ redraw! <CR>
 
 " Sign highlight lines.
 " TODO: Set signcolumn back to auto when you remove all the higlight signs.
 if v:version >= 800
-    set signcolumn=no
+    set signcolumn=auto
+    let s:sign_highlight_counter = 0
 endif
 
 hi SignHighlightRow ctermbg=49 guibg='#00ffaf'
 
 sign define wholeline linehl=SignHighlightRow
 
-let s:sign_highlight_row_counter = 1
+let s:sign_highlight_serial = 1
 
 function PlaceSignHighlight()
-    let l:linenum   = line(".")
-    let s:sign_highlight_row_counter = s:sign_highlight_row_counter + 1
-    exe ":sign place " . s:sign_highlight_row_counter .
+    let l:linenum  = line(".")
+    let s:sign_highlight_serial = s:sign_highlight_serial + 1
+    exe ":sign place " . s:sign_highlight_serial .
                 \ " line=" . l:linenum .
                 \ " name=wholeline file=" . expand("%:p")
+    if v:version >= 800
+        set signcolumn=no
+        let s:sign_highlight_counter = s:sign_highlight_counter + 1
+    endif
 endfunction
 
 function UnplaceSignHighlight()
@@ -351,6 +357,12 @@ function UnplaceSignHighlight()
 
     if l:id
         exe ":sign unplace " . l:id . " file=" . expand("%:p")
+    endif
+    if v:version >= 800
+        let s:sign_highlight_counter = s:sign_highlight_counter - 1
+        if s:sign_highlight_counter == '0'
+            set signcolumn=auto
+        endif
     endif
 endfunction
 
