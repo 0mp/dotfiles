@@ -30,6 +30,6 @@ done
 # Install.
 trap roll_back EXIT
 for file in $gFILES; do
-    ln -s -v -f -F -n -- "./$file" "$HOME/.$file"
+    ln -s -v -f -F -n -- "$PWD/$file" "$HOME/.$file"
 done
 trap - EXIT

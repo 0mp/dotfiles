@@ -31,7 +31,7 @@ git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.
 
 trap roll_back EXIT
 for file in $kFiles; do
-    ln -s -v -f -F -n -- "./$file" "$HOME/.$file"
+    ln -s -v -f -F -n -- "$PWD/$file" "$HOME/.$file"
 done
 trap - EXIT
 
