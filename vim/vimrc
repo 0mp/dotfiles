@@ -207,13 +207,7 @@ set undodir=~/.vimundo/
 
 ""      Subsection: Syntax highlighting.
 syntax enable
-" colorscheme monokai
-colorscheme xxx
-
-let iterm_profile=$ITERM_PROFILE
-if iterm_profile == 'Shine'
-    colorscheme xxx2
-endif
+colorscheme xxx2
 
 " Support markdown syntax higlight for .md files.
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
