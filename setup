@@ -7,7 +7,7 @@ if [ ! "$PWD" = "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
     exit 2
 fi
 
-readonly kBACKUP_DIR="$PWD/backup/$(date +%y%m%d%H%M%S)"
+readonly kBACKUP_DIR="$PWD/backup/$(date +%y-%m-%d-%H-%M-%S)"
 export kBACKUP_DIR
 
 mkdir -p "$kBACKUP_DIR"
