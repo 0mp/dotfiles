@@ -27,7 +27,9 @@ done
 mkdir -p "$HOME/.vim/bundle"
 
 # Install Vundle.
+set +e
 git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+set -e
 
 trap roll_back EXIT
 for file in $kFiles; do
@@ -36,7 +38,7 @@ done
 trap - EXIT
 
 # Install plugins.
-vim +PluginInstall +qall
+vim +PluginInstall +PluginUpdate +qall
 
 # ln -s to local.vim for easier access.
 # TODO
