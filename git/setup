@@ -1,0 +1,47 @@
+#!/bin/sh
+
+echo Set up Git
+
+set -eu
+
+kFILES='gitconfig'
+kGITCONFIG_LOCAL='gitconfig.local'
+
+roll_back() {
+    set +e
+    echo Rolling back ...
+    for file in $kFILES; do
+        cp -i -a -v -- "$kBACKUP_DIR/.$file" "$HOME/.$file"
+    done
+}
+
+# Back up.
+for file in $kFILES; do
+    if [ -e "$HOME/$file" ]; then
+        cp -i -a -v -- "$HOME/.$file" "$kBACKUP_DIR/.$file"
+    fi
+done
+
+# Install.
+
+# Preprocessing.
+touch "./$kGITCONFIG_LOCAL"
+printf 'Name: '
+read git_username
+printf 'Email: '
+read git_email
+cat <<EOF >> "./$kGITCONFIG_LOCAL"
+[user]
+    name = $git_username
+    email = $git_email
+
+[include]
+    path = $PWD/gitconfig
+
+EOF
+
+# Link.
+trap roll_back EXIT
+ln -s -v -f -F -n -- "./gitconfig.local" "$HOME/.gitconfig"
+trap - EXIT
+

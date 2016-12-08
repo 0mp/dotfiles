@@ -39,14 +39,12 @@ Plugin 'VundleVim/Vundle.vim'
 " Bundle 'vim-ruby/vim-ruby'
 
 Plugin 'ervandew/supertab'
-
 Plugin 'scrooloose/nerdcommenter'
-
 Plugin 'tpope/vim-repeat'
-
 Plugin 'dahu/vim-fanfingtastic'
-
 Plugin 'CycleColor' " Cycles through available colorschemes.
+
+Plugin '0mp/vim-local' " An empty plugin for local configurations.
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -96,17 +94,6 @@ set encoding=utf-8
 " Sudo saving.
 cmap w!! w !sudo tee % >/dev/null
 
-" " :W is just as good as :w.
-" cmap W w
-
-" " :wq shall be responsive even if you shout.
-" cmap Wq wq
-" cmap wQ wq
-" cmap WQ wq
-
-" " Finally, :Q is not worse than :q, is it?
-" cmap Q q
-
 " Remove trailing whitespace on file save.
 function! <SID>StripTrailingWhitespaces()
     let l = line(".")
@@ -121,13 +108,14 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 let mapleader = " "
 
 " Toggle paste mode.
-nnoremap <leader>p :set paste!<CR>
+nnoremap <leader>p<leader> :set paste!<CR>
 
 " One clipboard is enough for me.
 set clipboard=unnamed
 
-" Toggle wrapping.
-nnoremap <leader>w :set wrap!<CR>
+" Save.
+nnoremap <leader>w<leader> :w <CR>
+nnoremap <leader>ww :set wrap! <CR>
 
 " Disable the Ex mode.
 map Q <Nop>
@@ -219,10 +207,13 @@ set undodir=~/.vimundo/
 
 ""      Subsection: Syntax highlighting.
 syntax enable
-colorscheme monokai
+" colorscheme monokai
+colorscheme xxx
 
-" Well ...
-nnoremap <leader><leader>hackingtime :colorscheme monochrome<CR> :echo "Hack the planet!"<CR>
+let iterm_profile=$ITERM_PROFILE
+if iterm_profile == 'Shine'
+    colorscheme xxx2
+endif
 
 " Support markdown syntax higlight for .md files.
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
@@ -287,6 +278,11 @@ nnoremap <leader>n :nohl<CR>
 
 
 
+""      Subsection: Tags
+" Look for the tags up in the directory tree.
+set tags=./tags;/
+
+
 ""      Subsection: Private mode
 " Ensure private editing.
 " Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
@@ -305,8 +301,6 @@ if v:progname == "vimp"
     set viminfo=""
 endif
 
-
-
 ""      Subsection: Python
 au! FileType python setl nosmartindent
 
@@ -319,9 +313,49 @@ if os == "FreeBSD"
     set clipboard=unnamedplus
     silent call TabToggle()
 
-    " Disable full autocomplete in the last line mode.
-    set wildmode=list:longest,full
-
     " YAML support
     autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 endif
+
+" Disable full autocomplete in the last line mode.
+set wildmode=list:longest,full
+
+nnoremap <silent> K :silent ! sh -c
+            \ '
+            \ (set -o pipefail; help <cword> \| less --no-init
+            \                                        --raw-control-chars
+            \                                        --quit-at-eof) \|\|
+            \ man <cword> \|\|
+            \ '
+            \ <CR> :redraw! <CR>
+
+""      Subsection: Sign highlight lines.
+" TODO: Set signcolumn back to auto when you remove all the higlight signs.
+" Very useful command to list all the currently used highlights:
+"   so $VIMRUNTIME/syntax/hitest.vim
+set signcolumn=no
+hi SignHighlightRow ctermbg=49 guibg='#00ffaf'
+sign define wholeline linehl=SignHighlightRow
+let s:sign_highlight_row_counter = 1
+function PlaceSignHighlight()
+    let l:linenum   = line(".")
+    let s:sign_highlight_row_counter = s:sign_highlight_row_counter + 1
+    exe ":sign place " . s:sign_highlight_row_counter .
+                \ " line=" . l:linenum .
+                \ " name=wholeline file=" . expand("%:p")
+endfunction
+function UnplaceSignHighlight()
+    let l:linenum   = line(".")
+    redir! > /tmp/sign-highlight.txt
+    silent :exe ":sign place file=" . expand("%:p")
+    redir END
+    let l:id = system("cat /tmp/sign-highlight.txt | " .
+                \ "grep line=" . l:linenum . " | head -1 ")
+    let l:id = system("cut -d= -f3 | cut -d' ' -f1 | tr -d '\n'", l:id)
+
+    if l:id
+        exe ":sign unplace " . l:id . " file=" . expand("%:p")
+    endif
+endfunction
+map <leader>ghh :call PlaceSignHighlight()<CR>
+map <leader>ghc :call UnplaceSignHighlight()<CR>

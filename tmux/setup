@@ -1,0 +1,35 @@
+#!/bin/sh
+
+roll_back() {
+    set +e
+    echo Rolling back ...
+    for file in $gFILES; do
+        cp -i -a -v -- "$kBACKUP_DIR/.$file" "$HOME/.$file"
+    done
+}
+
+set -eu
+
+echo Set up tmux
+
+gFILES='tmux.conf '
+
+if [ "$(uname)" = Darwin ]; then
+    gFILES+='tmux-osx.conf '
+elif [ "$(uname)" = Linux ]; then
+    gFILES+='tmux-linux.conf '
+fi
+
+# Back up.
+for file in $gFILES; do
+    if [ -e "$HOME/$file" ]; then
+        cp -i -a -v -- "$HOME/.$file" "$kBACKUP_DIR/.$file"
+    fi
+done
+
+# Install.
+trap roll_back EXIT
+for file in $gFILES; do
+    ln -s -v -f -F -n -- "./$file" "$HOME/.$file"
+done
+trap - EXIT
