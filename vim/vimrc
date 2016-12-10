@@ -1,9 +1,4 @@
-" .vimrc file
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Cheatsheet
-"
+" Section: Cheatsheet {{{
 " Open many files at once.
 "
 "   vim -p file01 file02 *.c
@@ -26,13 +21,8 @@
 " Very useful command to list all the currently used highlights:
 "   so $VIMRUNTIME/syntax/hitest.vim
 "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Vundle
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Vundle {{{
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -59,23 +49,15 @@ filetype plugin indent on    " required
 
 filetype on           " Enable filetype detection
 filetype plugin on    " Enable filetype-specific plugins
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Plugins configuration
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Plugins configuration {{{
 let NERDSpaceDelims=1
 
 " Store and restore decisions only if the answer was given in upper case
 " (Y/N/A).
 let g:localvimrc_persistent = 1
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Miscellenous
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Miscellenous {{{
 " Mouse scrolling.
 set mouse=a
 
@@ -140,12 +122,8 @@ if v:progname == "vimp"
     set secure
     set viminfo=""
 endif
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Files & buffers
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Files & buffers {{{
 set history=500
 set undolevels=500
 
@@ -173,13 +151,8 @@ au! FileType python setl nosmartindent
 
 " YAML
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Automagic
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Automagic {{{
 " Jump to where I left off last time.
 if has("autocmd")
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
@@ -188,21 +161,19 @@ endif
 
 " Remove trailing whitespace on file save.
 function! <SID>StripTrailingWhitespaces()
+    let _s=@/
     let l = line(".")
     let c = col(".")
     %s/\s\+$//e
+    let @/=_s
     call cursor(l, c)
 endfun
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Autorefresh files.
 set autoread
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Mappings
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Mappings {{{
 " Leader needs some space.
 let mapleader = " "
 
@@ -233,10 +204,8 @@ inoremap <Up> <C-o>gk
 
 " Fight the <esc> <shift>-o delay.
 set timeout timeoutlen=1000 ttimeoutlen=100
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Visuals
+" }}}
+" Section: Visuals {{{
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set relativenumber
@@ -274,12 +243,8 @@ endif
 
 syntax enable
 colorscheme xxx2
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Style
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Style {{{
 set shiftwidth=4
 set tabstop=4
 set expandtab
@@ -308,12 +273,8 @@ set smartindent
 
 " Round up indentation.
 set shiftround
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Homebrewed hacks
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" }}}
+" Section: Homebrewed hacks {{{
 " Look for help everywhere you can.
 " FIXME
 nnoremap <silent> K :silent ! sh -c
@@ -339,13 +300,15 @@ sign define wholeline linehl=SignHighlightRow
 let s:sign_highlight_serial = 1
 
 function PlaceSignHighlight()
+    if v:version >= 800
+        set signcolumn=no
+    endif
     let l:linenum  = line(".")
     let s:sign_highlight_serial = s:sign_highlight_serial + 1
     exe ":sign place " . s:sign_highlight_serial .
                 \ " line=" . l:linenum .
                 \ " name=wholeline file=" . expand("%:p")
     if v:version >= 800
-        set signcolumn=no
         let s:sign_highlight_counter = s:sign_highlight_counter + 1
     endif
 endfunction
@@ -372,3 +335,6 @@ endfunction
 
 map <leader>ghh :call PlaceSignHighlight()<CR>
 map <leader>ghc :call UnplaceSignHighlight()<CR>
+" }}}
+
+" vim:foldmethod=marker:foldlevel=0
