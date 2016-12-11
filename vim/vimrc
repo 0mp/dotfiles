@@ -307,7 +307,7 @@ function PlaceSignHighlight()
     let s:sign_highlight_serial = s:sign_highlight_serial + 1
     exe ":sign place " . s:sign_highlight_serial .
                 \ " line=" . l:linenum .
-                \ " name=wholeline file=" . expand("%:p")
+                \ " name=wholeline buffer=" . bufnr('%')
     if v:version >= 800
         let s:sign_highlight_counter = s:sign_highlight_counter + 1
     endif
@@ -316,19 +316,19 @@ endfunction
 function UnplaceSignHighlight()
     let l:linenum   = line(".")
     redir! > /tmp/sign-highlight.txt
-    silent :exe ":sign place file=" . expand("%:p")
+    silent :exe ":sign place buffer=" . bufnr('%')
     redir END
     let l:id = system("cat /tmp/sign-highlight.txt | " .
                 \ "grep line=" . l:linenum . " | head -1 ")
     let l:id = system("cut -d= -f3 | cut -d' ' -f1 | tr -d '\n'", l:id)
 
     if l:id
-        exe ":sign unplace " . l:id . " file=" . expand("%:p")
-    endif
-    if v:version >= 800
-        let s:sign_highlight_counter = s:sign_highlight_counter - 1
-        if s:sign_highlight_counter == '0'
-            set signcolumn=auto
+        exe ":sign unplace " . l:id . " buffer=" . bufnr('%')
+        if v:version >= 800
+            let s:sign_highlight_counter = s:sign_highlight_counter - 1
+            if s:sign_highlight_counter == '0'
+                set signcolumn=auto
+            endif
         endif
     endif
 endfunction
