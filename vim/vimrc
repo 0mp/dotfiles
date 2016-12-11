@@ -293,13 +293,18 @@ if v:version >= 800
     let s:sign_highlight_counter = 0
 endif
 
-hi SignHighlightRow ctermbg=49 guibg='#00ffaf'
+hi GreenSignHighlightRow ctermbg=49 guibg='#00ffaf'
+hi YellowSignHighlightRow ctermbg=226 guibg='#ffff00'
+hi PinkSignHighlightRow ctermbg=177 guibg='#df87ff'
 
-sign define wholeline linehl=SignHighlightRow
+sign define GreenSignHighlightRow linehl=GreenSignHighlightRow
+sign define YellowSignHighlightRow linehl=YellowSignHighlightRow
+sign define PinkSignHighlightRow linehl=PinkSignHighlightRow
 
+let g:last_used_highlight_color = 'GreenSignHighlightRow'
 let s:sign_highlight_serial = 1
 
-function PlaceSignHighlight()
+function PlaceSignHighlight(sign_highlight_group)
     if v:version >= 800
         set signcolumn=no
     endif
@@ -307,10 +312,11 @@ function PlaceSignHighlight()
     let s:sign_highlight_serial = s:sign_highlight_serial + 1
     exe ":sign place " . s:sign_highlight_serial .
                 \ " line=" . l:linenum .
-                \ " name=wholeline buffer=" . bufnr('%')
+                \ " name=" . a:sign_highlight_group . " buffer=" . bufnr('%')
     if v:version >= 800
         let s:sign_highlight_counter = s:sign_highlight_counter + 1
     endif
+    let g:last_used_highlight_color = a:sign_highlight_group
 endfunction
 
 function UnplaceSignHighlight()
@@ -333,8 +339,29 @@ function UnplaceSignHighlight()
     endif
 endfunction
 
-map <leader>ghh :call PlaceSignHighlight()<CR>
+map <leader>ghh :call PlaceSignHighlight(g:last_used_highlight_color)<CR>
+map <leader>gh1 :call PlaceSignHighlight('GreenSignHighlightRow')<CR>
+map <leader>gh2 :call PlaceSignHighlight('YellowSignHighlightRow')<CR>
+map <leader>gh3 :call PlaceSignHighlight('PinkSignHighlightRow')<CR>
 map <leader>ghc :call UnplaceSignHighlight()<CR>
+
+" function HighlightCursorLine()
+"     let l:linenum   = line(".")
+"     redir! > /tmp/sign-highlight.txt
+"     silent :exe ":sign place buffer=" . bufnr('%')
+"     redir END
+"     let l:id = system("cat /tmp/sign-highlight.txt | " .
+"                 \ "grep line=" . l:linenum . " | head -1 ")
+"     let l:id = system("cut -d= -f3 | cut -d' ' -f1 | tr -d '\n'", l:id)
+
+"     if l:id
+"         hi CursorLine ctermfg=162 guifg='#df0087'
+"     else
+"         hi CursorLine ctermfg=NONE guifg=NONE
+"     endif
+" endfunction
+
+" autocmd CursorMoved * call HighlightCursorLine()
 " }}}
 
-" vim:foldmethod=marker:foldlevel=0
+" vim:foldmethod=marker:foldlevel=0:
