@@ -305,6 +305,12 @@ let g:last_used_highlight_color = 'GreenSignHighlightRow'
 let s:sign_highlight_serial = 1
 
 function PlaceSignHighlight(sign_highlight_group)
+    " Redefine highlights as they could have been overwritten by changing
+    " colorscheme.
+    hi GreenSignHighlightRow ctermbg=49 guibg='#00ffaf'
+    hi YellowSignHighlightRow ctermbg=226 guibg='#ffff00'
+    hi PinkSignHighlightRow ctermbg=177 guibg='#df87ff'
+
     if v:version >= 800
         set signcolumn=no
     endif
