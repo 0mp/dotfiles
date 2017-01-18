@@ -242,7 +242,7 @@ if !has("gui_running")
 endif
 
 syntax enable
-colorscheme xxx2
+colorscheme xxx
 " }}}
 " Section: Style {{{
 set shiftwidth=4
