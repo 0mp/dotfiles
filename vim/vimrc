@@ -364,4 +364,6 @@ map <leader>ghc :call UnplaceSignHighlight()<CR>
 " autocmd CursorMoved * call HighlightCursorLine()
 " }}}
 
+" Unfold the section under the cursor in .vimrc.
+au BufWinEnter .vimrc normal! zv
 " vim:foldmethod=marker:foldlevel=0:
