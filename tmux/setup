@@ -22,7 +22,7 @@ info setup
 
 if [ "$(uname)" = Darwin ]
 then
-    FILES="$FILES tmux-osx.conf"
+    FILES="$FILES tmux-macos.conf"
 elif [ "$(uname)" = Linux ]
 then
     FILES="$FILES tmux-linux.conf"
