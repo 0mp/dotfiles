@@ -16,8 +16,19 @@ roll_back() {
 set -eu
 
 FILES='vimrc vim/colors'
+readonly MODULE_NAME=vim
+readonly BUNDLE_DIR="$HOME/.vim/bundle"
+readonly VUNDLE_PLUGIN_DIR="$BUNDLE_DIR/Vundle.vim"
+readonly VUNDLE_REPO='https://github.com/VundleVim/Vundle.vim.git'
 
 info setup
+
+# Platform specific configuration.
+if uname -a 2>/dev/null | grep Ubuntu 2>&1 >/dev/null
+then
+    ln -s -v -f -F -n -- "$PWD/lvimrc-ubuntu" "$PWD/lvimrc"
+    FILES="$FILES lvimrc"
+fi
 
 # Back up.
 for file in $FILES
@@ -29,12 +40,13 @@ do
 done
 
 # Preprocessing.
-mkdir -p "$HOME/.vim/bundle"
+mkdir -p "$BUNDLE_DIR"
 
 # Install Vundle.
-set +e
-git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
-set -e
+if [ ! -d "$VUNDLE_PLUGIN_DIR" ]
+then
+    git clone "$VUNDLE_REPO" "$VUNDLE_PLUGIN_DIR"
+fi
 
 trap roll_back EXIT
 for file in $FILES;
