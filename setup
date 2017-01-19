@@ -1,21 +1,21 @@
-#!/bin/sh
+#! /bin/sh -
 
 set -eu
 
-if [ ! "$PWD" = "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
+if [ ! "x$PWD" = "x$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
     echo 'usage: ./setup target [target ...]'
-    exit 2
+    exit 1
 fi
 
-readonly kBACKUP_DIR="$PWD/backup/$(date +%y-%m-%d-%H-%M-%S)"
-export kBACKUP_DIR
+readonly BACKUP_DIR
+export BACKUP_DIR
+BACKUP_DIR="$PWD/backup/$(date +%y-%m-%d-%H-%M-%S)"
 
-mkdir -p "$kBACKUP_DIR"
+mkdir -p "$BACKUP_DIR"
 
-while [ "$#" -gt 0 ]; do
-    cd "$1"
-    ./setup
-    cd ..
+while [ $# -gt 0 ]
+do
+    (cd "$1"; ./setup)
     shift 1
 done
 

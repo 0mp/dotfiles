@@ -1,35 +1,48 @@
-#!/bin/sh
+#! /bin/sh -
+
+info() {
+    echo $MODULE_NAME: $*
+}
 
 roll_back() {
     set +e
-    echo Rolling back ...
-    for file in $gFILES; do
-        cp -i -a -v -- "$kBACKUP_DIR/.$file" "$HOME/.$file"
+    info roll back due to an error
+    for file in $FILES
+    do
+        cp -i -a -v -- "$BACKUP_DIR/.$file" "$HOME/.$file"
     done
 }
 
 set -eu
 
-echo Set up tmux
+FILES='tmux.conf'
+MODULE_NAME=tmux
 
-gFILES='tmux.conf'
+info setup
 
-if [ "$(uname)" = Darwin ]; then
-    gFILES="$gFILES tmux-osx.conf"
-elif [ "$(uname)" = Linux ]; then
-    gFILES="$gFILES tmux-linux.conf"
+if [ "$(uname)" = Darwin ]
+then
+    FILES="$FILES tmux-osx.conf"
+elif [ "$(uname)" = Linux ]
+then
+    FILES="$FILES tmux-linux.conf"
 fi
 
 # Back up.
-for file in $gFILES; do
-    if [ -e "$HOME/$file" ]; then
-        cp -i -a -v -- "$HOME/.$file" "$kBACKUP_DIR/.$file"
+for file in $FILES
+do
+    if [ -e "$HOME/$file" ]
+    then
+        cp -i -a -v -- "$HOME/.$file" "$BACKUP_DIR/.$file"
     fi
 done
 
 # Install.
 trap roll_back EXIT
-for file in $gFILES; do
+for file in $FILES
+do
     ln -s -v -f -F -n -- "$PWD/$file" "$HOME/.$file"
 done
 trap - EXIT
+
+info setup done

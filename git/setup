@@ -1,36 +1,42 @@
-#!/bin/sh
-
-echo Set up Git
+#! /bin/sh -
 
 set -eu
 
-kFILES='gitconfig'
-kGITCONFIG_LOCAL='gitconfig.local'
+MODULE_NAME=git
+FILES='gitconfig'
+GITCONFIG_LOCAL='gitconfig.local'
+
+info() {
+    echo $MODULE_NAME: $*
+}
 
 roll_back() {
     set +e
-    echo Rolling back ...
-    for file in $kFILES; do
-        cp -i -a -v -- "$kBACKUP_DIR/.$file" "$HOME/.$file"
+    info roll back due to an error
+    for file in $FILES
+    do
+        cp -i -a -v -- "$BACKUP_DIR/.$file" "$HOME/.$file"
     done
 }
 
+info setup
+
 # Back up.
-for file in $kFILES; do
-    if [ -e "$HOME/$file" ]; then
-        cp -i -a -v -- "$HOME/.$file" "$kBACKUP_DIR/.$file"
+for file in $FILES
+do
+    if [ -e "$HOME/$file" ]
+    then
+        cp -i -a -v -- "$HOME/.$file" "$BACKUP_DIR/.$file"
     fi
 done
 
-# Install.
-
 # Preprocessing.
-touch "./$kGITCONFIG_LOCAL"
+touch "./$GITCONFIG_LOCAL"
 printf 'Name: '
 read git_username
 printf 'Email: '
 read git_email
-cat <<EOF >> "./$kGITCONFIG_LOCAL"
+cat <<EOF >> "./$GITCONFIG_LOCAL"
 [user]
     name = $git_username
     email = $git_email
@@ -45,3 +51,4 @@ trap roll_back EXIT
 ln -s -v -f -F -n -- "$PWD/gitconfig.local" "$HOME/.gitconfig"
 trap - EXIT
 
+info setup done

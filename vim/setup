@@ -1,27 +1,32 @@
-#!/bin/sh
+#! /bin/sh -
+
+info() {
+    echo $MODULE_NAME: $*
+}
 
 roll_back() {
     set +e
-    echo Rolling back ...
-    for file in $kFiles; do
-        cp -i -a -v -- "$kBACKUP_DIR/.$file" "$HOME/.$file"
+    info roll back due to an error
+    for file in $FILES
+    do
+        cp -i -a -v -- "$BACKUP_DIR/.$file" "$HOME/.$file"
     done
 }
 
 set -eu
 
-echo Set up Vim
+FILES='vimrc vim/colors'
 
-kFiles='vimrc vim/colors'
+info setup
 
 # Back up.
-for file in $kFiles; do
-    if [ -e "$HOME/$file" ]; then
-        cp -i -a -v -- "$HOME/.$file" "$kBACKUP_DIR/.$file"
+for file in $FILES
+do
+    if [ -e "$HOME/$file" ]
+    then
+        cp -i -a -v -- "$HOME/.$file" "$BACKUP_DIR/.$file"
     fi
 done
-
-# Install.
 
 # Preprocessing.
 mkdir -p "$HOME/.vim/bundle"
@@ -32,7 +37,8 @@ git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.
 set -e
 
 trap roll_back EXIT
-for file in $kFiles; do
+for file in $FILES;
+do
     ln -s -v -f -F -n -- "$PWD/$file" "$HOME/.$file"
 done
 trap - EXIT
@@ -40,5 +46,4 @@ trap - EXIT
 # Install plugins.
 vim +PluginInstall +PluginUpdate +qall
 
-# ln -s to local.vim for easier access.
-# TODO
+info setup done
