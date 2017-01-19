@@ -32,7 +32,7 @@ hi Statement guifg=White ctermfg=15 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE 
 hi PreProc guifg=White ctermfg=15 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
 hi Type guifg=White ctermfg=15 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
 hi Special guifg=White ctermfg=15 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
-hi MatchParen guifg=Black ctermfg=16 guibg=LightGray ctermbg=252 gui=NONE cterm=NONE term=NONE
+hi MatchParen guifg=Black ctermfg=16 guibg=#737373 ctermbg=243 gui=NONE cterm=NONE term=NONE
 hi pythonEscape guifg=Yellow ctermfg=226 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
 hi Search guifg=White ctermfg=15 guibg=#778899 ctermbg=67 gui=NONE cterm=NONE term=NONE
 hi Visual guifg=White ctermfg=15 guibg=#778899 ctermbg=67 gui=NONE cterm=NONE term=NONE
