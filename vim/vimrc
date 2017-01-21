@@ -181,7 +181,7 @@ let mapleader = " "
 cmap w!! w !sudo tee % >/dev/null
 
 " Toggle paste mode.
-nnoremap <leader>p<leader> :set paste!<CR>
+nnoremap <leader>p<leader>p :set paste!<CR>p:set paste!<CR>
 
 " Save.
 nnoremap <leader>w<leader> :w <CR>
