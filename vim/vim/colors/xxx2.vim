@@ -33,7 +33,8 @@ hi PreProc guifg=Black ctermfg=16 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE te
 hi Type guifg=Black ctermfg=16 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
 hi Special guifg=Black ctermfg=16 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
 hi MatchParen guifg=Black ctermfg=16 guibg=LightGray ctermbg=252 gui=NONE cterm=NONE term=NONE
-hi Error guifg=Black ctermfg=16 guibg=Red ctermbg=9 gui=NONE cterm=NONE term=NONE
+hi Error guifg=Red ctermfg=9 guibg=#e4e4e4 ctermbg=254 gui=NONE cterm=NONE term=NONE
+hi ErrorMsg guifg=Red ctermfg=9 guibg=#e4e4e4 ctermbg=254 gui=NONE cterm=NONE term=NONE
 hi pythonEscape guifg=Black ctermfg=16 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE term=NONE
 hi Search guifg=Black ctermfg=16 guibg=#00ff00 ctermbg=10 gui=NONE cterm=NONE term=NONE
 hi Visual guifg=Black ctermfg=16 guibg=#00ff00 ctermbg=10 gui=NONE cterm=NONE term=NONE
