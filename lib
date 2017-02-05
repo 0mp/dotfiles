@@ -1,0 +1,61 @@
+# vi: set ft=sh:
+lib_info() {
+    echo $MODULE_NAME: $* 1>&2
+}
+
+lib_err() {
+    lib_info "error: $*"
+}
+
+# $1 - The full path to the backed-up file.
+# $2 - The name of the backup file in the back up directory.
+# Pass a RUNWITH environemntal variable with a desired prefix for the body of
+# this function. For example RUNWITH='sudo -E'.
+lib_back_up_file() {
+    ${RUNWITH:-} cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
+}
+
+lib_back_up() {
+    for file in $FILES
+    do
+        if [ -e "$HOME/$file" ]
+        then
+            lib_back_up_file "$HOME/.$file" ".$file"
+        fi
+    done
+    return 0
+}
+
+# $1 - The name of the file inside the backup directory.
+# $2 - The full path to the restored path.
+# Pass a RUNWITH environemntal variable with a desired prefix for the body of
+# this function. For example RUNWITH='sudo -E'.
+lib_roll_back_file() {
+    ${RUNWITH:-} cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
+}
+
+lib_roll_back() {
+    set +e
+    set +u # Try to restore everyhing you can.
+    lib_info roll back due to an error
+    for file in $FILES
+    do
+        lib_roll_back_file ".$file" "$HOME/.$file"
+    done
+    set -eu
+}
+
+# $1 - The full path of the source file.
+# $2 - The full path of the destination file.
+# Pass a RUNWITH environemntal variable with a desired prefix for the body of
+# this function. For example RUNWITH='sudo -E'.
+lib_install_file() {
+    ${RUNWITH:-} ln -s -v -f -F -n -- "$1" "$2"
+}
+
+lib_install() {
+    for file in $FILES
+    do
+        lib_install_file "$PWD/$file" "$HOME/.$file"
+    done
+}
