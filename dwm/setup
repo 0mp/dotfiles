@@ -9,41 +9,49 @@
 set -eu
 
 MODULE_NAME=dwm
-FILES="xinitrc"
+FILES=""
 
 lib_info setup
 
 if uname -a | grep Ubuntu 1> /dev/null
 then
-    lib_back_up() {
-        [ -f "$HOME/.$XINITRC_FILE" ] && lib_back_up_file "$HOME/.$XINITRC_FILE" ".$XINITRC_FILE"
-        [ -f "$GRUB_FILE" ] && lib_back_up_file "$GRUB_FILE" "$(basename -- $GRUB_FILE)"
-        return 0
-    }
+    # lib_back_up() {
+    #     [ -f "$HOME/.$XINITRC_FILE" ] && lib_back_up_file "$HOME/.$XINITRC_FILE" ".$XINITRC_FILE"
+    #     [ -f "$GRUB_FILE" ] && lib_back_up_file "$GRUB_FILE" "$(basename -- $GRUB_FILE)"
+    #     return 0
+    # }
 
-    lib_roll_back() {
-        set +eu
-        lib_info roll back due to an error
-        RUNWITH=sudo lib_roll_back_file "$(basename -- $GRUB_FILE)" "$GRUB_FILE"
-        lib_roll_back_file ".$XINITRC_FILE" "$HOME/.$XINITRC_FILE"
-        set -eu
-    }
+    # lib_roll_back() {
+    #     # set +eu
+    #     # lib_info roll back due to an error
+    #     # RUNWITH=sudo lib_roll_back_file "$(basename -- $GRUB_FILE)" "$GRUB_FILE"
+    #     # lib_roll_back_file ".$XINITRC_FILE" "$HOME/.$XINITRC_FILE"
+    #     # set -eu
+    # }
 
-    lib_install() {
-        # http://askubuntu.com/a/79682/413683
-        sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/GRUB_CMDLINE_LINUX_DEFAULT="text"/g' "$GRUB_FILE"
-        sudo sed -i 's/#GRUB_TERMINAL=console/GRUB_TERMINAL=console/g' "$GRUB_FILE"
-        sudo update-grub
-        sudo systemctl enable multi-user.target --force
-        sudo systemctl set-default multi-user.target
-        lib_install_file "$PWD/$XINITRC_FILE" "$HOME/.$XINITRC_FILE"
-    }
+    # lib_install() {
+    #     Disable Unity autologin: http://askubuntu.com/a/79682/413683
+    #     After all it was a bad idea as a lot of things broke such as
+    #     pulseaudio.
+    #     sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/GRUB_CMDLINE_LINUX_DEFAULT="text"/g' "$GRUB_FILE"
+    #     sudo sed -i 's/#GRUB_TERMINAL=console/GRUB_TERMINAL=console/g' "$GRUB_FILE"
+    #     sudo update-grub
+    #     # Q: How to roll back the changes introduced by the systemctl calls
+    #     #    below?
+    #     # A: http://askubuntu.com/a/879966/413683
+    #     sudo systemctl enable multi-user.target --force
+    #     sudo systemctl set-default multi-user.target
 
-    GRUB_FILE=/etc/default/grub
-    XINITRC_FILE=xinitrc
+    #     lib_install_file "$PWD/$XINITRC_FILE" "$HOME/.$XINITRC_FILE"
+    # }
+
+    # GRUB_FILE=/etc/default/grub
+    # XINITRC_FILE=xinitrc
 
     sudo apt-get update
-    sudo apt-get -y install build-essential libx11-dev libxinerama-dev libxft-dev suckless-tools
+    sudo apt-get -y install build-essential libx11-dev libxinerama-dev \
+        libxft-dev suckless-tools
+    sudo apt-get -y install dwm
     cd dwm
     make
     sudo make clean install
