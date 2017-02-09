@@ -1,1 +1,7 @@
 set clipboard=unnamedplus
+NoMatchParen
+
+if (match(system('echo $_0MP_TERM_PROFILE'), 'Shine') >= 0)
+    colorscheme xxx2
+    DoMatchParen
+endif
