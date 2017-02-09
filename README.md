@@ -3,6 +3,6 @@
 ```sh
 git clone https://github.com/0mp/dotfiles ~/.dotfiles
 cd ~/.dotfiles
-./setup vim tmux git
+./setup vim tmux git dwm
 ```
 
