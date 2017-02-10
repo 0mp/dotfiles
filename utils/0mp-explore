@@ -1,0 +1,115 @@
+#! /bin/sh -
+#
+# 0mp-explore - View files of the whole code base tree in a pager.
+#
+
+PROGRAM='0mp-explore'
+VERSION=0.5.2
+
+usage() {
+    cat <<EOF
+Usage: $PROGRAM [OPTION...] [SCOPE...]
+
+Positional arguments:
+    SCOPE
+        Files and directories to be explored by the program. If not provided
+        then the scope is set to '.' (the current directory).
+
+Options:
+    -c, --colors
+        Add syntax coloring with pygmentize which has to be installed. This
+        option might slow down the program significantly.
+
+    -r, --regex REGEX
+        Regex string used to match files to be read; for example providing
+        '.*.c' as a regex results in printing only C source files.
+
+    --
+        End of options. Treat the rest of the command line arguments as files
+        and directories for program's scope.
+
+    -h, --help
+        Show help.
+
+    --version
+        Show version.
+
+Examples:
+    $PROGRAM -r '.*.c' /usr/src
+        View only C source files in the /usr/src directory.
+
+    $PROGRAM .bashrc Downloads
+        View the .bashrc file and files inside the Downloads directory.
+
+EOF
+}
+
+version() {
+    cat <<EOF
+$VERSION
+EOF
+}
+
+usage_and_exit() {
+    usage
+    exit $1
+}
+
+scope=
+regex=
+colors=
+
+while test $# -gt 0
+do
+    case $1 in
+        --colors|-c)
+            shift
+            colors=yes
+            ;;
+
+        --help|-h)
+            shift
+            usage_and_exit
+            ;;
+
+        --regex|-r)
+            shift
+            regex="$1"
+            shift
+            ;;
+
+        --version)
+            shift
+            version
+            exit 0
+            ;;
+
+        --)
+            shift
+            if [ $# -gt 0 ]
+            then
+                scope="${scope:-''} $@"
+            fi
+            break
+            ;;
+
+        *)
+            scope="${scope:-''} $1"
+            shift
+            ;;
+    esac
+done
+
+if test "x$colors" = "xyes"
+then
+    grep -rlI '.' ${scope:-'.'} |
+        grep "${regex:-"."}" |
+        xargs -I {} sh -c "printf '%s\n' "{}"; pygmentize -g -- "{}" | cat -n; echo" |
+        less --no-init --chop-long-lines --RAW-CONTROL-CHARS
+else
+    grep -rlI '.' ${scope:-'.'} |
+        grep "${regex:-"."}" |
+        xargs -I {} sh -c "printf '%s\n' "{}"; cat -n -- "{}"; echo" |
+        less --no-init --chop-long-lines
+fi
+

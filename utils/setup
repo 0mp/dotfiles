@@ -1,0 +1,22 @@
+#! /bin/sh -
+
+. ../lib
+
+set -eu
+
+MODULE_NAME=utils
+FILES="0mp-explore"
+
+BIN_DIR=~/bin
+
+lib_info setup
+
+mkdir -p "$BIN_DIR"
+PREFIX="$BIN_DIR/"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info remember to add ~/bin to your PATH
+lib_info 'setup done'
