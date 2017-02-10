@@ -15,12 +15,16 @@ lib_back_up_file() {
     ${RUNWITH:-} cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
 }
 
+# Pass a PREFIX environemntal variable to modify the destination path of the
+# files. The default prefix is "$HOME/.". For example if you pass
+# PREFIX="~/bin/" then the files will be installed to that directory.
 lib_back_up() {
+    : ${PREFIX:="$HOME/."}
     for file in $FILES
     do
         if [ -e "$HOME/$file" ]
         then
-            lib_back_up_file "$HOME/.$file" ".$file"
+            lib_back_up_file "$PREFIX$file" "$(basename -- $PREFIX)$file"
         fi
     done
     return 0
@@ -34,13 +38,17 @@ lib_roll_back_file() {
     ${RUNWITH:-} cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
 }
 
+# Pass a PREFIX environemntal variable to modify the destination path of the
+# files. The default prefix is "$HOME/.". For example if you pass
+# PREFIX="~/bin/" then the files will be installed to that directory.
 lib_roll_back() {
+    : ${PREFIX:="$HOME/."}
     set +e
     set +u # Try to restore everyhing you can.
     lib_info roll back due to an error
     for file in $FILES
     do
-        lib_roll_back_file ".$file" "$HOME/.$file"
+        lib_roll_back_file "$(basename -- $PREFIX)$file" "$PREFIX$file"
     done
     set -eu
 }
@@ -53,9 +61,13 @@ lib_install_file() {
     ${RUNWITH:-} ln -s -v -f -F -n -- "$1" "$2"
 }
 
+# Pass a PREFIX environemntal variable to modify the destination path of the
+# files. The default prefix is "$HOME/.". For example if you pass
+# PREFIX="~/bin/" then the files will be installed to that directory.
 lib_install() {
+    : ${PREFIX:="$HOME/."}
     for file in $FILES
     do
-        lib_install_file "$PWD/$file" "$HOME/.$file"
+        lib_install_file "$PWD/$file" "$PREFIX$file"
     done
 }
