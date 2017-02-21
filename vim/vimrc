@@ -56,8 +56,16 @@ let NERDSpaceDelims=1
 " Store and restore decisions only if the answer was given in upper case
 " (Y/N/A).
 let g:localvimrc_persistent = 1
+
+" Netrw
+let g:netrw_banner=0 " Disable a banner.
+" let g:netrw_liststyle=3 " Print as a tree.
+let g:netrw_altv=1 " Open files to the right.
+
 " }}}
 " Section: Miscellenous {{{
+" Show the command you type in.
+set showcmd
 " Mouse scrolling.
 set mouse=a
 
@@ -122,6 +130,11 @@ if v:progname == "vimp"
     set secure
     set viminfo=""
 endif
+
+" Fuzzy file opener.
+" Usage: :find *.cpp
+set path+=**
+set wildmenu
 " }}}
 " Section: Files & buffers {{{
 set history=500
