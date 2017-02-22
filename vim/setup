@@ -1,45 +1,26 @@
 #! /bin/sh -
 
-info() {
-    echo $MODULE_NAME: $*
-}
-
-roll_back() {
-    set +e
-    info roll back due to an error
-    for file in $FILES
-    do
-        cp -i -a -v -- "$BACKUP_DIR/.$file" "$HOME/.$file"
-    done
-}
+. ../lib
 
 set -eu
 
-FILES='vimrc vim/colors'
-readonly MODULE_NAME=vim
-readonly BUNDLE_DIR="$HOME/.vim/bundle"
-readonly VUNDLE_PLUGIN_DIR="$BUNDLE_DIR/Vundle.vim"
-readonly VUNDLE_REPO='https://github.com/VundleVim/Vundle.vim.git'
+MODULE_NAME=vim
+FILES='vimrc vim/colors' # Keeping a directory here might not be the best idea.
+BUNDLE_DIR="$HOME/.vim/bundle"
+VUNDLE_PLUGIN_DIR="$BUNDLE_DIR/Vundle.vim"
+VUNDLE_REPO='https://github.com/VundleVim/Vundle.vim.git'
 
-info setup
+lib_info setup
+
+lib_back_up
 
 # Platform specific configuration.
 if uname -a 2>/dev/null | grep Ubuntu 2>&1 >/dev/null
 then
-    ln -s -v -f -F -n -- "$PWD/lvimrc-ubuntu" "$PWD/lvimrc"
+    lib_install_file "$PWD/lvimrc-ubuntu" "$PWD/lvimrc"
     FILES="$FILES lvimrc"
 fi
 
-# Back up.
-for file in $FILES
-do
-    if [ -e "$HOME/$file" ]
-    then
-        cp -i -a -v -- "$HOME/.$file" "$BACKUP_DIR/.$file"
-    fi
-done
-
-# Preprocessing.
 mkdir -p "$BUNDLE_DIR"
 
 # Install Vundle.
@@ -48,14 +29,11 @@ then
     git clone "$VUNDLE_REPO" "$VUNDLE_PLUGIN_DIR"
 fi
 
-trap roll_back EXIT
-for file in $FILES;
-do
-    ln -s -v -f -F -n -- "$PWD/$file" "$HOME/.$file"
-done
+trap lib_roll_back EXIT
+lib_install
 trap - EXIT
 
 # Install plugins.
 vim +PluginInstall +PluginUpdate +qall
 
-info setup done
+lib_info 'setup done'

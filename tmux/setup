@@ -1,48 +1,25 @@
 #! /bin/sh -
 
-info() {
-    echo $MODULE_NAME: $*
-}
-
-roll_back() {
-    set +e
-    info roll back due to an error
-    for file in $FILES
-    do
-        cp -i -a -v -- "$BACKUP_DIR/.$file" "$HOME/.$file"
-    done
-}
+. ../lib
 
 set -eu
 
-FILES='tmux.conf'
 MODULE_NAME=tmux
+FILES='tmux.conf'
 
-info setup
+lib_info 'setup'
 
-if [ "$(uname)" = Darwin ]
+if [ "x$(uname)" = xDarwin ]
 then
     FILES="$FILES tmux-macos.conf"
-elif [ "$(uname)" = Linux ]
+elif [ "x$(uname)" = xLinux ]
 then
     FILES="$FILES tmux-linux.conf"
 fi
 
-# Back up.
-for file in $FILES
-do
-    if [ -e "$HOME/$file" ]
-    then
-        cp -i -a -v -- "$HOME/.$file" "$BACKUP_DIR/.$file"
-    fi
-done
-
-# Install.
-trap roll_back EXIT
-for file in $FILES
-do
-    ln -s -v -f -F -n -- "$PWD/$file" "$HOME/.$file"
-done
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
 trap - EXIT
 
-info setup done
+lib_info 'setup done'

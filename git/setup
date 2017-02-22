@@ -1,44 +1,77 @@
 #! /bin/sh -
+#
+# Options:
+#     --name
+#     --email
+
+. ../lib
 
 set -eu
 
 MODULE_NAME=git
-FILES='gitconfig'
-GITCONFIG_LOCAL='gitconfig.local'
+GITCONFIG='gitconfig'
+FILES="$GITCONFIG"
 
-info() {
-    echo $MODULE_NAME: $*
+GITCONFIG_LOCAL="$GITCONFIG.local"
+
+lib_install() {
+    lib_install_file "$PWD/$GITCONFIG_LOCAL" "$HOME/.$GITCONFIG"
 }
 
-roll_back() {
-    set +e
-    info roll back due to an error
-    for file in $FILES
-    do
-        cp -i -a -v -- "$BACKUP_DIR/.$file" "$HOME/.$file"
-    done
-}
+lib_info 'setup'
 
-info setup
+lib_back_up
+trap lib_roll_back EXIT
 
-# Back up.
-for file in $FILES
+git_name=
+git_email=
+while [ $# -gt 0 ]
 do
-    if [ -e "$HOME/$file" ]
-    then
-        cp -i -a -v -- "$HOME/.$file" "$BACKUP_DIR/.$file"
-    fi
+    case "$1" in
+        --name)
+            shift 1
+            if [ $# -eq 0 ]
+            then
+                lib_err "name not provided for the --name option"
+                exit 1
+            fi
+            git_name="$1"
+            shift 1
+            ;;
+
+        --email)
+            shift 1
+            if [ $# -eq 0 ]
+            then
+                lib_err "email not provided for the --email option"
+                exit 1
+            fi
+            git_email="$1"
+            shift 1
+            ;;
+
+        *)
+            shift
+            break
+            ;;
+    esac
 done
 
-# Preprocessing.
-touch "./$GITCONFIG_LOCAL"
-printf 'Name: '
-read git_username
-printf 'Email: '
-read git_email
-cat <<EOF >> "./$GITCONFIG_LOCAL"
+touch "$PWD/$GITCONFIG_LOCAL"
+if [ -z "$git_name" ]
+then
+    printf 'Name: '
+    read git_name
+fi
+if [ -z "$git_email" ]
+then
+    printf 'Email: '
+    read git_email
+fi
+
+cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
 [user]
-    name = $git_username
+    name = $git_name
     email = $git_email
 
 [include]
@@ -46,9 +79,7 @@ cat <<EOF >> "./$GITCONFIG_LOCAL"
 
 EOF
 
-# Link.
-trap roll_back EXIT
-ln -s -v -f -F -n -- "$PWD/gitconfig.local" "$HOME/.gitconfig"
+lib_install
 trap - EXIT
 
-info setup done
+lib_info 'setup done'

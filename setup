@@ -3,18 +3,41 @@
 set -eu
 
 if [ ! "x$PWD" = "x$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
-    echo 'usage: ./setup target [target ...]'
+    echo 'usage: ./setup [ target [options ... ] ] ...'
     exit 1
 fi
 
-readonly BACKUP_DIR="$PWD/backup/$(date +%y-%m-%d-%H-%M-%S)"
+readonly BACKUP_DIR="$PWD/backup/$(date +%y-%m-%d-%H:%M:%S)"
 export BACKUP_DIR
 
 mkdir -p "$BACKUP_DIR"
 
 while [ $# -gt 0 ]
 do
-    (cd "$1"; ./setup)
+    (cd "$1"; shift 1; ./setup "$@")
     shift 1
+    if [ $# -gt 0 ]
+    then
+        case "$1" in
+            --*)
+                while [ $# -gt 0 ]
+                do
+                    case "$1" in
+                        --)
+                            shift 1
+                            break 1
+                            ;;
+
+                        *)
+                            shift 1
+                            ;;
+                    esac
+                done
+                ;;
+
+            *)
+                ;;
+        esac
+    fi
 done
 
