@@ -1,0 +1,30 @@
+#! /bin/sh -
+#
+# Autostart:
+# - http://askubuntu.com/q/178567/413683
+#
+# .desktop files:
+# - https://standards.freedesktop.org/desktop-entry-spec/latest/
+# - https://developer.gnome.org/integration-guide/stable/desktop-files.html.en
+
+. ../lib
+
+set -eu
+
+MODULE_NAME=ubuntu
+FILES="caps-lock-to-control.desktop"
+
+CONFIG_DIR=~/.config
+AUTOSTART_DIR="$CONFIG_DIR/autostart"
+
+lib_info 'setup'
+
+mkdir -p "$CONFIG_DIR"
+mkdir -p "$AUTOSTART_DIR"
+PREFIX="$AUTOSTART_DIR/"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'

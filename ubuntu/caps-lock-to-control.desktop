@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/bin/bash -c "sleep 10 && /usr/bin/xmodmap ~mpts/.Xmodmap"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Caps lock to control
+Name=Caps lock to contorl
+Comment[en_US]=Change the behaviour of the caps lock key to act as an additional control key.
+Comment=Change the behaviour of the caps lock key to act as an additional control key.
