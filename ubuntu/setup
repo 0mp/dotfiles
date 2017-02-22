@@ -12,7 +12,6 @@
 set -eu
 
 MODULE_NAME=ubuntu
-FILES="caps-lock-to-control.desktop"
 
 CONFIG_DIR=~/.config
 AUTOSTART_DIR="$CONFIG_DIR/autostart"
@@ -21,7 +20,15 @@ lib_info 'setup'
 
 mkdir -p "$CONFIG_DIR"
 mkdir -p "$AUTOSTART_DIR"
+FILES="caps-lock-to-control.desktop"
 PREFIX="$AUTOSTART_DIR/"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+FILES="Xmodmap"
+unset PREFIX
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
