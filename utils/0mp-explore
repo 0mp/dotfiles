@@ -4,7 +4,7 @@
 #
 
 PROGRAM='0mp-explore'
-VERSION=0.5.2
+VERSION=0.5.3
 
 usage() {
     cat <<EOF
@@ -88,17 +88,19 @@ do
             shift
             if [ $# -gt 0 ]
             then
-                scope="${scope:-''} $@"
+                scope="${scope:-""} $@"
             fi
             break
             ;;
 
         *)
-            scope="${scope:-''} $1"
+            scope="${scope:-""} $1"
             shift
             ;;
     esac
 done
+
+scope="${scope# }"
 
 if test "x$colors" = "xyes"
 then
