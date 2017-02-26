@@ -4,7 +4,7 @@
 #
 
 PROGRAM='0mp-explore'
-VERSION=0.5.3
+VERSION=0.5.4
 
 usage() {
     cat <<EOF
@@ -40,6 +40,9 @@ Examples:
 
     $PROGRAM .bashrc Downloads
         View the .bashrc file and files inside the Downloads directory.
+
+    $PROGRAM *.h
+        View header files in the current directory.
 
 EOF
 }
