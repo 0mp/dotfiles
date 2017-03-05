@@ -1,7 +1,11 @@
 set clipboard=unnamedplus
 NoMatchParen
 
-if (match(system('echo $_0MP_TERM_PROFILE'), 'Shine') >= 0)
+if (match(system('cat ~/.0mp-switch/profile'), 'Shine') >= 0)
     colorscheme xxx2
     DoMatchParen
+endif
+
+if (match(system('cat ~/.0mp-switch/profile'), 'Charcoal') >= 0)
+    colorscheme xxx
 endif
