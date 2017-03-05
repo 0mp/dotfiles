@@ -4,7 +4,10 @@
 #
 
 PROGRAM='0mp-explore'
-VERSION=0.5.4
+VERSION=0.5.7
+
+BOLD='\033[1m'
+NOBOLD='\033[0m'
 
 usage() {
     cat <<EOF
@@ -38,13 +41,28 @@ Examples:
     $PROGRAM -r '.*.c' /usr/src
         View only C source files in the /usr/src directory.
 
-    $PROGRAM .bashrc Downloads
-        View the .bashrc file and files inside the Downloads directory.
-
-    $PROGRAM *.h
-        View header files in the current directory.
+    $PROGRAM .bashrc Downloads/*.h
+        View the .bashrc file and header files inside the Downloads directory.
 
 EOF
+}
+
+# Parameters
+# $1 - The command which reads every file. Its output is then piped
+#      into `cat -n`.
+# Environmental variables:
+# - regex
+# - scope
+explore() {
+    command="$1"
+
+    # --dereference-recursive --files-with-matches --binary-files=without-match
+    grep -RlI '.' ${scope:-'.'} |
+        grep "${regex:-"."}" |
+        xargs -I {} sh -c "printf -- '%b%s%b\n' \"$BOLD\" "{}" \"$NOBOLD\"; \
+            $command "{}" | awk '{printf \"%6d  %s\n\", NR, \$0}'; echo" |
+        less --no-init --chop-long-lines --RAW-CONTROL-CHARS
+
 }
 
 version() {
@@ -68,6 +86,11 @@ do
         --colors|-c)
             shift
             colors=yes
+            if ! command -v pygmentize 1>&2 2>/dev/null
+            then
+                printf '%s: pygmentize is not available\n' "$PROGRAM"
+                exit 1
+            fi
             ;;
 
         --help|-h)
@@ -107,14 +130,7 @@ scope="${scope# }"
 
 if test "x$colors" = "xyes"
 then
-    grep -rlI '.' ${scope:-'.'} |
-        grep "${regex:-"."}" |
-        xargs -I {} sh -c "printf '%s\n' "{}"; pygmentize -g -- "{}" | cat -n; echo" |
-        less --no-init --chop-long-lines --RAW-CONTROL-CHARS
+    explore 'pygmentize -g --'
 else
-    grep -rlI '.' ${scope:-'.'} |
-        grep "${regex:-"."}" |
-        xargs -I {} sh -c "printf '%s\n' "{}"; cat -n -- "{}"; echo" |
-        less --no-init --chop-long-lines
+    explore 'cat --'
 fi
-
