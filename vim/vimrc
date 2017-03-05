@@ -290,14 +290,14 @@ set shiftround
 " Section: Homebrewed hacks {{{
 " Look for help everywhere you can.
 " FIXME
-nnoremap <silent> K :silent ! sh -c
-            \ '
-            \ (set -o pipefail; help <cword> 2>/dev/null <CR>\| less --no-init
-            \                                        --raw-control-chars
-            \                                        --quit-at-eof) \|\|
-            \ man <cword>
-            \ '
-            \ redraw! <CR>
+" nnoremap <silent> K :silent ! sh -c
+"             \ '
+"             \ (set -o pipefail; help <cword> 2>/dev/null <CR>\| less --no-init
+"             \                                        --raw-control-chars
+"             \                                        --quit-at-eof) \|\|
+"             \ man <cword>
+"             \ '
+"             \ redraw! <CR>
 
 " Sign highlight lines.
 " TODO: Set signcolumn back to auto when you remove all the higlight signs.
