@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.5.9
+version=0.5.11
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -26,6 +26,10 @@ Options:
     -r, --regex REGEX
         Regex string used to match files to be read; for example providing
         '.*.c' as a regex results in printing only C source files.
+
+    -n, --names
+        Print currently viewed file name on the left side bar, next to the line
+        numbers.
 
     --
         End of options. Treat the rest of the command line arguments as files
@@ -53,17 +57,35 @@ EOF
 # Environmental variables:
 # - regex
 # - scope
+# - names
 explore() {
     command="$1"
 
     find ${scope:-'.'} -type f -name "${regex:-*}" -exec sh -c "
-	for file do
-        # Skip binary files.
-        grep --binary-file=without-match . \"\$file\" 2>/dev/null 1>&2 || continue
-        printf -- '%b%s%b\n' \"$bold\" \"\$file\" \"$nobold\"
-        $command \"\$file\" | awk '{printf \"%6d  %s\n\", NR, \$0}'
-        echo
-	done
+        for file do
+            # Skip binary files.
+            grep --binary-file=without-match . \"\$file\" 2>/dev/null 1>&2 || \
+                continue
+            printf -- '%b%s%b\n' \"$bold\" \"\$file\" \"$nobold\"
+
+            if [ x\"$names\" = xyes ]
+            then
+                $command \"\$file\" | \
+                awk -v fn=\"\$file\" '{
+                    if (NR % length(fn) == 0) {
+                        printf \"█%6d  %s\n\", NR, \$0
+                    }
+                    else {
+                        printf \"%1s%6d  %s\n\", substr(fn,
+                                NR % length(fn) + 1, 1), NR, \$0
+                    }
+                }'
+            else
+                $command \"\$file\" | \
+                awk '{ printf \"%6d  %s\n\", NR, \$0 }'
+            fi
+            echo
+        done
 	" sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS
 }
 
@@ -81,6 +103,7 @@ usage_and_exit() {
 scope=
 regex=
 colors=
+names=
 
 while test $# -gt 0
 do
@@ -98,6 +121,11 @@ do
         --help|-h)
             shift
             usage_and_exit
+            ;;
+
+        --names|-n)
+            names=yes
+            shift
             ;;
 
         --regex|-r)
