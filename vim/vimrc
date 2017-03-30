@@ -56,6 +56,7 @@ let NERDSpaceDelims=1
 " Store and restore decisions only if the answer was given in upper case
 " (Y/N/A).
 let g:localvimrc_persistent = 1
+let g:localvimrc_sandbox = 0
 
 " Netrw
 let g:netrw_banner=0 " Disable a banner.
@@ -96,7 +97,9 @@ call EnsureDirExists($HOME . '/.vimundo')
 set undodir=~/.vimundo/
 
 " Show all the whitespace characters. Toggle with :set list!
-set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
+"set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
+set listchars=eol:$,tab:>―,trail:~,extends:>,precedes:<
+
 
 " Show search matches during typing.
 set incsearch
