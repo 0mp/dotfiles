@@ -4,7 +4,7 @@
 # http://rhunter.org/blog/2012/04/17/dwm-a-tutorial-for-beginners/
 # https://cannibalcandy.wordpress.com/2012/04/26/installing-and-configuring-dwm-under-ubuntu/
 
-. ../lib
+. ../lib.sh
 
 set -eu
 
