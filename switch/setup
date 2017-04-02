@@ -1,0 +1,25 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+MODULE_NAME=switch
+FILES='profile'
+SWITCH_DIR="$HOME/.0mp-switch"
+
+lib_install_file() {
+    touch -- "$2"
+}
+
+lib_info 'setup'
+
+mkdir -p "$SWITCH_DIR"
+
+PREFIX="$SWITCH_DIR/"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'
