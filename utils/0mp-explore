@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.5.12
+version=0.5.13
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -72,12 +72,12 @@ explore() {
             then
                 $command \"\$file\" | \
                 awk -v fn=\"\$file\" '{
-                    if (NR % length(fn) == 0) {
+                    if (NR % (length(fn) + 1) == 0) {
                         printf \"█%5d  %s\n\", NR, \$0
                     }
                     else {
                         printf \"%1s%5d  %s\n\", substr(fn,
-                                NR % length(fn) + 1, 1), NR, \$0
+                            NR % (length(fn) + 1), 1), NR, \$0
                     }
                 }'
             else
@@ -86,7 +86,7 @@ explore() {
             fi
             echo
         done
-	" sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS
+    " sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS
 }
 
 version() {
