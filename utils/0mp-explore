@@ -89,17 +89,6 @@ explore() {
     " sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS
 }
 
-version() {
-    cat <<EOF
-$version
-EOF
-}
-
-usage_and_exit() {
-    usage
-    exit $1
-}
-
 scope=
 regex=
 colors=
@@ -120,7 +109,8 @@ do
 
         --help|-h)
             shift
-            usage_and_exit
+            usage
+            exit 0
             ;;
 
         --names|-n)
@@ -136,7 +126,7 @@ do
 
         --version)
             shift
-            version
+            printf '%s\n' "$version"
             exit 0
             ;;
 
