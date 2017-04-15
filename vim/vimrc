@@ -188,6 +188,11 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Autorefresh files.
 set autoread
+
+" Hide the preview window when using Vim's native autocompletion.
+" http://stackoverflow.com/a/26022965/4694621
+autocmd CompleteDone * pclose
+
 " }}}
 " Section: Mappings {{{
 " Leader needs some space.
