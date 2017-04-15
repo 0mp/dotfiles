@@ -219,6 +219,12 @@ vnoremap k gk
 
 " Fight the <esc> <shift>-o delay.
 set timeout timeoutlen=1000 ttimeoutlen=100
+
+" Leader d sends targeted text into a black hole.
+" Ref.: https://stackoverflow.com/a/11993928/4694621
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
 " }}}
 " Section: Visuals {{{
 "
