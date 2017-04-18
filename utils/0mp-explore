@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.5.13
+version=0.5.14
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -86,7 +86,8 @@ explore() {
             fi
             echo
         done
-    " sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS
+    " sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS \
+        --ignore-case
 }
 
 scope=
