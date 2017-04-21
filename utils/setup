@@ -5,7 +5,7 @@
 set -eu
 
 MODULE_NAME=utils
-FILES="0mp-explore"
+FILES="0mp-explore fitqemu"
 
 BIN_DIR=~/bin
 

@@ -1,0 +1,46 @@
+#! /bin/sh -
+#
+# Fit your QEMU console running in a tmux session.
+#
+# The idea is to focus on a pane running QEMU and adjust its stty size.  It is
+# achived by prompting tmux for information about the current pane size and
+# sending a command adjusting the stty size in QEMU accordingly.
+#
+# Usage:
+# 1. Switch to the pane running QEMU.
+# 2. Make sure that you're in a shell (and not Vim or less) as you will be
+#    sending keystrokes directly into this pane in a while.
+# 2. Hit your tmux prefix and call ':run fitqemu' (assuming that fitqemu is
+#    present in your current path).
+
+# version=0.0.5
+
+get_info() {
+    format='#{pane_active} #{pane_index} #{pane_height} #{pane_width}'
+    tmux list-panes -F "$format" | awk '{ if ($1 == 1) { print $2, $3, $4 } }'
+}
+
+is_num() {
+    [ -n "$1" ] && [ "$1" -eq "$1" ] && [ "$1" -gt 0 ]
+}
+
+info="$(get_info)"
+
+if [ x3 != x"$(printf '%s' "$info" | wc -w)" ]; then
+    echo 'failed to get information about the active pane' 1>&2
+    exit 1
+fi
+
+index="$(printf '%s' "$info" | awk '{print $1}')"
+height="$(printf '%s' "$info" | awk '{print $2}')"
+width="$(printf '%s' "$info" | awk '{print $3}')"
+
+for num in "$index" "$height" "$width"; do
+    if ! is_num "$num"; then
+        echo 'one of the number extracted from tmux is not a number' 1>&2
+        exit 1
+    fi
+done
+
+tmux send-keys -t "$index" "stty rows $height cols $width"
+
