@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.6.0
+version=0.7.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -34,6 +34,9 @@ Options:
     -w, --wildcards REGEX
         Just like --regex but with a leading and a tailing wildcard .*. For
         example, "-r '*vector*'" and "-w vector" are effectively the same.
+
+    -
+        Read scope files and directories from the standard input.
 
     --
         End of options. Treat the rest of the command line arguments as files
@@ -66,7 +69,8 @@ explore() {
     command="$1"
 
     find ${scope:-'.'} -type f -name "${regex:-*}" -exec sh -c "
-        for file do
+        for file
+        do
             # Skip binary files.
             grep --binary-file=without-match . \"\$file\" 2>/dev/null 1>&2 || \
                 continue
@@ -139,6 +143,12 @@ do
             shift
             regex="*$1*"
             shift
+            ;;
+
+        -)
+            shift
+            IFS= read stdinscope
+            scope="${scope:-""} $stdinscope"
             ;;
 
         --)
