@@ -9,3 +9,8 @@ endif
 if (match(system('cat ~/.0mp-switch/profile'), 'Charcoal') >= 0)
     colorscheme xxx
 endif
+
+set hls
+
+" Turn off highlighting.
+nnoremap <leader>n :nohl<CR>
