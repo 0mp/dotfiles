@@ -194,6 +194,9 @@ set autoread
 " http://stackoverflow.com/a/26022965/4694621
 autocmd CompleteDone * pclose
 
+" Lines in a commit message should not exceed 72 characters.
+autocmd FileType gitcommit set tw=72
+
 " }}}
 " Section: Mappings {{{
 " Leader needs some space.
