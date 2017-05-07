@@ -301,6 +301,7 @@ set shiftround
 " }}}
 " Section: FreeBSD {{{
 " Copyright (c) 2007-2008 Sean C. Farley <scf@FreeBSD.org>
+" Copyright (c) 2017 Mateusz Piotrowski <0mp@FreeBSD.org>
 " All rights reserved.
 "
 " Redistribution and use in source and binary forms, with or without
@@ -331,43 +332,42 @@ set shiftround
 " indentation rules but does not change the indentation of existing code.
 
 " Load only once.
-if exists('loaded_FreeBSD')
-    finish
-endif
-let loaded_FreeBSD = 1
+if ! exists('loaded_FreeBSD')
+    let loaded_FreeBSD = 1
 
-" FreeBSD mapping to switch current buffer to style(9).  This is generally '\f'.
-nmap <silent> <Leader>sf :call FreeBSD_Style()<CR>
+    " FreeBSD mapping to switch current buffer to style(9).
+    nmap <silent> <Leader>sf :call FreeBSD_Style()<CR>
 
-" Ignore indents caused by parentheses in FreeBSD style.
-function! IgnoreParenIndent()
-    let indent = cindent(v:lnum)
+    " Ignore indents caused by parentheses in FreeBSD style.
+    function! IgnoreParenIndent()
+        let indent = cindent(v:lnum)
 
-    if indent > 4000
-        if cindent(v:lnum - 1) > 4000
-            return indent(v:lnum - 1)
+        if indent > 4000
+            if cindent(v:lnum - 1) > 4000
+                return indent(v:lnum - 1)
+            else
+                return indent(v:lnum - 1) + 4
+            endif
         else
-            return indent(v:lnum - 1) + 4
+            return (indent)
         endif
-    else
-        return (indent)
-    endif
-endfun
+    endfun
 
-" Follow the FreeBSD style(9).
-function! FreeBSD_Style()
-    setlocal cindent
-    setlocal cinoptions=(4200,u4200,+0.5s,*500,:0,t0,U4200,l1
-    setlocal indentexpr=IgnoreParenIndent()
-    setlocal indentkeys=0{,0},0),:,0#,!^F,o,O,e
-    setlocal noexpandtab
-    setlocal shiftwidth=8
-    setlocal tabstop=8
-    setlocal textwidth=80
-    if v:version >= 703
-        set colorcolumn=80
-    endif
-endfun
+    " Follow the FreeBSD style(9).
+    function! FreeBSD_Style()
+        setlocal cindent
+        setlocal cinoptions=(4200,u4200,+0.5s,*500,:0,t0,U4200,l1
+        setlocal indentexpr=IgnoreParenIndent()
+        setlocal indentkeys=0{,0},0),:,0#,!^F,o,O,e
+        setlocal noexpandtab
+        setlocal shiftwidth=8
+        setlocal tabstop=8
+        setlocal textwidth=80
+        " if v:version >= 703
+        "     set colorcolumn=80
+        " endif
+    endfun
+endif
 " }}}
 " Section: Homebrewed hacks {{{
 " Look for help everywhere you can.
