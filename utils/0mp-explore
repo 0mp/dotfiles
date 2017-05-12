@@ -4,15 +4,17 @@
 #
 
 program='0mp-explore'
-version=0.8.0
+version=0.9.0
 
 bold='\033[1m'
 nobold='\033[0m'
 
 shortusage() {
+    proglen="$(printf '%s' "$program" | sed 's/./ /g')"
+
     cat <<EOF
-Usage: $program [--colors] [--names] [--regex REGEX] [--wildcards REGEX] [-]
-       $(printf '%s' "$program" | sed 's/./ /g') [--help] [--version] [--] [SCOPE...]
+Usage: $program [--colors] [--names] [--nonumbers] [--regex REGEX]
+       $proglen [--wildcards REGEX] [-] [--help] [--version] [--] [SCOPE...]
 EOF
 }
 
@@ -33,6 +35,9 @@ Options:
     -n, --names
         Print currently viewed file name on the left side bar, next to the line
         numbers.
+
+    -N, --nonumbers
+        Don't print line numbers and file names on the left side bar.
 
     -r, --regex REGEX
         Set the regex string used to match files to be read; for example
@@ -83,7 +88,7 @@ explore() {
                 continue
             printf -- '%b%s%b\n' \"$bold\" \"\$file\" \"$nobold\"
 
-            if [ x\"$names\" = xyes ]
+            if [ x\"$leftbar\" = xnames ]
             then
                 $command \"\$file\" | \
                 awk -v fn=\"\$file\" '{
@@ -95,6 +100,9 @@ explore() {
                             NR % (length(fn) + 1), 1), NR, \$0
                     }
                 }'
+            elif [ x\"$leftbar\" = xnothing ]
+            then
+                $command \"\$file\"
             else
                 $command \"\$file\" | \
                 awk '{ printf \"%6d  %s\n\", NR, \$0 }'
@@ -106,7 +114,7 @@ explore() {
 }
 
 colors=
-names=
+leftbar=
 regex=
 scope=
 
@@ -136,7 +144,12 @@ do
             ;;
 
         --names|-n)
-            names=yes
+            leftbar=names
+            shift
+            ;;
+
+        --nonumbers|-N)
+            leftbar=nothing
             shift
             ;;
 
