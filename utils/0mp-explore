@@ -4,10 +4,17 @@
 #
 
 program='0mp-explore'
-version=0.7.0
+version=0.8.0
 
 bold='\033[1m'
 nobold='\033[0m'
+
+shortusage() {
+    cat <<EOF
+Usage: $program [--colors] [--names] [--regex REGEX] [--wildcards REGEX] [-]
+       $(printf '%s' "$program" | sed 's/./ /g') [--help] [--version] [--] [SCOPE...]
+EOF
+}
 
 usage() {
     cat <<EOF
@@ -116,7 +123,13 @@ do
             fi
             ;;
 
-        --help|-h)
+        -h)
+            shift
+            shortusage
+            exit 0
+            ;;
+
+        --help)
             shift
             usage
             exit 0
