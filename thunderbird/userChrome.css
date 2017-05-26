@@ -1,24 +1,30 @@
 /*
- * References:
- * - https://unix.stackexchange.com/q/4781/128489
- * - https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/tree
- * - Zebra
- *   http://kb.mozillazine.org/Zebra_striping
- *
+
+Thunderbird customization basics:
+https://unix.stackexchange.com/q/4781/128489
+
+XUL tree:
+https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/tree
+
+Zebra defaults are available here:
+http://kb.mozillazine.org/Zebra_striping
+They are broken however as of Thunderbird 52.1.1 because selected and unfocused
+rows have a white font on a bright background.
+
+CSS color keywords:
+https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#Color_keywords
+
+Useful articles:
+http://www.makeuseof.com/tag/tweak-your-firefox-with-the-userchromecss-file/
+
  */
+
 /* Set default namespace to XUL */
 @namespace
 url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-/* Set Font Size In Thread Pane */
-/* #threadTree >treechildren::-moz-tree-cell-text { */
-    /* font-size: 15pt !important; } */
-
-/* Set Height For Cells In Thread Pane */
-/* #threadTree >treechildren::-moz-tree-row { */
-   /* height: 25px !important; } */
-
 /* Add zebra striping */
+
 treechildren::-moz-tree-row(odd) {
   border: 1px solid transparent !important;
   background-color: #FFFFFF !important;
@@ -34,8 +40,11 @@ treechildren::-moz-tree-row(even) {
 }
 
 treechildren::-moz-tree-row(selected) {
-  /* background-color: -moz-Dialog !important; */
-  background-color: yellow !important;
+  background-color: peachpuff !important;
+}
+
+treechildren::-moz-tree-cell-text(selected) {
+  color: black !important;
 }
 
 treechildren::-moz-tree-row(selected, focus) {
@@ -48,13 +57,4 @@ treechildren::-moz-tree-row(current, focus) {
 
 treechildren::-moz-tree-row(selected, current, focus) {
   border: 1px dotted #C0C0C0 !important;
-}
-
-tree[selstyle="primary"] > treechildren::-moz-tree-row {
-  border: none !important;
-  background-color: transparent !important;
-}
-
-treechildren::-moz-tree-cell-text(selected) {
-  color: black !important;
 }
