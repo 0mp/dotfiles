@@ -1,0 +1,60 @@
+/*
+ * References:
+ * - https://unix.stackexchange.com/q/4781/128489
+ * - https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/tree
+ * - Zebra
+ *   http://kb.mozillazine.org/Zebra_striping
+ *
+ */
+/* Set default namespace to XUL */
+@namespace
+url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Set Font Size In Thread Pane */
+/* #threadTree >treechildren::-moz-tree-cell-text { */
+    /* font-size: 15pt !important; } */
+
+/* Set Height For Cells In Thread Pane */
+/* #threadTree >treechildren::-moz-tree-row { */
+   /* height: 25px !important; } */
+
+/* Add zebra striping */
+treechildren::-moz-tree-row(odd) {
+  border: 1px solid transparent !important;
+  background-color: #FFFFFF !important;
+  min-height: 18px !important;
+  height: 1.3em !important;
+}
+
+treechildren::-moz-tree-row(even) {
+  border: 1px solid transparent !important;
+  background-color: #F4F4F4 !important;
+  min-height: 18px !important;
+  height: 1.3em !important;
+}
+
+treechildren::-moz-tree-row(selected) {
+  /* background-color: -moz-Dialog !important; */
+  background-color: yellow !important;
+}
+
+treechildren::-moz-tree-row(selected, focus) {
+  background-color: Highlight !important;
+}
+
+treechildren::-moz-tree-row(current, focus) {
+  border: 1px dotted #000000 !important;
+}
+
+treechildren::-moz-tree-row(selected, current, focus) {
+  border: 1px dotted #C0C0C0 !important;
+}
+
+tree[selstyle="primary"] > treechildren::-moz-tree-row {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+treechildren::-moz-tree-cell-text(selected) {
+  color: black !important;
+}

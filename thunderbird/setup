@@ -1,0 +1,15 @@
+#! /bin/sh -
+#
+# Not automatic yet.
+
+. ../lib.sh
+
+set -eu
+
+MODULE_NAME=thunderbird
+FILES="userChrome.css"
+
+lib_info 'setup'
+
+lib_info 'this module has to be set up manually!'
+lib_info 'move userChrome.css to ~/.thunderbird/${profile_name}.default/chrome/'
