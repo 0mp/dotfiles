@@ -118,6 +118,9 @@ set tags=./tags;/
 " Disable full autocomplete in the last line mode.
 set wildmode=list:longest,full
 
+" Improve the autocompletion menu.
+set completeopt=longest,menuone
+
 " Ensure private editing.
 " Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
 " Usage: Just run `vimp`.
