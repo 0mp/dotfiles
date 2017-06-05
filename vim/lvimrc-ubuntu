@@ -1,16 +1,9 @@
 set clipboard=unnamedplus
-NoMatchParen
 
-if (match(system('cat ~/.0mp-switch/profile'), 'Shine') >= 0)
-    colorscheme xxx2
-    DoMatchParen
-endif
-
-if (match(system('cat ~/.0mp-switch/profile'), 'Charcoal') >= 0)
-    colorscheme xxx
-endif
+colorscheme robpike
 
 set hls
 
 " Turn off highlighting.
 nnoremap <leader>n :nohl<CR>
+
