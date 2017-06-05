@@ -212,7 +212,7 @@ cmap w!! w !sudo tee % >/dev/null
 nnoremap <leader>p<leader>p :set paste!<CR>p:set paste!<CR>
 
 " Save.
-nnoremap <leader>w<leader> :w <CR>
+" nnoremap <leader>w<leader> :w <CR>
 nnoremap <leader>ww :set wrap! <CR>
 
 " Disable the Ex mode.
