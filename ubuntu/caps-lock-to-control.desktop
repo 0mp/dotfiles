@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/bin/bash -c "sleep 10 && /usr/bin/xmodmap ~mpts/.Xmodmap"
+Exec=/bin/bash -c "sleep 10 && /usr/bin/xmodmap ~/.Xmodmap"
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
