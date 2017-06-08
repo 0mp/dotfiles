@@ -1,27 +1,3 @@
-" Section: Cheatsheet {{{
-" Open many files at once.
-"
-"   vim -p file01 file02 *.c
-"
-"   :n *.c
-"   :tab ball
-"
-" Copy text to the system clipboard.
-"
-"   "*y
-"
-" Reload files in tabs.
-"
-"   :tabdo e!
-"
-" Reload files in buffers.
-"
-"   :bufdo e
-"
-" Very useful command to list all the currently used highlights:
-"   so $VIMRUNTIME/syntax/hitest.vim
-"
-" }}}
 " Section: Vundle {{{
 set nocompatible              " be iMproved, required
 filetype off                  " required
