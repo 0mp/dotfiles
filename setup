@@ -2,7 +2,7 @@
 
 set -eu
 
-if [ ! "x$PWD" = "x$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
+if [ ! "x$(pwd -P)" = "x$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
     echo 'usage: ./setup [ target [options ... ] ] ...'
     exit 1
 fi
