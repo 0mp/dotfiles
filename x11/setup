@@ -1,0 +1,17 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+MODULE_NAME=x11
+FILES="Xmodmap"
+
+lib_info 'setup'
+
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'
