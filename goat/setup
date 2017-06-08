@@ -1,0 +1,15 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+MODULE_NAME=goat
+FILES=""
+
+lib_info setup
+
+cd goat
+./setup
+
+lib_info 'setup done'
