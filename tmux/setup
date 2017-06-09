@@ -9,13 +9,19 @@ FILES='tmux.conf'
 
 lib_info 'setup'
 
-if [ "x$(uname)" = xDarwin ]
-then
-    FILES="$FILES tmux-macos.conf"
-elif [ "x$(uname)" = xLinux ]
-then
-    FILES="$FILES tmux-linux.conf"
-fi
+case "$(uname)" in
+    Darwin)
+        FILES="$FILES tmux-macos.conf"
+        ;;
+    FreeBSD)
+        FILES="$FILES tmux-freebsd.conf"
+        ;;
+    Linux)
+        FILES="$FILES tmux-linux.conf"
+        ;;
+    *)
+        ;;
+esac
 
 lib_back_up
 trap lib_roll_back EXIT
