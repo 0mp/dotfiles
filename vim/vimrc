@@ -40,6 +40,41 @@ let g:netrw_banner=0 " Disable a banner.
 let g:netrw_altv=1 " Open files to the right.
 
 " }}}
+" Section: Mappings {{{
+" Leader needs some space.
+let mapleader = " "
+
+" Turn off highlighting.
+nnoremap <leader>n :nohl<CR>
+
+" Sudo saving.
+cmap w!! w !sudo tee % >/dev/null
+
+" Toggle paste mode.
+nnoremap <leader>p<leader>p :set paste!<CR>p:set paste!<CR>
+
+" Save.
+" nnoremap <leader>w<leader> :w <CR>
+nnoremap <leader>ww :set wrap! <CR>
+
+" Disable the Ex mode.
+map Q <Nop>
+
+" Move cursor by display lines when wrapping
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Fight the <esc> <shift>-o delay.
+set timeout timeoutlen=1000 ttimeoutlen=100
+
+" Leader d sends targeted text into a black hole.
+" Ref.: https://stackoverflow.com/a/11993928/4694621
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+" }}}
 " Section: Miscellenous {{{
 " Show the command you type in.
 set showcmd
@@ -77,16 +112,13 @@ set undodir=~/.vimundo/
 set listchars=eol:$,tab:>―,trail:~,extends:>,precedes:<
 
 
-" Show search matches during typing.
+" Show and highlight search matches during typing.
 set incsearch
+set hlsearch
 
 " Ignore case if search pattern is all lowercase, case-sensitive otherwise.
 set smartcase
 set ignorecase
-
-" Turn off highlighting.
-" XXX: Broken.
-nnoremap <leader>n :nohl<CR>
 
 " Look for the tags up in the directory tree.
 set tags=./tags;/
@@ -175,38 +207,6 @@ autocmd CompleteDone * pclose
 
 " Lines in a commit message should not exceed 72 characters.
 autocmd FileType gitcommit set tw=72
-
-" }}}
-" Section: Mappings {{{
-" Leader needs some space.
-let mapleader = " "
-
-" Sudo saving.
-cmap w!! w !sudo tee % >/dev/null
-
-" Toggle paste mode.
-nnoremap <leader>p<leader>p :set paste!<CR>p:set paste!<CR>
-
-" Save.
-" nnoremap <leader>w<leader> :w <CR>
-nnoremap <leader>ww :set wrap! <CR>
-
-" Disable the Ex mode.
-map Q <Nop>
-
-" Move cursor by display lines when wrapping
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
-
-" Fight the <esc> <shift>-o delay.
-set timeout timeoutlen=1000 ttimeoutlen=100
-
-" Leader d sends targeted text into a black hole.
-" Ref.: https://stackoverflow.com/a/11993928/4694621
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
 
 " }}}
 " Section: Visuals {{{

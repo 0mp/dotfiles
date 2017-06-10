@@ -1,9 +1,3 @@
 set clipboard=unnamedplus
 
 colorscheme robpike
-
-set hls
-
-" Turn off highlighting.
-nnoremap <leader>n :nohl<CR>
-
