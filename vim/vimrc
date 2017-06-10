@@ -224,8 +224,6 @@ set showtabline=2
 " Highlight the current line.
 set cursorline
 
-" set scrolloff=7
-
 " Highlight the 81th column.
 let &colorcolumn=0
 nnoremap <leader>h :call ColorColumnToggle()<CR>
