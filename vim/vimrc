@@ -246,7 +246,7 @@ if !has("gui_running")
 endif
 
 syntax enable
-colorscheme default
+colorscheme robpike
 " }}}
 " Section: Style {{{
 set shiftwidth=4
