@@ -243,6 +243,13 @@ if !has("gui_running")
     " set term=xterm
 endif
 
+" Indent wrapped lines and don't break in the middle of a word.
+" XXX: Might break in older version.
+" https://bluz71.github.io/2017/05/15/vim-tips-tricks.html
+set lbr
+set breakindent
+set showbreak=\
+
 syntax enable
 colorscheme robpike
 " }}}
