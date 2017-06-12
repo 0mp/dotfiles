@@ -120,6 +120,10 @@ set hlsearch
 set smartcase
 set ignorecase
 
+" Works better for completions -> does not mix cases although ignorecase is
+" set.
+set infercase
+
 " Look for the tags up in the directory tree.
 set tags=./tags;/
 
