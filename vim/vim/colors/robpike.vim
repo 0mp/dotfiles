@@ -4,6 +4,7 @@
 "
 " Name: robpike.vim
 " Maintainer: Mateusz Piotrowski
+" Version: 0.1.0
 
 set background=light
 hi clear
@@ -37,4 +38,5 @@ hi TabLineSel cterm=bold term=bold
 hi Title ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE cterm=bold term=bold
 hi Todo ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE cterm=bold term=bold
 hi Visual ctermbg=11 ctermfg=16 guifg=Black
+hi SpellBad ctermfg=1 ctermbg=NONE guibg=NONE cterm=NONE term=NONE
 hi gitcommitSummary ctermfg=4
