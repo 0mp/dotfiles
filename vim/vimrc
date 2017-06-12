@@ -82,7 +82,10 @@ set showcmd
 set mouse=a
 
 " One clipboard is enough for me.
-set clipboard=unnamed
+set clipboard=unnamedplus
+if substitute(system('uname'), "\n", "", "") == "Darwin"
+    set clipboard=unnamed
+endif
 
 " Make backspace work like in most other apps.
 set backspace=2

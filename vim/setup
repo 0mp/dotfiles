@@ -5,7 +5,8 @@
 set -eu
 
 MODULE_NAME=vim
-FILES='vimrc vim/colors' # Keeping a directory here might not be the best idea.
+# XXX: Keeping a directory here might not be the best idea.
+FILES='vimrc vim/colors'
 BUNDLE_DIR="$HOME/.vim/bundle"
 VUNDLE_PLUGIN_DIR="$BUNDLE_DIR/Vundle.vim"
 VUNDLE_REPO='https://github.com/VundleVim/Vundle.vim.git'
@@ -13,13 +14,6 @@ VUNDLE_REPO='https://github.com/VundleVim/Vundle.vim.git'
 lib_info setup
 
 lib_back_up
-
-# Platform specific configuration.
-if uname -a 2>/dev/null | grep Ubuntu 2>&1 >/dev/null
-then
-    lib_install_file "$PWD/lvimrc-ubuntu" "$PWD/lvimrc"
-    FILES="$FILES lvimrc"
-fi
 
 mkdir -p "$BUNDLE_DIR"
 
