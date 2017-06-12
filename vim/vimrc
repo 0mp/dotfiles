@@ -61,10 +61,10 @@ nnoremap <leader>ww :set wrap! <CR>
 map Q <Nop>
 
 " Move cursor by display lines when wrapping
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+vnoremap <expr> j v:count ? 'j' : 'gj'
+vnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Fight the <esc> <shift>-o delay.
 set timeout timeoutlen=1000 ttimeoutlen=100
