@@ -1,6 +1,6 @@
 # vi: set ft=sh:
 lib_info() {
-    printf '%s: %s' "$MODULE_NAME" "$*" 1>&2
+    printf '%s: %s\n' "$MODULE_NAME" "$*" 1>&2
 }
 
 lib_err() {
