@@ -255,7 +255,7 @@ endif
 " https://bluz71.github.io/2017/05/15/vim-tips-tricks.html
 set lbr
 set breakindent
-set showbreak=\
+set showbreak=\\_
 
 syntax enable
 colorscheme robpike
