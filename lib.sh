@@ -18,12 +18,13 @@ lib_back_up_file() {
 # FILES  - The list of file names (not the full paths).
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
-#          PREFIX="~/bin/" then the files will be installed to that directory.
+#          PREFIX="~/bin/" then the files from that directory will be backed
+#          up.
 lib_back_up() {
     : ${PREFIX:="$HOME/."}
     for file in $FILES
     do
-        if [ -e "$HOME/$file" ]
+        if [ -e "$PREFIX$file" ]
         then
             lib_back_up_file "$PREFIX$file" "$(basename -- $PREFIX)$file"
         fi

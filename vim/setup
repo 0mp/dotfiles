@@ -5,29 +5,45 @@
 set -eu
 
 MODULE_NAME=vim
-# XXX: Keeping a directory here might not be the best idea.
-FILES='vimrc vim/colors'
-BUNDLE_DIR="$HOME/.vim/bundle"
-VUNDLE_PLUGIN_DIR="$BUNDLE_DIR/Vundle.vim"
-VUNDLE_REPO='https://github.com/VundleVim/Vundle.vim.git'
+
+vim_dir="$HOME/.vim"
 
 lib_info setup
 
-lib_back_up
-
-mkdir -p "$BUNDLE_DIR"
-
-# Install Vundle.
-if [ ! -d "$VUNDLE_PLUGIN_DIR" ]
+# 1. Install Vundle.
+vundle_dir="$vim_dir/bundle"
+vundle_plugin_dir="$vundle_dir/Vundle.vim"
+vundle_repo='https://github.com/VundleVim/Vundle.vim.git'
+mkdir -p "$vundle_dir"
+if [ ! -d "$vundle_plugin_dir" ]
 then
-    git clone "$VUNDLE_REPO" "$VUNDLE_PLUGIN_DIR"
+    git clone "$vundle_repo" "$vundle_plugin_dir"
 fi
 
+# 2. Install vimrc.
+FILES='vimrc'
+lib_back_up
 trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
-# Install plugins.
+# 3. Install color schemes.
+FILES='monochrome.vim monokai.vim xxx.vim xxx2.vim robpike.vim'
+PREFIX="$vim_dir/colors/"
+colors_dir="$vim_dir/colors"
+lib_back_up
+if [ -e "$colors_dir" ] && [ ! -d "$colors_dir" ]
+then
+    lib_back_up_file "$colors_dir" "${colors_dir##*/}"
+    rm -rf "$colors_dir"
+fi
+mkdir -p "$colors_dir"
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+PREFIX=
+
+# 4. Install Vundle plugins.
 vim +PluginInstall +PluginUpdate +qall
 
 lib_info 'setup done'
