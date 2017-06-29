@@ -2,9 +2,12 @@
 #
 # 0mp-explore - View files of the whole code base tree in a pager.
 #
+# TODO:
+# `grep -l foo * | 0mp-explore -` does not work as the file names are seperated
+# with a new line.
 
 program='0mp-explore'
-version=0.9.0
+version=0.10.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -26,6 +29,11 @@ Positional arguments:
     SCOPE
         Files and directories to be explored by the program. If not provided
         then the scope is set to '.' (the current directory).
+
+Environmental variables:
+    _0MP_EXPLORE_OPTS
+        Options to be passed to the program when it starts. They are processed
+        before the options passed via the command line.
 
 Options:
     -c, --colors
@@ -70,7 +78,7 @@ Examples:
 EOF
 }
 
-# Parameters
+# Parameters:
 # $1 - The command which reads every file. Its output is then piped
 #      into `cat -n`.
 # Environmental variables:
@@ -113,85 +121,97 @@ explore() {
         --ignore-case
 }
 
+# Parameters
+# $@ - Arguments to be parsed.
+# Environmental variables:
+# - colors
+# - leftbar
+# - regex
+# - scope
+parse() {
+    while test $# -gt 0
+    do
+        case $1 in
+            --colors|-c)
+                shift
+                colors=yes
+                if ! command -v pygmentize 1>&2 2>/dev/null
+                then
+                    printf '%s: pygmentize is not available\n' "$program"
+                    exit 1
+                fi
+                ;;
+
+            -h)
+                shift
+                shortusage
+                exit 0
+                ;;
+
+            --help)
+                shift
+                usage
+                exit 0
+                ;;
+
+            --names|-n)
+                leftbar=names
+                shift
+                ;;
+
+            --nonumbers|-N)
+                leftbar=nothing
+                shift
+                ;;
+
+            --regex|-r)
+                shift
+                regex="$1"
+                shift
+                ;;
+
+            --version)
+                shift
+                printf '%s\n' "$version"
+                exit 0
+                ;;
+
+            --wildcards|-w)
+                shift
+                regex="*$1*"
+                shift
+                ;;
+
+            -)
+                shift
+                IFS= read stdinscope
+                scope="${scope:-""} $stdinscope"
+                ;;
+
+            --)
+                shift
+                if [ $# -gt 0 ]
+                then
+                    scope="${scope:-""} $@"
+                fi
+                break
+                ;;
+
+            *)
+                scope="${scope:-""} $1"
+                shift
+                ;;
+        esac
+    done
+}
+
 colors=
 leftbar=
 regex=
 scope=
 
-while test $# -gt 0
-do
-    case $1 in
-        --colors|-c)
-            shift
-            colors=yes
-            if ! command -v pygmentize 1>&2 2>/dev/null
-            then
-                printf '%s: pygmentize is not available\n' "$program"
-                exit 1
-            fi
-            ;;
-
-        -h)
-            shift
-            shortusage
-            exit 0
-            ;;
-
-        --help)
-            shift
-            usage
-            exit 0
-            ;;
-
-        --names|-n)
-            leftbar=names
-            shift
-            ;;
-
-        --nonumbers|-N)
-            leftbar=nothing
-            shift
-            ;;
-
-        --regex|-r)
-            shift
-            regex="$1"
-            shift
-            ;;
-
-        --version)
-            shift
-            printf '%s\n' "$version"
-            exit 0
-            ;;
-
-        --wildcards|-w)
-            shift
-            regex="*$1*"
-            shift
-            ;;
-
-        -)
-            shift
-            IFS= read stdinscope
-            scope="${scope:-""} $stdinscope"
-            ;;
-
-        --)
-            shift
-            if [ $# -gt 0 ]
-            then
-                scope="${scope:-""} $@"
-            fi
-            break
-            ;;
-
-        *)
-            scope="${scope:-""} $1"
-            shift
-            ;;
-    esac
-done
+parse $_0MP_EXPLORE_OPTS
+parse "$@"
 
 scope="${scope# }"
 
