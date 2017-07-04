@@ -2,12 +2,9 @@
 #
 # 0mp-explore - View files of the whole code base tree in a pager.
 #
-# TODO:
-# `grep -l foo * | 0mp-explore -` does not work as the file names are seperated
-# with a new line.
 
 program='0mp-explore'
-version=0.10.0
+version=0.10.1
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -184,8 +181,10 @@ parse() {
 
             -)
                 shift
-                IFS= read stdinscope
-                scope="${scope:-""} $stdinscope"
+                while IFS= read stdinscope || [ -n "$stdinscope" ]
+                do
+                    scope="${scope:-""} $stdinscope"
+                done
                 ;;
 
             --)
