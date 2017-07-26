@@ -1,0 +1,201 @@
+#! /bin/sh -
+#
+# moinmoincli - Edit existing Moin Moin Wiki pages from a command line.
+#
+#               This script has been tested only on the FreeBSD wiki
+#               (https://wiki.freebsd.org).
+#
+# ---
+#
+# Copyright (c) 2017 Mateusz Piotrowski <0mp@FreeBSD.org>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHORS AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+program=moinmoincli
+version=0.0.0
+
+base='https://wiki.freebsd.org'
+conffile="$HOME/.moinmoincli.conf"
+workdir='/tmp/moinmoincli-workdir'
+EDITFILE="$workdir/edit.html"
+oldrawfile="$workdir/oldraw.txt"
+cookiefile="$workdir/cookie.txt"
+
+usage() {
+    cat <<-EOF
+Usage: $program [-f TEXTFILE] [-n NAME] [-t TARGET] [--help] [--version]
+EOF
+}
+
+# $1 -- field number
+# $2 -- field separator
+# $3 -- regex
+# $EDITFILE -- parsed file
+take() {
+    grep -E -o "$3" "$EDITFILE" | cut -d "$2" -f "$1"
+}
+
+# $1 -- text to be add to $DATA (& between fields is added automatically)
+add_data() {
+    if [ -z "$DATA" ]
+    then
+        DATA="$1"
+    else
+        DATA="$DATA&$1"
+    fi
+}
+
+ask_yn() {
+    printf 'OK? [Y/n] '
+    read yn
+    case "$yn" in
+        n*|N*)
+            exit 1
+            ;;
+        *)
+            return 0
+            ;;
+    esac
+}
+
+# Inspiration: https://stackoverflow.com/a/7506695/4694621
+# $1 -- data to be encoded
+encode() {
+    printf '%s' "$1" | hexdump -v -e '/1 "%02x"' | sed 's/\(..\)/%\1/g'
+}
+
+clean_up() {
+    if [ -n "$workdir" ] && [ -d "$workdir" ]
+    then
+        rm -rf "$workdir"
+    fi
+    stty echo
+}
+
+errxit() {
+	printf "error: %s\n" "$*"
+	exit 1
+}
+
+mkdir -p "$workdir"
+trap 'clean_up' EXIT
+
+set -u
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        -n|--name)
+            name="$2"
+            shift 2
+            ;;
+        -f|--file)
+            textfile="$2"
+            shift 2
+            ;;
+        -t|--target)
+            target="$2"
+            shift 2
+            ;;
+        -h|--help)
+            shift
+            usage
+            exit 0
+            ;;
+        -v|--version)
+            shift
+            printf '%s\n' "$version"
+            exit 0
+            ;;
+        *)
+            errxit "invalid option '$1'"
+            ;;
+    esac
+done
+set +u
+
+. "$conffile"
+[ -z "$name" ] && errxit 'missing name'
+if [ -z "$password" ]
+then
+    printf 'Password: '
+    stty -echo
+    read password
+    stty echo
+fi
+[ -z "$target" ] && errxit 'missing target'
+[ -z "$textfile" ] && errxit 'missing text file'
+
+printf 'Comment: '
+read comment
+
+textarea="$(cat $textfile)"
+
+rawpage="$base/$target?action=raw"
+
+if ! curl "$rawpage" | awk 1 RS='\r\n' ORS='\n' > "$oldrawfile"
+then
+    errxit "failed to download old revision"
+fi
+
+cat <<-EOF
+Summary
+=======
+Username:  $name
+Target:    $target
+Comment:   $comment
+Text file: $textfile
+Diff: $(git diff "$oldrawfile" "$textfile")
+EOF
+
+ask_yn
+
+loginpage="$base/action/login/FrontPage"
+editpage="$base/action/edit$target?action=edit&editor=text"
+
+DATA=
+add_data "action=login"
+add_data "login=Login"
+add_data "name=$name"
+add_data "password=$password"
+
+if ! curl --data "$DATA" --cookie-jar "$cookiefile" "$loginpage" 1>&2 2>/dev/null
+then
+    errxit "failed to log in"
+fi
+if ! curl -b "$cookiefile" "$editpage" > "$EDITFILE" 2>/dev/null
+then
+    errxit "failed to get the edit page"
+fi
+
+DATA=
+add_data "action=edit"
+add_data "rev=$(take 6 '"' '<input type="hidden" name="rev" value="[0-9]+">')"
+add_data "ticket=$(take 6 '"' '<input type="hidden" name="ticket" value=".*">')"
+add_data "button_save=Save Changes"
+add_data "editor=text"
+add_data "comment=$(encode "$comment")"
+add_data "savetext=$(encode "$textarea")"
+
+curl --data "$DATA" -b "$cookiefile" "$base$target#preview" 1>/dev/null
+
