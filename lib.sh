@@ -26,7 +26,7 @@ lib_back_up() {
     do
         if [ -e "$PREFIX$file" ]
         then
-            lib_back_up_file "$PREFIX$file" "$(basename -- $PREFIX)$file"
+            lib_back_up_file "$PREFIX$file" "${PREFIX##*/}$file"
         fi
     done
     return 0
@@ -51,7 +51,7 @@ lib_roll_back() {
     lib_info roll back due to an error
     for file in $FILES
     do
-        lib_roll_back_file "$(basename -- $PREFIX)$file" "$PREFIX$file"
+        lib_roll_back_file "${PREFIX##*/}$file" "$PREFIX$file"
     done
     set -eu
 }
