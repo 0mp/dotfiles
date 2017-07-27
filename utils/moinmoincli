@@ -33,7 +33,7 @@
 # SUCH DAMAGE.
 
 program=moinmoincli
-version=0.0.1
+version=0.0.2
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -153,10 +153,12 @@ textarea="$(cat $textfile)"
 
 rawpage="$base/$target?action=raw"
 
-if ! curl "$rawpage" | awk 1 RS='\r\n' ORS='\n' 1>"$oldrawfile" 2>/dev/null
+if ! curl "$rawpage" 1>"$oldrawfile" 2>/dev/null
 then
     errxit "failed to download old revision"
 fi
+mv "$oldrawfile" "$oldrawfile".tmp
+awk 1 RS='\r\n' ORS='\n' "$oldrawfile".tmp 1>"$oldrawfile" 2>/dev/null
 
 cat <<-EOF
 Summary
@@ -165,11 +167,10 @@ Username:  $name
 Target:    $target
 Comment:   $comment
 Text file: $textfile
-Diff: $(git diff "$oldrawfile" "$textfile")
+Diff: $(git diff --color=always -- "$oldrawfile" "$textfile")
 EOF
 
 ask_yn
-
 
 DATA=
 add_data "action=login"
@@ -178,7 +179,7 @@ add_data "name=$name"
 add_data "password=$password"
 
 loginpage="$base/action/login/FrontPage"
-if ! curl --data "$DATA" --cookie-jar "$cookiefile" "$loginpage" 1>&2 2>/dev/null
+if ! curl --data "$DATA" --cookie-jar "$cookiefile" "$loginpage" 1>/dev/null 2>&1
 then
     errxit "failed to log in"
 fi
@@ -197,5 +198,5 @@ add_data "editor=text"
 add_data "comment=$(encode "$comment")"
 add_data "savetext=$(encode "$textarea")"
 
-curl --data "$DATA" --cookie "$cookiefile" "$base$target#preview" 1>/dev/null
+curl --data "$DATA" --cookie "$cookiefile" "$base$target#preview" 1>/dev/null 2>&1
 
