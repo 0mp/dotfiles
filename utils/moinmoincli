@@ -33,7 +33,7 @@
 # SUCH DAMAGE.
 
 program=moinmoincli
-version=0.0.2
+version=1.0.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -146,13 +146,9 @@ fi
 [ -z "$target" ] && errxit 'missing target'
 [ -z "$textfile" ] && errxit 'missing text file'
 
-printf 'Comment: '
-read comment
-
 textarea="$(cat $textfile)"
 
 rawpage="$base/$target?action=raw"
-
 if ! curl "$rawpage" 1>"$oldrawfile" 2>/dev/null
 then
     errxit "failed to download old revision"
@@ -160,6 +156,12 @@ fi
 mv "$oldrawfile" "$oldrawfile".tmp
 awk 1 RS='\r\n' ORS='\n' "$oldrawfile".tmp 1>"$oldrawfile" 2>/dev/null
 
+echo Diff
+echo ====
+git diff --color=always -- "$oldrawfile" "$textfile"
+echo
+printf 'Comment: '
+read comment
 cat <<-EOF
 Summary
 =======
@@ -167,7 +169,6 @@ Username:  $name
 Target:    $target
 Comment:   $comment
 Text file: $textfile
-Diff: $(git diff --color=always -- "$oldrawfile" "$textfile")
 EOF
 
 ask_yn
