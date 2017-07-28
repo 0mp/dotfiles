@@ -33,12 +33,12 @@
 # SUCH DAMAGE.
 
 program=moinmoincli
-version=1.0.0
+version=2.0.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
 workdir='/tmp/moinmoincli-workdir'
-EDITFILE="$workdir/edit.html"
+editfile="$workdir/edit.html"
 oldrawfile="$workdir/oldraw.txt"
 cookiefile="$workdir/cookie.txt"
 
@@ -51,32 +51,37 @@ EOF
 # $1 -- field number
 # $2 -- field separator
 # $3 -- regex
-# $EDITFILE -- parsed file
+# $editfile -- parsed file
 take() {
-    grep -E -o "$3" "$EDITFILE" | cut -d "$2" -f "$1"
+    grep -E -o "$3" "$editfile" | cut -d "$2" -f "$1"
 }
 
-# $1 -- text to be add to $DATA (& between fields is added automatically)
+# $1 -- text to be add to $data (& between fields is added automatically)
+# $data
 add_data() {
-    if [ -z "$DATA" ]
+    if [ -z "$data" ]
     then
-        DATA="$1"
+        data="$1"
     else
-        DATA="$DATA&$1"
+        data="$data&$1"
     fi
 }
 
-ask_yn() {
-    printf 'OK? [Y/n] '
-    read yn
-    case "$yn" in
-        n*|N*)
-            exit 1
-            ;;
-        *)
-            return 0
-            ;;
-    esac
+# $oldrawfile
+show_diff() {
+    if git diff --exit-code --color=always -- "$oldrawfile" "$textfile"
+    then
+        echo no changes
+        exit 1
+    else
+        echo
+    fi
+}
+
+# $comment
+get_comment() {
+    printf 'Comment: '
+    read comment
 }
 
 # Inspiration: https://stackoverflow.com/a/7506695/4694621
@@ -91,6 +96,17 @@ clean_up() {
         rm -rf "$workdir"
     fi
     stty echo
+}
+
+print_summary() {
+    cat <<-EOF
+Summary
+=======
+Username:  $name
+Target:    $target
+Comment:   $comment
+Text file: $textfile
+EOF
 }
 
 errxit() {
@@ -156,41 +172,62 @@ fi
 mv "$oldrawfile" "$oldrawfile".tmp
 awk 1 RS='\r\n' ORS='\n' "$oldrawfile".tmp 1>"$oldrawfile" 2>/dev/null
 
-echo Diff
-echo ====
-git diff --color=always -- "$oldrawfile" "$textfile"
-echo
-printf 'Comment: '
-read comment
+show_diff
+get_comment
+print_summary
 cat <<-EOF
-Summary
-=======
-Username:  $name
-Target:    $target
-Comment:   $comment
-Text file: $textfile
+Actions:
+ * confirm        -> y,k
+ * abort          -> n,a
+ * mark trivial   -> t
+ * change comment -> c
+ * show diff      -> d
+ * print summary  -> s
 EOF
+while true
+do
+    printf '[yknatcds] '
+    read action
+    case "$action" in
+        y|k)
+            break
+            ;;
+        n|a)
+            exit 1
+            ;;
+        t)
+            trivial=yes
+            echo 'marked as trivial'
+            ;;
+        c)
+            get_comment
+            ;;
+        d)
+            show_diff
+            ;;
+        *)
+            echo 'invalid action (%s)\n' "$action"
+    esac
+done
 
-ask_yn
-
-DATA=
+data=
 add_data "action=login"
 add_data "login=Login"
 add_data "name=$name"
 add_data "password=$password"
 
 loginpage="$base/action/login/FrontPage"
-if ! curl --data "$DATA" --cookie-jar "$cookiefile" "$loginpage" 1>/dev/null 2>&1
+if ! curl --data "$data" --cookie-jar "$cookiefile" "$loginpage" 1>/dev/null 2>&1
 then
     errxit "failed to log in"
 fi
 editpage="$base/action/edit$target?action=edit&editor=text"
-if ! curl --cookie "$cookiefile" "$editpage" 1>"$EDITFILE" 2>/dev/null
+if ! curl --cookie "$cookiefile" "$editpage" 1>"$editfile" 2>/dev/null
 then
     errxit "failed to get the edit page"
 fi
 
-DATA=
+data=
 add_data "action=edit"
 add_data "rev=$(take 6 '"' '<input type="hidden" name="rev" value="[0-9]+">')"
 add_data "ticket=$(take 6 '"' '<input type="hidden" name="ticket" value=".*">')"
@@ -198,6 +235,7 @@ add_data "button_save=Save Changes"
 add_data "editor=text"
 add_data "comment=$(encode "$comment")"
 add_data "savetext=$(encode "$textarea")"
+[ "@$trivial@" = "@yes@" ] && add_data "trivial=1"
 
-curl --data "$DATA" --cookie "$cookiefile" "$base$target#preview" 1>/dev/null 2>&1
+curl --data "$data" --cookie "$cookiefile" "$base$target#preview" 1>/dev/null 2>&1
 
