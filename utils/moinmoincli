@@ -33,7 +33,7 @@
 # SUCH DAMAGE.
 
 program=moinmoincli
-version=2.0.0
+version=2.1.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -44,7 +44,7 @@ cookiefile="$workdir/cookie.txt"
 
 usage() {
     cat <<-EOF
-Usage: $program [-f TEXTFILE] [-n NAME] [-t TARGET] [--help] [--version]
+Usage: $program [-q] [-f TEXTFILE] [-n NAME] [-t TARGET] [--help] [--version]
 EOF
 }
 
@@ -129,6 +129,10 @@ do
             textfile="$2"
             shift 2
             ;;
+        -q|--quick)
+            quickmode=yes
+            shift 1
+            ;;
         -t|--target)
             target="$2"
             shift 2
@@ -186,6 +190,7 @@ Actions:
 EOF
 while true
 do
+    [ "@${quickmode:-no}@" = "@yes@" ] && break
     printf '[yknatcds] '
     read action
     case "$action" in
@@ -209,6 +214,8 @@ do
             echo 'invalid action (%s)\n' "$action"
     esac
 done
+
+echo processing...
 
 data=
 add_data "action=login"
@@ -237,5 +244,9 @@ add_data "comment=$(encode "$comment")"
 add_data "savetext=$(encode "$textarea")"
 [ "@$trivial@" = "@yes@" ] && add_data "trivial=1"
 
-curl --data "$data" --cookie "$cookiefile" "$base$target#preview" 1>/dev/null 2>&1
+if ! curl --data "$data" --cookie "$cookiefile" "$base$target#preview" 1>/dev/null 2>&1
+then
+    errxit "failed to update the page"
+fi
 
+echo done.
