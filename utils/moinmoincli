@@ -5,6 +5,29 @@
 #               This script has been tested only on the FreeBSD wiki
 #               (https://wiki.freebsd.org).
 #
+# Usage: Consult `moinmoincli --help` or the implementation.
+#
+# Sample configuration file (~/.moinmoincli.conf):
+# name=MateuszPiotrowski
+# password=xxx
+# target='/WikiSandBox'
+# textfile=/tmp/wiki.moin
+# select_target() {
+#     case "$1" in
+#         [pP]*)
+#             target='/MateuszPiotrowski/Audit/AudispAuditdistd'
+#             textfile="$HOME/notes/plugin.moin"
+#             ;;
+#         [aA]*)
+#             target='/MateuszPiotrowski/Audit/Auditdistd'
+#             textfile="$HOME/notes/auditdistd.moin"
+#             ;;
+#         *)
+#             errxit "invalid selector '$1'"
+#             ;;
+#     esac
+# }
+#
 # ---
 #
 # Copyright (c) 2017 Mateusz Piotrowski <0mp@FreeBSD.org>
@@ -33,7 +56,7 @@
 # SUCH DAMAGE.
 
 program=moinmoincli
-version=2.1.0
+version=3.0.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -44,7 +67,7 @@ cookiefile="$workdir/cookie.txt"
 
 usage() {
     cat <<-EOF
-Usage: $program [-q] [-f TEXTFILE] [-n NAME] [-t TARGET] [--help] [--version]
+Usage: $program [-hqv] [-f TEXTFILE] [-n NAME] [-t TARGET] SELECTOR
 EOF
 }
 
@@ -114,18 +137,26 @@ errxit() {
 	exit 1
 }
 
+# This should be overwritten in the configuration file.
+select_target() {
+    printf '%s' "$target"
+}
+
 mkdir -p "$workdir"
 trap 'clean_up' EXIT
 
-set -u
+. "$conffile"
+
 while [ $# -gt 0 ]
 do
     case "$1" in
         -n|--name)
+            [ $# -eq 0 ] && errxit "missing value for the '$1' flag"
             name="$2"
             shift 2
             ;;
         -f|--file)
+            [ $# -eq 0 ] && errxit "missing value for the '$1' flag"
             textfile="$2"
             shift 2
             ;;
@@ -134,6 +165,7 @@ do
             shift 1
             ;;
         -t|--target)
+            [ $# -eq 0 ] && errxit "missing value for the '$1' flag"
             target="$2"
             shift 2
             ;;
@@ -148,13 +180,12 @@ do
             exit 0
             ;;
         *)
-            errxit "invalid option '$1'"
+            select_target "$1"
+            shift
             ;;
     esac
 done
-set +u
 
-. "$conffile"
 [ -z "$name" ] && errxit 'missing name'
 if [ -z "$password" ]
 then
@@ -166,7 +197,7 @@ fi
 [ -z "$target" ] && errxit 'missing target'
 [ -z "$textfile" ] && errxit 'missing text file'
 
-textarea="$(cat $textfile)"
+textarea="$(cat -- "$textfile")"
 
 rawpage="$base/$target?action=raw"
 if ! curl "$rawpage" 1>"$oldrawfile" 2>/dev/null
