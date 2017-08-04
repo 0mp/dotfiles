@@ -56,7 +56,7 @@
 # SUCH DAMAGE.
 
 program=moinmoincli
-version=3.0.0
+version=4.0.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -67,7 +67,7 @@ cookiefile="$workdir/cookie.txt"
 
 usage() {
     cat <<-EOF
-Usage: $program [-hqv] [-f TEXTFILE] [-n NAME] [-t TARGET] SELECTOR
+Usage: $program [-hquv] [-f TEXTFILE] [-n NAME] [-t TARGET] SELECTOR
 EOF
 }
 
@@ -142,6 +142,16 @@ select_target() {
     printf '%s' "$target"
 }
 
+download_rawpage() {
+    rawpage="$base/$target?action=raw"
+    if ! curl "$rawpage" 1>"$oldrawfile" 2>/dev/null
+    then
+        errxit "failed to download old revision"
+    fi
+    mv "$oldrawfile" "$oldrawfile".tmp
+    awk 1 RS='\r\n' ORS='\n' "$oldrawfile".tmp 1>"$oldrawfile" 2>/dev/null
+}
+
 mkdir -p "$workdir"
 trap 'clean_up' EXIT
 
@@ -174,6 +184,10 @@ do
             usage
             exit 0
             ;;
+        -u|--update)
+            shift
+            updatemode=yes
+            ;;
         -v|--version)
             shift
             printf '%s\n' "$version"
@@ -197,15 +211,17 @@ fi
 [ -z "$target" ] && errxit 'missing target'
 [ -z "$textfile" ] && errxit 'missing text file'
 
+if [ "@$updatemode@" = '@yes@' ]
+then
+    download_rawpage
+    cat "$oldrawfile" > "$textfile"
+    echo updated.
+    exit 0
+fi
+
 textarea="$(cat -- "$textfile")"
 
-rawpage="$base/$target?action=raw"
-if ! curl "$rawpage" 1>"$oldrawfile" 2>/dev/null
-then
-    errxit "failed to download old revision"
-fi
-mv "$oldrawfile" "$oldrawfile".tmp
-awk 1 RS='\r\n' ORS='\n' "$oldrawfile".tmp 1>"$oldrawfile" 2>/dev/null
+download_rawpage
 
 show_diff
 get_comment
