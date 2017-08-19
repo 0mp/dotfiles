@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.10.1
+version=0.11.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -13,7 +13,7 @@ shortusage() {
     proglen="$(printf '%s' "$program" | sed 's/./ /g')"
 
     cat <<EOF
-Usage: $program [--colors] [--names] [--nonumbers] [--regex REGEX]
+Usage: $program [--ascii] [--colors] [--names] [--nonumbers] [--regex REGEX]
        $proglen [--wildcards REGEX] [-] [--help] [--version] [--] [SCOPE...]
 EOF
 }
@@ -33,6 +33,10 @@ Environmental variables:
         before the options passed via the command line.
 
 Options:
+    -A, --ascii
+        Replace the default character separating file names on the left side
+        bar. Implies the --names option.
+
     -c, --colors
         Add syntax coloring with pygmentize which has to be installed. This
         option might slow down the program significantly.
@@ -98,7 +102,7 @@ explore() {
                 $command \"\$file\" | \
                 awk -v fn=\"\$file\" '{
                     if (NR % (length(fn) + 1) == 0) {
-                        printf \"█%5d  %s\n\", NR, \$0
+                        printf \"$leftbarseparator%5d  %s\n\", NR, \$0
                     }
                     else {
                         printf \"%1s%5d  %s\n\", substr(fn,
@@ -123,12 +127,19 @@ explore() {
 # Environmental variables:
 # - colors
 # - leftbar
+# - leftbarseparator
 # - regex
 # - scope
 parse() {
     while test $# -gt 0
     do
         case $1 in
+            --ascii|-A)
+                shift
+                leftbarseparator='|'
+                leftbar=names
+                ;;
+
             --colors|-c)
                 shift
                 colors=yes
@@ -206,6 +217,7 @@ parse() {
 
 colors=
 leftbar=
+leftbarseparator='█'
 regex=
 scope=
 
