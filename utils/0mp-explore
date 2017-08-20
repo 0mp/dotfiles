@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.13.1
+version=0.13.2
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -108,7 +108,7 @@ do
     grep --binary-file=without-match . "$file" 2>/dev/null 1>&2 || continue
     printf -- '%b%s%b\n' "$bold" "$file" "$nobold"
 
-    if [ x"$leftbar" = xnames ]
+    if [ "@$leftbar@" = @names@ ]
     then
         $command "$file" | awk -v fn="$file" -v lbs="$leftbarseparator" '{
             if (NR % (length(fn) + 1) == 0) {
@@ -118,7 +118,7 @@ do
                     substr(fn, NR % (length(fn) + 1), 1), NR, $0
             }
         }'
-    elif [ x"$leftbar" = xnothing ]
+    elif [ "@$leftbar@" = @nothing@ ]
     then
         $command "$file"
     else
@@ -216,7 +216,7 @@ parse_opt_stdin() {
 # - regex
 # - scope
 parse() {
-    while test $# -gt 0
+    while [ $# -gt 0 ]
     do
         case $1 in
             --ascii|-A) parse_opt_ascii ;;
@@ -241,7 +241,7 @@ parse() {
                 # String of short options glued together, e.g., '-Acw'.
                 opts="${1#-}"
 
-                while test "x" != "x$opts"
+                while [ @@ != "@$opts@" ]
                 do
                     opt="${opts%%"${opts#?}"}"
                     case $opt in
@@ -277,7 +277,7 @@ parse "$@"
 
 scope="${scope# }"
 
-if test "x$colors" = "xyes"
+if [ "@$colors@" = @yes@ ]
 then
     explore 'pygmentize -g --'
 else
