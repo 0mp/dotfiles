@@ -1,0 +1,32 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+MODULE_NAME=bash
+FILES='bash_0mp'
+
+lib_info 'setup'
+
+# Standard module setup.
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+# Make bashrc source bash_0mp.
+lib_install() {
+    sourcecmd='[ -f ~/.bash_0mp ] && . ~/.bash_0mp'
+    if ! grep "$sourcecmd" ~/.bashrc 2>/dev/null 1>&2
+    then
+        printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
+    fi
+}
+FILES='bashrc'
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'

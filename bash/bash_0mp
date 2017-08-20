@@ -1,0 +1,19 @@
+# Add ~/bin to the PATH.
+printf '%s' "$PATH" | grep "$HOME/bin:" 1>/dev/null || {
+    export PATH="$HOME/bin:$PATH"
+}
+
+# Use vi mode.
+set -o vi
+
+# Use C-l in insert mode to clear the screen (it only works in normal mode
+# otherwise).
+bind -m vi-insert "\C-l":clear-screen
+
+# Configure history.
+HISTCONTROL=ignoredups:ignorespace:erasedups
+HISTFILESIZE=20000
+
+# C-s and C-q key bindings for the flow control should be off by default.
+# http://stackoverflow.com/a/6951487/4694621
+stty -ixon -ixoff
