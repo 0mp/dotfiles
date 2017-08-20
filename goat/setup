@@ -4,7 +4,6 @@
 
 set -eu
 
-MODULE_NAME=goat
 FILES=""
 
 lib_info setup

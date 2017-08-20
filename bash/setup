@@ -4,7 +4,6 @@
 
 set -eu
 
-MODULE_NAME=bash
 FILES='bash_0mp'
 
 lib_info 'setup'

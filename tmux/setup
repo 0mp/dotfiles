@@ -4,7 +4,6 @@
 
 set -eu
 
-MODULE_NAME=tmux
 FILES='tmux.conf'
 
 lib_info 'setup'

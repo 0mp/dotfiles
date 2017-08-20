@@ -4,8 +4,6 @@
 
 set -eu
 
-MODULE_NAME=vim
-
 vim_dir="$HOME/.vim"
 
 lib_info setup

@@ -4,7 +4,6 @@
 
 set -eu
 
-MODULE_NAME=x11
 FILES="Xmodmap"
 
 lib_info 'setup'

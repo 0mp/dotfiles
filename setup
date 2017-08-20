@@ -14,7 +14,7 @@ mkdir -p "$BACKUP_DIR"
 
 while [ $# -gt 0 ]
 do
-    (cd "$1"; shift 1; ./setup "$@")
+    (cd "$1"; export MODULE_NAME="$1"; shift 1; ./setup "$@")
     shift 1
     if [ $# -gt 0 ]
     then

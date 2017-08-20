@@ -8,7 +8,6 @@
 
 set -eu
 
-MODULE_NAME=thunderbird
 FILES="userChrome.css"
 
 tbdir="$HOME/.thunderbird"
