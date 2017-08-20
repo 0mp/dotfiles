@@ -215,6 +215,9 @@ autocmd CompleteDone * pclose
 " Lines in a commit message should not exceed 72 characters.
 autocmd FileType gitcommit set tw=72
 
+" Enable spell-checking when commiting with git.
+autocmd FileType gitcommit set spell
+
 " }}}
 " Section: Visuals {{{
 "
