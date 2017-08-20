@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.13.0
+version=0.13.1
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -82,43 +82,56 @@ EOF
 # $1 - The command which reads every file. Its output is then piped
 #      into `cat -n`.
 # Environmental variables:
+# - bold
+# - nobold
+# - leftbar
+# - leftbarseparator
 # - names
 # - regex
 # - scope
 explore() {
-    command="$1"
+    # Pass the variables into the script and in the second here-doc add the
+    # literal part of the script (no substitutions in the current shell).
+    script="$(cat << EOF
+command="$1"
+bold="$bold"
+nobold="$nobold"
+leftbar="$leftbar"
+leftbarseparator="$leftbarseparator"
 
-    find ${scope:-'.'} \( -type f -o -type l \) -name "${regex:-*}" -exec sh -c "
-        for file
-        do
-            # Skip binary files.
-            grep --binary-file=without-match . \"\$file\" 2>/dev/null 1>&2 || \
-                continue
-            printf -- '%b%s%b\n' \"$bold\" \"\$file\" \"$nobold\"
+EOF
+    )
+    $(cat << 'EOF'
+for file
+do
+    # Skip binary files.
+    grep --binary-file=without-match . "$file" 2>/dev/null 1>&2 || continue
+    printf -- '%b%s%b\n' "$bold" "$file" "$nobold"
 
-            if [ x\"$leftbar\" = xnames ]
-            then
-                $command \"\$file\" | \
-                awk -v fn=\"\$file\" '{
-                    if (NR % (length(fn) + 1) == 0) {
-                        printf \"$leftbarseparator%5d  %s\n\", NR, \$0
-                    }
-                    else {
-                        printf \"%1s%5d  %s\n\", substr(fn,
-                            NR % (length(fn) + 1), 1), NR, \$0
-                    }
-                }'
-            elif [ x\"$leftbar\" = xnothing ]
-            then
-                $command \"\$file\"
-            else
-                $command \"\$file\" | \
-                awk '{ printf \"%6d  %s\n\", NR, \$0 }'
-            fi
-            echo
-        done
-    " sh {} + | less --no-init --chop-long-lines --RAW-CONTROL-CHARS \
-        --ignore-case
+    if [ x"$leftbar" = xnames ]
+    then
+        $command "$file" | awk -v fn="$file" -v lbs="$leftbarseparator" '{
+            if (NR % (length(fn) + 1) == 0) {
+                printf "%s%5d  %s\n", lbs, NR, $0
+            } else {
+                printf "%1s%5d  %s\n", \
+                    substr(fn, NR % (length(fn) + 1), 1), NR, $0
+            }
+        }'
+    elif [ x"$leftbar" = xnothing ]
+    then
+        $command "$file"
+    else
+        $command "$file" | awk '{ printf "%6d  %s\n", NR, $0 }'
+    fi
+    echo
+done
+EOF
+    )"
+
+    find ${scope:-'.'} \( -type f -o -type l \) -name "${regex:-*}" \
+        -exec sh -c "$script" sh {} + | \
+        less --no-init --chop-long-lines --RAW-CONTROL-CHARS --ignore-case
 }
 
 # Environmental variables:
