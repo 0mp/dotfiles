@@ -2,42 +2,28 @@
 
 set -eu
 
-if [ ! "x$(pwd -P)" = "x$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)" ]; then
-    echo 'usage: ./setup [ target [options ... ] ] ...'
+if [ "@$(pwd -P)@" != "@$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)@" ]
+then
+    echo 'usage: ./setup [target [options...]]...' 1>&2
     exit 1
 fi
 
-readonly BACKUP_DIR="$PWD/backup/$(date +%y-%m-%d-%H:%M:%S)"
+readonly BACKUP_DIR="$PWD/backup/$(date +%y-%m-%d.%H-%M-%S)"
 export BACKUP_DIR
 
-mkdir -p "$BACKUP_DIR"
+if ! mkdir "$BACKUP_DIR"
+then
+    echo failed to create a backup directory 1>&2
+    exit 1
+fi
 
 while [ $# -gt 0 ]
 do
-    (cd "$1"; export MODULE_NAME="$1"; shift 1; ./setup "$@")
-    shift 1
-    if [ $# -gt 0 ]
-    then
-        case "$1" in
-            --*)
-                while [ $# -gt 0 ]
-                do
-                    case "$1" in
-                        --)
-                            shift 1
-                            break 1
-                            ;;
-
-                        *)
-                            shift 1
-                            ;;
-                    esac
-                done
-                ;;
-
-            *)
-                ;;
-        esac
-    fi
+    (cd "$1"; export MODULE_NAME="${1%/}"; shift; ./setup "$@")
+    shift
+    # Remove command line arguments matching '--*' before the next module.
+    while [ $# -gt 0 ] && [ @--@ = "@${1%"${1#??}"}@" ]
+    do
+        shift
+    done
 done
-
