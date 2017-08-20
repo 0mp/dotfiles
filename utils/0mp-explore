@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.11.0
+version=0.12.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -13,8 +13,7 @@ shortusage() {
     proglen="$(printf '%s' "$program" | sed 's/./ /g')"
 
     cat <<EOF
-Usage: $program [--ascii] [--colors] [--names] [--nonumbers] [--regex REGEX]
-       $proglen [--wildcards REGEX] [-] [--help] [--version] [--] [SCOPE...]
+Usage: $program [-AchnN-] [-r REGEX] [-w REGEX] [--] [SCOPE...]
 EOF
 }
 
@@ -56,14 +55,14 @@ Options:
         Just like --regex but with a leading and a tailing wildcard .*. For
         example, "-r '*vector*'" and "-w vector" are effectively the same.
 
-    -
+    -, --stdin
         Read scope files and directories from the standard input.
 
     --
         End of options. Treat the rest of the command line arguments as files
         and directories for program's scope.
 
-    -h, --help
+    -h, --help, --shorthelp
         Show help.
 
     --version
@@ -122,7 +121,80 @@ explore() {
         --ignore-case
 }
 
-# Parameters
+# Environmental variables:
+# - leftbar
+# - leftbarseparator
+parse_opt_ascii() {
+    leftbarseparator='|'
+    leftbar=names
+}
+
+# Environmental variables:
+# - colors
+parse_opt_colors() {
+    colors=yes
+    if ! command -v pygmentize 2>/dev/null 1>&2
+    then
+        printf '%s: pygmentize is not available\n' "$program"
+        exit 1
+    fi
+}
+
+parse_opt_shorthelp() {
+    shortusage
+    exit 0
+}
+
+parse_opt_help() {
+    usage
+    exit 0
+}
+
+# Environmental variables:
+# - leftbar
+parse_opt_names() {
+    leftbar=names
+}
+
+# Environmental variables:
+# - leftbar
+parse_opt_nonumbers() {
+    leftbar=nothing
+}
+
+# Parameters:
+# "$1" - Regex to be applied.
+# Environmental variables:
+# - regex
+parse_opt_regex() {
+    regex="$1"
+}
+
+# Environmental variables:
+# - version
+parse_opt_version() {
+    printf '%s\n' "$version"
+    exit 0
+}
+
+# Parameters:
+# "$1" - Part of the regex to be applied.
+# Environmental variables:
+# - regex
+parse_opt_wildcards() {
+    regex="*$1*"
+}
+
+# Environmental variables:
+# - scope
+parse_opt_stdin() {
+    while IFS= read stdinscope || [ -n "$stdinscope" ]
+    do
+        scope="${scope:-""} $stdinscope"
+    done
+}
+
+# Parameters:
 # $@ - Arguments to be parsed.
 # Environmental variables:
 # - colors
@@ -134,70 +206,16 @@ parse() {
     while test $# -gt 0
     do
         case $1 in
-            --ascii|-A)
-                shift
-                leftbarseparator='|'
-                leftbar=names
-                ;;
-
-            --colors|-c)
-                shift
-                colors=yes
-                if ! command -v pygmentize 1>&2 2>/dev/null
-                then
-                    printf '%s: pygmentize is not available\n' "$program"
-                    exit 1
-                fi
-                ;;
-
-            -h)
-                shift
-                shortusage
-                exit 0
-                ;;
-
-            --help)
-                shift
-                usage
-                exit 0
-                ;;
-
-            --names|-n)
-                leftbar=names
-                shift
-                ;;
-
-            --nonumbers|-N)
-                leftbar=nothing
-                shift
-                ;;
-
-            --regex|-r)
-                shift
-                regex="$1"
-                shift
-                ;;
-
-            --version)
-                shift
-                printf '%s\n' "$version"
-                exit 0
-                ;;
-
-            --wildcards|-w)
-                shift
-                regex="*$1*"
-                shift
-                ;;
-
-            -)
-                shift
-                while IFS= read stdinscope || [ -n "$stdinscope" ]
-                do
-                    scope="${scope:-""} $stdinscope"
-                done
-                ;;
-
+            --ascii|-A) parse_opt_ascii ;;
+            --colors|-c) parse_opt_colors ;;
+            --shorthelp|-h) parse_opt_shorthelp ;;
+            --help) parse_opt_help ;;
+            --names|-n) parse_opt_names ;;
+            --nonumbers|-N) parse_opt_nonumbers ;;
+            --regex|-r) parse_opt_regex "${2:?missing regex}"; shift ;;
+            --version) parse_opt_version ;;
+            --wildcards|-w) parse_opt_wildcards "${2:?missing regex}"; shift ;;
+            --stdin|-) parse_opt_stdin ;;
             --)
                 shift
                 if [ $# -gt 0 ]
@@ -206,12 +224,32 @@ parse() {
                 fi
                 break
                 ;;
+            -*)
+                # String of short options glued together, e.g., '-Acw'.
+                opts="${1#-}"
 
+                while test "x" != "x$opts"
+                do
+                    opt="${opts%%"${opts#?}"}"
+                    case $opt in
+                        A) parse_opt_ascii ;;
+                        c) parse_opt_colors ;;
+                        h) parse_opt_shorthelp ;;
+                        n) parse_opt_names ;;
+                        N) parse_opt_nonumbers ;;
+                        r) shift; parse_opt_regex "${1:?missing regex}" ;;
+                        w) shift; parse_opt_wildcards "${1:?missing regex}" ;;
+                        -) parse_opt_stdin ;;
+                        *) ;;
+                    esac
+                    opts="${opts#"$opt"}"
+                done
+                ;;
             *)
                 scope="${scope:-""} $1"
-                shift
                 ;;
         esac
+        shift
     done
 }
 
