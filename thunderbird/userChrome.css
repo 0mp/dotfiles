@@ -23,38 +23,3 @@ http://www.makeuseof.com/tag/tweak-your-firefox-with-the-userchromecss-file/
 @namespace
 url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-/* Add zebra striping */
-
-treechildren::-moz-tree-row(odd) {
-  border: 1px solid transparent !important;
-  background-color: #FFFFFF !important;
-  min-height: 18px !important;
-  height: 1.3em !important;
-}
-
-treechildren::-moz-tree-row(even) {
-  border: 1px solid transparent !important;
-  background-color: #F4F4F4 !important;
-  min-height: 18px !important;
-  height: 1.3em !important;
-}
-
-treechildren::-moz-tree-row(selected) {
-  background-color: peachpuff !important;
-}
-
-treechildren::-moz-tree-cell-text(selected) {
-  color: black !important;
-}
-
-treechildren::-moz-tree-row(selected, focus) {
-  background-color: Highlight !important;
-}
-
-treechildren::-moz-tree-row(current, focus) {
-  border: 1px dotted #000000 !important;
-}
-
-treechildren::-moz-tree-row(selected, current, focus) {
-  border: 1px dotted #C0C0C0 !important;
-}
