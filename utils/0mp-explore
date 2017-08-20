@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.12.0
+version=0.13.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -88,7 +88,7 @@ EOF
 explore() {
     command="$1"
 
-    find ${scope:-'.'} -type f -name "${regex:-*}" -exec sh -c "
+    find ${scope:-'.'} \( -type f -o -type l \) -name "${regex:-*}" -exec sh -c "
         for file
         do
             # Skip binary files.
