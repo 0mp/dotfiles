@@ -349,7 +349,6 @@ if ! exists('loaded_FreeBSD')
 
     " Follow the FreeBSD style(9).
     function! FreeBSD_Style()
-        echo 'Using FreeBSD style from now on.'
         setlocal cindent
         setlocal cinoptions=(4200,u4200,+0.5s,*500,:0,t0,U4200,l1
         setlocal indentexpr=IgnoreParenIndent()
