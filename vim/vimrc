@@ -136,6 +136,9 @@ set wildmode=list:longest,full
 " Improve the autocompletion menu.
 set completeopt=longest,menuone
 
+" Do not look up tags when asked to perform autocompletion.
+set complete-=t
+
 " Ensure private editing.
 " Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
 " Usage: Just run `vimp`.
