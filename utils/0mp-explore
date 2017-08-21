@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.13.2
+version=0.13.3
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -13,7 +13,7 @@ shortusage() {
     proglen="$(printf '%s' "$program" | sed 's/./ /g')"
 
     cat <<EOF
-Usage: $program [-AchnN-] [-r REGEX] [-w REGEX] [--] [SCOPE...]
+Usage: $program [-AcnN-] [-rw REGEX] [--help] [--] [SCOPE...]
 EOF
 }
 
