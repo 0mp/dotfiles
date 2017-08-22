@@ -4,7 +4,7 @@
 #
 
 program='0mp-explore'
-version=0.13.4
+version=0.13.5
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -130,7 +130,7 @@ EOF
     )"
 
     find ${scope:-'.'} \( -type f -o -type l \) -name "${regex:-*}" \
-        -exec sh -c "$script" sh {} + | \
+        -exec sh -c "$script" sh {} + 2>/dev/null | \
         less --no-init --chop-long-lines --RAW-CONTROL-CHARS --ignore-case
 }
 
