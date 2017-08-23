@@ -1,0 +1,201 @@
+#! /bin/sh -
+#
+# cflowfilter - Filter out a call tree a desired function from output of cflow.
+#
+# ---
+#
+# Copyright (c) 2017 Mateusz Piotrowski <mpp302@gmail.com>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHORS AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+program=cflowfilter
+version=0.0.0
+
+usage() {
+    cat <<EOF
+Usage: $program [--help|--version] FILE PATTERN
+EOF
+}
+
+version() {
+    printf '%s\n' "$version"
+}
+
+front() {
+    printf '%s' "${1%?"${1#*[^[:space:]]}"}"
+}
+
+# Check if $1 is a parent line of $2 based on the indenation difference ($1
+# shall be less indented than $2).
+is_parent() {
+    expr -- "$(front "$1")" \< "$(front "$2")" 1>/dev/null && return 0 || return 1
+}
+
+# Check if $1 has the function we are looking for.
+is_matching() {
+    test "$(expr -- "$1" : ".*$pattern.*")" -gt 0
+}
+
+print_stack() {
+    for line; do
+        printf '%s\n' "$line"
+    done
+    printmode=no
+}
+
+do_read() {
+    prev="$curr"
+    IFS= read curr
+}
+
+err() {
+    printf '%s\n' "$*" 1>&2
+}
+
+errxit() {
+    printf '%s\n' "$*" 1>&2
+    exit 1
+}
+
+find_dead() {
+    for dead; do
+        [ "$(front "$dead")" = "$(front "$curr")" ] && break
+    done
+    if [ "$dead" = "$prev" -a "$(front "$dead")" != "$(front "$curr")" ]; then
+        dead="$1"
+    fi
+    printf '%s' "$dead"
+}
+
+filter() {
+    curr=
+    prev=
+    printmode=no
+    state=init
+
+    while :; do
+        case "$state" in
+            init)
+                do_read
+                [ -z "$curr" ] && errxit 'error: cflow has nothing to say'
+                set -- "$curr"
+                do_read
+                [ -z "$curr" ] && errxit "error: only one input line: \"$prev\""
+                state=examine
+                ;;
+
+            examine) # Check if golden and go to corresponding state
+                if is_parent "$prev" "$curr" && is_matching "$curr"; then
+                    printmode=yes
+                    state=print
+                elif is_parent "$prev" "$curr" && ! is_matching "$curr"; then
+                    state=read
+                elif ! is_parent "$prev" "$curr" && is_matching "$curr"; then
+                    dead="$(find_dead "$@")"
+                    deletemode=no
+                    for line; do
+                        shift
+                        case "$line" in
+                            "$dead") deletemode=yes ;;
+                            "$prev") deletemode=no ;;
+                            *) [ "$deletemode" = no ] && set -- "$@" "$line" ;;
+                        esac
+                    done
+                    printmode=yes
+                    state=print
+                elif ! is_parent "$prev" "$curr" && ! is_matching "$curr"; then
+                    dead="$(find_dead "$@")"
+                    deletemode=no
+                    for line; do
+                        shift
+                        case "$line" in
+                            "$dead") deletemode=yes ;;
+                            "$prev") deletemode=no ;;
+                            *) [ "$deletemode" = no ] && set -- "$@" "$line" ;;
+                        esac
+                    done
+                    state=read
+                fi
+                set -- "$@" "$curr"
+                ;;
+
+            print) # Print stack and read on.
+                [ "$printmode" = yes ] && print_stack "$@"; set --
+                [ -z "$curr" ] && state=exit || state=read
+                ;;
+
+            read) do_read; [ -z "$curr" ] && state=print || state=examine ;;
+            eof) state=print ;;
+            exit) break ;;
+            *) errxit "error: invalid state $state" ;;
+        esac
+    done
+}
+
+runtests() {
+    # Test 1.
+    pattern='do_exit'
+    input="$(cat << ___
+do_group_exit() <void do_group_exit (int exit_code) at exit.c:912>:
+    BUG_ON()
+    signal_group_exit()
+    thread_group_empty()
+    spin_lock_irq()
+    zap_other_threads()
+    spin_unlock_irq()
+    do_exit() <void __noreturn do_exit (long code) at exit.c:730>:
+do_group_exit() <void do_group_exit (int exit_code) at exit.c:912>:
+    do_exit() <void __noreturn do_exit (long code) at exit.c:730>:
+___
+    )"
+    expected="$(cat << ___
+do_group_exit() <void do_group_exit (int exit_code) at exit.c:912>:
+    do_exit() <void __noreturn do_exit (long code) at exit.c:730>:
+do_group_exit() <void do_group_exit (int exit_code) at exit.c:912>:
+    do_exit() <void __noreturn do_exit (long code) at exit.c:730>:
+___
+    )"
+    if ! [ "$(printf '%s' "$input" | filter)" = "$expected" ]; then
+        echo FAIL 1
+        return 1
+    fi
+
+    echo OK
+}
+
+case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --version) version; exit 0 ;;
+    --test)
+        runtests
+        exit
+        ;;
+esac
+
+[ $# -eq 2 ] || errxit 'error: invalid number of arguments'
+[ -f "$1" ] || errxit "error: \"$1\" does not exist"
+which cflow 2>/dev/null 1>&2 || errxit 'error: cflow is not installed'
+
+pattern="$2"
+cflow "$1" 2>/dev/null | filter

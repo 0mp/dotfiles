@@ -4,7 +4,7 @@
 
 set -eu
 
-FILES="0mp-explore fitqemu moinmoincli"
+FILES="0mp-explore fitqemu moinmoincli cflowfilter"
 
 BIN_DIR=~/bin
 
