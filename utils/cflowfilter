@@ -30,11 +30,27 @@
 # SUCH DAMAGE.
 
 program=cflowfilter
-version=0.0.0
+version=0.1.0
 
 usage() {
     cat <<EOF
-Usage: $program [--help|--version] FILE PATTERN
+Usage: $program [OPTION] FILE PATTERN
+
+Options:
+    -w, --word-regexp
+        Match the pattern as an exact word (it uses grep -w internally).
+
+    --
+        End of options.
+
+    -h, --help
+        Show help.
+
+    --test
+        Run a test suite for this tool (usefuly for developing).
+
+    --version
+        Show version.
 EOF
 }
 
@@ -54,7 +70,11 @@ is_parent() {
 
 # Check if $1 has the function we are looking for.
 is_matching() {
-    test "$(expr -- "$1" : ".*$pattern.*")" -gt 0
+    if [ "$wordmatchmode" = no ]; then
+        test "$(expr -- "$1" : ".*$pattern.*")" -gt 0
+    else
+        printf '%s\n' "$1" | grep "\<$pattern\>" 1>/dev/null 2>&1
+    fi
 }
 
 print_stack() {
@@ -156,6 +176,7 @@ filter() {
 runtests() {
     # Test 1.
     pattern='do_exit'
+    wordmatchmode=no
     input="$(cat << ___
 do_group_exit() <void do_group_exit (int exit_code) at exit.c:912>:
     BUG_ON()
@@ -184,13 +205,14 @@ ___
     echo OK
 }
 
+wordmatchmode=no
+
 case "$1" in
     -h|--help) usage; exit 0 ;;
     --version) version; exit 0 ;;
-    --test)
-        runtests
-        exit
-        ;;
+    --test) runtests; exit; ;;
+    -w|--word-regexp) wordmatchmode=yes; shift ;;
+    --) shift ;;
 esac
 
 [ $# -eq 2 ] || errxit 'error: invalid number of arguments'
