@@ -2,6 +2,9 @@
 #
 # cflowfilter - Filter out a call tree a desired function from output of cflow.
 #
+# Notes:
+# 1. There must be no empty lines in the cflow output.
+#
 # ---
 #
 # Copyright (c) 2017 Mateusz Piotrowski <mpp302@gmail.com>
