@@ -4,7 +4,7 @@
 
 set -eu
 
-FILES='tmux.conf'
+FILES='tmux.conf tmux-shine.conf tmux-charcoal.conf'
 
 lib_info 'setup'
 
