@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=0.13.5
+version=0.13.6
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -135,12 +135,11 @@ do
     if [ "@$leftbar@" = @names@ ]
     then
         $command "$file" | awk -v fn="$file" -v lbs="$leftbarseparator" '{
-            if (NR % (length(fn) + 1) == 0) {
-                printf "%s%5d  %s\n", lbs, NR, $0
-            } else {
-                printf "%1s%5d  %s\n", \
-                    substr(fn, NR % (length(fn) + 1), 1), NR, $0
-            }
+            pos = NR % (length(fn) + 1)
+            if (pos == 0)
+                printf "%1s%5d  %s\n", lbs, NR, $0
+            else
+                printf "%1s%5d  %s\n", substr(fn, pos, 1), NR, $0
         }'
     elif [ "@$leftbar@" = @nothing@ ]
     then
@@ -148,7 +147,7 @@ do
     else
         $command "$file" | awk '{ printf "%6d  %s\n", NR, $0 }'
     fi
-    echo
+    echo ""
 done
 EOF
     )"
