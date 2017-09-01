@@ -111,9 +111,9 @@ call EnsureDirExists($HOME . '/.vimundo')
 set undodir=~/.vimundo/
 
 " Show all the whitespace characters. Toggle with :set list!
-"set listchars=eol:$,tab:>.,trail:~,extends:>,precedes:<
-set listchars=eol:$,tab:>―,trail:~,extends:>,precedes:<
-
+" http://vim.wikia.com/wiki/See_the_tabs_in_your_file
+" https://stackoverflow.com/q/40498265/4694621
+set listchars=tab:\|\ ,trail:~,extends:>,precedes:<,space:.
 
 " Show and highlight search matches during typing.
 set incsearch
