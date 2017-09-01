@@ -36,8 +36,6 @@ bold='\033[1m'
 nobold='\033[0m'
 
 shortusage() {
-    proglen="$(printf '%s' "$program" | sed 's/./ /g')"
-
     cat <<EOF
 Usage: $program [-AcnN-] [-rw REGEX] [--help] [--] [SCOPE...]
 EOF
