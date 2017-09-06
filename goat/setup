@@ -11,4 +11,22 @@ lib_info setup
 cd goat
 ./setup
 
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        --defaults)
+            shift
+            set +e
+            export GOAT_PATH="$HOME/.goat"
+            ~/bin/goat desk ~/Desktop
+            ~/bin/goat docs ~/Documents
+            ~/bin/goat dots ~/.dotfiles
+            ~/bin/goat down ~/Downloads
+            ~/bin/goat drop ~/Dropbox
+            ~/bin/goat h ~/h
+            set -e
+            ;;
+    esac
+done
+
 lib_info 'setup done'
