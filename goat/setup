@@ -27,6 +27,9 @@ do
             ~/bin/goat h ~/h
             set -e
             ;;
+        *)
+            break
+            ;;
     esac
 done
 
