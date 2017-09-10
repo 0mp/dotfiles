@@ -113,7 +113,11 @@ set undodir=~/.vimundo/
 " Show all the whitespace characters. Toggle with :set list!
 " http://vim.wikia.com/wiki/See_the_tabs_in_your_file
 " https://stackoverflow.com/q/40498265/4694621
-set listchars=tab:\|\ ,trail:~,extends:>,precedes:<,space:.
+" https://stackoverflow.com/a/36374234/4694621
+set listchars=tab:\|\ ,trail:~,extends:>,precedes:<,
+if has("patch-7.4.710")
+    set listchars+=space:.
+endif
 
 " Show and highlight search matches during typing.
 set incsearch
