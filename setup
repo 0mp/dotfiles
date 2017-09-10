@@ -4,7 +4,7 @@ set -eu
 
 if [ "@$(pwd -P)@" != "@$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)@" ]
 then
-    echo 'usage: ./setup [target [options...]]...' 1>&2
+    echo 'usage: ./setup [target [[options...] --]]...' 1>&2
     exit 1
 fi
 
@@ -22,8 +22,17 @@ do
     (cd "$1"; export MODULE_NAME="${1%/}"; shift; ./setup "$@")
     shift
     # Remove command line arguments matching '--*' before the next module.
-    while [ $# -gt 0 ] && [ @--@ = "@${1%"${1#??}"}@" ]
-    do
-        shift
-    done
+    if [ $# -gt 0 ] && [ @--@ = "@${1%"${1#??}"}@" ]
+    then
+        while [ $# -gt 0 ]
+        do
+            if [ @--@ = "@$1@" ]
+            then
+                shift
+                break
+            else
+                shift
+            fi
+        done
+    fi
 done
