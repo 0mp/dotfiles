@@ -12,7 +12,12 @@ lib_err() {
 # RUNWITH - The environemntal variable with a desired prefix for the body of
 #           this function. For example RUNWITH='sudo -E'.
 lib_back_up_file() {
-    ${RUNWITH:-} cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
+    if [ "@${RUNWITH:-}@" != @@ ]
+    then
+        $RUNWITH cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
+    else
+        cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
+    fi
 }
 
 # FILES  - The list of file names (not the full paths).
@@ -37,7 +42,12 @@ lib_back_up() {
 # RUNWITH - The environemntal variable with a desired prefix for the body of
 #           this function. For example RUNWITH='sudo -E'.
 lib_roll_back_file() {
-    ${RUNWITH:-} cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
+    if [ "@${RUNWITH:-}@" != @@ ]
+    then
+        $RUNWITH cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
+    else
+        cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
+    fi
 }
 
 # FILES  - The list of file names (not the full paths).
@@ -61,7 +71,12 @@ lib_roll_back() {
 # RUNWITH - The environemntal variable with a desired prefix for the body of
 #           this function. For example RUNWITH='sudo -E'.
 lib_install_file() {
-    ${RUNWITH:-} ln -s -v -f -F -n -- "$1" "$2"
+    if [ "@${RUNWITH:-}@" != @@ ]
+    then
+        $RUNWITH ln -s -v -f -F -n -- "$1" "$2"
+    else
+        ln -s -v -f -F -n -- "$1" "$2"
+    fi
 }
 
 # FILES  - The list of file names (not the full paths).
