@@ -10,6 +10,7 @@ FILES='login_conf'
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
+sudo -k cap_mkdb /etc/login.conf ~/.login_conf
 trap - EXIT
 
 lib_info 'setup done'
