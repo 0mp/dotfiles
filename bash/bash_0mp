@@ -18,3 +18,10 @@ HISTFILESIZE=20000
 # C-s and C-q key bindings for the flow control should be off by default.
 # http://stackoverflow.com/a/6951487/4694621
 stty -ixon -ixoff
+
+# Aliases & functions
+tmux_clear_detached_sessions() {
+    tmux list-sessions | grep -E -v '\(attached\)$' | while IFS='\n' read line; do
+        tmux kill-session -t "${line%%:*}"
+    done
+}
