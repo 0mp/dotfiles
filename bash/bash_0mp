@@ -1,7 +1,8 @@
-# Add ~/bin to the PATH.
-printf '%s' "$PATH" | grep "$HOME/bin:" 1>/dev/null || {
-    export PATH="$HOME/bin:$PATH"
-}
+# Add ~/bin to the PATH unless it is already there.
+case "$PATH" in
+    *$HOME/bin*) ;;
+    *) PATH="$HOME/bin:$PATH" ;;
+esac
 
 # Use vi mode.
 set -o vi
