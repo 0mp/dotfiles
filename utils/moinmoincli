@@ -5,29 +5,6 @@
 #               This script has been tested only on the FreeBSD wiki
 #               (https://wiki.freebsd.org).
 #
-# Usage: Consult `moinmoincli --help` or the implementation.
-#
-# Sample configuration file (~/.moinmoincli.conf):
-# name=MateuszPiotrowski
-# password=xxx
-# target='/WikiSandBox'
-# textfile=/tmp/wiki.moin
-# select_target() {
-#     case "$1" in
-#         [pP]*)
-#             target='/MateuszPiotrowski/Audit/AudispAuditdistd'
-#             textfile="$HOME/notes/plugin.moin"
-#             ;;
-#         [aA]*)
-#             target='/MateuszPiotrowski/Audit/Auditdistd'
-#             textfile="$HOME/notes/auditdistd.moin"
-#             ;;
-#         *)
-#             errxit "invalid selector '$1'"
-#             ;;
-#     esac
-# }
-#
 # ---
 #
 # Copyright (c) 2017 Mateusz Piotrowski <0mp@FreeBSD.org>
@@ -55,8 +32,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-program=moinmoincli
-version=4.0.1
+version=4.1.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -65,9 +41,58 @@ editfile="$workdir/edit.html"
 oldrawfile="$workdir/oldraw.txt"
 cookiefile="$workdir/cookie.txt"
 
+shortusage() {
+    cat << 'EOF'
+Usage: moinmoincli [-qu] [-n NAME] [-f TEXTFILE] [-t TARGET] [SELECTOR]
+EOF
+}
+
 usage() {
-    cat <<-EOF
-Usage: $program [-hquv] [-f TEXTFILE] [-n NAME] [-t TARGET] SELECTOR
+    cat << 'EOF'
+Usage: moinmoincli [OPTION...] [SELECTOR]
+
+Options:
+    -f, --file FILE
+        Point to the text file that is going to be sent to the server.
+
+    -n, --name NAME
+        Set the username used as a login.
+
+    -q, --quick
+        Active quick mode (skip confirmation and the action menu).
+
+    -t, --target TARGET
+        Provide the name of the wiki page to be updated, e.g.: /WiFi/80211ac
+        (the program is configured to work with wiki.freebsd.org by default).
+
+    -u, --update
+        Download the contents of the target wiki page and put them into the
+        file pointed to by the -f option.
+
+    -h, --help
+        Show help (use -h for a short reminder).
+
+    -v, --version
+        Show version.
+
+Selectors:
+    Selectors are used if the select_target() function is defined in the
+    configuration file (~/.moinmoincli.conf by default). A single selector is
+    assosiated with a target and a text file. As a result it is possible to
+    moinmoincli by typing a much shorter `moinmoincli ac` instead of
+    `moinmoincli -f ./80211ac.moin -t /WiFi/80211ac`.
+
+Sample configuration file ('~/.moinmoincli.conf' by default):
+    name=MateuszPiotrowski
+    password=xxx
+    target='/WikiSandBox'
+    textfile=/tmp/wiki.moin
+    select_target() {
+        case "$1" in
+            [wW]*) target='/WiFi'; textfile="$HOME/wifi.moin" ;;
+            *) errxit "invalid selector '$1'" ;;
+        esac
+    }
 EOF
 }
 
@@ -137,7 +162,7 @@ errxit() {
 	exit 1
 }
 
-# This should be overwritten in the configuration file.
+# This may be overwritten in the configuration file.
 select_target() {
     printf '%s' "$target"
 }
@@ -179,7 +204,12 @@ do
             target="$2"
             shift 2
             ;;
-        -h|--help)
+        -h)
+            shift
+            shortusage
+            exit 0
+            ;;
+        --help)
             shift
             usage
             exit 0
