@@ -1,4 +1,5 @@
 # vi: set ft=sh:
+
 lib_info() {
     printf '%s: %s\n' "$MODULE_NAME" "$*" 1>&2
 }
@@ -9,15 +10,8 @@ lib_err() {
 
 # $1      - The full path to the backed-up file.
 # $2      - The name of the backup file in the back up directory.
-# RUNWITH - The environemntal variable with a desired prefix for the body of
-#           this function. For example RUNWITH='sudo -E'.
 lib_back_up_file() {
-    if [ "@${RUNWITH:-}@" != @@ ]
-    then
-        $RUNWITH cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
-    else
-        cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
-    fi
+    cp -i -a -v -- "$1" "$BACKUP_DIR/$2"
 }
 
 # FILES  - The list of file names (not the full paths).
@@ -39,15 +33,8 @@ lib_back_up() {
 
 # $1      - The name of the file inside the backup directory.
 # $2      - The full path to the restored path.
-# RUNWITH - The environemntal variable with a desired prefix for the body of
-#           this function. For example RUNWITH='sudo -E'.
 lib_roll_back_file() {
-    if [ "@${RUNWITH:-}@" != @@ ]
-    then
-        $RUNWITH cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
-    else
-        cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
-    fi
+    cp -i -a -v -- "$BACKUP_DIR/$1" "$2"
 }
 
 # FILES  - The list of file names (not the full paths).
@@ -68,15 +55,8 @@ lib_roll_back() {
 
 # $1      - The full path of the source file.
 # $2      - The full path of the destination file.
-# RUNWITH - The environemntal variable with a desired prefix for the body of
-#           this function. For example RUNWITH='sudo -E'.
 lib_install_file() {
-    if [ "@${RUNWITH:-}@" != @@ ]
-    then
-        $RUNWITH ln -s -v -f -F -n -- "$1" "$2"
-    else
-        ln -s -v -f -F -n -- "$1" "$2"
-    fi
+    ln -s -v -f -F -n -- "$1" "$2"
 }
 
 # FILES  - The list of file names (not the full paths).
