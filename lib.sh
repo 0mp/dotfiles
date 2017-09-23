@@ -90,3 +90,11 @@ lib_install() {
         lib_install_file "$PWD/$file" "$PREFIX$file"
     done
 }
+
+lib_require_root() {
+    if [ "$(id -u)" -ne 0 ]
+    then
+        lib_err 'requires root privileges'
+        return 1
+    fi
+}

@@ -6,7 +6,6 @@
 Modules:
 
     bash
-    freebsd
     git
         --name name
         --email email
@@ -19,6 +18,9 @@ Modules:
     utils
     vim
     x11
+
+    root-freebsd
+        --user username
 ```
 
 ## Setup script template
