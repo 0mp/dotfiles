@@ -177,9 +177,6 @@ set hidden
 set nobackup
 set noswapfile
 
-" Cycle through buffers.
-nnoremap £ :bNext<CR>
-
 " Support markdown syntax higlight for .md files.
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
