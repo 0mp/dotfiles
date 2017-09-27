@@ -9,11 +9,12 @@
 # Usage:
 # 1. Switch to the pane running QEMU.
 # 2. Make sure that you're in a shell (and not Vim or less) as you will be
-#    sending keystrokes directly into this pane in a while.
-# 2. Hit your tmux prefix and call ':run fitqemu' (assuming that fitqemu is
+#    sending keystrokes directly into the shell running inside the pane in a
+#    while.
+# 3. Hit your tmux prefix and call ':run fitqemu' (assuming that fitqemu is
 #    present in your current path).
 
-# version=0.1.0
+# version=0.1.1
 
 get_info() {
     format='#{pane_active} #{pane_index} #{pane_height} #{pane_width}'
