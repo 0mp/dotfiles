@@ -77,8 +77,8 @@ vnoremap <leader>d "_d
 " Section: Miscellenous {{{
 " Show the command you type in.
 set showcmd
-" Mouse scrolling.
-set mouse=a
+" Turn off mouse scrolling.
+set mouse=
 
 " One clipboard is enough for me.
 set clipboard=unnamedplus
