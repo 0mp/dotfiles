@@ -4,13 +4,6 @@ case "$PATH" in
     *) PATH="$HOME/bin:$PATH" ;;
 esac
 
-# Use vi mode.
-set -o vi
-
-# Use C-l in insert mode to clear the screen (it only works in normal mode
-# otherwise).
-bind -m vi-insert "\C-l":clear-screen
-
 # Configure history.
 HISTCONTROL=ignoredups:ignorespace:erasedups
 HISTFILESIZE=20000

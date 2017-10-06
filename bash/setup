@@ -4,7 +4,7 @@
 
 set -eu
 
-FILES='bash_0mp'
+FILES='bash_0mp inputrc'
 
 lib_info 'setup'
 
@@ -21,6 +21,7 @@ lib_install() {
     then
         printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
     fi
+    lib_install_file "$PWD/inputrc" "$HOME/.inputrc"
 }
 FILES='bashrc'
 lib_back_up

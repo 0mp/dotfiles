@@ -1,0 +1,6 @@
+# Use vi mode.
+set editing-mode vi
+
+# Use C-l in insert mode to clear the screen (it only works in normal mode
+# otherwise).
+"\C-l":clear-screen
