@@ -30,7 +30,7 @@ FILES='monochrome.vim monokai.vim xxx.vim xxx2.vim robpike.vim'
 PREFIX="$vim_dir/colors/"
 colors_dir="$vim_dir/colors"
 lib_back_up
-if [ -e "$colors_dir" ] && [ ! -d "$colors_dir" ]
+if [ -h "$colors_dir" ] || [ -e "$colors_dir" ] && [ ! -d "$colors_dir" ]
 then
     lib_back_up_file "$colors_dir" "${colors_dir##*/}"
     rm -rf "$colors_dir"
