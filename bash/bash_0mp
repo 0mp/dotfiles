@@ -18,3 +18,5 @@ tmux_clear_detached_sessions() {
         tmux kill-session -t "${line%%:*}"
     done
 }
+
+export EDITOR=vim
