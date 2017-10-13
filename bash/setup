@@ -4,7 +4,7 @@
 
 set -eu
 
-FILES='bash_0mp inputrc'
+FILES='bash_0mp inputrc bash_profile'
 
 lib_info 'setup'
 
@@ -22,6 +22,7 @@ lib_install() {
         printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
     fi
     lib_install_file "$PWD/inputrc" "$HOME/.inputrc"
+    lib_install_file "$PWD/bash_profile" "$HOME/.bash_profile"
 }
 FILES='bashrc'
 lib_back_up
