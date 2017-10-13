@@ -16,7 +16,7 @@ trap - EXIT
 
 # Make bashrc source bash_0mp.
 lib_install() {
-    sourcecmd='[ -f ~/.bash_0mp ] && . ~/.bash_0mp'
+    sourcecmd='[ -r ~/.bash_0mp ] && . ~/.bash_0mp'
     if ! grep "$sourcecmd" ~/.bashrc 2>/dev/null 1>&2
     then
         printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
