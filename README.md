@@ -6,6 +6,7 @@
 Modules:
 
     bash
+    freebsd
     git
         --name name
         --email email

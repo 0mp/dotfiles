@@ -1,0 +1,20 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+FILES="fonts.conf"
+
+destdir=~/.config/fontconfig
+
+lib_info setup
+
+mkdir -p "$destdir"
+PREFIX="$destdir/"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'
