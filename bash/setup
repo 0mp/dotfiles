@@ -4,27 +4,25 @@
 
 set -eu
 
-FILES='bash_0mp inputrc bash_profile'
-
 lib_info 'setup'
 
 # Standard module setup.
+FILES='bash_0mp inputrc bash_profile'
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
 # Make bashrc source bash_0mp.
-lib_install() {
+FILES=''
+CUSTOMFILES='bashrc'
+lib_custom_install() {
     sourcecmd='[ -r ~/.bash_0mp ] && . ~/.bash_0mp'
     if ! grep "$sourcecmd" ~/.bashrc 2>/dev/null 1>&2
     then
         printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
     fi
-    lib_install_file "$PWD/inputrc" "$HOME/.inputrc"
-    lib_install_file "$PWD/bash_profile" "$HOME/.bash_profile"
 }
-FILES='bashrc'
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
