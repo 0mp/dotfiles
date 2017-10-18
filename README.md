@@ -35,7 +35,10 @@ set -eu
 
 lib_info 'setup'
 
-FILES=''
+FILES=
+PREFIX=
+CUSTOMFILES=
+lib_custom_install() { }
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
