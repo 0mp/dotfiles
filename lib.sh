@@ -22,6 +22,7 @@ lib_back_up_file() {
 #          PREFIX="~/bin/" then the files from that directory will be backed
 #          up.
 lib_back_up() {
+    lib_info 'backup'
     : ${PREFIX:="$HOME/."}
     for file in $FILES ${CUSTOMFILES:-}
     do
@@ -46,6 +47,7 @@ lib_roll_back_file() {
 #          files. The default prefix is "$HOME/.". For example if you pass
 #          PREFIX="~/bin/" then the files will be installed to that directory.
 lib_roll_back() {
+    lib_info 'rollback'
     : ${PREFIX:="$HOME/."}
     set +e
     set +u # Try to restore everyhing you can.
@@ -72,6 +74,7 @@ lib_install_file() {
 # process, which is not covered by the standard lib_install and
 # lib_install_file functions.
 lib_install() {
+    lib_info 'install'
     : ${PREFIX:="$HOME/."}
     for file in $FILES
     do
