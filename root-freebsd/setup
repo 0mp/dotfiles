@@ -12,6 +12,8 @@ lib_install() {
     cp login_conf "$PREFIX"login_conf
     chown "$user" "$PREFIX"login_conf
     cap_mkdb /etc/login.conf "$PREFIX"login_conf
+
+    lib_install_file "$PWD/sysctl.conf" "/etc/sysctl.conf"
 }
 
 while [ $# -gt 0 ] && [ "@$1@" != "@--@" ]
