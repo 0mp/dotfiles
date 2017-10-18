@@ -15,13 +15,15 @@ lib_back_up_file() {
 }
 
 # FILES  - The list of file names (not the full paths).
+# CUSTOMFILES - The list of file names, which are installed using
+#          lib_custom_install.
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
 #          PREFIX="~/bin/" then the files from that directory will be backed
 #          up.
 lib_back_up() {
     : ${PREFIX:="$HOME/."}
-    for file in $FILES
+    for file in $FILES ${CUSTOMFILES:-}
     do
         if [ -e "$PREFIX$file" ]
         then
@@ -38,6 +40,8 @@ lib_roll_back_file() {
 }
 
 # FILES  - The list of file names (not the full paths).
+# CUSTOMFILES - The list of file names, which are installed using
+#          lib_custom_install.
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
 #          PREFIX="~/bin/" then the files will be installed to that directory.
@@ -46,7 +50,7 @@ lib_roll_back() {
     set +e
     set +u # Try to restore everyhing you can.
     lib_info roll back due to an error
-    for file in $FILES
+    for file in $FILES ${CUSTOMFILES:-}
     do
         lib_roll_back_file "${PREFIX##*/}$file" "$PREFIX$file"
     done
@@ -63,12 +67,20 @@ lib_install_file() {
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
 #          PREFIX="~/bin/" then the files will be installed to that directory.
+#
+# lib_custom_install can be a function used to perform custom installation
+# process, which is not covered by the standard lib_install and
+# lib_install_file functions.
 lib_install() {
     : ${PREFIX:="$HOME/."}
     for file in $FILES
     do
         lib_install_file "$PWD/$file" "$PREFIX$file"
     done
+    case "$(type lib_custom_install 2>/dev/null)" in
+        lib_custom_install*function*) lib_custom_install ;;
+    esac
+    return 0
 }
 
 lib_require_root() {
