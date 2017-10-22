@@ -32,7 +32,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-version=4.1.0
+version=4.1.1
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -180,7 +180,7 @@ download_rawpage() {
 mkdir -p "$workdir"
 trap 'clean_up' EXIT
 
-. "$conffile"
+[ -r "$conffile" ] && . "$conffile"
 
 while [ $# -gt 0 ]
 do
