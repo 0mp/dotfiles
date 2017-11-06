@@ -1,0 +1,15 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+FILES='octaverc'
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'

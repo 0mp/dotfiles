@@ -12,6 +12,7 @@ Modules:
         --email email
     goat
         --defaults
+    octave
     switch
     thunderbird
     tmux

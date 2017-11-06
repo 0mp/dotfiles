@@ -1,0 +1,3 @@
+% Use Vim as the default editor for octave-cli.
+% http://wiki.octave.org/Vim
+edit mode sync
