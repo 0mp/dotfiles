@@ -14,7 +14,6 @@ Modules:
         --defaults
     octave
     switch
-    thunderbird
     tmux
     ubuntu
     utils
