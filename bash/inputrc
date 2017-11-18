@@ -4,3 +4,7 @@ set editing-mode vi
 # Use C-l in insert mode to clear the screen (it only works in normal mode
 # otherwise).
 "\C-l":clear-screen
+
+set show-mode-in-prompt on
+set vi-ins-mode-string " "
+set vi-cmd-mode-string ":"
