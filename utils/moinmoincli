@@ -32,7 +32,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-version=4.1.1
+version=4.1.2
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -173,8 +173,6 @@ download_rawpage() {
     then
         errxit "failed to download old revision"
     fi
-    mv "$oldrawfile" "$oldrawfile".tmp
-    awk 1 RS='\r\n' ORS='\n' "$oldrawfile".tmp 1>"$oldrawfile" 2>/dev/null
 }
 
 mkdir -p "$workdir"
