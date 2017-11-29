@@ -1,3 +1,5 @@
 % Use Vim as the default editor for octave-cli.
 % http://wiki.octave.org/Vim
 edit mode sync
+
+PS1('\[\033[01;34m\]\#> \[\033[0m\]')
