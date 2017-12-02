@@ -19,6 +19,7 @@ Modules:
     utils
     vim
     x11
+    xpdf
 
     root-freebsd
         --user username
