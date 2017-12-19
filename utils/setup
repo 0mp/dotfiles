@@ -8,6 +8,7 @@ FILES="$(cat <<-EOF
 0mp-explore
 cflowfilter
 disable-yoga-3-14-touchscreen
+faf
 fitqemu
 moinmoincli
 superdrive
