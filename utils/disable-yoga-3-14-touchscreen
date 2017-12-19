@@ -1,0 +1,3 @@
+#! /bin/sh -
+
+xinput disable "$(xinput -list | awk -F'[=\t]' '/ELAN/{print $3}')" || printf failure >&2

@@ -4,7 +4,15 @@
 
 set -eu
 
-FILES="0mp-explore fitqemu moinmoincli cflowfilter superdrive"
+FILES="$(cat <<-EOF
+0mp-explore
+cflowfilter
+disable-yoga-3-14-touchscreen
+fitqemu
+moinmoincli
+superdrive
+EOF
+)"
 
 BIN_DIR=~/bin
 
