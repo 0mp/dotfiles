@@ -1,0 +1,8 @@
+#! /bin/sh -
+#
+# Use Apple SuperDrive on Linux.
+#
+# Resources: https://christianmoser.me/use-apples-usb-superdrive-with-linux/
+# Dependency: sg3-utils
+
+sg_raw /dev/sr0 EA 00 00 00 00 00 01
