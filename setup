@@ -11,7 +11,8 @@ fi
 readonly BACKUP_DIR="$PWD/backup/$(date +%y-%m-%d.%H-%M-%S)"
 export BACKUP_DIR
 
-if ! mkdir "$BACKUP_DIR"
+mkdir -p "$BACKUP_DIR"
+if ! [ -d "$BACKUP_DIR" ]
 then
     echo failed to create a backup directory 1>&2
     exit 1
