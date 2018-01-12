@@ -1,0 +1,30 @@
+#! /bin/sh -
+#
+# https://wiki.freebsd.org/Laptops/Lenovo_Yoga_3_14
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+FILES=
+PREFIX=
+CUSTOMFILES=
+lib_custom_install() {
+    # Fix the headphones jack.
+    headphonefix='hint.hdaa.1.nid22.config="as=1 seq=15"'
+    if ! grep "$headphonefix" /boot/device.hints >/dev/null 2>&1
+    then
+        printf '%s\n' "$headphonefix" >> /boot/device.hints
+    fi
+
+    # Load acpi_video for backlight support.
+    sysrc kld_list+=acpi_video
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'

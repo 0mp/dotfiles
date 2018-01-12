@@ -23,4 +23,5 @@ Modules:
 
     root-freebsd
         --user username
+    root-freebsd-yoga314
 ```
