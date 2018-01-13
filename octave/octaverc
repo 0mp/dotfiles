@@ -1,4 +1,12 @@
-% Use Vim as the default editor for octave-cli.
+% Use Vim as the default editor for octave-cli. Try to fall back to vi
+% if Vim is not available.
+if (([output, text] = system ('which vim')) && output == 0)
+	EDITOR ('vim');
+elseif (([output, text] = system ('which vi')) && output == 0)
+	EDITOR ('vi')
+endif
+% It is a necessary fix to be able to run a terminal-based editor from
+% within the Octave CLI without some weird display issues.
 % http://wiki.octave.org/Vim
 edit mode sync
 
