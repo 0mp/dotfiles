@@ -22,7 +22,12 @@ set_once() {
 FILES=
 PREFIX=
 CUSTOMFILES=
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
 lib_custom_install() {
+    case "$CUSTOMOPTS" in ?*)
+        pkg update
+    esac
+
     # Fix the headphones jack.
     set_once '/boot/device.hints' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
@@ -32,11 +37,32 @@ lib_custom_install() {
     # Disable the console bell.
     set_once '/etc/sysctl.conf' 'kern.vt.enable_bell=0'
 
+    # Enable D-BUS.
+    sysrc dbus_enable="YES"
+
     # Load acpi_video for backlight support.
     sysrc kld_list+=acpi_video
 
+    # Configure Intel drivers.
+    # Assume that "/boot/modules" is in the module path.
+    # See `sysctl kern.module_path`.
+    case "$CUSTOMOPTS" in
+        *--intel*) pkg install -y graphics/drm-next-kmod
+    esac
+    sysrc kld_list+=i915kms
+
     # Enable moused with some empirically tested flags.
     sysrc moused_enable="YES" moused_flags="-A 1.65 -a 1.1"
+
+    # Configure powerdxx (and disable powerd).
+    case "$CUSTOMOPTS" in
+        *--powerdxx*) pkg install -y sysutils/powerdxx
+    esac
+    sysrc powerd_enable=NO
+    sysrc powerdxx_enable=YES
+    sysrc powerdxx_flags="--ac hiadaptive --batt minimum --unknown adaptive"
+    sysrc performance_cx_lowest="Cmax"
+    sysrc economy_cx_lowest="Cmax"
 }
 lib_back_up
 trap lib_roll_back EXIT
