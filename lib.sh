@@ -19,8 +19,8 @@ lib_back_up_file() {
 #          lib_custom_install.
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
-#          PREFIX="~/bin/" then the files from that directory will be backed
-#          up.
+#          PREFIX="$HOME/bin/" then the files from that directory will be
+#          backed up.
 lib_back_up() {
     lib_info 'backup'
     : ${PREFIX:="$HOME/."}
@@ -45,7 +45,8 @@ lib_roll_back_file() {
 #          lib_custom_install.
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
-#          PREFIX="~/bin/" then the files will be installed to that directory.
+#          PREFIX="$HOME/bin/" then the files will be installed to that
+#          directory.
 lib_roll_back() {
     lib_info 'rollback'
     : ${PREFIX:="$HOME/."}
@@ -68,7 +69,8 @@ lib_install_file() {
 # FILES  - The list of file names (not the full paths).
 # PREFIX - The environemntal variable to modify the destination path of the
 #          files. The default prefix is "$HOME/.". For example if you pass
-#          PREFIX="~/bin/" then the files will be installed to that directory.
+#          PREFIX="$HOME/bin/" then the files will be installed to that
+#          directory.
 #
 # lib_custom_install can be a function used to perform custom installation
 # process, which is not covered by the standard lib_install and
