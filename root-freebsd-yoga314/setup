@@ -22,24 +22,16 @@ PREFIX=
 CUSTOMFILES=
 lib_custom_install() {
     # Fix the headphones jack.
-    headphonefix='hint.hdaa.1.nid22.config="as=1 seq=15"'
-    if ! grep "$headphonefix" /boot/device.hints >/dev/null 2>&1
-    then
-        printf '%s\n' "$headphonefix" >> /boot/device.hints
-    fi
-
-    # Load acpi_video for backlight support.
-    sysrc kld_list+=acpi_video
-
-    # Disable the console bell.
-    bellstate='kern.vt.enable_bell=0'
-    if ! grep "$bellstate" /etc/sysctl.conf >/dev/null 2>&1
-    then
-        printf '%s\n' "$bellstate" >> /etc/sysctl.conf
-    fi
+    set_once '/boot/device.hints' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
     # Disable the power button (https://forums.freebsd.org/threads/56807/).
     set_once '/etc/sysctl.conf' 'hw.acpi.power_button_state=NONE'
+
+    # Disable the console bell.
+    set_once '/etc/sysctl.conf' 'kern.vt.enable_bell=0'
+
+    # Load acpi_video for backlight support.
+    sysrc kld_list+=acpi_video
 }
 lib_back_up
 trap lib_roll_back EXIT
