@@ -66,11 +66,12 @@ lib_install_file() {
     ln -s -v -f -F -n -- "$1" "$2"
 }
 
-# FILES  - The list of file names (not the full paths).
-# PREFIX - The environemntal variable to modify the destination path of the
-#          files. The default prefix is "$HOME/.". For example if you pass
-#          PREFIX="$HOME/bin/" then the files will be installed to that
-#          directory.
+# CUSTOMOPTS - The list of options to be passed to lib_custom_install.
+# FILES      - The list of file names (not the full paths).
+# PREFIX     - The environemntal variable to modify the destination path of the
+#              files. The default prefix is "$HOME/.". For example if you pass
+#              PREFIX="$HOME/bin/" then the files will be installed to that
+#              directory.
 #
 # lib_custom_install can be a function used to perform custom installation
 # process, which is not covered by the standard lib_install and
