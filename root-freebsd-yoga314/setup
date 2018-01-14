@@ -32,6 +32,9 @@ lib_custom_install() {
 
     # Load acpi_video for backlight support.
     sysrc kld_list+=acpi_video
+
+    # Enable moused with some empirically tested flags.
+    sysrc moused_enable="YES" moused_flags="-A 1.65 -a 1.1"
 }
 lib_back_up
 trap lib_roll_back EXIT
