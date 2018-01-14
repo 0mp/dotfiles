@@ -8,6 +8,15 @@ set -eu
 
 lib_info 'setup'
 
+set_once() {
+    filename="$1"
+    string="$2"
+    if ! grep "$string" "$filename" >/dev/null 2>&1
+    then
+        printf '%s\n' "$string" >> "$filename"
+    fi
+}
+
 FILES=
 PREFIX=
 CUSTOMFILES=
@@ -28,6 +37,9 @@ lib_custom_install() {
     then
         printf '%s\n' "$bellstate" >> /etc/sysctl.conf
     fi
+
+    # Disable the power button (https://forums.freebsd.org/threads/56807/).
+    set_once '/etc/sysctl.conf' 'hw.acpi.power_button_state=NONE'
 }
 lib_back_up
 trap lib_roll_back EXIT
