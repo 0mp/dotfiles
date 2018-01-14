@@ -6,6 +6,8 @@ set -eu
 
 lib_info 'setup'
 
+# lib_require_root
+
 FILES=
 PREFIX=
 CUSTOMFILES=
