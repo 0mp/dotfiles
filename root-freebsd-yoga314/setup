@@ -21,6 +21,13 @@ lib_custom_install() {
 
     # Load acpi_video for backlight support.
     sysrc kld_list+=acpi_video
+
+    # Disable the console bell.
+    bellstate='kern.vt.enable_bell=0'
+    if ! grep "$bellstate" /etc/sysctl.conf >/dev/null 2>&1
+    then
+        printf '%s\n' "$bellstate" >> /etc/sysctl.conf
+    fi
 }
 lib_back_up
 trap lib_roll_back EXIT
