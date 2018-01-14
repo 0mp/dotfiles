@@ -1,0 +1,61 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+lib_require_root
+
+FILES='src-env.conf'
+PREFIX='/etc/'
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+lib_custom_install() {
+    ncpu="$(sysctl hw.ncpu | awk '{print $2}')"
+
+    # Get the latest source tree.
+    case "$CUSTOMOPTS" in
+        *--update*)
+            if ! [ -d /usr/src/.svn ]
+            then
+                rm -rf -- /usr/src/*
+                if ! which svn >/dev/null 2>&1
+                then
+                    pkg install -y subversion
+                fi
+                svn co https://svn.freebsd.org/base/head /usr/src
+            fi
+            svn update /usr/src
+            ;;
+    esac
+
+    case "$CUSTOMOPTS" in
+        # Build the world and the kernel.
+        *--build*)
+            cd /usr/src
+            kldstat -q -n filemon || kldload filemon
+            make -j$ncpu buildworld
+            make -j$ncpu buildkernel
+            ;;
+        *--complete*)
+            cd /usr/src
+            make -j$ncpu installworld
+            mergemaster -i -v
+            ;;
+    esac
+
+    # Install the kernel.
+    case "$CUSTOMOPTS" in
+        *--install-kernel*)
+            cd /usr/src
+            make -j$ncpu installkernel
+            ;;
+    esac
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'

@@ -23,6 +23,11 @@ Modules:
 
     root-freebsd
         --user username
+    root-freebsd-current
+        --build
+        --complete
+        --install-kernel
+        --update
     root-freebsd-yoga314
         --intel
         --powerdxx
