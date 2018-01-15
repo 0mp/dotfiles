@@ -1,19 +1,20 @@
-# Created by: Matthew Donovan <kitchetech@gmail.com>
-# $FreeBSD: head/x11/sterm/Makefile 421456 2016-09-06 18:17:02Z amdmi3 $
-
-PORTNAME=	sterm
+PORTNAME=	sterm-0mp
 PORTVERSION=	0.7
 CATEGORIES=	x11
-MASTER_SITES=	http://dl.suckless.org/st/
-DISTNAME=	st-${PORTVERSION}
+DISTVERSION=	g20171226
 
-MAINTAINER=	kitche@kitchetech.com
+MAINTAINER=	0mp@FreeBSD.org
 COMMENT=	Simple X terminal
 
 LICENSE=	MITX
 LICENSE_NAME=	MIT/X Consortium License
 LICENSE_FILE=	${WRKSRC}/LICENSE
 LICENSE_PERMS=	dist-mirror dist-sell pkg-mirror pkg-sell auto-accept
+
+USE_GITHUB=	yes
+GH_ACCOUNT=	0mp
+GH_PROJECT=	st
+GH_TAGNAME=	1f24bde
 
 LIB_DEPENDS=	libfontconfig.so:x11-fonts/fontconfig \
 		libfreetype.so:print/freetype2
@@ -26,10 +27,6 @@ PLIST_FILES=	bin/st man/man1/st.1.gz
 PORTDOCS=	README
 
 OPTIONS_DEFINE=	DOCS
-
-pre-everything::
-	@${ECHO_MSG} "You can build st with your own config.h using the ST_CONF knob:"
-	@${ECHO_MSG} "make ST_CONF=/path/to/st/config.h install clean"
 
 post-patch:
 .if defined(ST_CONF)
