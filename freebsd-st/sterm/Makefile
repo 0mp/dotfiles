@@ -1,7 +1,10 @@
+# Created by: 0mp@FreeBSD.org
+# $FreeBSD$
+
 PORTNAME=	sterm-0mp
-PORTVERSION=	0.7
-CATEGORIES=	x11
 DISTVERSION=	g20171226
+PORTEPOCH=	1
+CATEGORIES=	x11
 
 MAINTAINER=	0mp@FreeBSD.org
 COMMENT=	Simple X terminal
@@ -11,16 +14,16 @@ LICENSE_NAME=	MIT/X Consortium License
 LICENSE_FILE=	${WRKSRC}/LICENSE
 LICENSE_PERMS=	dist-mirror dist-sell pkg-mirror pkg-sell auto-accept
 
+LIB_DEPENDS=	libfontconfig.so:x11-fonts/fontconfig \
+		libfreetype.so:print/freetype2
+
+USES=		pkgconfig ncurses:port
+USE_XORG=	x11 xext xft
+
 USE_GITHUB=	yes
 GH_ACCOUNT=	0mp
 GH_PROJECT=	st
 GH_TAGNAME=	1f24bde
-
-LIB_DEPENDS=	libfontconfig.so:x11-fonts/fontconfig \
-		libfreetype.so:print/freetype2
-
-USES=		pkgconfig
-USE_XORG=	x11 xext xft
 
 PLIST_FILES=	bin/st man/man1/st.1.gz
 
