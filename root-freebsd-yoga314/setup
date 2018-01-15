@@ -44,12 +44,11 @@ lib_custom_install() {
     sysrc kld_list+=acpi_video
 
     # Configure Intel drivers.
-    # Assume that "/boot/modules" is in the module path.
-    # See `sysctl kern.module_path`.
+    # For some reason, i915kms has to be loaded using its absolute path.
     case "$CUSTOMOPTS" in
         *--intel*) pkg install -y graphics/drm-next-kmod
     esac
-    sysrc kld_list+=i915kms
+    sysrc kld_list+="/boot/modules/i915kms.ko"
 
     # Enable moused with some empirically tested flags.
     sysrc moused_enable="YES" moused_flags="-A 1.65 -a 1.1"
