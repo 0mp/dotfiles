@@ -45,6 +45,8 @@ lib_custom_install() {
 
     # Configure Intel drivers.
     # For some reason, i915kms has to be loaded using its absolute path.
+    # It is not recommended to install x11-drivers/xf86-video-intel alongside
+    # graphics/drm-next-kmod.
     case "$CUSTOMOPTS" in
         *--intel*) pkg install -y graphics/drm-next-kmod
     esac
