@@ -1,4 +1,4 @@
---- config.def.h.orig	2018-01-16 00:02:17 UTC
+--- config.def.h.orig	2018-01-16 00:19:53 UTC
 +++ config.def.h
 @@ -1,6 +1,11 @@
  /* See LICENSE file for copyright and license details. */
@@ -6,7 +6,7 @@
  /*
 + * plumber
 + */
-+static char plumber[] = "~/plumb.sh";
++static char plumber[] = "~/.suckless/plumb.sh";
 +
 +/*
   * appearance

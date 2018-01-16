@@ -1,4 +1,4 @@
---- x.c.orig	2018-01-16 00:02:17 UTC
+--- x.c.orig	2018-01-16 00:19:53 UTC
 +++ x.c
 @@ -140,6 +140,9 @@ static DC dc;
  static XWindow xw;

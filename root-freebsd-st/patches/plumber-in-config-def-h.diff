@@ -6,7 +6,7 @@
  /*
 + * plumber
 + */
-+static char plumber[] = "~/plumb.sh";
++static char plumber[] = "~/.suckless/plumb.sh";
 +
 +/*
   * appearance
