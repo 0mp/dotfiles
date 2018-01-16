@@ -1,0 +1,71 @@
+#! /bin/sh -
+#
+# A simple script that can be used to provide some extra debug information
+# about the iwm driver operating. It is just a handy wrapper around
+#
+#     sysctl dev.iwm.0.debug
+#
+# See also: wlandebug(8)
+#
+# Suggested to me by my GSoC mentor, Adrian Chadd.
+#
+# Version: 0.1
+#
+
+_XMIT=1 # basic xmit operation
+_RECV=2 # basic recv operation
+_STATE=4 # 802.11 state transitions
+_TXPOW=8 # tx power processing
+_RESET=10 # reset processing
+_OPS=20 # iwm_ops processing
+_BEACON=40 # beacon handling
+_WATCHDOG=80 # watchdog timeout
+_INTR=100 # ISR
+_CALIBRATE=200 # periodic calibration
+_NODE=400 # node management
+_LED=800 # led management
+_CMD=1000 # cmd submission
+_TXRATE=2000 # TX rate debugging
+_PWRSAVE=4000 # Power save operations
+_SCAN=8000 # Scan related operations
+_STATS=10000 # Statistics updates
+_FIRMWARE_TLV=20000 # Firmware TLV parsing
+_TRANS=40000 # Transport layer (eg PCIe)
+_EEPROM=80000 # EEPROM/channel information
+_TEMP=100000 # Thermal Sensor handling
+_FW=200000 # Firmware management
+_LAR=400000 # Location Aware Regulatory
+_REGISTER=20000000 # print chipset register
+_TRACE=40000000 # Print begin and start driver function
+_FATAL=80000000 # fatal errors
+
+hex2dec() {
+	printf 'obase=10; ibase=16; %s\n' "$1$( \
+		shift
+		for opt; do
+			printf ' + %s' "$opt"
+		done
+	)" | bc
+}
+
+iwmctl() {
+	sudo sysctl dev.iwm.0.debug="$(hex2dec "$@")"
+}
+
+while [ $# -gt 0 ]; do
+	case $1 in
+		custom)
+			iwmctl $_XMIT $_RECV $_SCAN $_CMD $_TXRATE
+			;;
+		reset)
+			iwmctl 0
+			;;
+        usage)
+            printf 'Usage: %s [custom|reset]\n' "${0##*/}"
+            ;;
+		*)
+			printf 'Error: Invalid command "%s"\n' "$1" &1>2
+			;;
+	esac
+	shift 1
+done
