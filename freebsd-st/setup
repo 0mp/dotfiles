@@ -1,0 +1,42 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+lib_require_root
+
+while [ $# -gt 0 ] && [ "@$1@" != "@--@" ]
+do
+    case "$1" in
+        --user) user="$2" ; shift 2 ;;
+        *) lib_err "invalid argument \"$1\"" ; shift ;;
+    esac
+done
+
+FILES=
+PREFIX=
+CUSTOMFILES=
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+lib_custom_install() {
+    cd sterm
+    if pkg info -e sterm-0mp
+    then
+        make deinstall
+        make clean
+        su "$user" -c make
+        make reinstall
+    else
+        make fetch
+        su "$user" -c make
+        make install
+    fi
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'
