@@ -16,10 +16,9 @@ do
     esac
 done
 
-FILES=
-PREFIX=
-CUSTOMFILES=
-CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+FILES='plumb.sh'
+PREFIX="/home/$user/.suckless/"
+su "$user" -c "mkdir -p $PREFIX"
 lib_custom_install() {
     cd sterm
     if pkg info -e sterm-0mp
@@ -33,6 +32,8 @@ lib_custom_install() {
         su "$user" -c make
         make install
     fi
+
+    chown -h "$user:$user" "$PREFIX"plumb.sh
 }
 lib_back_up
 trap lib_roll_back EXIT
