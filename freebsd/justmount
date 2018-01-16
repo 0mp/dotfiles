@@ -1,0 +1,6 @@
+#! /bin/sh -
+#
+# Version: 0.1
+
+mkdir -p ~/mnt
+sudo mount_msdosfs /dev/da0 ~/mnt

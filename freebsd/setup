@@ -4,14 +4,19 @@
 
 set -eu
 
-FILES="fonts.conf"
+lib_info 'setup'
 
-destdir=~/.config/fontconfig
+FILES='fonts.conf'
+PREFIX="$HOME/.config/fontconfig/"
+mkdir -p "$PREFIX"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
 
-lib_info setup
-
-mkdir -p "$destdir"
-PREFIX="$destdir/"
+FILES='justmount'
+PREFIX="$HOME/bin/"
+mkdir -p "$PREFIX"
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
