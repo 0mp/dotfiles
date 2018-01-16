@@ -1,0 +1,27 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+lib_require_root
+
+FILES=
+PREFIX=
+CUSTOMFILES=
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+lib_custom_install() {
+    export DWM_CONF="$PWD/config.h"
+    cd /usr/ports/x11-wm/dwm
+    make deinstall
+    make clean
+    make reinstall
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'

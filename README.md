@@ -28,6 +28,7 @@ Modules:
         --complete
         --install-kernel
         --update
+    root-freebsd-dwm
     root-freebsd-st
         --user username
     root-freebsd-yoga314
