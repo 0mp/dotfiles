@@ -8,7 +8,7 @@ index ae93ade..ff531a3 100644
  int oldbutton   = 3; /* button event on startup: 3 = release */
 +char *cwd = NULL;
 +char *plumber_cmd = plumber;
- 
+
  static CSIEscape csiescseq;
  static STREscape strescseq;
 @@ -1858,6 +1860,9 @@ strhandle(void)
@@ -28,7 +28,7 @@ index fbfd350..02ba92d 100644
 @@ -140,6 +140,9 @@ static DC dc;
  static XWindow xw;
  static XSelection xsel;
- 
+
 +extern char *cwd;
 +extern char *plumber_cmd;
 +
@@ -40,21 +40,21 @@ index fbfd350..02ba92d 100644
  brelease(XEvent *e)
  {
 +	pid_t child;
-+	char cmd[100 + strlen(cwd)];
++	char cmd[400];
 +
  	if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forceselmod)) {
  		mousereport(e);
  		return;
 @@ -519,6 +525,15 @@ brelease(XEvent *e)
- 
+
  	if (e->xbutton.button == Button2) {
  		xselpaste();
 +	} else if (e->xbutton.button == Button3) {
 +		switch(child = fork()) {
-+			case -1: 
++			case -1:
 +				return;
-+			case 0: 
-+				sprintf(cmd, "(cd %s ; %s %s)", cwd, plumber_cmd, sel.primary);
++			case 0:
++				snprintf(cmd, sizeof(cmd), "%s %s", plumber_cmd, sel.primary);
 +				execvp( "sh", (char *const []){ "/bin/sh", "-c", cmd, 0 });
 +				exit(127);
 +		}
