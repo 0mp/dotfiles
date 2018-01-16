@@ -28,6 +28,8 @@ Modules:
         --complete
         --install-kernel
         --update
+    root-freebsd-st
+        --user username
     root-freebsd-yoga314
         --intel
         --powerdxx
