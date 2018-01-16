@@ -6,7 +6,7 @@ do
         /State:[[:space:]]+charging/{printf "+"}\
         /Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}'
     printf -- ' | '
-    date +'%H:%m | %A, %d.%m'
+    date +'%H:%M | %A, %d.%m'
     )"
 
     sleep 10
