@@ -7,6 +7,8 @@ Modules:
 
     bash
     freebsd
+    freebsd-dwm
+        --root-install
     git
         --name name
         --email email
@@ -28,7 +30,6 @@ Modules:
         --complete
         --install-kernel
         --update
-    root-freebsd-dwm
     root-freebsd-st
         --user username
     root-freebsd-yoga314

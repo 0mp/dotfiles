@@ -1,0 +1,42 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+case "$CUSTOMOPTS" in
+    --root-install)
+        lib_require_root
+        lib_custom_install() {
+            export DWM_CONF="$PWD/config.h"
+            cd /usr/ports/x11-wm/dwm
+            make deinstall
+            make clean
+            make reinstall
+        }
+        lib_back_up
+        trap lib_roll_back EXIT
+        lib_install
+        trap - EXIT
+        ;;
+    *)
+        FILES='status-bar.sh'
+        PREFIX="$HOME/.suckless/"
+        lib_back_up
+        trap lib_roll_back EXIT
+        lib_install
+        trap - EXIT
+
+        FILES='xinitrc'
+        PREFIX=
+        lib_back_up
+        trap lib_roll_back EXIT
+        lib_install
+        trap - EXIT
+        ;;
+esac
+
+lib_info 'setup done'
