@@ -24,4 +24,18 @@ trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
+FILES='status-bar.sh'
+PREFIX="$HOME/.suckless/"
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+FILES='xinitrc'
+PREFIX=
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
 lib_info 'setup done'

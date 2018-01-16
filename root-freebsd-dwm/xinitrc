@@ -1,0 +1,12 @@
+#! /bin/sh -
+
+if [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
+then
+    /bin/sh ~/.suckless/status-bar.sh &
+fi
+
+setxkbmap pl
+
+[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+
+exec dwm
