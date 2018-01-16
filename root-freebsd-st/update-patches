@@ -30,3 +30,4 @@ do
     cd ../..
 done
 make makepatch
+make clean
