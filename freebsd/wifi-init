@@ -1,0 +1,43 @@
+#! /bin/sh -
+#
+# Create a wlandev, start a WPA supplicant and run a dhclient.
+#
+# Version: 1.0.0
+#
+# Usage: $0 [wlandev [dev]]
+#
+# You can also pass `wlandev` and `dev` environmental variables to the
+# script. The defaults are: "wlan0" and "iwm0" respectively.
+
+case "$1" in
+    -h|--help)
+
+        cat <<EOF
+Usage: ${0##*/} [wlandev [dev]]
+
+Environmental variables:
+    wlandev=wlan0
+    dev=iwm0
+EOF
+        exit 0
+        ;;
+    *)
+        ;;
+esac
+
+set -x
+
+wlandev="${wlandev:-${1:-wlan0}}"
+dev="${dev:-${2:-iwm0}}"
+
+set -u
+
+if ! ifconfig "$wlandev" 1>&2 2>/dev/null; then
+    sudo ifconfig "$wlandev" create wlandev "$dev"
+else
+    sudo service netif restart
+fi
+
+sudo ifconfig "$wlandev" up
+sudo wpa_supplicant -B -i "$wlandev" -c /etc/wpa_supplicant.conf
+sudo dhclient "$wlandev"

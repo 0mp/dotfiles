@@ -14,7 +14,7 @@ trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
-FILES='justmount'
+FILES='justmount wifi-init'
 PREFIX="$HOME/bin/"
 mkdir -p "$PREFIX"
 lib_back_up
