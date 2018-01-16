@@ -1,4 +1,4 @@
---- st.c.orig	2018-01-16 00:19:53 UTC
+--- st.c.orig	2018-01-16 01:05:12 UTC
 +++ st.c
 @@ -128,6 +128,8 @@ typedef struct {
  /* function definitions used in config.h */

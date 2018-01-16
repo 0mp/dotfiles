@@ -1,6 +1,6 @@
---- config.def.h.orig	2018-01-16 00:19:53 UTC
+--- config.def.h.orig	2018-01-16 01:05:12 UTC
 +++ config.def.h
-@@ -1,6 +1,11 @@
+@@ -1,11 +1,16 @@
  /* See LICENSE file for copyright and license details. */
  
  /*
@@ -12,6 +12,12 @@
   * appearance
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
+  */
+-char font[] = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
++char font[] = "Inconsolata:pixelsize=14:antialias=true:autohint=true";
+ int borderpx = 2;
+ 
+ /*
 @@ -63,7 +68,7 @@ unsigned int cursorthickness = 2;
  static int bellvolume = 0;
  
