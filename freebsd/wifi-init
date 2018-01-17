@@ -2,7 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #
 # Usage: $0 [wlandev [dev]]
 #
@@ -35,7 +35,7 @@ set -u
 if ! ifconfig "$wlandev" 1>&2 2>/dev/null; then
     sudo ifconfig "$wlandev" create wlandev "$dev"
 else
-    sudo service netif restart
+    sudo service netif restart "$wlandev"
 fi
 
 sudo ifconfig "$wlandev" up
