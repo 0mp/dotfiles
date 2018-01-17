@@ -3,6 +3,7 @@
 while [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
 do
     /bin/sh ~/.suckless/status-bar.sh
+    sleep 10
 done &
 
 setxkbmap pl
