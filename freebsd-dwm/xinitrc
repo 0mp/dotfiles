@@ -1,9 +1,9 @@
 #! /bin/sh -
 
-if [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
-then
-    /bin/sh ~/.suckless/status-bar.sh &
-fi
+while [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
+do
+    /bin/sh ~/.suckless/status-bar.sh
+done &
 
 setxkbmap pl
 
