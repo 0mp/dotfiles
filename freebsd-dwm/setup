@@ -8,19 +8,13 @@ lib_info 'setup'
 
 CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
 case "$CUSTOMOPTS" in
-    --root-install)
+    *--root-install*)
         lib_require_root
-        lib_custom_install() {
-            export DWM_CONF="$PWD/config.h"
-            cd /usr/ports/x11-wm/dwm
-            make deinstall
-            make clean
-            make reinstall
-        }
-        lib_back_up
-        trap lib_roll_back EXIT
-        lib_install
-        trap - EXIT
+        export DWM_CONF="$PWD/config.h"
+        cd /usr/ports/x11-wm/dwm
+        make deinstall
+        make clean
+        make reinstall
         ;;
     *)
         FILES='status-bar.sh'
