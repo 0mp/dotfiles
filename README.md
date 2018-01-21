@@ -12,6 +12,7 @@ Modules:
     git
         --name name
         --email email
+        --github-ssh
     goat
         --defaults
     octave

@@ -3,6 +3,7 @@
 # Options:
 #     --name
 #     --email
+#     --github-ssh
 
 . ../lib.sh
 
@@ -24,6 +25,7 @@ trap lib_roll_back EXIT
 
 git_name=
 git_email=
+github_ssh=no
 while [ $# -gt 0 ]
 do
     case "$1" in
@@ -47,6 +49,11 @@ do
             fi
             git_email="$1"
             shift 1
+            ;;
+
+         --github-ssh)
+            shift 1
+            github_ssh=yes
             ;;
 
         *)
@@ -75,6 +82,12 @@ cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
 
 [include]
     path = $PWD/gitconfig
+
+EOF
+
+[ "@$github_ssh@" = "yes" ] && cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
+[url "ssh://git@github.com/"] 
+    insteadOf = https://github.com/
 
 EOF
 
