@@ -2,12 +2,14 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 1.1.0
+# Version: 2.0.0
 #
 # Usage: $0 [wlandev [dev]]
 #
 # You can also pass `wlandev` and `dev` environmental variables to the
 # script. The defaults are: "wlan0" and "iwm0" respectively.
+#
+# Send SIGQUIT with Control+\ to reinitiate the connection.
 
 case "$1" in
     -h|--help)
@@ -18,6 +20,8 @@ Usage: ${0##*/} [wlandev [dev]]
 Environmental variables:
     wlandev=wlan0
     dev=iwm0
+
+Send SIGQUIT with Control+\ to reinitiate the connection.
 EOF
         exit 0
         ;;
@@ -25,19 +29,38 @@ EOF
         ;;
 esac
 
-set -x
+reconnect() {
+    set -x
+
+    set -u
+
+    if ! ifconfig "$wlandev" 1>&2 2>/dev/null
+    then
+        sudo ifconfig "$wlandev" create wlandev "$dev"
+    else
+        sudo service netif restart "$wlandev"
+    fi
+
+    sudo ifconfig "$wlandev" up
+    sudo wpa_supplicant -B -i "$wlandev" -c /etc/wpa_supplicant.conf
+    if sudo dhclient "$wlandev"
+    then
+        { set +x; } 2>/dev/null
+        return 0
+    else
+        { set +x; } 2>/dev/null
+        return 1
+    fi
+}
+
+keep_reconnecting() {
+    while ! reconnect
+    do done
+}
 
 wlandev="${wlandev:-${1:-wlan0}}"
 dev="${dev:-${2:-iwm0}}"
 
-set -u
+trap 'keep_reconnecting' SIGQUIT # It's Ctrl-\.
 
-if ! ifconfig "$wlandev" 1>&2 2>/dev/null; then
-    sudo ifconfig "$wlandev" create wlandev "$dev"
-else
-    sudo service netif restart "$wlandev"
-fi
-
-sudo ifconfig "$wlandev" up
-sudo wpa_supplicant -B -i "$wlandev" -c /etc/wpa_supplicant.conf
-sudo dhclient "$wlandev"
+keep_reconnecting
