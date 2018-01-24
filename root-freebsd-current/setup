@@ -8,7 +8,7 @@ lib_info 'setup'
 
 lib_require_root
 
-FILES='src-env.conf'
+FILES='src-env.conf make.conf'
 PREFIX='/etc/'
 CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
 lib_custom_install() {
