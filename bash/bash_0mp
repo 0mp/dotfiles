@@ -19,6 +19,11 @@ tmux_clear_detached_sessions() {
     done
 }
 
+ssh_agent_activate() {
+    eval $(ssh-agent)
+    ssh-add
+}
+
 PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] '
 
 export EDITOR=vim
