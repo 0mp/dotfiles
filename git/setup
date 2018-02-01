@@ -85,8 +85,8 @@ cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
 
 EOF
 
-[ "@$github_ssh@" = "yes" ] && cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
-[url "ssh://git@github.com/"] 
+[ "@$github_ssh@" = "@yes@" ] && cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
+[url "ssh://git@github.com/"]
     insteadOf = https://github.com/
 
 EOF
