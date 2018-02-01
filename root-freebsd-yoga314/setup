@@ -68,6 +68,11 @@ lib_custom_install() {
     sysrc powerdxx_flags="--ac adaptive --batt minimum --unknown adaptive"
     sysrc performance_cx_lowest="Cmax"
     sysrc economy_cx_lowest="Cmax"
+
+    # Install missing fonts.
+    case "$CUSTOMOPTS" in
+        *--fonts*) pkg install -y x11-fonts/noto
+    esac
 }
 lib_back_up
 trap lib_roll_back EXIT

@@ -34,6 +34,7 @@ Modules:
     root-freebsd-st
         --user username
     root-freebsd-yoga314
+        --fonts
         --intel
         --powerdxx
 ```
