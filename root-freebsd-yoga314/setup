@@ -65,7 +65,7 @@ lib_custom_install() {
     esac
     sysrc powerd_enable=NO
     sysrc powerdxx_enable=YES
-    sysrc powerdxx_flags="--ac adaptive --batt minimum --unknown adaptive"
+    sysrc powerdxx_flags="--ac hiadaptive --batt minimum --unknown hiadaptive"
     sysrc performance_cx_lowest="Cmax"
     sysrc economy_cx_lowest="Cmax"
 
