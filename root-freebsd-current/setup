@@ -41,7 +41,7 @@ lib_custom_install() {
         *--complete*)
             cd /usr/src
             make -j$ncpu installworld
-            mergemaster -i -v
+            mergemaster -i -v -U
             ;;
     esac
 
