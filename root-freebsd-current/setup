@@ -19,11 +19,11 @@ lib_custom_install() {
         *--update*)
             if ! [ -d /usr/src/.svn ]
             then
-                rm -rf -- /usr/src/*
-                if ! which svn >/dev/null 2>&1
+                if ! pkg info -q subversion
                 then
                     pkg install -y subversion
                 fi
+                rm -rf -- /usr/src/*
                 svn co https://svn.freebsd.org/base/head /usr/src
             fi
             svn update /usr/src
