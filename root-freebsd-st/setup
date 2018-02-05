@@ -20,19 +20,27 @@ FILES='plumb.sh'
 PREFIX="/home/$user/.suckless/"
 su "$user" -c "mkdir -p $PREFIX"
 lib_custom_install() {
-    cd sterm
+    cd sterm-0mp
     if pkg info -e sterm-0mp
     then
-        make deinstall
-        make clean
-        su "$user" -c make
-        make reinstall
+        for flavor in shine charcoal
+        do
+            make deinstall FLAVOR=$flavor
+            make clean FLAVOR=$flavor
+            make BATCH=YES FLAVOR=$flavor
+            make reinstall FLAVOR=$flavor
+        done
     else
-        make fetch
-        su "$user" -c make
-        make install
+        for flavor in shine charcoal
+        do
+            make fetch FLAVOR=$flavor
+            make BATCH=YES FLAVOR=$flavor
+            make install FLAVOR=$flavor
+        done
     fi
 
+    ln -s -f /usr/local/bin/st-charcoal /usr/local/bin/st
+    ln -s -f /usr/local/bin/st-shine /usr/local/bin/st2
     chown -h "$user:$user" "$PREFIX"plumb.sh
 }
 lib_back_up
