@@ -3,7 +3,7 @@
 
 PORTNAME=	sterm-0mp
 DISTVERSION=	g20171226
-PORTREVISION=	1
+PORTREVISION=	2
 PORTEPOCH=	1
 CATEGORIES=	x11
 
@@ -26,30 +26,38 @@ GH_ACCOUNT=	0mp
 GH_PROJECT=	st
 GH_TAGNAME=	1f24bde
 
-# charcoal_PORTDOCS=	README
-
-OPTIONS_DEFINE=	DOCS SCROLLBACK PLUMBER FONT TERMNAME SHINE
+OPTIONS_DEFINE=		SCROLLBACK PLUMBER FONT TERMNAME SHINE DOCS
 OPTIONS_DEFAULT=	SCROLLBACK PLUMBER FONT TERMNAME
 
 SCROLLBACK_EXTRA_PATCHES=	${PATCHDIR}/extra-patch-scrollback
-PLUMBER_EXTRA_PATCHES=	${PATCHDIR}/extra-patch-plumber ${PATCHDIR}/extra-patch-plumber-config.def.h
-FONT_EXTRA_PATCHES=	${PATCHDIR}/extra-patch-font
-TERMNAME_EXTRA_PATCHES=	${PATCHDIR}/extra-patch-termname
+PLUMBER_EXTRA_PATCHES=		${PATCHDIR}/extra-patch-plumber \
+				${PATCHDIR}/extra-patch-plumber-config.def.h
+FONT_EXTRA_PATCHES=		${PATCHDIR}/extra-patch-font
+TERMNAME_EXTRA_PATCHES=		${PATCHDIR}/extra-patch-termname
 
-FLAVORS=	charcoal shine
-FLAVOR?=	${FLAVORS:[1]}
+FLAVORS=		charcoal shine data
+FLAVOR?=		${FLAVORS:[1]}
+
 charcoal_PKGNAMESUFFIX=	-charcoal
-charcoal_PLIST=	bin/st-charcoal \
-			man/man1/st.1.gz
+charcoal_PLIST=		bin/st-charcoal
+.if ${FLAVOR:U} == charcoal
+PLIST_FILES+=		${charcoal_PLIST}
+.endif
+
 shine_PKGNAMESUFFIX=	-shine
 shine_PLIST=		bin/st-shine
-
-.if ${FLAVOR:U} == charcoal
-PLIST_FILES+=	${charcoal_PLIST}
-.else
+.if ${FLAVOR:U} == shine
 OPTIONS_DEFAULT+=	SHINE
 SHINE_EXTRA_PATCHES=	${PATCHDIR}/extra-patch-shine
-PLIST_FILES+=	${shine_PLIST}
+PLIST_FILES+=		${shine_PLIST}
+.endif
+
+data_PKGNAMESUFFIX=	-data
+data_PLIST=		man/man1/st.1.gz
+data_PORTDOCS=		README
+.if ${FLAVOR:U} == data
+PLIST_FILES+=		${data_PLIST}
+PORTDOCS+=		${data_PORTDOCS}
 .endif
 
 post-patch:
@@ -69,10 +77,9 @@ post-install:
 	@${MV} ${STAGEDIR}${PREFIX}/bin/st ${STAGEDIR}${PREFIX}/bin/st${PKGNAMESUFFIX}
 	@${STRIP_CMD} ${STAGEDIR}${PREFIX}/bin/st${PKGNAMESUFFIX}
 
-post-install-DOCS-on:
-	@${MKDIR} ${STAGEDIR}${DOCSDIR}
-.for doc in ${PORTDOCS}
-	${INSTALL_DATA} ${WRKSRC}/${doc} ${STAGEDIR}${DOCSDIR}
-.endfor
+.if ${FLAVOR:U} == data
+do-install-DOCS-on:
+	cd ${WRKSRC} && ${COPYTREE_SHARE} "${PORTDOCS}" ${STAGEDIR}${DOCSDIR}
+.endif
 
 .include <bsd.port.mk>

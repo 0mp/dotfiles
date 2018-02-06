@@ -21,23 +21,16 @@ PREFIX="/home/$user/.suckless/"
 su "$user" -c "mkdir -p $PREFIX"
 lib_custom_install() {
     cd sterm-0mp
-    if pkg info -e sterm-0mp
-    then
-        for flavor in shine charcoal
-        do
+    for flavor in shine charcoal data
+    do
+        if pkg info -e sterm-0mp-$flavor
+        then
             make deinstall FLAVOR=$flavor
-            make clean FLAVOR=$flavor
-            make BATCH=YES FLAVOR=$flavor
-            make reinstall FLAVOR=$flavor
-        done
-    else
-        for flavor in shine charcoal
-        do
-            make fetch FLAVOR=$flavor
-            make BATCH=YES FLAVOR=$flavor
-            make install FLAVOR=$flavor
-        done
-    fi
+        fi
+        make clean FLAVOR=$flavor
+        make BATCH=YES FLAVOR=$flavor
+        make install FLAVOR=$flavor
+    done
 
     ln -s -f /usr/local/bin/st-charcoal /usr/local/bin/st
     ln -s -f /usr/local/bin/st-shine /usr/local/bin/st2
