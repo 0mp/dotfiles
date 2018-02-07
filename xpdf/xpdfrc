@@ -1,5 +1,6 @@
 # https://superuser.com/q/1079084/442991
 bind t any toggleSidebar
+bind c any toggleContinuousMode
 
 bind j any scrollDown(50)
 bind k any scrollUp(50)
