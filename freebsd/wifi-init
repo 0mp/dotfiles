@@ -2,14 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 2.1.0
-#
-# Usage: $0 [wlandev [dev]]
-#
-# You can also pass `wlandev` and `dev` environmental variables to the
-# script. The defaults are: "wlan0" and "iwm0" respectively.
-#
-# Send SIGQUIT with Control+\ to reinitiate the connection.
+# Version: 2.1.1
 
 loopmode=no
 
