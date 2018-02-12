@@ -2,7 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #
 # Usage: $0 [wlandev [dev]]
 #
@@ -11,11 +11,13 @@
 #
 # Send SIGQUIT with Control+\ to reinitiate the connection.
 
+loopmode=no
+
 case "$1" in
     -h|--help)
 
         cat <<EOF
-Usage: ${0##*/} [wlandev [dev]]
+Usage: ${0##*/} [-l] [wlandev [dev]]
 
 Environmental variables:
     wlandev=wlan0
@@ -24,6 +26,10 @@ Environmental variables:
 Send SIGQUIT with Control+\ to reinitiate the connection.
 EOF
         exit 0
+        ;;
+    -l|--loop)
+        loopmode=yes
+        shift
         ;;
     *)
         ;;
@@ -63,4 +69,15 @@ dev="${dev:-${2:-iwm0}}"
 
 trap 'keep_reconnecting' SIGQUIT # It's Ctrl-\.
 
-keep_reconnecting
+if [ "@$loopmode@" = "@no@" ]
+then
+    keep_reconnecting
+else
+    while keep_reconnecting
+    do
+        while ifconfig "$wlandev" | grep 'status: associated' >/dev/null 2>&1
+        do
+            sleep 5
+        done
+    done
+fi
