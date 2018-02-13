@@ -1,0 +1,12 @@
+#! /bin/sh -
+
+set -ex
+
+if ! kldstat -q axe
+then
+    sudo kldload axe
+fi
+sudo service netif restart ue0
+sudo ifconfig ue0 up
+sleep 3
+sudo dhclient ue0
