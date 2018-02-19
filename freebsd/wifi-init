@@ -2,7 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 2.2
+# Version: 2.3
 
 loopmode=no
 
@@ -38,9 +38,9 @@ reconnect() {
 
     set -u
 
-    if ! ifconfig "$wlandev" 1>&2 2>/dev/null
+    if ! ifconfig "$wlandev" >/dev/null 2>&1
     then
-        ifconfig "$wlandev" create wlandev "$dev"
+        ifconfig "$wlandev" create wlandev "$dev" >/dev/null 2>&1
     else
         service netif restart "$wlandev"
     fi
