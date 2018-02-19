@@ -2,7 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 2.1.1
+# Version: 2.2
 
 loopmode=no
 
@@ -28,6 +28,11 @@ EOF
         ;;
 esac
 
+wlandev="${wlandev:-${1:-wlan0}}"
+dev="${dev:-${2:-iwm0}}"
+
+sudo sh -c "$(cat <<EOF
+
 reconnect() {
     set -x
 
@@ -35,14 +40,14 @@ reconnect() {
 
     if ! ifconfig "$wlandev" 1>&2 2>/dev/null
     then
-        sudo ifconfig "$wlandev" create wlandev "$dev"
+        ifconfig "$wlandev" create wlandev "$dev"
     else
-        sudo service netif restart "$wlandev"
+        service netif restart "$wlandev"
     fi
 
-    sudo ifconfig "$wlandev" up
-    sudo wpa_supplicant -B -i "$wlandev" -c /etc/wpa_supplicant.conf
-    if sudo dhclient "$wlandev"
+    ifconfig "$wlandev" up
+    wpa_supplicant -B -i "$wlandev" -c /etc/wpa_supplicant.conf
+    if dhclient "$wlandev"
     then
         { set +x; } 2>/dev/null
         return 0
@@ -53,24 +58,27 @@ reconnect() {
 }
 
 keep_reconnecting() {
-    while ! reconnect
-    do done
+    if [ "@$loopmode@" = "@yes@" ]
+    then
+        reconnect
+        while :
+        do
+            if ifconfig "$wlandev" | grep 'status: associated' >/dev/null 2>&1
+            then
+                sleep 5
+            else
+                reconnect
+            fi
+        done
+    else
+        while ! reconnect
+        do done
+    fi
 }
-
-wlandev="${wlandev:-${1:-wlan0}}"
-dev="${dev:-${2:-iwm0}}"
 
 trap 'keep_reconnecting' SIGQUIT # It's Ctrl-\.
 
-if [ "@$loopmode@" = "@no@" ]
-then
-    keep_reconnecting
-else
-    while keep_reconnecting
-    do
-        while ifconfig "$wlandev" | grep 'status: associated' >/dev/null 2>&1
-        do
-            sleep 5
-        done
-    done
-fi
+keep_reconnecting
+
+EOF
+)"
