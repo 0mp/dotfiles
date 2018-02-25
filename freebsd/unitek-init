@@ -1,11 +1,14 @@
 #! /bin/sh -
+#
+# Version: 0.2
 
 set -ex
 
-if ! kldstat -q axe
+if ! kldstat -q -n if_axe
 then
     sudo kldload axe
 fi
+
 sudo service netif restart ue0
 sudo ifconfig ue0 up
 sleep 3
