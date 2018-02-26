@@ -21,6 +21,8 @@ LIB_DEPENDS=	libfontconfig.so:x11-fonts/fontconfig \
 USES=		ncurses:port
 USE_XORG=	x11 xext xft
 
+CONFLICTS_INSTALL=	x11/sterm
+
 USE_GITHUB=	yes
 GH_ACCOUNT=	0mp
 GH_PROJECT=	st
