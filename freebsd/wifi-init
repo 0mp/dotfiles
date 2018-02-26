@@ -2,7 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 2.3
+# Version: 2.4
 
 loopmode=no
 
@@ -47,6 +47,7 @@ reconnect() {
 
     ifconfig "$wlandev" up
     wpa_supplicant -B -i "$wlandev" -c /etc/wpa_supplicant.conf
+    killall dhclient
     if dhclient "$wlandev"
     then
         { set +x; } 2>/dev/null
