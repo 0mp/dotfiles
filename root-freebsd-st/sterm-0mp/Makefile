@@ -62,6 +62,8 @@ PLIST_FILES+=		${data_PLIST}
 PORTDOCS+=		${data_PORTDOCS}
 .endif
 
+CFLAGS+=		-I/usr/local/include/freetype2
+
 post-patch:
 .if defined(ST_CONF)
 	@${ECHO_MSG} "creating config.h from ${ST_CONF}"
