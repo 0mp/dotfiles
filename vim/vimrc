@@ -198,7 +198,7 @@ if has("autocmd")
 endif
 
 " Remove trailing whitespace on file save.
-function! <SID>StripTrailingWhitespaces()
+function! StripTrailingWhitespaces()
     let _s=@/
     let l = line(".")
     let c = col(".")
@@ -206,7 +206,7 @@ function! <SID>StripTrailingWhitespaces()
     let @/=_s
     call cursor(l, c)
 endfun
-autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre * :call StripTrailingWhitespaces()
 
 " Autorefresh files.
 set autoread
