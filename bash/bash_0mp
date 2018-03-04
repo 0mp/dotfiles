@@ -13,6 +13,11 @@ HISTFILESIZE=20000
 stty -ixon -ixoff
 
 # Aliases & functions
+alias w3m="w3m -v"
+ddg() {
+    local search='/?q='"$@"
+    command w3m -X "ddg.gg${search%%/?q=}"
+}
 tmux_clear_detached_sessions() {
     tmux list-sessions | grep -E -v '\(attached\)$' | while IFS='\n' read line; do
         tmux kill-session -t "${line%%:*}"
