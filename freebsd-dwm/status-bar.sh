@@ -1,4 +1,6 @@
 xsetroot -name "$(
+mixer -S vol
+printf -- ' | '
 acpiconf -i 0 | awk '\
     /Remaining capacity*/{printf "%s", $3}\
     /State:[[:space:]]+charging/{printf "+"}\
