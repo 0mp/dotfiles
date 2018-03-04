@@ -1,19 +1,19 @@
 # Is it running low on power?
 if [ ! -f ~/.0mp-switch/low-batter-alert-off ] && \
     acpiconf -i 0 | awk -v discharging=no '
-        /^State:[[:space:]]+discharging$/ { 
-            discharging = yes 
+        /^State:[[:space:]]+discharging$/ {
+            discharging = yes
         }
         /^Remaining capacity:/ {
             capacity = substr($3, 1, length($3) -1)
-        } 
+        }
         END {
             if (discharging == yes && capacity < 5) {
                 exit 0
             }
             exit 1
         }'
-then 
+then
     button="ALRIGHT I'M ON IT JUST PLEASE DON'T DIE"
     xmessage -buttons "$button" -default "$button" -file - <<'MESSAGE'
  _   _ _____ _     _     ___    _____ _   _ _____ ____  _____ _
