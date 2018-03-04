@@ -8,7 +8,7 @@ if [ ! -f ~/.0mp-switch/low-battery-alert-activated ] && \
             capacity = substr($3, 1, length($3) -1)
         }
         END {
-            if (discharging == yes && capacity < 5) {
+            if (discharging == yes && int(capacity) < 5) {
                 exit 0
             }
             exit 1
