@@ -1,4 +1,5 @@
 xsetroot -name "$(
+case "$(date +%M)" in [024][012]) printf -- '👓 | ' ;; esac
 mixer -S vol
 printf -- ' | '
 acpiconf -i 0 | awk '\
