@@ -198,7 +198,8 @@ if has("autocmd")
 endif
 
 " Remove trailing whitespace on file save.
-function! StripTrailingWhitespaces()
+" https://stackoverflow.com/a/10410590/4694621
+function! StripTrailingWhitespace()
     let _s=@/
     let l = line(".")
     let c = col(".")
@@ -206,7 +207,8 @@ function! StripTrailingWhitespaces()
     let @/=_s
     call cursor(l, c)
 endfun
-autocmd BufWritePre * :call StripTrailingWhitespaces()
+autocmd BufWritePre * if index(['markdown'], &ft) < 0 |
+            \ call StripTrailingWhitespace()
 
 " Autorefresh files.
 set autoread
