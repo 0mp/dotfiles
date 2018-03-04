@@ -18,7 +18,7 @@ LICENSE_PERMS=	dist-mirror dist-sell pkg-mirror pkg-sell auto-accept
 LIB_DEPENDS=	libfontconfig.so:x11-fonts/fontconfig \
 		libfreetype.so:print/freetype2
 
-USES=		ncurses:port
+USES=		ncurses:port pkgconfig
 USE_XORG=	x11 xext xft
 
 CONFLICTS_INSTALL=	x11/sterm
