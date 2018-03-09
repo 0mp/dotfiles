@@ -11,7 +11,8 @@ setxkbmap pl
 
 [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
 
-xsetroot -solid yellow
+# Wallpaper.
+sh ~/.fehbg &
 
 which intel_backlight 1>/dev/null 2>&1 && intel_backlight 30
 
