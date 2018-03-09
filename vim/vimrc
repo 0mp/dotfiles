@@ -270,7 +270,7 @@ set shiftround
 " }}}
 " Section: FreeBSD {{{
 " Copyright (c) 2007-2008 Sean C. Farley <scf@FreeBSD.org>
-" Copyright (c) 2017 Mateusz Piotrowski <0mp@FreeBSD.org>
+" Copyright (c) 2017-2018 Mateusz Piotrowski <0mp@FreeBSD.org>
 " All rights reserved.
 "
 " Redistribution and use in source and binary forms, with or without
@@ -308,7 +308,7 @@ if ! exists('loaded_FreeBSD')
     nmap <silent> <Leader>sf :call FreeBSD_Style()<CR>
 
     " Ignore indents caused by parentheses in FreeBSD style.
-    function! IgnoreParenIndent()
+    function! <SID>IgnoreParenIndent()
         let indent = cindent(v:lnum)
 
         if indent > 4000
@@ -326,7 +326,7 @@ if ! exists('loaded_FreeBSD')
     function! FreeBSD_Style()
         setlocal cindent
         setlocal cinoptions=(4200,u4200,+0.5s,*500,:0,t0,U4200,l1
-        setlocal indentexpr=IgnoreParenIndent()
+        setlocal indentexpr=<SID>IgnoreParenIndent()
         setlocal indentkeys=0{,0},0),:,0#,!^F,o,O,e
         setlocal noexpandtab
         setlocal shiftwidth=8
