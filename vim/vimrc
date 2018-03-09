@@ -273,24 +273,6 @@ set tabstop=4
 set expandtab
 set softtabstop=4
 
-" Toggle between tabs and spaces.
-function! TabToggle()
-    if &expandtab
-        set shiftwidth=8
-        set tabstop=8
-        set softtabstop=8
-        set noexpandtab
-        echo 'Using tabs for indentation from now on.'
-    else
-        set shiftwidth=4
-        set tabstop=4
-        set softtabstop=4
-        set expandtab
-        echo 'Using spaces for indentation from now on.'
-    endif
-endfunction
-nnoremap <leader>t :call TabToggle()<CR>
-
 set autoindent
 set smartindent
 
@@ -462,6 +444,26 @@ map <leader>ghc :call UnplaceSignHighlight()<CR>
 " endfunction
 
 " au CursorMoved * call HighlightCursorLine()
+" }}}
+" Section: Toggle switch knobs {{{
+" Toggle between tabs and spaces.
+function! ToggleIndentation()
+    if &expandtab
+        set shiftwidth=8
+        set tabstop=8
+        set softtabstop=8
+        set noexpandtab
+        echo 'Using tabs for indentation from now on.'
+    else
+        set shiftwidth=4
+        set tabstop=4
+        set softtabstop=4
+        set expandtab
+        echo 'Using spaces for indentation from now on.'
+    endif
+endfunction
+
+nnoremap <leader>ti :call ToggleIndentation()<CR>
 " }}}
 
 " Unfold the section under the cursor in .vimrc.
