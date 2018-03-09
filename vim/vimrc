@@ -464,6 +464,7 @@ function! ToggleIndentation()
 endfunction
 
 nnoremap <leader>ti :call ToggleIndentation()<CR>
+nnoremap <leader>tl :set list!<CR>
 " }}}
 
 " Unfold the section under the cursor in .vimrc.
