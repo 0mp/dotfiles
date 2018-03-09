@@ -188,14 +188,12 @@ au BufNewFile,BufFilePre,BufRead *.cuh set filetype=cuda
 au! FileType python setl nosmartindent
 
 " YAML
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 " }}}
 " Section: Automagic {{{
 " Jump to where I left off last time.
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-          \| exe "normal! g'\"" | endif
-endif
+au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+        \| exe "normal! g'\"" | endif
 
 " Remove trailing whitespace on file save.
 " https://stackoverflow.com/a/10410590/4694621
@@ -207,7 +205,7 @@ function! StripTrailingWhitespace()
     let @/=_s
     call cursor(l, c)
 endfun
-autocmd BufWritePre * if index(['markdown'], &ft) < 0 |
+au BufWritePre * if index(['markdown'], &ft) < 0 |
             \ call StripTrailingWhitespace()
 
 " Autorefresh files.
@@ -215,13 +213,14 @@ set autoread
 
 " Hide the preview window when using Vim's native autocompletion.
 " http://stackoverflow.com/a/26022965/4694621
-autocmd CompleteDone * pclose
+au CompleteDone * pclose
 
 " Lines in a commit message should not exceed 72 characters.
-autocmd FileType gitcommit set tw=72
+au FileType gitcommit set tw=72
 
 " Enable spell-checking when commiting with git.
-autocmd FileType gitcommit set spell
+au FileType gitcommit set spell
+
 
 " }}}
 " Section: Visuals {{{
@@ -458,7 +457,7 @@ map <leader>ghc :call UnplaceSignHighlight()<CR>
 "     endif
 " endfunction
 
-" autocmd CursorMoved * call HighlightCursorLine()
+" au CursorMoved * call HighlightCursorLine()
 " }}}
 
 " Unfold the section under the cursor in .vimrc.
