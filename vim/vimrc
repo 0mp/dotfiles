@@ -300,10 +300,6 @@ set shiftround
 " indentation.  It registers a macro (see below) for changing a buffer's
 " indentation rules but does not change the indentation of existing code.
 
-" Load only once.
-if ! exists('loaded_FreeBSD')
-    let loaded_FreeBSD = 1
-
     " FreeBSD mapping to switch current buffer to style(9).
     nmap <silent> <Leader>sf :call FreeBSD_Style()<CR>
 
@@ -333,7 +329,6 @@ if ! exists('loaded_FreeBSD')
         setlocal tabstop=8
         setlocal textwidth=80
     endfun
-endif
 
 " Set correct indendation rules for the FreeBSD Ports.
 au BufRead /usr/ports/* set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
