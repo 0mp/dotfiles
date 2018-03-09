@@ -15,7 +15,6 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-repeat'
 Plugin 'dahu/vim-fanfingtastic'
 Plugin 'CycleColor' " Cycles through available colorschemes.
-Plugin 'embear/vim-localvimrc' " Use .lvimrc for local configuration.
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -27,11 +26,6 @@ filetype plugin on    " Enable filetype-specific plugins
 " }}}
 " Section: Plugins configuration {{{
 let NERDSpaceDelims=1
-
-" Store and restore decisions only if the answer was given in upper case
-" (Y/N/A).
-let g:localvimrc_persistent = 1
-let g:localvimrc_sandbox = 0
 
 " Netrw
 let g:netrw_banner=0 " Disable a banner.
