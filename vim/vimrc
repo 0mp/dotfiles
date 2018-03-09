@@ -300,35 +300,32 @@ set shiftround
 " indentation.  It registers a macro (see below) for changing a buffer's
 " indentation rules but does not change the indentation of existing code.
 
-    " FreeBSD mapping to switch current buffer to style(9).
-    nmap <silent> <Leader>sf :call FreeBSD_Style()<CR>
+" Ignore indents caused by parentheses in FreeBSD style.
+function! <SID>IgnoreParenIndent()
+    let indent = cindent(v:lnum)
 
-    " Ignore indents caused by parentheses in FreeBSD style.
-    function! <SID>IgnoreParenIndent()
-        let indent = cindent(v:lnum)
-
-        if indent > 4000
-            if cindent(v:lnum - 1) > 4000
-                return indent(v:lnum - 1)
-            else
-                return indent(v:lnum - 1) + 4
-            endif
+    if indent > 4000
+        if cindent(v:lnum - 1) > 4000
+            return indent(v:lnum - 1)
         else
-            return (indent)
+            return indent(v:lnum - 1) + 4
         endif
-    endfun
+    else
+        return (indent)
+    endif
+endfun
 
-    " Follow the FreeBSD style(9).
-    function! FreeBSD_Style()
-        setlocal cindent
-        setlocal cinoptions=(4200,u4200,+0.5s,*500,:0,t0,U4200,l1
-        setlocal indentexpr=<SID>IgnoreParenIndent()
-        setlocal indentkeys=0{,0},0),:,0#,!^F,o,O,e
-        setlocal noexpandtab
-        setlocal shiftwidth=8
-        setlocal tabstop=8
-        setlocal textwidth=80
-    endfun
+" Follow the FreeBSD style(9).
+function! SwitchFreeBSDStyle()
+    setlocal cindent
+    setlocal cinoptions=(4200,u4200,+0.5s,*500,:0,t0,U4200,l1
+    setlocal indentexpr=<SID>IgnoreParenIndent()
+    setlocal indentkeys=0{,0},0),:,0#,!^F,o,O,e
+    setlocal noexpandtab
+    setlocal shiftwidth=8
+    setlocal tabstop=8
+    setlocal textwidth=80
+endfun
 
 " Set correct indendation rules for the FreeBSD Ports.
 au BufRead /usr/ports/* set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
@@ -429,7 +426,7 @@ map <leader>ghc :call UnplaceSignHighlight()<CR>
 
 " au CursorMoved * call HighlightCursorLine()
 " }}}
-" Section: Toggle switch knobs {{{
+" Section: Toggling and switching knobs {{{
 " Toggle between tabs and spaces.
 " Highlight the 81th column.
 let &colorcolumn=0
@@ -456,6 +453,8 @@ function! ToggleIndentation()
         echo 'Using spaces for indentation from now on.'
     endif
 endfunction
+
+nnoremap <leader>sf :call SwitchFreeBSDStyle()<CR>
 
 nnoremap <leader>th :call Toggle81()<CR>
 nnoremap <leader>ti :call ToggleIndentation()<CR>
