@@ -238,17 +238,6 @@ set showtabline=2
 " Highlight the current line.
 set cursorline
 
-" Highlight the 81th column.
-let &colorcolumn=0
-nnoremap <leader>h :call ColorColumnToggle()<CR>
-function! ColorColumnToggle()
-    if &colorcolumn
-        setlocal colorcolumn=0
-    else
-        setlocal colorcolumn=81
-    endif
-endfunction
-
 " Don't let tmux mess the background colour.
 " XXX: It might break some shortcuts though.
 " Source: http://stackoverflow.com/q/6427650/4694621
@@ -447,6 +436,16 @@ map <leader>ghc :call UnplaceSignHighlight()<CR>
 " }}}
 " Section: Toggle switch knobs {{{
 " Toggle between tabs and spaces.
+" Highlight the 81th column.
+let &colorcolumn=0
+function! Toggle81()
+    if &colorcolumn
+        setlocal colorcolumn=0
+    else
+        setlocal colorcolumn=81
+    endif
+endfunction
+
 function! ToggleIndentation()
     if &expandtab
         set shiftwidth=8
@@ -463,6 +462,7 @@ function! ToggleIndentation()
     endif
 endfunction
 
+nnoremap <leader>th :call Toggle81()<CR>
 nnoremap <leader>ti :call ToggleIndentation()<CR>
 nnoremap <leader>tl :set list!<CR>
 " }}}
