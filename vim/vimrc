@@ -93,7 +93,7 @@ set backspace=2
 set undofile
 
 " Ensure that .vimundo exists.
-function! EnsureDirExists(dir)
+function! <SID>EnsureDirExists(dir)
   if !isdirectory(a:dir)
     if exists("*mkdir")
       call mkdir(a:dir,'p')
@@ -106,7 +106,7 @@ function! EnsureDirExists(dir)
   endif
 endfunction
 
-call EnsureDirExists($HOME . '/.vimundo')
+call <SID>EnsureDirExists($HOME . '/.vimundo')
 set undodir=~/.vimundo/
 
 " Show all the whitespace characters. Toggle with :set list!
