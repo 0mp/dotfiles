@@ -26,7 +26,7 @@ lib_install
 trap - EXIT
 
 # 3. Install color schemes.
-FILES='monochrome.vim monokai.vim xxx.vim xxx2.vim robpike.vim'
+FILES='monochrome.vim monokai.vim robpike.vim'
 PREFIX="$vim_dir/colors/"
 colors_dir="$vim_dir/colors"
 lib_back_up
