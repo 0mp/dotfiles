@@ -1,4 +1,6 @@
 xsetroot -name "$(
+[ -f ~/.0mp-switch/current-task ] && cat ~/.0mp-switch/current-task | tr '\n' ' '
+printf -- '| '
 case "$(date +%M)" in [024][012]) printf -- '👓 | ' ;; esac
 mixer -S vol
 printf -- ' | '
