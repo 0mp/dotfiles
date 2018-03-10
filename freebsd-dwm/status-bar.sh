@@ -4,6 +4,7 @@ printf -- '| '
 case "$(date +%M)" in [024][012]) printf -- '👓 | ' ;; esac
 mixer -S vol
 printf -- ' | '
+[ -f ~/.0mp-switch/low-battery-alert-activated ] && printf -- '! '
 acpiconf -i 0 | awk '\
     /Remaining capacity*/{printf "%s", $3}\
     /State:[[:space:]]+charging/{printf "+"}\
