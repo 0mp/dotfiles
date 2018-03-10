@@ -96,3 +96,15 @@ lib_require_root() {
         return 1
     fi
 }
+
+# PREFIX     - The environemntal variable to modify the destination path of the
+#              files. The default prefix is "$HOME/.". For example if you pass
+#              PREFIX="$HOME/bin/" then the files will be installed to that
+#              directory.
+#              Here, the PREFIX directory is created if it's missing.
+lib_create_prefix_if_missing() {
+    if [ ! -d "${PREFIX%/*}" ]
+    then
+        mkdir -p -- "${PREFIX%/*}"
+    fi
+}
