@@ -4,18 +4,21 @@
 
 set -eu
 
-FILES='current-task profile'
-SWITCH_DIR="$HOME/.0mp-switch"
-
-lib_install_file() {
-    touch -- "$2"
-}
-
 lib_info 'setup'
 
-mkdir -p "$SWITCH_DIR"
+# lib_require_root
 
-PREFIX="$SWITCH_DIR/"
+FILES=
+PREFIX="$HOME/.0mp-switchx/"
+CUSTOMFILES='current-task profile'
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+lib_custom_install() {
+    for file in $CUSTOMFILES
+    do
+        touch -- "$PREFIX""$file"
+    done
+}
+lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
