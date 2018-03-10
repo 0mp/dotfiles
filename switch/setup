@@ -4,7 +4,7 @@
 
 set -eu
 
-FILES='profile'
+FILES='current-task profile'
 SWITCH_DIR="$HOME/.0mp-switch"
 
 lib_install_file() {
