@@ -214,6 +214,7 @@ au FileType gitcommit set tw=72
 
 " Enable spell-checking when commiting with git.
 au FileType gitcommit set spell
+au FileType gitcommit setlocal colorcolumn=51
 
 
 " }}}
