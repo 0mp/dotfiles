@@ -1,1 +1,1 @@
-feh -B white --bg-tile ~/.fehbg.freebsd-128.png
+feh -B white --bg-tile ~/.suckless/fehbg.freebsd-128.png
