@@ -12,7 +12,12 @@ setxkbmap pl
 [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
 
 # Wallpaper.
-sh ~/.fehbg &
+if [ -f ~/.fehbg ]
+then
+    sh ~/.fehbg
+else
+    feh -B white --bg-tile ~/.suckless/fehbg.freebsd-128.png
+fi
 
 which intel_backlight 1>/dev/null 2>&1 && intel_backlight 30
 

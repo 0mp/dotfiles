@@ -24,7 +24,7 @@ case "$CUSTOMOPTS" in
         pkg lock -y dwm
         ;;
     *)
-        FILES='fehbg fehbg.freebsd-128.png low-battery-alert.sh status-bar.sh'
+        FILES='fehbg.freebsd-128.png low-battery-alert.sh status-bar.sh'
         PREFIX="$HOME/.suckless/"
         lib_back_up
         trap lib_roll_back EXIT
