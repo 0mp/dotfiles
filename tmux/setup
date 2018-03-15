@@ -16,7 +16,7 @@ case "$(uname)" in
         FILES="$FILES tmux-freebsd.conf"
         ;;
     Linux)
-        FILES="$FILES tmux-linux.conf"
+        FILES="$FILES tmux-23.conf tmux-24+.conf"
         ;;
     *)
         ;;
