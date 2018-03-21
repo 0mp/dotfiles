@@ -6,6 +6,7 @@ do
     /bin/sh ~/.suckless/low-battery-alert.sh &
     sleep 4
 done &
+/bin/sh ~/.suckless/eyes-alert.sh &
 
 setxkbmap pl
 
