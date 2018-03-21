@@ -326,7 +326,6 @@ endfun
 
 " Set correct indendation rules for the FreeBSD Ports.
 au BufRead /usr/ports/* set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
-au BufRead /usr/ports/Mk/* set shiftwidth=4 softtabstop=4 tabstop=4
 " }}}
 " Section: Homebrewed hacks {{{
 " Look for help everywhere you can.
