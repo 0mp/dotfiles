@@ -1,0 +1,31 @@
+#! /bin/sh -
+#
+# Version: 0.2.0
+
+file="$HOME/.suckless/current-task.txt"
+
+if [ -z "$*" ]; then
+    printf '' > "$file"
+    exit 0
+fi
+
+case "$1" in
+    -)
+        sed -i '' -e '$ d' "$file"
+        ;;
+    -[1-9])
+        awk -v ln="${1#-}" 'NR != ln{print $0}' "$file" > "$file.tmp"
+        mv "$file.tmp" "$file"
+        ;;
+    --)
+        shift
+        cat >> "$file" <<EOF
+[$(date +%H:%M)] $*
+EOF
+        ;;
+    *)
+        cat >> "$file" <<EOF
+[$(date +%H:%M)] $*
+EOF
+        ;;
+esac

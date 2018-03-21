@@ -1,8 +1,8 @@
 xsetroot -name "$(
-if [ -s ~/.0mp-switch/current-task ]
+if [ -s ~/.suckless/current-task.txt ]
 then
-    awk 'NR > 1{printf " "} {printf "%s", $0} END{printf " | "}' \
-        ~/.0mp-switch/current-task
+    awk 'NR > 1{printf " -> "} {printf "%s", $0} END{printf " | "}' \
+        ~/.suckless/current-task.txt
 fi
 case "$(date +%M)" in [024][012]) printf -- '👓 | ' ;; esac
 mixer -S vol

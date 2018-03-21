@@ -26,6 +26,7 @@ case "$CUSTOMOPTS" in
     *)
         FILES='eyes-alert.sh fehbg.freebsd-128.png low-battery-alert.sh status-bar.sh'
         PREFIX="$HOME/.suckless/"
+        lib_create_prefix_if_missing
         lib_back_up
         trap lib_roll_back EXIT
         lib_install
@@ -33,6 +34,14 @@ case "$CUSTOMOPTS" in
 
         FILES='xinitrc'
         PREFIX=
+        lib_back_up
+        trap lib_roll_back EXIT
+        lib_install
+        trap - EXIT
+
+        FILES='current-task'
+        PREFIX="$HOME/bin/"
+        lib_create_prefix_if_missing
         lib_back_up
         trap lib_roll_back EXIT
         lib_install

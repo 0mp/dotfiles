@@ -10,7 +10,7 @@ lib_info 'setup'
 
 FILES=
 PREFIX="$HOME/.0mp-switch/"
-CUSTOMFILES='current-task profile'
+CUSTOMFILES='profile'
 CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
 lib_custom_install() {
     for file in $CUSTOMFILES
