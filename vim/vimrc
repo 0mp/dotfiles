@@ -253,7 +253,9 @@ colorscheme robpike
 " }}}
 " Section: Style {{{
 set shiftwidth=4
-set tabstop=4
+" Always set tabstop to 8 so that it is always visiable that you're mixing
+" tabs and spaces.
+set tabstop=8
 set expandtab
 set softtabstop=4
 
@@ -442,7 +444,7 @@ function! ToggleIndentation()
         echo 'Using tabs for indentation from now on.'
     else
         set shiftwidth=4
-        set tabstop=4
+        set tabstop=8
         set softtabstop=4
         set expandtab
         echo 'Using spaces for indentation from now on.'
