@@ -60,6 +60,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *term2cmd[]  = { "st2", NULL };
 static const char *volupcmd[]  = { "mixer", "vol", "+2", NULL };
 static const char *voldowncmd[]  = { "mixer", "vol", "-2", NULL };
+static const char *volmutecmd[]  = { "mixer", "vol", "0", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -97,8 +98,9 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ 0,                         XF86XK_AudioRaiseVolume,      spawn,           {.v = volupcmd} },
-	{ 0,                         XF86XK_AudioLowerVolume,      spawn,           {.v = voldowncmd} },
+	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = volupcmd} },
+	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = voldowncmd} },
+	{ 0,         XF86XK_AudioMute,             spawn,          {.v = volmutecmd} },
 };
 
 /* button definitions */

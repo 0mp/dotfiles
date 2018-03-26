@@ -7,3 +7,4 @@ add Control = Control_L
 ! Natural scrolling
 pointer = 1 2 3 5 4 6 7 8 9 10 11 12
 
+keycode 140 = XF86AudioMute
