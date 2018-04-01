@@ -26,6 +26,9 @@ case "$CUSTOMOPTS" in
     *)
         FILES='eyes-alert.sh fehbg.freebsd-128.png low-battery-alert.sh status-bar.sh'
         PREFIX="$HOME/.suckless/"
+        lib_custom_install() {
+            feh -B white --bg-tile ~/.suckless/fehbg.freebsd-128.png
+        }
         lib_create_prefix_if_missing
         lib_back_up
         trap lib_roll_back EXIT
@@ -34,6 +37,7 @@ case "$CUSTOMOPTS" in
 
         FILES='xinitrc'
         PREFIX=
+        lib_custom_install() { }
         lib_back_up
         trap lib_roll_back EXIT
         lib_install
@@ -41,6 +45,7 @@ case "$CUSTOMOPTS" in
 
         FILES='current-task'
         PREFIX="$HOME/bin/"
+        lib_custom_install() { }
         lib_create_prefix_if_missing
         lib_back_up
         trap lib_roll_back EXIT
