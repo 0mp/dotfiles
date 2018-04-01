@@ -62,6 +62,12 @@ lib_custom_install() {
     # Enable moused with some empirically tested flags.
     sysrc moused_enable="YES" moused_flags="-A 1.65 -a 1.1"
 
+    # Configure the iwm wireless network device.
+    # Actually, it might be better to move if_iwm and iwm3160fw to
+    # /boot/loader.conf at some point.
+    sysrc kld_list+='if_iwm iwm3160fw'
+    sysrc wlans_iwm0='wlan0' ifconfig_wlan0='WPA DHCP'
+
     # Configure powerdxx (and disable powerd).
     case "$CUSTOMOPTS" in
         *--powerdxx*) pkg install -y sysutils/powerdxx
