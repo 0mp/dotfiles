@@ -13,7 +13,6 @@ setxkbmap pl
 [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
 
 # Wallpaper.
-which intel_backlight 1>/dev/null 2>&1 && intel_backlight 30
 /bin/sh ~/.fehbg
 
 exec dwm

@@ -38,6 +38,9 @@ lib_custom_install() {
     # Disable the power button (https://forums.freebsd.org/threads/56807/).
     set_once '/etc/sysctl.conf' 'hw.acpi.power_button_state=NONE'
 
+    # Lower the screen brightness to a reasonable level.
+    set_once '/etc/sysctl.conf' 'hw.acpi.video.lcd0.brightness=6'
+
     # Disable the console bell.
     set_once '/etc/sysctl.conf' 'kern.vt.enable_bell=0'
 
