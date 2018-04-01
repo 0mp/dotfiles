@@ -29,7 +29,7 @@ lib_custom_install() {
     esac
 
     # Fix the headphones jack.
-    set_once '/boot/device.hints' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
+    set_once '/boot/loader.conf' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
     # Configure the iwm wireless network device.
     set_once '/boot/loader.conf' 'if_iwm_load="YES"'
