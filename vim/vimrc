@@ -421,6 +421,15 @@ map <leader>ghc :call UnplaceSignHighlight()<CR>
 " endfunction
 
 " au CursorMoved * call HighlightCursorLine()
+
+function! SaveOrig()
+    if filereadable(expand('%:p'). '.orig')
+        echom 'The ' . expand('%:p') . '.orig file already exists!'
+    else
+        write %:p.orig
+    endif
+endfunction
+
 " }}}
 " Section: Toggling and switching knobs {{{
 " Toggle between tabs and spaces.
