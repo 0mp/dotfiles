@@ -3,7 +3,7 @@
 while [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
 do
     /bin/sh ~/.suckless/status-bar.sh &
-    /bin/sh ~/.suckless/low-battery-alert.sh &
+    /bin/sh ~/.suckless/battery-alert.sh &
     sleep 2
 done &
 /bin/sh ~/.suckless/eyes-alert.sh &

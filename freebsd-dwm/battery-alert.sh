@@ -1,5 +1,5 @@
 # Is it running low on power?
-if [ ! -f ~/.0mp-switch/low-battery-alert-off ] && \
+if [ ! -f ~/.0mp-switch/battery-alert-off ] && \
     acpiconf -i 0 | awk -v discharging=no '
         /^State:[[:space:]]+discharging$/ {
             discharging = yes
@@ -14,7 +14,7 @@ if [ ! -f ~/.0mp-switch/low-battery-alert-off ] && \
             exit 1
         }'
 then
-    touch ~/.0mp-switch/low-battery-alert-off
+    touch ~/.0mp-switch/battery-alert-off
     button="ALRIGHT I'M ON IT JUST PLEASE DON'T DIE"
     xmessage -buttons "$button" -default "$button" -file - <<'MESSAGE'
  _   _ _____ _     _     ___    _____ _   _ _____ ____  _____ _
