@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=0.14.0
+version=0.14.1
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -106,6 +106,7 @@ EOF
 # $1 - The command which reads every file. Its output is then piped
 #      into `cat -n`.
 # Environmental variables:
+# - command
 # - bold
 # - nobold
 # - leftbar
@@ -117,7 +118,7 @@ explore() {
     # Pass the variables into the script and in the second here-doc add the
     # literal part of the script (no substitutions in the current shell).
     script="$(cat << EOF
-command="$1"
+command="$command"
 bold="$bold"
 nobold="$nobold"
 leftbar="$leftbar"
@@ -302,7 +303,8 @@ scope="${scope# }"
 
 if [ "@$colors@" = @yes@ ]
 then
-    explore 'pygmentize -g --'
+    command='pygmentize -g --'
 else
-    explore 'cat --'
+    command='cat --'
 fi
+explore
