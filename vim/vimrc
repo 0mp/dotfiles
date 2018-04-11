@@ -200,6 +200,8 @@ function! StripTrailingWhitespace()
     call cursor(l, c)
 endfun
 au BufWritePre * if index(['markdown'], &ft) < 0 |
+" Avoid stripping whitespace from FreeBSD UPDATING files
+au BufReadPost UPDATING set filetype=markdown
             \ call StripTrailingWhitespace()
 
 " Autorefresh files.
