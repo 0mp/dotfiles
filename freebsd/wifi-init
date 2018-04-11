@@ -2,7 +2,7 @@
 #
 # Create a wlandev, start a WPA supplicant and run a dhclient.
 #
-# Version: 2.4
+# Version: 2.5
 
 loopmode=no
 
@@ -59,22 +59,18 @@ reconnect() {
 }
 
 keep_reconnecting() {
-    if [ "@$loopmode@" = "@yes@" ]
-    then
-        reconnect
-        while :
-        do
-            if ifconfig "$wlandev" | grep 'status: associated' >/dev/null 2>&1
-            then
-                sleep 5
-            else
-                reconnect
-            fi
-        done
-    else
-        while ! reconnect
-        do done
-    fi
+    reconnect
+    sleep 1
+    while :
+    do
+        if ifconfig "$wlandev" | grep 'status: associated' >/dev/null 2>&1
+        then
+            [ "@$loopmode@" = "@no@" ] && break
+            sleep 5
+        else
+            reconnect
+        fi
+    done
 }
 
 trap 'keep_reconnecting' SIGQUIT # It's Ctrl-\.
