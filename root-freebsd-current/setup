@@ -31,7 +31,16 @@ lib_custom_install() {
     esac
 
     case "$CUSTOMOPTS" in
-        # Build the world and the kernel.
+        *--build-kernel)
+            cd /usr/src
+            kldstat -q -n filemon || kldload filemon
+            make -j$ncpu buildkernel
+            ;;
+        *--build-world)
+            cd /usr/src
+            kldstat -q -n filemon || kldload filemon
+            make -j$ncpu buildworld
+            ;;
         *--build*)
             cd /usr/src
             kldstat -q -n filemon || kldload filemon

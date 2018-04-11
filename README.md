@@ -28,6 +28,8 @@ Modules:
         --user username
     root-freebsd-current
         --build
+        --build-kernel
+        --build-world
         --complete
         --install-kernel
         --update
