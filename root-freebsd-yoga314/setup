@@ -31,10 +31,6 @@ lib_custom_install() {
     # Fix the headphones jack.
     set_once '/boot/loader.conf' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
-    # Configure the iwm wireless network device.
-    set_once '/boot/loader.conf' 'if_iwm_load="YES"'
-    set_once '/boot/loader.conf' 'iwm3160fw_load="YES"'
-
     # Disable the power button (https://forums.freebsd.org/threads/56807/).
     set_once '/etc/sysctl.conf' 'hw.acpi.power_button_state=NONE'
 
