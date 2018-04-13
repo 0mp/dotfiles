@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.1.0
+version=1.2.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -81,6 +81,10 @@ Options:
 
     -, --stdin
         Read scope files and directories from the standard input.
+
+    -0, --stdin0
+        Read scope files and directories from the standard input. Use ASCII NUL
+        as a delimiter (works fine with -print0 of find(1)).
 
     --
         End of options. Treat the rest of the command line arguments as files
@@ -274,9 +278,26 @@ do
                 -r|--regex) state=--regex ;;
                 -w|--wildcards) state=--wildcards ;;
                 -|--stdin)
-                    while read stdin
+                    set -x
+                    while read line
                     do
-                        set -- "$@" "$(dotslashify "$stdin")"
+                        for path in $line
+                        do
+                            set -- "$@" "$(dotslashify "$path")"
+                        done
+                    done
+                    set +x
+                    ;;
+                -0|--stdin0)
+                    while IFS= read line
+                    do
+                        oldIFS="$IFS"
+                        IFS='\0'
+                        for path in $line
+                        do
+                            set -- "$@" "$(dotslashify "$path")"
+                        done
+                        IFS="$oldIFS"
                     done
                     ;;
                 --help) parse_opt_help ;;
@@ -300,9 +321,21 @@ do
                             r) state=--regex ;;
                             w) state=--wildcards ;;
                             -)
-                                while read stdin
+                                while read stdin || [ -n "$stdin" ]
                                 do
                                     set -- "$@" "$(dotslashify "$stdin")"
+                                done
+                                ;;
+                            0)
+                                while IFS= read line
+                                do
+                                    oldIFS="$IFS"
+                                    IFS='\0'
+                                    for path in $line
+                                    do
+                                        set -- "$@" "$(dotslashify "$path")"
+                                    done
+                                    IFS="$oldIFS"
                                 done
                                 ;;
                             *) ;;
