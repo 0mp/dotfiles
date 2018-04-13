@@ -23,6 +23,17 @@ trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
+FILES="$(cat <<-EOF
+0mp-explore.1
+EOF
+)"
+PREFIX="$HOME/.local/share/man/man1/"
+lib_create_prefix_if_missing
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
 lib_info remember to add ~/.local/bin to your PATH
 
 lib_info 'setup done'
