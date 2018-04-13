@@ -111,7 +111,7 @@ parse_opt_colors() {
     command='pygmentize -g --'
     if ! command -v pygmentize 2>/dev/null 1>&2
     then
-        printf '%s: pygmentize is not available\n' "$program"
+        printf '%s: pygmentize is not available\n' "$program" >&2
         exit 1
     fi
 }
@@ -279,7 +279,9 @@ do
             esac
             ;;
         *)
-            echo 'invalid state reached during parsing of command line arguments' >&2
+            printf '%s: %s\n' >&2 \
+                "$program" \
+                "invalid state reached during command line arguments parsing"
             ;;
     esac
 done
@@ -287,7 +289,7 @@ done
 # Make sure that we got all the arguments we need.
 case $state in
     --regex|--wildcards)
-        echo 'missing regex' >&2
+        printf '%s: missing regex' "$program" >&2
         exit 1
         ;;
     *) ;;
