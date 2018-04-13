@@ -17,18 +17,6 @@ do
 done
 
 FILES=''
-CUSTOMFILES='sysctl.conf'
-PREFIX="/etc/"
-lib_custom_install() {
-    cp sysctl.conf "$PREFIX"sysctl.conf
-    chown root:wheel "$PREFIX"sysctl.conf
-}
-lib_back_up
-trap lib_roll_back EXIT
-lib_install
-trap - EXIT
-
-FILES=''
 CUSTOMFILES='login_conf'
 PREFIX="/home/$user/."
 lib_custom_install() {

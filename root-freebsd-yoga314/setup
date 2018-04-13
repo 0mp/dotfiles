@@ -41,6 +41,11 @@ lib_custom_install() {
     # Lower the screen brightness to a reasonable level.
     set_once '/etc/sysctl.conf' 'hw.acpi.video.lcd0.brightness=6'
 
+    # Configure touchpad.
+    # Although it says "Synaptics", moused is is affected by those settings as
+    # well.
+    set_once '/etc/sysctl.conf' 'hw.psm.synaptics.min_pressure=40'
+
     # Disable the console bell.
     set_once '/etc/sysctl.conf' 'kern.vt.enable_bell=0'
 
