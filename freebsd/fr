@@ -1,0 +1,112 @@
+#! /bin/sh -
+#
+# FreeBSD reference tool.
+#
+# ---
+#
+# Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHORS AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+ftpbase='https://download.freebsd.org/ftp/doc/en/'
+webbase='https://www.freebsd.org/doc/en/'
+
+storedir="$HOME/.freebsd-reference"
+
+# $1 -- file name
+# $2 -- url
+getthatdoc() {
+    fetch -o "$1.bzp" "$2"
+    bzip2 -d "$1.bz2"
+}
+
+if [ $# -eq 0 ]
+then
+    echo 'usage: fr document [pattern]'
+    echo 'version: 0.2.0'
+    exit 0
+fi
+
+if ! mkdir -p "$storedir"
+then
+    echo "failed to create a directory to store books" >&2
+    exit 1
+fi
+
+case "$1" in
+    c*)
+        type='article'
+        name='committers-guide'
+        ;;
+    de*)
+        type='book'
+        name='developers-handbook'
+        ;;
+    d*|f*)
+        type='book'
+        name='fdp-primer'
+        ;;
+    h*)
+        type='book'
+        name='handbook'
+        ;;
+    p*)
+        type='book'
+        name='porters-handbook'
+        ;;
+    *)
+        echo invalid document name 1>&2
+        exit 1
+        ;;
+esac
+
+txtfile="$storedir/$name.txt"
+if ! [ -r "$txtfile" ]
+then
+    getthatdoc "$txtfile" " "${ftpbase}${type}s/${name}/${type}.txt.bz2"
+else
+    latestrev="$(fetch -o - "${webbase}${type}s/${name}/" | awk -v RS='<' -v FS='>' '/svnref/{print $2}')"
+    currentrev="$(awk '/Revision/{print $2; exit 0}' "$txtfile")"
+    case $latestrev in
+        ''|*[!0-9]*) ;;
+        *)
+            case $currentrev in
+                ''|*[!0-9]*) ;;
+                *)
+                    if [ "$latestrev" -gt "currentrev" ]
+                    then
+                        getthatdoc "$txtfile" " "${ftpbase}${type}s/${name}/${type}.txt.bz2"
+                    fi
+                    ;;
+            esac
+            ;;
+    esac
+fi
+
+if [ -n "$2" ]
+then
+    $PAGER --pattern="$2" -- "$txtfile"
+else
+    $PAGER -- "$txtfile"
+fi
