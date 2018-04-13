@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.0.1
+version=1.1.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -222,15 +222,6 @@ parse_opt_wildcards() {
     regex="*$1*"
 }
 
-# Environmental variables:
-# - scope
-parse_opt_stdin() {
-    while read stdinscope || [ -n "$stdinscope" ]
-    do
-        scope="${scope:-""} $stdinscope"
-    done
-}
-
 # Avoid filenames starting with a dash in find paths.
 # https://stackoverflow.com/a/4286196/4694621
 # "$1" - Argument to dotslashify.
@@ -282,7 +273,12 @@ do
                 -N|--nonumbers) parse_opt_nonumbers ;;
                 -r|--regex) state=--regex ;;
                 -w|--wildcards) state=--wildcards ;;
-                -|--stdin) parse_opt_stdin ;;
+                -|--stdin)
+                    while read stdin
+                    do
+                        set -- "$@" "$(dotslashify "$stdin")"
+                    done
+                    ;;
                 --help) parse_opt_help ;;
                 --version) parse_opt_version ;;
                 --) state=skip ;;
@@ -303,7 +299,12 @@ do
                             # we only remember the last state.
                             r) state=--regex ;;
                             w) state=--wildcards ;;
-                            -) parse_opt_stdin ;;
+                            -)
+                                while read stdin
+                                do
+                                    set -- "$@" "$(dotslashify "$stdin")"
+                                done
+                                ;;
                             *) ;;
                         esac
                         opts="${opts#"$opt"}"
