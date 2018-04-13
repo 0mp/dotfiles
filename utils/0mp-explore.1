@@ -1,0 +1,151 @@
+.\"
+.\" SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+.\"
+.\" Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.Dd April 13, 2018
+.Dt 0MP-EXPLORE 1
+.Os
+.Sh NAME
+.Nm 0mp-explore
+.Nd "explore text files as if you had an interactive grep"
+.Sh SYNOPSIS
+.Nm
+.Op Fl 0AcNn
+.Op -
+.Op Fl r Ar regex
+.Op Fl w Ar regex
+.Op Oo -- Oc Ar scope ...
+.Sh DESCRIPTION
+.Nm
+is a utility one can use to quickly scan through and become faimilar with a
+significant number of files.
+.Pp
+When run without any arguments,
+.Nm
+recursively descends the directory tree for each file and directory in the
+scope, opening any regular, non-binary and non-empty file.
+It's like
+.Dq Li "find . -exec cat \+"
+but with headers, line numbers and more.
+.Pp
+The options are as follows:
+.Bl -tag -width ".Fl d Ar argument"
+.It Fl A , Fl -ascii
+Replace the default character separating file names on the left side bar.
+Implies
+.Fl -names
+.
+.It Fl c , Fl -colors
+Add syntax coloring with pygmentize which has to be installed.
+This option might slow down the program significantly.
+.It Fl N , Fl -nonumbers
+Don't print line numbers and file names on the left side bar.
+.It Fl n , Fl -names
+Print the currently viewed file name on the left side bar, next to the line
+numbers.
+.It Fl r Ar regex , Fl -regex Ar regex
+Set the regex string used to match files to be read.
+For example, providing
+.Dq Li .*.c
+as
+.Ar regex
+results in printing only C source files.
+.It Fl w Ar regex , Fl -wildcards Ar regex
+Just like
+.Fl -regex
+but with a leading and a trailing
+.Dq Li .*
+wildcard.
+For example,
+.Dq Li -r '*vector*'
+and
+.Dq Li -w vector
+are effectively the same.
+.It Fl - , Fl -stdin
+Read scope files and directories from the standard input.
+.It Fl 0 , -stdin0
+Just like
+.Fl -stdin
+but use ASCII NUL as a delimiter to work nicely with with
+.Fl -print0
+of
+.Xr find 1 .
+.It --
+End of options.
+Treat the rest of the command line arguments as files and directories for
+program's scope.
+.It Fl h , Fl -help
+Show help.
+.It Fl -version
+Show version.
+.It Ar scope
+Files and directories to be explored by the program.
+If not provided then
+.Ar scope
+is set to
+.Pa \&.
+.Pq the current working directory .
+.El
+.Sh ENVIRONMENT
+.Bl -tag -width "_0MP_EXPLORE_OPTS" -compact
+.It Ev _0MP_EXPLORE_OPTS
+Extra arguments processed before command line arguments.
+.El
+.Sh EXAMPLES
+View all C source files in
+.Pa /usr/src :
+.Pp
+.Dl "0mp-explore -r '*.c' /usr/src"
+.Pp
+View all Makefiles using Go in
+.Pa /usr/ports :
+.Pp
+.Bd -literal -offset indent
+find /usr/ports/* -mindepth 2 -maxdepth 2 -name Makefile \\
+    -exec grep -l ' go ' {} + | 0mp-explore -
+.Ed
+.Pp
+Turn on
+.Fl -nonumbers
+in every
+.Nm
+invocation:
+.Pp
+.Bd -literal -offset indent
+export _0MP_EXPLORE_OPTS='--nonumbers'
+0mp-explore
+.Ed
+.Sh COMPATIBILITY
+The
+.Nm
+command has no known compatibility issues.
+.Sh SEE ALSO
+.Xr find 1 ,
+.Xr grep 1
+.Sh AUTHORS
+This
+manual page was written by
+.An Mateusz Piotrowski Aq Mt 0mp@FreeBSD.org .
