@@ -31,6 +31,10 @@ lib_custom_install() {
     # Fix the headphones jack.
     set_once '/boot/loader.conf' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
+    # Don't waste time on probing USB at early boot time.
+    # https://unrelenting.technology/kb/FreeBSDDesktop
+    set_once '/boot/loader.conf' 'hw.usb.no_boot_wait="1"'
+
     # Disable the power button (https://forums.freebsd.org/threads/56807/).
     set_once '/etc/sysctl.conf' 'hw.acpi.power_button_state=NONE'
 
