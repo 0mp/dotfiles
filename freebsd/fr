@@ -43,8 +43,8 @@ getthatdoc() {
 
 if [ $# -eq 0 ]
 then
-    echo 'usage: fr document [pattern]'
-    echo 'version: 0.2.0'
+    echo 'usage: fr document [-u] [--] [pattern]'
+    echo 'version: 1.0.0'
     exit 0
 fi
 
@@ -81,32 +81,45 @@ case "$1" in
         ;;
 esac
 
+shift
+
 txtfile="$storedir/$name.txt"
 if ! [ -r "$txtfile" ]
 then
-    getthatdoc "$txtfile" " "${ftpbase}${type}s/${name}/${type}.txt.bz2"
-else
-    latestrev="$(fetch -o - "${webbase}${type}s/${name}/" | awk -v RS='<' -v FS='>' '/svnref/{print $2}')"
-    currentrev="$(awk '/Revision/{print $2; exit 0}' "$txtfile")"
-    case $latestrev in
-        ''|*[!0-9]*) ;;
-        *)
-            case $currentrev in
-                ''|*[!0-9]*) ;;
-                *)
-                    if [ "$latestrev" -gt "currentrev" ]
-                    then
-                        getthatdoc "$txtfile" " "${ftpbase}${type}s/${name}/${type}.txt.bz2"
-                    fi
-                    ;;
-            esac
-            ;;
-    esac
+    getthatdoc "$txtfile" "${ftpbase}${type}s/${name}/${type}.txt.bz2"
 fi
 
-if [ -n "$2" ]
+while [ $# -gt 0 ]
+do
+    case $1 in
+        -u)
+            latestrev="$(fetch -o - "${webbase}${type}s/${name}/" | awk -v RS='<' -v FS='>' '/svnref/{print $2}')"
+            currentrev="$(awk '/Revision/{print $2; exit 0}' "$txtfile")"
+            case $latestrev in
+                ''|*[!0-9]*) ;;
+                *)
+                    case $currentrev in
+                        ''|*[!0-9]*) ;;
+                        *)
+                            if [ "$latestrev" -gt "$currentrev" ]
+                            then
+                                getthatdoc "$txtfile" "${ftpbase}${type}s/${name}/${type}.txt.bz2"
+                            fi
+                            ;;
+                    esac
+                    ;;
+            esac
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if [ -n "$*" ]
 then
-    $PAGER --pattern="$2" -- "$txtfile"
+    $PAGER --pattern="$*" -- "$txtfile"
 else
     $PAGER -- "$txtfile"
 fi
