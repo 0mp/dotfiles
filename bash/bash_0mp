@@ -26,6 +26,7 @@ ddg() {
     local search='/?q='"$@"
     command w3m -X "ddg.gg${search%%/?q=}"
 }
+
 tmux_clear_detached_sessions() {
     tmux list-sessions | grep -E -v '\(attached\)$' | while IFS='\n' read line; do
         tmux kill-session -t "${line%%:*}"
@@ -41,3 +42,4 @@ PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] '
 
 export EDITOR=vim
 export PAGER='less --ignore-case'
+export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
