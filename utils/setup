@@ -4,6 +4,8 @@
 
 set -eu
 
+lib_info 'setup'
+
 FILES="$(cat <<-EOF
 0mp-explore
 cflowfilter
@@ -14,17 +16,13 @@ moinmoincli
 superdrive
 EOF
 )"
-
-BIN_DIR=~/bin
-
-lib_info setup
-
-mkdir -p "$BIN_DIR"
-PREFIX="$BIN_DIR/"
+PREFIX="$HOME/.local/bin/"
+lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
-lib_info remember to add ~/bin to your PATH
+lib_info remember to add ~/.local/bin to your PATH
+
 lib_info 'setup done'
