@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.0.0
+version=1.0.1
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -167,9 +167,9 @@ parse_opt_ascii() {
 }
 
 # Environmental variables:
-# - colors
+# - command
 parse_opt_colors() {
-    colors=yes
+    command='pygmentize -g --'
     if ! command -v pygmentize 2>/dev/null 1>&2
     then
         printf '%s: pygmentize is not available\n' "$program"
@@ -243,7 +243,7 @@ dotslashify() {
     fi
 }
 
-colors=
+command='cat --'
 leftbar=
 leftbarseparator='█'
 regex=
@@ -335,10 +335,4 @@ do
     set -- "$@" "$(dotslashify "$scope")"
 done
 
-if [ "@$colors@" = @yes@ ]
-then
-    command='pygmentize -g --'
-else
-    command='cat --'
-fi
 explore "$@"
