@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.2.0
+version=1.3.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -362,11 +362,5 @@ case $state in
         ;;
     *) ;;
 esac
-
-# Append files from SCOPE to find paths.
-for scope in $SCOPE
-do
-    set -- "$@" "$(dotslashify "$scope")"
-done
 
 explore "$@"
