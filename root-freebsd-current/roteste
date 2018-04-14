@@ -1,0 +1,56 @@
+#! /bin/sh -
+#
+# Scripting helping to automate the FreeBSD CURRENT branch maintenance.
+
+ncpu="$(sysctl hw.ncpu | awk '{print $2}')"
+
+CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+
+# Get the latest source tree.
+case "$CUSTOMOPTS" in
+    *--update*)
+        #
+        if ! [ -d /usr/src/.svn ]
+        then
+            if ! pkg info -q subversion
+            then
+                pkg install -y subversion
+            fi
+            rm -rf -- /usr/src/*
+            svn co https://svn.freebsd.org/base/head /usr/src
+        fi
+        svn update /usr/src
+        ;;
+esac
+
+case "$CUSTOMOPTS" in
+    *--build-kernel)
+        cd /usr/src
+        kldstat -q -n filemon || kldload filemon
+        make -j$ncpu buildkernel
+        ;;
+    *--build-world)
+        cd /usr/src
+        kldstat -q -n filemon || kldload filemon
+        make -j$ncpu buildworld
+        ;;
+    *--build*)
+        cd /usr/src
+        kldstat -q -n filemon || kldload filemon
+        make -j$ncpu buildworld
+        make -j$ncpu buildkernel
+        ;;
+    *--complete*)
+        cd /usr/src
+        make -j$ncpu installworld
+        mergemaster -i -v -U
+        ;;
+esac
+
+# Install the kernel.
+case "$CUSTOMOPTS" in
+    *--install-kernel*)
+        cd /usr/src
+        make -j$ncpu installkernel
+        ;;
+esac
