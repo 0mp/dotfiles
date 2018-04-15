@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.3.1
+version=1.4.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -108,12 +108,23 @@ parse_opt_ascii() {
 # Environmental variables:
 # - command
 parse_opt_colors() {
-    command='pygmentize -g --'
-    if ! command -v pygmentize 2>/dev/null 1>&2
+    for command in pygmentize pygmentize-2.7 pygmentize-3.6
+    do
+        if ! command -v "$command" 2>/dev/null 1>&2
+        then
+            command=
+        else
+            break
+        fi
+    done
+
+    if [ -z "$command" ]
     then
-        printf '%s: pygmentize is not available\n' "$program" >&2
+        printf '%s: no syntax highlighters available\n' "$program" >&2
         exit 1
     fi
+
+    command="$command -g --"
 }
 
 parse_opt_help() {
