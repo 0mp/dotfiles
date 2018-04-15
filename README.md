@@ -16,7 +16,6 @@ Modules:
     goat
         --defaults
     octave
-    switch
     tmux
     ubuntu
     utils

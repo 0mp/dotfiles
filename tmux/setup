@@ -4,10 +4,9 @@
 
 set -eu
 
-FILES='tmux.conf tmux-shine.conf tmux-charcoal.conf'
-
 lib_info 'setup'
 
+FILES='tmux.conf tmux-shine.conf tmux-charcoal.conf'
 case "$(uname)" in
     Darwin)
         FILES="$FILES tmux-macos.conf"
@@ -21,7 +20,22 @@ case "$(uname)" in
     *)
         ;;
 esac
+PREFIX=
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
 
+FILES=
+PREFIX="$HOME/.0mp-switch/"
+CUSTOMFILES='profile'
+lib_custom_install() {
+    for file in $CUSTOMFILES
+    do
+        touch -- "${PREFIX}${file}"
+    done
+}
+lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
