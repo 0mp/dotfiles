@@ -9,7 +9,7 @@ FILES=""
 lib_info setup
 
 cd goat
-./setup
+./setup --destination ~/.local/bin
 
 while [ $# -gt 0 ]
 do
@@ -18,7 +18,7 @@ do
             shift
             set +e
             export GOAT_PATH="$HOME/.goat"
-            ~/bin/goat bin ~/bin
+            ~/bin/goat bin ~/.local/bin
             ~/bin/goat desk ~/Desktop
             ~/bin/goat docs ~/Documents
             ~/bin/goat dots ~/.dotfiles

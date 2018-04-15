@@ -8,15 +8,15 @@ lib_info 'setup'
 
 FILES='fonts.conf'
 PREFIX="$HOME/.config/fontconfig/"
-mkdir -p "$PREFIX"
+lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
 FILES='fr justmount unitek-init wifi-init'
-PREFIX="$HOME/bin/"
-mkdir -p "$PREFIX"
+PREFIX="$HOME/.local/bin/"
+lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
 lib_install

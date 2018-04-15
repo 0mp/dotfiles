@@ -47,7 +47,7 @@ case "$CUSTOMOPTS" in
         trap - EXIT
 
         FILES='current-task'
-        PREFIX="$HOME/bin/"
+        PREFIX="$HOME/.local/bin/"
         lib_custom_install() { }
         lib_create_prefix_if_missing
         lib_back_up
