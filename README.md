@@ -27,12 +27,6 @@ Modules:
     root-freebsd
         --user username
     root-freebsd-current
-        --build
-        --build-kernel
-        --build-world
-        --complete
-        --install-kernel
-        --update
     root-freebsd-st
         --user username
     root-freebsd-yoga314
