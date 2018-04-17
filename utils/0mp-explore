@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.5.0
+version=1.6.0
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -93,7 +93,7 @@ EOF
     )"
 
     find "${@:-.}" \( -type f -o -type l \) -name "${regex:-*}" \
-        -exec sh -c "$script" sh {} + 2>/dev/null | \
+        -exec sh -c "$script" sh {} \; 2>/dev/null | \
         less --no-init --chop-long-lines --RAW-CONTROL-CHARS --ignore-case
 }
 
