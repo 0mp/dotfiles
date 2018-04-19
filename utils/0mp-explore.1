@@ -117,7 +117,7 @@ Extra arguments processed before command line arguments.
 .Sh EXAMPLES
 View all C source and header files in the current directory
 .Pp
-.Dl "0mp-explore *[ch]
+.Dl "0mp-explore *[ch]"
 .Pp
 View all C source files in
 .Pa /usr/src :
@@ -126,7 +126,6 @@ View all C source files in
 .Pp
 View all Makefiles using Go in
 .Pa /usr/ports :
-.Pp
 .Bd -literal -offset indent
 find /usr/ports/* -mindepth 2 -maxdepth 2 -name Makefile \\
     -exec grep -l ' go ' {} + | 0mp-explore -
@@ -137,7 +136,6 @@ Turn on
 in every
 .Nm
 invocation:
-.Pp
 .Bd -literal -offset indent
 export _0MP_EXPLORE_OPTS='--nonumbers'
 0mp-explore
