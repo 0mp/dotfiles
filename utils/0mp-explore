@@ -30,7 +30,7 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.6.0
+version=1.6.1
 
 bold='\033[1m'
 nobold='\033[0m'
@@ -52,7 +52,6 @@ EOF
 # - leftbarseparator
 # - names
 # - regex
-# - scope
 explore() {
     # Pass the variables into the script and in the second here-doc add the
     # literal part of the script (no substitutions in the current shell).
@@ -183,7 +182,6 @@ command='cat --'
 leftbar=
 leftbarseparator='█'
 regex=
-scope=
 
 state=''
 for arg in $_0MP_EXPLORE_OPTS "$@"
@@ -219,7 +217,7 @@ do
                 -r|--regex) state=--regex ;;
                 -w|--wildcards) state=--wildcards ;;
                 -|--stdin)
-                    while read line
+                    while read -r line
                     do
                         for path in $line
                         do
@@ -228,7 +226,7 @@ do
                     done
                     ;;
                 -0|--stdin0)
-                    while IFS= read line
+                    while IFS= read -r line
                     do
                         oldIFS="$IFS"
                         IFS='\0'
@@ -239,7 +237,6 @@ do
                         IFS="$oldIFS"
                     done
                     ;;
-                --help) parse_opt_help ;;
                 --version) parse_opt_version ;;
                 --) state=skip ;;
                 -*)
@@ -260,13 +257,13 @@ do
                             r) state=--regex ;;
                             w) state=--wildcards ;;
                             -)
-                                while read stdin || [ -n "$stdin" ]
+                                while read -r stdin || [ -n "$stdin" ]
                                 do
                                     set -- "$@" "$(dotslashify "$stdin")"
                                 done
                                 ;;
                             0)
-                                while IFS= read line
+                                while IFS= read -r line
                                 do
                                     oldIFS="$IFS"
                                     IFS='\0'
