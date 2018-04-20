@@ -20,6 +20,10 @@ HISTSIZE=20000
 # http://stackoverflow.com/a/6951487/4694621
 stty -ixon -ixoff
 
+# Check the window size after each command and, if necessary, update the
+# values of LINES and  COLUMNS.
+shopt -s checkwinsize
+
 # Aliases & functions
 alias w3m="w3m -v"
 ddg() {
