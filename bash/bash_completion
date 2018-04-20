@@ -1,0 +1,7 @@
+# Hints on how to manage user-defined Bash completions:
+# https://serverfault.com/q/506612/291898
+
+for f in ~/.bash_completion.d/*
+do
+    source "$f"
+done

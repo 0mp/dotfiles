@@ -7,7 +7,10 @@ set -eu
 lib_info 'setup'
 
 # Standard module setup.
-FILES='bash_0mp inputrc bash_profile'
+FILES='bash_0mp bash_completion inputrc bash_profile'
+lib_custom_install() {
+    mkdir -p "$HOME/bash_completion.d"
+}
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
