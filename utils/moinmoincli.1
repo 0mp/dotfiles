@@ -1,0 +1,198 @@
+.\"
+.\" SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+.\"
+.\" Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.Dd April 21, 2018
+.Dt MOINMOINCLI 1
+.Os
+.Sh NAME
+.Nm moinmoincli
+.Nd "edit existing MoinMoin wiki pages from a command line"
+.Sh SYNOPSIS
+.Nm
+.Op Fl hquv
+.Op Fl f Ar textfile
+.Op Fl n Ar username
+.Op Fl t Ar target
+.Op Ar selector
+.Sh DESCRIPTION
+.Nm
+is an interactive utility to edit existing MoinMoin wiki pages from
+a command line.
+.Nm
+was only tested with the
+.Fx
+Wiki
+which is using the MoinMoin engine.
+The
+.Fx
+Wiki address is also hard-coded into
+.Nm
+as the default web service the utility works with.
+.Pp
+.Nm
+cannot create new Wiki pages.
+.Pp
+When
+.Nm
+is run in order to update a wiki page, a diff is presented to the
+user to confirm the changes.
+It is done by providing a comment describing the changes.
+Next, a summary and the action menu is displayed.
+The summary includes the username, the target, the comment, and the
+text file name.
+Actions that could be entered at the action menu prompt are
+described in the
+.Sx ACTION MENU
+subsection.
+Once the user confirms requested changes to be processed, the password prompt
+is presented to the user.
+.Ss Command-line options
+The options are as follows:
+.Bl -tag -width ".Fl d Ar argument"
+.It Fl f Ar textfile , Fl -file Ar textfile
+Point to the
+Ar textfile
+that is going to be sent to the server.
+.It Fl n Ar username , Fl -name Ar username
+Set the username to log in as.
+.It Fl q , Fl -quick
+Activate the quick mode, which disables the action menu.
+As a result the changes will be uploaded once a comment is entered
+by the user.
+.It Fl t Ar target , Fl -target Ar target
+Provide the name of the wiki page to be updated, e.g.:
+.Dq Li "/WiFi/80211ac" .
+.It Fl u , Fl -update
+Download the contents of the
+.Ar target
+wiki page and put them into the
+.It Fl h , Fl -help
+Show help.
+.It Fl v , Fl -version
+Show version.
+.It Ar selector
+Run
+.Nm
+as preconfigured for a given
+.Ar selector .
+.Pp
+Selectors are used if the
+.Fn select_target
+function is defined in the
+configuration file (defaults are listed in the
+.Sx FILES
+section).
+A single
+.Ar selector
+is associated with a
+.Ar target
+and a
+.Ar textfile .
+As a result it is possible to use selectors to replace
+.Ql moinmoincli -f ./80211ac.moin -t /WiFi/80211ac
+with
+.Ql moinmoincli ac
+using an
+.Cm ac
+selector.
+.El
+.Ss Action menu
+The following actions could be entered at the action menu prompt one
+action at a time:
+.Bl -tag -width ".Ic a , Ic b"
+.It Ic y , Ic k
+Confirm changes.
+The action menu will be closed and the changes uploaded to the server.
+.It Ic n , Ic a
+Abort.
+Close
+.Nm
+immediately.
+.It Ic t
+Mark changes as trivial so that subscribers to the modified wiki
+page are not notified.
+.It Ic c
+Change the comment.
+.It Ic d
+Show the diff.
+.It Ic s
+Print the summary.
+.El
+.Sh FILES
+.Bl -tag -width ".Pa ~/.moinmoincli.conf" -compact
+.It Pa ~/.moinmoincli.conf
+The
+.Nm
+configuration file.
+.It Pa /tmp/moinmoincli-workdir
+The location of temporary files.
+.El
+.Sh EXAMPLES
+Download the code of
+.Ql https://wiki.freebsd.org/Community/Dogs
+and save it under
+.Pa ./dogs.moinmoin :
+.Pp
+.Dl "moinmoincli --file ./dogs.moinmoin --target /Community/Dogs --update"
+.Pp
+Write
+.Pa ./sandbox.txt
+to
+.Ql https://wiki.freebsd.org/WikiSandBox
+using the
+.Cm CharlieRoot
+account:
+.Pp
+.Dl "moinmoincli -n CharlieRoot -f ./sandbox.txt -t /WikiSandBox"
+.Ss Configuration file
+.Bd -literal
+# The username to use when logging in.
+name=CharlieRoot
+
+# The password for the account.
+password=osiolek.8
+
+# The default target It's used unless a selector or
+# the -t flag is used.
+target='/WikiSandBox'
+
+# The default textfile.
+textfile=/tmp/wiki.moin
+
+# The select_target function, which defines the logic behind the
+# selectors.
+select_target() {
+    case "$1" in
+        [wW]*) target='/WiFi'; textfile="$HOME/wifi.moin" ;;
+        *) errxit "invalid selector '$1'" ;;
+    esac
+}
+.Ed
+.Sh AUTHORS
+.Nm
+and its manual page was written by
+.An Mateusz Piotrowski Aq Mt 0mp@FreeBSD.org .

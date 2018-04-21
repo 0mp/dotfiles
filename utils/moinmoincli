@@ -1,13 +1,13 @@
 #! /bin/sh -
 #
-# moinmoincli - Edit existing Moin Moin Wiki pages from a command line.
+# moinmoincli - Edit existing MoinMoin wiki pages from a command line.
 #
 #               This script has been tested only on the FreeBSD wiki
 #               (https://wiki.freebsd.org).
 #
 # ---
 #
-# Copyright (c) 2017 Mateusz Piotrowski <0mp@FreeBSD.org>
+# Copyright (c) 2017, 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,67 +32,19 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-version=4.1.2
+version=4.2.0
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
-workdir='/tmp/moinmoincli-workdir'
+workdir="$(env -u TMPDIR mktemp -t moinmoincli)"
+[ "$?" -ne 0 ] && errxit "failed to create a work directory"
 editfile="$workdir/edit.html"
 oldrawfile="$workdir/oldraw.txt"
 cookiefile="$workdir/cookie.txt"
 
-shortusage() {
-    cat << 'EOF'
-Usage: moinmoincli [-qu] [-n NAME] [-f TEXTFILE] [-t TARGET] [SELECTOR]
-EOF
-}
-
 usage() {
     cat << 'EOF'
-Usage: moinmoincli [OPTION...] [SELECTOR]
-
-Options:
-    -f, --file FILE
-        Point to the text file that is going to be sent to the server.
-
-    -n, --name NAME
-        Set the username used as a login.
-
-    -q, --quick
-        Active quick mode (skip confirmation and the action menu).
-
-    -t, --target TARGET
-        Provide the name of the wiki page to be updated, e.g.: /WiFi/80211ac
-        (the program is configured to work with wiki.freebsd.org by default).
-
-    -u, --update
-        Download the contents of the target wiki page and put them into the
-        file pointed to by the -f option.
-
-    -h, --help
-        Show help (use -h for a short reminder).
-
-    -v, --version
-        Show version.
-
-Selectors:
-    Selectors are used if the select_target() function is defined in the
-    configuration file (~/.moinmoincli.conf by default). A single selector is
-    assosiated with a target and a text file. As a result it is possible to
-    moinmoincli by typing a much shorter `moinmoincli ac` instead of
-    `moinmoincli -f ./80211ac.moin -t /WiFi/80211ac`.
-
-Sample configuration file ('~/.moinmoincli.conf' by default):
-    name=MateuszPiotrowski
-    password=xxx
-    target='/WikiSandBox'
-    textfile=/tmp/wiki.moin
-    select_target() {
-        case "$1" in
-            [wW]*) target='/WiFi'; textfile="$HOME/wifi.moin" ;;
-            *) errxit "invalid selector '$1'" ;;
-        esac
-    }
+Usage: moinmoincli [-hquv] [-f textfile] [-n username] [-t target] [selector]
 EOF
 }
 
@@ -202,12 +154,7 @@ do
             target="$2"
             shift 2
             ;;
-        -h)
-            shift
-            shortusage
-            exit 0
-            ;;
-        --help)
+        -h|--help)
             shift
             usage
             exit 0
@@ -228,14 +175,6 @@ do
     esac
 done
 
-[ -z "$name" ] && errxit 'missing name'
-if [ -z "$password" ]
-then
-    printf 'Password: '
-    stty -echo
-    read -r password
-    stty echo
-fi
 [ -z "$target" ] && errxit 'missing target'
 [ -z "$textfile" ] && errxit 'missing text file'
 
@@ -247,6 +186,8 @@ then
     exit 0
 fi
 
+[ -z "$name" ] && errxit 'missing username'
+
 textarea="$(cat -- "$textfile")"
 
 download_rawpage
@@ -255,13 +196,13 @@ show_diff
 get_comment
 print_summary
 cat <<-EOF
-Actions:
- * confirm        -> y,k
- * abort          -> n,a
- * mark trivial   -> t
- * change comment -> c
- * show diff      -> d
- * print summary  -> s
+actions:
+  * confirm        -> y,k
+  * abort          -> n,a
+  * mark trivial   -> t
+  * change comment -> c
+  * show diff      -> d
+  * print summary  -> s
 EOF
 while true
 do
@@ -285,10 +226,22 @@ do
         d)
             show_diff
             ;;
+        s)
+            print_summary
+            ;;
         *)
-            echo 'invalid action (%s)\n' "$action"
+            printf 'invalid action (%s)\n' "$action"
+            ;;
     esac
 done
+
+if [ -z "$password" ]
+then
+    printf '%s password: ' "$name"
+    stty -echo
+    read -r password
+    stty echo
+fi
 
 echo processing...
 

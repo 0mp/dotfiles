@@ -25,6 +25,7 @@ trap - EXIT
 
 FILES="$(cat <<-EOF
 0mp-explore.1
+moinmoincli.1
 EOF
 )"
 PREFIX="$HOME/.local/share/man/man1/"
