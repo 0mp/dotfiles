@@ -2,9 +2,13 @@
 #
 # Scripting helping to automate the FreeBSD CURRENT branch maintenance.
 
-ncpu="$(sysctl hw.ncpu | awk '{print $2}')"
+version=0.1.0
+
+ncpu="$(sysctl -n hw.ncpu)"
 
 CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+
+set -e
 
 # Get the latest source tree.
 case "$CUSTOMOPTS" in
