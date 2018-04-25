@@ -187,7 +187,7 @@ fi
 
 [ -z "$name" ] && errxit 'missing username'
 
-textarea="$(cat -- "$textfile")"
+! textarea="$(cat -- "$textfile")" && errxit "failed to open '$textfile'"
 
 download_rawpage
 
