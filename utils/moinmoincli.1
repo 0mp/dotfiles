@@ -145,7 +145,7 @@ Show the diff.
 Print the summary.
 .El
 .Sh FILES
-.Bl -tag -width ".Pa ~/.moinmoincli.conf" -compact
+.Bl -tag -width ".Pa ~/.moinmoincli-workdir" -compact
 .It Pa ~/.moinmoincli.conf
 The
 .Nm
@@ -157,17 +157,16 @@ The location of temporary files.
 Download the code of
 .Ql https://wiki.freebsd.org/Community/Dogs
 and save it under
-.Pa ./dogs.moinmoin :
+.Ql ./dogs.moinmoin :
 .Pp
 .Dl "moinmoincli --file ./dogs.moinmoin --target /Community/Dogs --update"
 .Pp
 Write
-.Pa ./sandbox.txt
+.Ql ./sandbox.txt
 to
 .Ql https://wiki.freebsd.org/WikiSandBox
-using the
-.Cm CharlieRoot
-account:
+as
+.Ql CharlieRoot :
 .Pp
 .Dl "moinmoincli -n CharlieRoot -f ./sandbox.txt -t /WikiSandBox"
 .Ss Configuration file
