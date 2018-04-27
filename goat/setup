@@ -5,11 +5,12 @@
 set -eu
 
 FILES=""
+goat="$HOME/.local/bin/goat"
 
 lib_info setup
 
 cd goat
-./setup --destination ~/.local/bin
+./setup --destination "${goat%/*}"
 
 while [ $# -gt 0 ]
 do
@@ -18,13 +19,13 @@ do
             shift
             set +e
             export GOAT_PATH="$HOME/.goat"
-            ~/bin/goat bin ~/.local/bin
-            ~/bin/goat desk ~/Desktop
-            ~/bin/goat docs ~/Documents
-            ~/bin/goat dots ~/.dotfiles
-            ~/bin/goat down ~/Downloads
-            ~/bin/goat drop ~/Dropbox
-            ~/bin/goat h ~/h
+            $goat link bin ~/.local/bin
+            $goat link desk ~/Desktop
+            $goat link docs ~/Documents
+            $goat link dots ~/.dotfiles
+            $goat link down ~/Downloads
+            $goat link drop ~/Dropbox
+            $goat link h ~/h
             set -e
             ;;
         *)
