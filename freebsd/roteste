@@ -2,7 +2,7 @@
 #
 # Scripting helping to automate the FreeBSD CURRENT branch maintenance.
 
-version=0.2.0
+version=0.2.1
 
 [ 0 -ne "$(id -u)" ] && echo 'error: roteste has to be run as root' && exit 1
 
@@ -29,7 +29,7 @@ case "$CUSTOMOPTS" in
         if ! [ -d /usr/ports/.svn ]
         then
             rm -rf -- /usr/ports/*
-            svn co https://svn.freebsd.org/ports /usr/ports
+            svn co https://svn.freebsd.org/ports/head /usr/ports
         else
             svn update /usr/ports
         fi
