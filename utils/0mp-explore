@@ -30,14 +30,14 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=1.6.1
+version=2.0.0
 
 bold='\033[1m'
 nobold='\033[0m'
 
 usage() {
     cat <<EOF
-Usage: 0mp-explore [-0AcNn] [-] [-r regex] [-w regex] [[--] scope ...]
+Usage: 0mp-explore [-0Acn] [-] [-r regex] [-w regex] [[--] scope ...]
 EOF
 }
 
@@ -50,7 +50,6 @@ EOF
 # - nobold
 # - leftbar
 # - leftbarseparator
-# - names
 # - regex
 explore() {
     # Pass the variables into the script and in the second here-doc add the
@@ -71,8 +70,10 @@ do
     grep --binary-file=without-match . "$file" 2>/dev/null 1>&2 || continue
     printf -- '%b%s%b\n' "$bold" "$file" "$nobold"
 
-    if [ "@$leftbar@" = @names@ ]
+    if [ "@$leftbar@" = @nothing@ ]
     then
+        $command "$file"
+    else
         $command "$file" | awk -v fn="$file" -v lbs="$leftbarseparator" '{
             pos = (NR + 1) % (length(fn) + 1)
             if (pos == 0)
@@ -80,11 +81,6 @@ do
             else
                 printf "%1s%5d  %s\n", substr(fn, pos, 1), NR, $0
         }'
-    elif [ "@$leftbar@" = @nothing@ ]
-    then
-        $command "$file"
-    else
-        $command "$file" | awk '{ printf "%6d  %s\n", NR, $0 }'
     fi
     echo ""
 done
@@ -101,7 +97,7 @@ EOF
 # - leftbarseparator
 parse_opt_ascii() {
     leftbarseparator=' '
-    leftbar=names
+    leftbar=
 }
 
 # Environmental variables:
@@ -133,13 +129,7 @@ parse_opt_help() {
 
 # Environmental variables:
 # - leftbar
-parse_opt_names() {
-    leftbar=names
-}
-
-# Environmental variables:
-# - leftbar
-parse_opt_nonumbers() {
+parse_opt_noleftbar() {
     leftbar=nothing
 }
 
@@ -212,8 +202,7 @@ do
                 -A|--ascii) parse_opt_ascii ;;
                 -c|--colors) parse_opt_colors ;;
                 -h|--help) parse_opt_help ;;
-                -n|--names) parse_opt_names ;;
-                -N|--nonumbers) parse_opt_nonumbers ;;
+                -n|--noleftbar) parse_opt_noleftbar ;;
                 -r|--regex) state=--regex ;;
                 -w|--wildcards) state=--wildcards ;;
                 -|--stdin)
@@ -250,8 +239,7 @@ do
                             A) parse_opt_ascii ;;
                             c) parse_opt_colors ;;
                             h) parse_opt_help ;;
-                            n) parse_opt_names ;;
-                            N) parse_opt_nonumbers ;;
+                            n) parse_opt_leftbar ;;
                             # --regex and --wildcards are mutually exclusive so
                             # we only remember the last state.
                             r) state=--regex ;;

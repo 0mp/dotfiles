@@ -25,7 +25,7 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd April 16, 2018
+.Dd April 27, 2018
 .Dt 0MP-EXPLORE 1
 .Os
 .Sh NAME
@@ -33,11 +33,13 @@
 .Nd "explore text files as if you had an interactive grep"
 .Sh SYNOPSIS
 .Nm
-.Op Fl 0AcNn
+.Op Fl 0Acn
 .Op -
 .Op Fl r Ar regex
 .Op Fl w Ar regex
 .Op Oo -- Oc Ar scope ...
+.Nm
+.Op Fl h | Fl -version
 .Sh DESCRIPTION
 .Nm
 is a utility one can use to quickly scan through and become faimilar with a
@@ -55,17 +57,11 @@ The options are as follows:
 .Bl -tag -width ".Fl d Ar argument"
 .It Fl A , Fl -ascii
 Replace the default character separating file names on the left side bar.
-Implies
-.Fl -names
-.
 .It Fl c , Fl -colors
 Add syntax coloring with pygmentize which has to be installed.
 This option might slow down the program significantly.
-.It Fl N , Fl -nonumbers
+.It Fl n , Fl -noleftbar
 Don't print line numbers and file names on the left side bar.
-.It Fl n , Fl -names
-Print the currently viewed file name on the left side bar, next to the line
-numbers.
 .It Fl r Ar regex , Fl -regex Ar regex
 Set the regex string used to match files to be read.
 For example, providing
@@ -132,12 +128,12 @@ find /usr/ports/* -mindepth 2 -maxdepth 2 -name Makefile \\
 .Ed
 .Pp
 Turn on
-.Fl -nonumbers
+.Fl -noleftbar
 in every
 .Nm
 invocation:
 .Bd -literal -offset indent
-export _0MP_EXPLORE_OPTS='--nonumbers'
+export _0MP_EXPLORE_OPTS='--noleftbar'
 0mp-explore
 .Ed
 .Sh COMPATIBILITY
