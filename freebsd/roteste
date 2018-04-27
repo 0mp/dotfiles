@@ -13,17 +13,24 @@ set -e
 # Get the latest source tree.
 case "$CUSTOMOPTS" in
     *--update*)
-        #
+        if ! pkg info -q subversion
+        then
+            pkg install -y subversion
+        fi
         if ! [ -d /usr/src/.svn ]
         then
-            if ! pkg info -q subversion
-            then
-                pkg install -y subversion
-            fi
             rm -rf -- /usr/src/*
             svn co https://svn.freebsd.org/base/head /usr/src
+        else
+            svn update /usr/src
         fi
-        svn update /usr/src
+        if ! [ -d /usr/ports/.svn ]
+        then
+            rm -rf -- /usr/ports/*
+            svn co https://svn.freebsd.org/ports /usr/ports
+        else
+            svn update /usr/ports
+        fi
         ;;
 esac
 
@@ -41,8 +48,8 @@ case "$CUSTOMOPTS" in
     *--build*)
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
-        make -j$ncpu buildworld
         make -j$ncpu buildkernel
+        make -j$ncpu buildworld
         ;;
     *--complete*)
         cd /usr/src

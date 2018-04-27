@@ -6,8 +6,8 @@ set -eu
 
 lib_info 'setup'
 
-FILES='fr justmount roteste unitek-init wifi-init'
-PREFIX="$HOME/.local/bin/"
+FILES='fonts.conf'
+PREFIX="$HOME/.config/fontconfig/"
 lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
