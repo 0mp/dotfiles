@@ -29,6 +29,9 @@ lib_custom_install() {
     # after a warning about a missing LICENSE variable when building a port.
     set_once '/etc/make.conf' 'DEV_WARNING_WAIT=0'
 
+    # Use ccache(1).
+    set_once '/etc/src.conf' 'WITH_CCACHE_BUILD=YES'
+
     set_once '/etc/src-env.conf' 'WITH_META_MODE=YES'
 }
 lib_back_up
