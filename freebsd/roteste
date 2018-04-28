@@ -2,18 +2,16 @@
 #
 # Scripting helping to automate the FreeBSD CURRENT branch maintenance.
 
-version=0.2.1
+version=0.2.2
 
 [ 0 -ne "$(id -u)" ] && echo 'error: roteste has to be run as root' && exit 1
 
 ncpu="$(sysctl -n hw.ncpu)"
 
-CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
-
 set -e
 
 # Get the latest source tree.
-case "$CUSTOMOPTS" in
+case "$*" in
     *--update*)
         if ! pkg info -q subversion
         then
@@ -36,7 +34,7 @@ case "$CUSTOMOPTS" in
         ;;
 esac
 
-case "$CUSTOMOPTS" in
+case "$*" in
     *--build-kernel)
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
@@ -61,7 +59,7 @@ case "$CUSTOMOPTS" in
 esac
 
 # Install the kernel.
-case "$CUSTOMOPTS" in
+case "$*" in
     *--install-kernel*)
         cd /usr/src
         make -j$ncpu installkernel
