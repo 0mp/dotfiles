@@ -47,7 +47,7 @@ case $PS1 in
 esac
 
 if [[ $OSTYPE =~ freebsd.* ]] && \
-    [[ -f /usr/local/share/bash_completion/bash_completion.sh ]]
+    [[ -f /usr/local/share/bash-completion/bash_completion.sh ]]
 then
     source /usr/local/share/bash-completion/bash_completion.sh
 fi
