@@ -40,7 +40,8 @@ ssh_agent_activate() {
 
 PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] '
 
-export EDITOR=vim
+export EDITOR='vim'
+export VISUAL='vim'
 export PAGER='less --ignore-case'
 export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
 # Make manpages fit the screen even if it's very small.
