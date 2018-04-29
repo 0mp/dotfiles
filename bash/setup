@@ -20,7 +20,7 @@ trap - EXIT
 FILES=''
 CUSTOMFILES='bashrc'
 lib_custom_install() {
-    sourcecmd='[ -r ~/.bash_0mp ] && . ~/.bash_0mp'
+    sourcecmd='[[ -r ~/.bash_0mp ]] && source ~/.bash_0mp'
     if [ -r ~/.bashrc ]
     then
         printf '%s\n' "$sourcecmd" >> ~/.bashrc
