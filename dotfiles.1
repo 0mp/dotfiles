@@ -1,0 +1,156 @@
+.\"
+.\" SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+.\"
+.\" Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.Dd April 29, 2018
+.Dt DOTFILES 8
+.Os
+.Sh NAME
+.Nm dotfiles
+.Nd "various configuration scripts, dotfiles and utilities by 0mp"
+.Sh SYNOPSIS
+.Cm ./setup
+.Op Ar module Oo Oo Ar option ... Oc Cm -- Oc Ar ...
+.Sh DESCRIPTION
+.Nm
+is a framework to manage configuration scripts, dotfiles and utilities.
+.Pp
+Administrative rights are required in for the
+.Fl -root-*
+options and the
+.Cm root-*
+modules.
+.Pp
+The modules are as follows:
+.Bl -tag -width ".Cm freebsd-desktop" -compact
+.It Cm bash
+Install Bash
+configuration files.
+.It Cm freebsd
+Install some
+.Fx
+utilities of general purpose.
+.It Cm freebsd-desktop
+Configuration files for a
+.Fx
+desktop.
+.It Cm freebsd-dwm Op Fl -root-install
+Configuration of a desktop environment running the dwm window manager.
+Using
+.Fl -root-install
+causes dwm to be recompiled and reinstalled.
+.It Cm git Op Ar option ...
+Configure Git.
+The options are as follows:
+.Bl -tag -width ".Fl -github-ssh"
+.It Fl -name Ar name
+The name to set in
+.Pa ~/.gitconfig .
+Unless specified, the module interactively prompts for the name during
+installation.
+.It Fl -email Ar email
+The email to set in
+.Pa ~/.gitconfig .
+Unless specified, the module interactively prompts for the email during
+installation.
+.It Fl -github-ssh
+Configure Git to replace
+.Dq Li "https://github.com/"
+with
+.Dq Li "ssh://git@github.com/"
+so that SSH is used even if a repository is configured to use HTTPS.
+.El
+.It Cm goat Op Fl -defaults
+Install goat.
+Using
+.Fl -defaults
+populates goat with some default shortcuts.
+.It Cm octave
+Instal octave-cli configuration files.
+.It Cm tmux
+Install tmux configuration files.
+.It Cm ubuntu
+Install Ubuntu-specific configuration files.
+.It Cm utils
+Install general purpose utilities.
+.It Cm vim
+Configure Vim and install related configuration files.
+.It Cm x11
+Install Xorg-related configuration files.
+.It Cm xpdf
+Install Xpdf configuration files.
+.It Cm root-freebsd Fl -user Ar username
+Configure
+.Fx
+for general use.
+.Fl -user
+is required.
+Make sure that
+.Ar username
+is set to your username.
+.It Cm root-freebsd-current
+Configure a
+.Fx
+machine running CURRENT.
+This module sets some development-specific variables in
+.Xr make.conf 5 ,
+.Xr src.conf 5 ,
+and
+.Xr src-env.conf 5 .
+.It Cm root-freebsd-st Fl -user Ar username
+Recompile and reinstall st terminals.
+.Fl -user
+is required.
+Make sure that
+.Ar username
+is set to your username.
+.It Cm root-freebsd-yoga314 Op Ar option ...
+Configure
+.Fx
+desktop experience for Lenovo Yoga 3 14.
+The options are as follows:
+.Bl -tag -width ".Fl -powerdxx"
+.It Fl -fonts
+Install additional fonts.
+.It Fl -intel
+Install Intel graphics kernel modules.
+.It Fl -powerdxx
+Install powerd++ for a better power management than the one offered by
+.Xr powerd 8
+.
+.El
+.El
+.Sh EXAMPLES
+Install
+.Cm bash
+and
+.Cm git
+modules:
+.Bd -literal -offset indent
+\&./setup bash git --name 'Charlie Root' --email 'root@example.org' --
+.Ed
+.Sh AUTHORS
+.An Mateusz Piotrowski Aq Mt 0mp@FreeBSD.org
