@@ -8,35 +8,26 @@ lib_info 'setup'
 
 lib_require_root
 
-set_once() {
-    filename="$1"
-    string="$2"
-    if ! grep "$string" "$filename" >/dev/null 2>&1
-    then
-        printf '%s\n' "$string" >> "$filename"
-    fi
-}
-
 FILES=
 PREFIX=
 CUSTOMFILES=
 CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
 lib_custom_install() {
     # Turn on additional checks for ports.
-    set_once '/etc/make.conf' 'DEVELOPER=YES'
+    sysrc -f /etc/make.conf DEVELOPER=YES
 
     # Disable the delay after a warning. For example there will be no delay
     # after a warning about a missing LICENSE variable when building a port.
-    set_once '/etc/make.conf' 'DEV_WARNING_WAIT=0'
+    sysrc -f /etc/make.conf DEV_WARNING_WAIT=0
 
     # Use ccache(1).
-    set_once '/etc/src.conf' 'WITH_CCACHE_BUILD=YES'
+    sysrc -f /etc/src.conf WITH_CCACHE_BUILD=YES
 
     # Recompile the following kernel modules during build-kernel and install
     # them during install-kernel.
-    set_once '/etc/src.conf' 'PORT_MODULES=graphics/drm-next-kmod emulators/virtualbox-ose-kmod'
+    sysrc -f /etc/src.conf 'PORT_MODULES=graphics/drm-next-kmod emulators/virtualbox-ose-kmod'
 
-    set_once '/etc/src-env.conf' 'WITH_META_MODE=YES'
+    sysrc -f /etc/src-env.conf WITH_META_MODE=YES
 }
 lib_back_up
 trap lib_roll_back EXIT

@@ -10,15 +10,6 @@ lib_info 'setup'
 
 lib_require_root
 
-set_once() {
-    filename="$1"
-    string="$2"
-    if ! grep "$string" "$filename" >/dev/null 2>&1
-    then
-        printf '%s\n' "$string" >> "$filename"
-    fi
-}
-
 FILES=
 PREFIX=
 CUSTOMFILES=
@@ -29,25 +20,25 @@ lib_custom_install() {
     esac
 
     # Fix the headphones jack.
-    set_once '/boot/loader.conf' 'hint.hdaa.1.nid22.config="as=1 seq=15"'
+    sysrc -f /boot/loader.conf 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
     # Don't waste time on probing USB at early boot time.
     # https://unrelenting.technology/kb/FreeBSDDesktop
-    set_once '/boot/loader.conf' 'hw.usb.no_boot_wait="1"'
+    sysrc -f /boot/loader.conf 'hw.usb.no_boot_wait="1"'
 
     # Disable the power button (https://forums.freebsd.org/threads/56807/).
-    set_once '/etc/sysctl.conf' 'hw.acpi.power_button_state=NONE'
+    sysrc -f /etc/sysctl.conf 'hw.acpi.power_button_state=NONE'
 
     # Lower the screen brightness to a reasonable level.
-    set_once '/etc/sysctl.conf' 'hw.acpi.video.lcd0.brightness=6'
+    sysrc -f /etc/sysctl.conf 'hw.acpi.video.lcd0.brightness=6'
 
     # Configure touchpad.
     # Although it says "Synaptics", moused is is affected by those settings as
     # well.
-    set_once '/etc/sysctl.conf' 'hw.psm.synaptics.min_pressure=40'
+    sysrc -f /etc/sysctl.conf 'hw.psm.synaptics.min_pressure=40'
 
     # Disable the console bell.
-    set_once '/etc/sysctl.conf' 'kern.vt.enable_bell=0'
+    sysrc -f /etc/sysctl.conf 'kern.vt.enable_bell=0'
 
     # Enable D-BUS.
     sysrc dbus_enable="YES"
