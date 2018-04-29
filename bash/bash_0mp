@@ -38,7 +38,13 @@ ssh_agent_activate() {
     ssh-add
 }
 
-PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] '
+# Although the default color is blue, it is possible to configure the prompt to
+# use a different color by setting PS1 before source this file. For example,
+# setting it to '41' results in a red prompt.
+case $PS1 in
+    [0-9][0-9]) PS1='  \u@\h $PWD\n'"\[\e[0;${PS1}m"'\] \[\e[0m\] ' ;;
+    *) PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] ' ;;
+esac
 
 export EDITOR='vim'
 export VISUAL='vim'
