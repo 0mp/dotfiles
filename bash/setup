@@ -21,7 +21,10 @@ FILES=''
 CUSTOMFILES='bashrc'
 lib_custom_install() {
     sourcecmd='[ -r ~/.bash_0mp ] && . ~/.bash_0mp'
-    if ! grep "$sourcecmd" ~/.bashrc 2>/dev/null 1>&2
+    if [ -r ~/.bashrc ]
+    then
+        printf '%s\n' "$sourcecmd" >> ~/.bashrc
+    elif ! grep "$sourcecmd" ~/.bashrc 2>/dev/null 1>&2
     then
         printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
     fi
