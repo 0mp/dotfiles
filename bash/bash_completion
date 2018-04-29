@@ -1,3 +1,9 @@
+if [[ $OSTYPE =~ freebsd.* ]] &&
+    [[ -f /usr/local/share/bash_completion/bash_completion.sh ]]
+then
+    source /usr/local/share/bash-completion/bash_completion.sh
+fi
+
 # Hints on how to manage user-defined Bash completions:
 # https://serverfault.com/q/506612/291898
 
