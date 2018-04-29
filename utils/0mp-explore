@@ -30,14 +30,15 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=2.1.0
+version=3.0.0
 
 bold='\033[1m'
 nobold='\033[0m'
 
 usage() {
     cat <<EOF
-Usage: 0mp-explore [-0Acn] [-] [-r regex] [-w regex] [[--] scope ...]
+Usage: 0mp-explore [-Acn] [-0 | -i] [-r regex | -w regex] [[--] scope ...]
+       0mp-explore [-h | --version]
 EOF
 }
 
@@ -206,7 +207,7 @@ do
                 -n|--noleftbar) parse_opt_noleftbar ;;
                 -r|--regex) state=--regex ;;
                 -w|--wildcards) state=--wildcards ;;
-                -|--stdin)
+                -i|--stdin)
                     while read -r line
                     do
                         for path in $line
@@ -245,7 +246,7 @@ do
                             # we only remember the last state.
                             r) state=--regex ;;
                             w) state=--wildcards ;;
-                            -)
+                            i)
                                 while read -r stdin || [ -n "$stdin" ]
                                 do
                                     set -- "$@" "$(dotslashify "$stdin")"

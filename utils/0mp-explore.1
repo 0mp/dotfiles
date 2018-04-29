@@ -25,7 +25,7 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd April 27, 2018
+.Dd April 29, 2018
 .Dt 0MP-EXPLORE 1
 .Os
 .Sh NAME
@@ -33,11 +33,10 @@
 .Nd "explore text files as if you had an interactive grep"
 .Sh SYNOPSIS
 .Nm
-.Op Fl 0Acn
-.Op -
-.Op Fl r Ar regex
-.Op Fl w Ar regex
-.Op Oo -- Oc Ar scope ...
+.Op Fl Acn
+.Op Fl 0 | Fl i
+.Op Fl r Ar regex | Fl w Ar regex
+.Op Oo Cm -- Oc Ar scope ...
 .Nm
 .Op Fl h | Fl -version
 .Sh DESCRIPTION
@@ -60,6 +59,8 @@ Replace the default character separating file names on the left side bar.
 .It Fl c , Fl -colors
 Add syntax coloring with pygmentize which has to be installed.
 This option might slow down the program significantly.
+.It Fl i , Fl -stdin
+Read scope files and directories from the standard input.
 .It Fl n , Fl -noleftbar
 Don't print line numbers and file names on the left side bar.
 .It Fl r Ar regex , Fl -regex Ar regex
@@ -80,8 +81,6 @@ For example,
 and
 .Dq Li -w vector
 are effectively the same.
-.It Fl - , Fl -stdin
-Read scope files and directories from the standard input.
 .It Fl 0 , -stdin0
 Just like
 .Fl -stdin
@@ -89,7 +88,7 @@ but use ASCII NUL as a delimiter to work nicely with with
 .Fl -print0
 of
 .Xr find 1 .
-.It --
+.It Cm --
 End of options.
 Treat the rest of the command line arguments as files and directories for
 program's scope.
@@ -113,18 +112,22 @@ Extra arguments processed before command line arguments.
 .Sh EXAMPLES
 View all C source and header files in the current directory
 .Pp
-.Dl "0mp-explore *[ch]"
+.Bd -literal -offset indent
+0mp-explore *[ch]
+.Ed
 .Pp
 View all C source files in
 .Pa /usr/src :
 .Pp
-.Dl "0mp-explore -r '*.c' /usr/src"
+.Bd -literal -offset indent
+0mp-explore -r '*.c' /usr/src
+.Ed
 .Pp
 View all Makefiles using Go in
 .Pa /usr/ports :
 .Bd -literal -offset indent
 find /usr/ports/* -mindepth 2 -maxdepth 2 -name Makefile \\
-    -exec grep -l ' go ' {} + | 0mp-explore -
+    -exec grep -l ' go ' {} + | 0mp-explore -i
 .Ed
 .Pp
 Turn on
