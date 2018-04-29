@@ -46,6 +46,12 @@ case $PS1 in
     *) PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] ' ;;
 esac
 
+if [[ $OSTYPE =~ freebsd.* ]] && \
+    [[ -f /usr/local/share/bash_completion/bash_completion.sh ]]
+then
+    source /usr/local/share/bash-completion/bash_completion.sh
+fi
+
 export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less --ignore-case'
