@@ -78,6 +78,11 @@ lib_custom_install() {
     case "$CUSTOMOPTS" in
         *--fonts*) pkg install -y x11-fonts/noto
     esac
+
+    # Recompile the following kernel modules during build-kernel and install
+    # them during install-kernel.
+    sysrc -f /etc/src.conf 'PORT_MODULES=graphics/drm-next-kmod emulators/virtualbox-ose-kmod'
+
 }
 lib_back_up
 trap lib_roll_back EXIT

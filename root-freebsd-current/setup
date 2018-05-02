@@ -23,10 +23,6 @@ lib_custom_install() {
     # Use ccache(1).
     sysrc -f /etc/src.conf WITH_CCACHE_BUILD=YES
 
-    # Recompile the following kernel modules during build-kernel and install
-    # them during install-kernel.
-    sysrc -f /etc/src.conf 'PORT_MODULES=graphics/drm-next-kmod emulators/virtualbox-ose-kmod'
-
     sysrc -f /etc/src-env.conf WITH_META_MODE=YES
 }
 lib_back_up
