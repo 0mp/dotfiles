@@ -27,6 +27,10 @@ ddg() {
     command w3m -X "ddg.gg${search%%/?q=}"
 }
 
+man() {
+    MANWIDTH="$((COLUMNS < 80 ? (COLUMNS - 2) : 78))" command man "$@"
+}
+
 tmux_clear_detached_sessions() {
     tmux list-sessions | grep -E -v '\(attached\)$' | while IFS='\n' read line; do
         tmux kill-session -t "${line%%:*}"
@@ -57,4 +61,3 @@ export VISUAL='vim'
 export PAGER='less --ignore-case'
 export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
 # Make manpages fit the screen even if it's very small.
-export MANWIDTH="$((COLUMNS < 80 ? (COLUMNS - 2) : 78))"
