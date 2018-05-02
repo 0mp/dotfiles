@@ -43,7 +43,7 @@ getthatdoc() {
 if [ $# -eq 0 ]
 then
     echo 'usage: fr source [-u] [--] [pattern]'
-    echo 'version: 1.3.0'
+    echo 'version: 1.4.0'
     exit 0
 fi
 
@@ -75,7 +75,7 @@ case "$1" in
         name='porters-handbook'
         ;;
     M*)
-        0mp-explore -n -- /usr/ports/Mk /usr/ports/Keywords
+        0mp-explore -- /usr/ports/Mk /usr/ports/Keywords
         exit 0
         ;;
     *)
