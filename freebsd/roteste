@@ -2,7 +2,7 @@
 #
 # Scripting helping to automate the FreeBSD CURRENT branch maintenance.
 
-version=0.2.2
+version=0.3.0
 
 [ 0 -ne "$(id -u)" ] && echo 'error: roteste has to be run as root' && exit 1
 
@@ -13,23 +13,19 @@ set -e
 # Get the latest source tree.
 case "$*" in
     *--update*)
-        if ! pkg info -q subversion
-        then
-            pkg install -y subversion
-        fi
         if ! [ -d /usr/src/.svn ]
         then
             rm -rf -- /usr/src/*
-            svn co https://svn.freebsd.org/base/head /usr/src
+            svnlite co https://svn.freebsd.org/base/head /usr/src
         else
-            svn update /usr/src
+            svnlite update /usr/src
         fi
         if ! [ -d /usr/ports/.svn ]
         then
             rm -rf -- /usr/ports/*
-            svn co https://svn.freebsd.org/ports/head /usr/ports
+            svnlite co https://svn.freebsd.org/ports/head /usr/ports
         else
-            svn update /usr/ports
+            svnlite update /usr/ports
         fi
         ;;
 esac
