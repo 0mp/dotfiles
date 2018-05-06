@@ -106,17 +106,6 @@ The modules are as follows:
 
 > Install Xpdf configuration files.
 
-**root-freebsd** **--user** *username*
-
-> Configure
-> FreeBSD
-> for general use.
-> **--user**
-> is required.
-> Make sure that
-> *username*
-> is set to your username.
-
 **root-freebsd-current**
 
 > Configure a
