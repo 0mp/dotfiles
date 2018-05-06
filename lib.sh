@@ -103,7 +103,7 @@ lib_require_root() {
 #              directory.
 #              Here, the PREFIX directory is created if it's missing.
 lib_create_prefix_if_missing() {
-    if [ ! -d "${PREFIX%/*}" ]
+    if [ -n "$PREFIX" ] && [ ! -d "${PREFIX%/*}" ]
     then
         mkdir -p -- "${PREFIX%/*}"
     fi
