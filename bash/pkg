@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.1.0
+# Version: 0.1.1
 # Upstream: https://github.com/0mp/dotfiles
 
 _pkg()
@@ -159,7 +159,7 @@ _pkg()
                             if ! [[ $cur =~ / ]]; then
                                 # Firstly, try to complete by name. For example
                                 # this completes "py36-" to "py36-pgsanity".
-                                COMPREPLY=($(pkg rquery --case-insensitive --glob %n -- "$cur*"))
+                                COMPREPLY=($(pkg rquery --case-insensitive --glob --no-repo-update %n -- "$cur*"))
                                 # Add categories.
                                 COMPREPLY+=($(compgen -S '/' -W '\
                                 accessibility arabic archivers astro audio base \
@@ -180,13 +180,13 @@ _pkg()
                             # This autocompletion can complete "pgsa" to
                             # "databases/pgsanity".
                             if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
-                                COMPREPLY=($(pkg rquery --case-insensitive --regex %o -- "$cur"))
+                                COMPREPLY=($(pkg rquery --case-insensitive --no-repo-update --regex %o -- "$cur"))
                             elif [[ ${#COMPREPLY[@]} -eq 1 ]] && [[ $COMPREPLY =~ / ]]; then
                                 cur="${COMPREPLY[0]}"
                                 # Add "^" to "$cur" so that the regex matches
                                 # only origins starting with the specified
                                 # category.
-                                COMPREPLY=($(pkg rquery --case-insensitive --regex %o -- "^$cur"))
+                                COMPREPLY=($(pkg rquery --case-insensitive --no-repo-update --regex %o -- "^$cur"))
                             fi
                         else
                             COMPREPLY=($(compgen -W '\
