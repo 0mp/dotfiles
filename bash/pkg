@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.2.0
+# Version: 0.2.1
 # Upstream: https://github.com/0mp/dotfiles
 
 _pkg()
@@ -48,14 +48,17 @@ _pkg()
         ukrainian vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts \
         x11-servers x11-themes x11-toolkits x11-wm)
 
+    local option_with_arg_list=(-C --config -c --chroot -r --rootdir -o --options -j --jail)
+
     # Is the command already selected?
     local pipe_separated_command_list="$(tr ' ' '|' <<< "${command_list[@]}")"
+    local pipe_separated_option_with_arg_list="$(tr ' ' '|' <<< "${option_with_arg_list[@]}")"
     local selected_command=
     local i
     for (( i=0 ; i < "${#words[@]}" ; i++ )); do
         word="${words[$i]}"
         if [[ $word =~ $pipe_separated_command_list ]]; then
-            if [[ $i > 0 ]] && [[ ${words[$(( i - 1 ))]} =~ -e ]]; then
+            if [[ $i > 0 ]] && [[ ${words[$(( i - 1 ))]} =~ $pipe_separated_option_with_arg_list ]]; then
                 continue
             else
                 selected_command="$word"
