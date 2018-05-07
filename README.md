@@ -12,7 +12,7 @@
 **dotfiles**
 is a framework to manage configuration scripts, dotfiles and utilities.
 
-Administrative rights are required in for the
+Administrative rights are required for the
 **--root-\*&zwnj;**
 options and the
 **root-\*&zwnj;**
