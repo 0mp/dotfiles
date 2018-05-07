@@ -275,7 +275,9 @@ _pkg()
                 # TODO
                 ;;
 
-            which) ;;
+            which)
+                # TODO
+                ;;
         esac
     fi
 } &&
