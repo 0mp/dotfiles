@@ -1,0 +1,282 @@
+# vim: filetype=sh
+#
+# SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+#
+# Copyright (c) 2018 Matusz Piotrowski <0mp@FreeBSD.org>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+#
+# ---
+# Version: 0.1.0
+# Upstream: https://github.com/0mp/dotfiles
+
+_pkg()
+{
+    local cur prev words cword
+    _init_completion || return
+
+    local command_list=(help add annotate alias audit autoremove backup \
+        bootstrap check clean convert create delete fetch info install lock \
+        plugins query register repo rquery search set shell shlib stats \
+        unlock update updating upgrade version which)
+
+    # Is the command already selected?
+    local pipe_separated_command_list="$(tr ' ' '|' <<< "${command_list[@]}")"
+    local selected_command=
+    local i
+    for (( i=0 ; i < "${#words[@]}" ; i++ )); do
+        word="${words[$i]}"
+        if [[ $word =~ $pipe_separated_command_list ]]; then
+            if [[ $i > 0 ]] && [[ ${words[$(( i - 1 ))]} =~ -e ]]; then
+                continue
+            else
+                selected_command="$word"
+                break
+            fi
+        fi
+    done
+
+    if [[ -z $selected_command ]]; then
+        case "$prev" in
+            -C|--config) ;&
+            -c|--chroot) ;&
+            -r|--rootdir) ;&
+            -o|--options)
+                compopt -o default
+                ;;
+            -j|--jail)
+                COMPREPLY=($(compgen -W "$(jls | awk 'NR>1{print $1, $3}')" -- "$cur"))
+                ;;
+            *)
+                if [[ $cur == -* ]]; then
+                    COMPREPLY=($(compgen -W '\
+                        -v --version \
+                        -d --debug \
+                        -l --list \
+                        -o --options \
+                        -N \
+                        -j --jail \
+                        -c --chroot \
+                        -r --rootdir \
+                        -C --config \
+                        -4 \
+                        -6 \
+                        ' -- "$cur"))
+                else
+                    COMPREPLY=($(compgen -W "${command_list[*]}" -- "$cur"))
+                fi
+                ;;
+        esac
+    else
+        case "$selected_command" in
+            # help) ;;
+
+            add)
+                # TODO
+                ;;
+
+            annotate)
+                # TODO
+                ;;
+
+            alias)
+                # TODO
+                ;;
+
+            audit)
+                # TODO
+                ;;
+
+            autoremove)
+                # TODO
+                ;;
+
+            backup)
+                # TODO
+                ;;
+
+            bootstrap)
+                # TODO
+                ;;
+
+            check)
+                # TODO
+                ;;
+
+            clean)
+                # TODO
+                ;;
+
+            convert)
+                # TODO
+                ;;
+
+            create)
+                # TODO
+                ;;
+
+            delete)
+                # TODO
+                ;;
+
+            fetch)
+                # TODO
+                ;;
+
+            info)
+                # TODO
+                ;;
+
+            install)
+                case "$prev" in
+                    -r|--repository)
+                        compopt -o default
+                        ;;
+                    *)
+                        if [[ $cur != -* ]]; then
+                            # Skip package name matching if we know the
+                            # category as it means that we should look at the
+                            # origin instead.
+                            if ! [[ $cur =~ / ]]; then
+                                # Firstly, try to complete by name. For example
+                                # this completes "py36-" to "py36-pgsanity".
+                                COMPREPLY=($(pkg rquery --case-insensitive --glob %n -- "$cur*"))
+                                # Add categories.
+                                COMPREPLY+=($(compgen -S '/' -W '\
+                                accessibility arabic archivers astro audio base \
+                                benchmarks biology cad chinese comms converters \
+                                databases deskutils devel distfiles dns editors \
+                                emulators finance french ftp games german graphics \
+                                hebrew hungarian irc japanese java korean lang \
+                                mail math misc multimedia net net-im net-mgmt \
+                                net-p2p news palm polish ports-mgmt portuguese \
+                                print russian science security shells sysutils \
+                                textproc ukrainian vietnamese www x11 x11-clocks \
+                                x11-drivers x11-fm x11-fonts x11-servers \
+                                x11-themes x11-toolkits x11-wm \
+                                ' -- "$cur"))
+                            fi
+                            # If completing by name yield no results or a
+                            # category is known then try to complete by origin.
+                            # This autocompletion can complete "pgsa" to
+                            # "databases/pgsanity".
+                            if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
+                                COMPREPLY=($(pkg rquery --case-insensitive --regex %o -- "$cur"))
+                            elif [[ ${#COMPREPLY[@]} -eq 1 ]] && [[ $COMPREPLY =~ / ]]; then
+                                cur="${COMPREPLY[0]}"
+                                # Add "^" to "$cur" so that the regex matches
+                                # only origins starting with the specified
+                                # category.
+                                COMPREPLY=($(pkg rquery --case-insensitive --regex %o -- "^$cur"))
+                            fi
+                        else
+                            COMPREPLY=($(compgen -W '\
+                                -A --automatic \
+                                -C --case-sensitive \
+                                -f --force \
+                                -g --globe \
+                                -I --no-install-scripts \
+                                -i --case-insensitive \
+                                -M --ignore-missing \
+                                -n --dry-run \
+                                -F --fetch-only \
+                                -q --quiet \
+                                -R --recursive \
+                                -r --repository \
+                                -U --no-repo-update \
+                                -x --regex \
+                                -y --yes \
+                                ' -- "$cur"))
+                        fi
+                        ;;
+                esac
+                ;;
+
+            lock)
+                # TODO
+                ;;
+
+            plugins)
+                # TODO
+                ;;
+
+            query)
+                # TODO
+                ;;
+
+            register)
+                # TODO
+                ;;
+
+            repo)
+                # TODO
+                ;;
+
+            rquery)
+                # TODO
+                ;;
+
+            search)
+                # TODO
+                ;;
+
+            set)
+                # TODO
+                ;;
+
+            shell)
+                # TODO
+                ;;
+
+            shlib)
+                # TODO
+                ;;
+
+            stats)
+                # TODO
+                ;;
+
+            unlock)
+                # TODO
+                ;;
+
+            update)
+                # TODO
+                ;;
+
+            updating)
+                # TODO
+                ;;
+
+            upgrade)
+                # TODO
+                ;;
+
+            version)
+                # TODO
+                ;;
+
+            which) ;;
+        esac
+    fi
+} &&
+complete -F _pkg pkg

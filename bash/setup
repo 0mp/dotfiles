@@ -6,11 +6,20 @@ set -eu
 
 lib_info 'setup'
 
+# Install Bash completion files.
+FILES='pkg'
+PREFIX="$HOME/.bash_completion.d/"
+lib_create_prefix_if_missing
+lib_custom_install() { }
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
 # Standard module setup.
 FILES='bash_0mp bash_completion inputrc bash_profile'
-lib_custom_install() {
-    mkdir -p "$HOME/.bash_completion.d"
-}
+PREFIX=
+lib_custom_install() { }
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
@@ -18,6 +27,7 @@ trap - EXIT
 
 # Make bashrc source bash_0mp.
 FILES=''
+PREFIX=
 CUSTOMFILES='bashrc'
 lib_custom_install() {
     sourcecmd='[[ -r ~/.bash_0mp ]] && source ~/.bash_0mp'
