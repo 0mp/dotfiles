@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.2.1
+# Version: 0.3.0
 # Upstream: https://github.com/0mp/dotfiles
 
 _pkg()
@@ -155,7 +155,50 @@ _pkg()
                 ;;
 
             info)
-                # TODO
+                # TODO: Some options are mutually exclusive. It might be nice
+                # to make this completion logic aware of this fact. At the
+                # moment it just completes all the options.
+                case "$prev" in
+                    --raw-format)
+                        COMPREPLY=($(compgen -W 'json json-compact yaml' -- "$cur"))
+                        ;;
+                    -F|--file)
+                        compopt -o default
+                        ;;
+                    *)
+                        if [[ $cur == -* ]]; then
+                            COMPREPLY=($(compgen -W '\
+                                -a --all \
+                                -A --annotations \
+                                -C --case-sensitive \
+                                -f --full \
+                                -R --raw \
+                                --raw-format \
+                                -e --exists \
+                                -D --pkg-message \
+                                -g --glob \
+                                -i --case-insensitive \
+                                -I --comment \
+                                -x --regex \
+                                -d --dependencies \
+                                -r --required-by \
+                                -k --locked \
+                                -l --list-files \
+                                -b --provided-shlibs \
+                                -B --required-shlibs \
+                                -s --size \
+                                -q --quiet \
+                                -O --by-origin \
+                                -E --show-name-only \
+                                -o --origin \
+                                -p --prefix \
+                                -F pkg-file --file pkg-file \
+                                ' -- "$cur"))
+                        else
+                            COMPREPLY=($(pkg query --case-insensitive --regex %n -- "${cur:-.}"))
+                        fi
+                        ;;
+                esac
                 ;;
 
             install)
