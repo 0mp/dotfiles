@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.3.0
+# Version: 0.3.1
 # Upstream: https://github.com/0mp/dotfiles
 
 _pkg()
@@ -192,7 +192,7 @@ _pkg()
                                 -E --show-name-only \
                                 -o --origin \
                                 -p --prefix \
-                                -F pkg-file --file pkg-file \
+                                -F --file \
                                 ' -- "$cur"))
                         else
                             COMPREPLY=($(pkg query --case-insensitive --regex %n -- "${cur:-.}"))
