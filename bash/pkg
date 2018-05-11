@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.4.0
+# Version: 0.5.0
 # Upstream: https://github.com/0mp/dotfiles
 
 _pkg()
@@ -370,7 +370,17 @@ _pkg()
                 ;;
 
             which)
-                # TODO
+                if [[ $cur == -* ]]; then
+                    COMPREPLY=($(compgen -W '\
+                        -g --glob \
+                        -m --show-match \
+                        -o --origin \
+                        -p --path-search \
+                        -q --quiet \
+                        ' -- "$cur"))
+                else
+                    compopt -o default
+                fi
                 ;;
         esac
     fi
