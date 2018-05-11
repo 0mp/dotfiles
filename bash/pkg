@@ -283,6 +283,52 @@ _pkg()
 
             search)
                 # TODO
+                case "$prev" in
+                    -L|--label) ;&
+                    -S|--search)
+                        # See "Search and Label Options" in pkg-search(8).
+                        COMPREPLY=($(compgen -W 'comment description name origin pkg-name' -- "$cur"))
+                        ;;
+                    -Q|--query-modifier)
+                        # See "Output Modifier Options" in pkg-search(8).
+                        COMPREPLY=($(compgen -W 'annotations arch categories \
+                        comment description full licenses maintainer name \
+                        options pkg-size prefix repository required-by \
+                        shared-libs-required shared-libs-provided size url \
+                        version www' -- "$cur"))
+                        ;;
+                    --raw-format)
+                        COMPREPLY=($(compgen -W 'json json-compact yaml' -- "$cur"))
+                        ;;
+                    -r|--repository)
+                        # TODO: Could it be completed better?
+                        compopt -o default
+                        ;;
+                    *)
+                        COMPREPLY=($(compgen -W '\
+                            -C --case-sensitive \
+                            -c --comment \
+                            -D --description \
+                            -d --depends-on \
+                            -e --exact \
+                            -f --full   \
+                            -g --glob \
+                            -i --case-insensitive \
+                            -L --label \
+                            -o --origins \
+                            -p --prefix \
+                            -q --quiet \
+                            -Q --query-modifier \
+                            -r --repository \
+                            -R --raw \
+                            -S --search \
+                            --raw-format \
+                            -s --size \
+                            -U --no-repo-update \
+                            -x --regex \
+                            ' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             set)
