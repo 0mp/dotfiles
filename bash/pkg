@@ -26,8 +26,14 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.5.0
+# Version: 0.6.0
 # Upstream: https://github.com/0mp/dotfiles
+
+_pkg_complete_installed_package()
+{
+
+    COMPREPLY=($(pkg query --case-insensitive --regex %n -- "${cur:-.}"))
+}
 
 _pkg()
 {
@@ -197,7 +203,7 @@ _pkg()
                                 -F --file \
                                 ' -- "$cur"))
                         else
-                            COMPREPLY=($(pkg query --case-insensitive --regex %n -- "${cur:-.}"))
+                            _pkg_complete_installed_package
                         fi
                         ;;
                 esac
@@ -362,7 +368,30 @@ _pkg()
                 ;;
 
             upgrade)
-                # TODO
+                case "$prev" in
+                    -r|--repository)
+                        # TODO: Could it be completed better?
+                        compopt -o default
+                        ;;
+                    *)
+                        if [[ $cur == -* ]]; then
+                            COMPREPLY=($(compgen -W '\
+                                -C --case-sensitive \
+                                -F --fetch-only \
+                                -f --force \
+                                -g --glob \
+                                -i --case-insensitive \
+                                -n --dry-run \
+                                -q --quiet \
+                                -r --repository \
+                                -U --no-repo-update \
+                                -y --yes    \
+                                ' -- "$cur"))
+                        else
+                            _pkg_complete_installed_package
+                        fi
+                        ;;
+                esac
                 ;;
 
             version)
