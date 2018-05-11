@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.3.1
+# Version: 0.4.0
 # Upstream: https://github.com/0mp/dotfiles
 
 _pkg()
@@ -47,6 +47,8 @@ _pkg()
         portuguese print russian science security shells sysutils textproc \
         ukrainian vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts \
         x11-servers x11-themes x11-toolkits x11-wm)
+
+    local raw_output_formats=(json json-compact yaml)
 
     local option_with_arg_list=(-C --config -c --chroot -r --rootdir -o --options -j --jail)
 
@@ -160,7 +162,7 @@ _pkg()
                 # moment it just completes all the options.
                 case "$prev" in
                     --raw-format)
-                        COMPREPLY=($(compgen -W 'json json-compact yaml' -- "$cur"))
+                        COMPREPLY=($(compgen -W "${raw_output_formats[*]}" -- "$cur"))
                         ;;
                     -F|--file)
                         compopt -o default
@@ -298,7 +300,7 @@ _pkg()
                         version www' -- "$cur"))
                         ;;
                     --raw-format)
-                        COMPREPLY=($(compgen -W 'json json-compact yaml' -- "$cur"))
+                        COMPREPLY=($(compgen -W "${raw_output_formats[*]}" -- "$cur"))
                         ;;
                     -r|--repository)
                         # TODO: Could it be completed better?
