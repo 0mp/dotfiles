@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.7.0
+# Version: 0.8.0
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -149,7 +149,18 @@ _pkg()
             # help) ;;
 
             add)
-                # TODO
+                COMPREPLY=($(compgen -W '\
+                    -A --automatic \
+                    -f --force \
+                    -I --no-scripts \
+                    -M --accept-missing \
+                    -q --quiet \
+                    ' -- "$cur"))
+                COMPREPLY+=($(compgen -f -- "$cur"))
+                # "-" is for stdin.
+                COMPREPLY+=($(compgen -W '-' -- "$cur"))
+                # XXX: Do not print space after "protocol://".
+                COMPREPLY+=($(compgen -S '://' -W 'ftp http https' -- "$cur"))
                 ;;
 
             annotate)
