@@ -29,6 +29,42 @@
 # Version: 0.6.0
 # Upstream: https://github.com/0mp/dotfiles
 
+_pkg_complete_any_package()
+{
+
+    # Complete empty "$cur" with categories instead of all the packages.
+    if [[ -z $cur ]]; then
+        COMPREPLY=($(compgen -S '/' -W "${category_list[*]}" -- "$cur"))
+        return 0
+    fi
+
+    # Complete by name.
+    #
+    # Skip package name matching if we know the category as it means that we
+    # should look at the origin instead.
+    if ! [[ $cur =~ / ]]; then
+        # Firstly, try to complete by name. For example this completes "py36-"
+        # to "py36-pgsanity".
+        COMPREPLY=($(pkg rquery --case-insensitive --glob --no-repo-update %n -- "$cur*"))
+        # Add categories.
+        COMPREPLY+=($(compgen -S '/' -W "${category_list[*]}" -- "$cur"))
+    fi
+
+    # Complete by origin.
+    #
+    # If completing by name yield no results or a category is known then try to
+    # complete by origin.  This autocompletion can complete "pgsa" to
+    # "databases/pgsanity".
+    if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
+        COMPREPLY=($(pkg rquery --case-insensitive --no-repo-update --regex %o -- "$cur"))
+    elif [[ ${#COMPREPLY[@]} -eq 1 ]] && [[ $COMPREPLY =~ / ]]; then
+        cur="${COMPREPLY[0]}"
+        # Add "^" to "$cur" so that the regex matches only origins starting
+        # with the specified category.
+        COMPREPLY=($(pkg rquery --case-insensitive --no-repo-update --regex %o -- "^$cur"))
+    fi
+}
+
 _pkg_complete_installed_package()
 {
 
@@ -233,33 +269,8 @@ _pkg()
                                 -x --regex \
                                 -y --yes \
                                 ' -- "$cur"))
-                        elif [[ -z $cur ]]; then
-                            # Complete empty "$cur" with categories instead of all the packages.
-                            COMPREPLY=($(compgen -S '/' -W "${category_list[*]}" -- "$cur"))
                         else
-                            # Skip package name matching if we know the
-                            # category as it means that we should look at the
-                            # origin instead.
-                            if ! [[ $cur =~ / ]]; then
-                                # Firstly, try to complete by name. For example
-                                # this completes "py36-" to "py36-pgsanity".
-                                COMPREPLY=($(pkg rquery --case-insensitive --glob --no-repo-update %n -- "$cur*"))
-                                # Add categories.
-                                COMPREPLY+=($(compgen -S '/' -W "${category_list[*]}" -- "$cur"))
-                            fi
-                            # If completing by name yield no results or a
-                            # category is known then try to complete by origin.
-                            # This autocompletion can complete "pgsa" to
-                            # "databases/pgsanity".
-                            if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
-                                COMPREPLY=($(pkg rquery --case-insensitive --no-repo-update --regex %o -- "$cur"))
-                            elif [[ ${#COMPREPLY[@]} -eq 1 ]] && [[ $COMPREPLY =~ / ]]; then
-                                cur="${COMPREPLY[0]}"
-                                # Add "^" to "$cur" so that the regex matches
-                                # only origins starting with the specified
-                                # category.
-                                COMPREPLY=($(pkg rquery --case-insensitive --no-repo-update --regex %o -- "^$cur"))
-                            fi
+                            _pkg_complete_any_package
                         fi
                         ;;
                 esac
