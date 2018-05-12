@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.8.1
+# Version: 0.8.2
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -406,11 +406,10 @@ _pkg()
                                 # Day.
                                 case "${cur:4:2}" in
                                     02)
+                                        COMPREPLY=($(compgen -W "$(echo ${cur:0:6}{01..28})" -- "$cur"))
                                         # Detect a leap year.
-                                        if [[ -n $(awk -v RS=' ' '/^29$/{print $1}' <(cal 2 "${cur:0:4}")) ]]; then
-                                            COMPREPLY=($(compgen -W "$(echo ${cur:0:6}{01..29})" -- "$cur"))
-                                        else
-                                            COMPREPLY=($(compgen -W "$(echo ${cur:0:6}{01..28})" -- "$cur"))
+                                        if [[ ${cur:2:2} =~ [13579][26]|[02468][048] ]]; then
+                                            COMPREPLY+=($(compgen -W "${cur:0:6}29" -- "$cur"))
                                         fi
                                         ;;
                                     0[13578]|1[02])
