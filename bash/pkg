@@ -28,6 +28,8 @@
 # ---
 # Version: 0.7.0
 # Upstream: https://github.com/0mp/dotfiles
+# ---
+# TODO: Respect "--".
 
 _pkg_complete_any_package()
 {
