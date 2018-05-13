@@ -86,10 +86,6 @@ The modules are as follows:
 
 > Install tmux configuration files.
 
-**ubuntu**
-
-> Install Ubuntu-specific configuration files.
-
 **utils**
 
 > Install general purpose utilities.
