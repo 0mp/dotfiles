@@ -10,7 +10,7 @@ lib_info 'setup'
 FILES='pkg'
 PREFIX="$HOME/.bash_completion.d/"
 lib_create_prefix_if_missing
-lib_custom_install() { }
+lib_custom_install() { :; }
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
@@ -19,7 +19,7 @@ trap - EXIT
 # Standard module setup.
 FILES='bash_0mp bash_completion inputrc bash_profile'
 PREFIX=
-lib_custom_install() { }
+lib_custom_install() { :; }
 lib_back_up
 trap lib_roll_back EXIT
 lib_install

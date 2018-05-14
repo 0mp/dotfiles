@@ -39,7 +39,7 @@ case "$CUSTOMOPTS" in
 
         FILES='xinitrc'
         PREFIX=
-        lib_custom_install() { }
+        lib_custom_install() { :; }
         lib_back_up
         trap lib_roll_back EXIT
         lib_install
@@ -47,7 +47,7 @@ case "$CUSTOMOPTS" in
 
         FILES='current-task'
         PREFIX="$HOME/.local/bin/"
-        lib_custom_install() { }
+        lib_custom_install() { :; }
         lib_create_prefix_if_missing
         lib_back_up
         trap lib_roll_back EXIT

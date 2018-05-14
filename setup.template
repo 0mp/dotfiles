@@ -12,7 +12,7 @@ FILES=
 PREFIX=
 CUSTOMFILES=
 CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
-lib_custom_install() { }
+lib_custom_install() { :; }
 lib_create_prefix_if_missing
 lib_back_up
 trap lib_roll_back EXIT
