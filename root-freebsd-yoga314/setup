@@ -13,7 +13,7 @@ lib_require_root
 FILES=
 PREFIX=
 CUSTOMFILES=
-CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 lib_custom_install() {
     case "$CUSTOMOPTS" in ?*)
         pkg update

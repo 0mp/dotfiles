@@ -11,7 +11,7 @@ lib_info 'setup'
 FILES=
 PREFIX=
 CUSTOMFILES=
-CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 lib_custom_install() { :; }
 lib_create_prefix_if_missing
 lib_back_up

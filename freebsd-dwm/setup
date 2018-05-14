@@ -6,7 +6,7 @@ set -eu
 
 lib_info 'setup'
 
-CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 case "$CUSTOMOPTS" in
     *--root-install*)
         lib_require_root

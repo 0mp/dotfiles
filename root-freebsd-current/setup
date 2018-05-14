@@ -11,7 +11,7 @@ lib_require_root
 FILES=
 PREFIX=
 CUSTOMFILES=
-CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 lib_custom_install() {
     # Turn on additional checks for ports.
     sysrc -f /etc/make.conf DEVELOPER=YES
