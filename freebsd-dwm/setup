@@ -10,10 +10,9 @@ CUSTOMOPTS="$(opts="${@%--}"; printf -- "${opts%% -- *}")"
 case "$CUSTOMOPTS" in
     *--root-install*)
         lib_require_root
-        if pkg lock --show-locked 2>/dev/null | grep dwm 1>/dev/null
-        then
-            pkg unlock -y dwm
-        fi
+        case $(pkg info --locked dwm 2>/dev/null) in
+            *yes) pkg unlock -y dwm ;;
+        esac
         cp -f files/patch-fakefullscreen-0mp.diff /usr/ports/x11-wm/dwm/files/
         export DWM_CONF="$PWD/config.h"
         cd /usr/ports/x11-wm/dwm
