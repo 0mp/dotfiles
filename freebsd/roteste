@@ -2,9 +2,20 @@
 #
 # Scripting helping to automate the FreeBSD CURRENT branch maintenance.
 
-version=0.3.0
+version=0.4.0
 
-[ 0 -ne "$(id -u)" ] && echo 'error: roteste has to be run as root' && exit 1
+if [ $# -eq 0 ]
+then
+    cat <<__end_of_usage
+Usage: roteste [--update]
+               [--build-kernel | --build-world | --build | --complete]
+               [--install-kernel]
+Version: $version
+__end_of_usage
+elif [ 0 -ne "$(id -u)" ]
+then
+    echo 'error: roteste has to be run as root' && exit 1
+fi
 
 ncpu="$(sysctl -n hw.ncpu)"
 
