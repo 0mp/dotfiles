@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.8.3
+# Version: 0.9.0
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -183,7 +183,11 @@ _pkg()
                 ;;
 
             autoremove)
-                # TODO
+                COMPREPLY=($(compgen -W '
+                    -n --dry-run
+                    -q --quiet
+                    -y --yes
+                    ' -- "$cur"))
                 ;;
 
             backup)
