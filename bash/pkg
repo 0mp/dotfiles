@@ -148,18 +148,22 @@ _pkg()
     else
         case "$selected_command" in
             add)
-                COMPREPLY=($(compgen -W '
-                    -A --automatic
-                    -f --force
-                    -I --no-scripts
-                    -M --accept-missing
-                    -q --quiet
-                    ' -- "$cur"))
-                COMPREPLY+=($(compgen -f -- "$cur"))
-                # "-" is for stdin.
-                COMPREPLY+=($(compgen -W '-' -- "$cur"))
-                # XXX: Do not print space after "protocol://".
-                COMPREPLY+=($(compgen -S '://' -W 'ftp http https' -- "$cur"))
+                if [[ $cur =~ ^- ]]; then
+                    COMPREPLY=($(compgen -W '
+                        -A --automatic
+                        -f --force
+                        -I --no-scripts
+                        -M --accept-missing
+                        -q --quiet
+                        ' -- "$cur"))
+                else
+                    COMPREPLY=($(compgen -f -- "$cur"))
+                    # "-" is for stdin.
+                    COMPREPLY+=($(compgen -W '-' -- "$cur"))
+                    # XXX: Do not print space after "protocol://".
+                    # XXX: Do we even want to autocomplete protocols?
+                    COMPREPLY+=($(compgen -S '://' -W 'ftp http https' -- "$cur"))
+                fi
                 ;;
 
             annotate)
