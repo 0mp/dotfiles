@@ -15,6 +15,9 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-repeat'
 Plugin 'dahu/vim-fanfingtastic'
 Plugin 'CycleColor' " Cycles through available colorschemes.
+"Plugin 'neovimhaskell/haskell-vim'
+Plugin 'vim-syntastic/syntastic'
+"Plugin 'alx741/vim-hindent'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -26,6 +29,8 @@ filetype plugin on    " Enable filetype-specific plugins
 " }}}
 " Section: Plugins configuration {{{
 let NERDSpaceDelims=1
+" Use "--" instead of "{--}" for Haskell.
+let g:NERDAltDelims_haskell = 1
 
 " Netrw
 let g:netrw_banner=0 " Disable a banner.

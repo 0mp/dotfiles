@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.8.2
+# Version: 0.8.3
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -78,18 +78,18 @@ _pkg()
     local cur prev words cword
     _init_completion || return
 
-    local command_list=(help add annotate alias audit autoremove backup \
-        bootstrap check clean convert create delete fetch info install lock \
-        plugins query register repo rquery search set shell shlib stats \
+    local command_list=(help add annotate alias audit autoremove backup
+        bootstrap check clean convert create delete fetch info install lock
+        plugins query register repo rquery search set shell shlib stats
         unlock update updating upgrade version which)
 
-    local category_list=( accessibility arabic archivers astro audio base \
-        benchmarks biology cad chinese comms converters databases deskutils \
-        devel distfiles dns editors emulators finance french ftp games german \
-        graphics hebrew hungarian irc japanese java korean lang mail math misc \
-        multimedia net net-im net-mgmt net-p2p news palm polish ports-mgmt \
-        portuguese print russian science security shells sysutils textproc \
-        ukrainian vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts \
+    local category_list=( accessibility arabic archivers astro audio base
+        benchmarks biology cad chinese comms converters databases deskutils
+        devel distfiles dns editors emulators finance french ftp games german
+        graphics hebrew hungarian irc japanese java korean lang mail math misc
+        multimedia net net-im net-mgmt net-p2p news palm polish ports-mgmt
+        portuguese print russian science security shells sysutils textproc
+        ukrainian vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts
         x11-servers x11-themes x11-toolkits x11-wm)
 
     local raw_output_formats=(json json-compact yaml)
@@ -104,7 +104,7 @@ _pkg()
     for (( i=0 ; i < "${#words[@]}" ; i++ )); do
         word="${words[$i]}"
         if [[ $word =~ $pipe_separated_command_list ]]; then
-            if [[ $i > 0 ]] && [[ ${words[$(( i - 1 ))]} =~ $pipe_separated_option_with_arg_list ]]; then
+            if [[ $i -gt 0 ]] && [[ ${words[$(( i - 1 ))]} =~ $pipe_separated_option_with_arg_list ]]; then
                 continue
             else
                 selected_command="$word"
@@ -115,10 +115,10 @@ _pkg()
 
     if [[ -z $selected_command ]]; then
         case "$prev" in
-            -C|--config) ;&
             -c|--chroot) ;&
-            -r|--rootdir) ;&
-            -o|--options)
+            -C|--config) ;&
+            -o|--options) ;&
+            -r|--rootdir)
                 compopt -o default
                 ;;
             -j|--jail)
@@ -127,18 +127,18 @@ _pkg()
                 ;;
             *)
                 if [[ $cur == -* ]]; then
-                    COMPREPLY=($(compgen -W '\
-                        -v --version \
-                        -d --debug \
-                        -l --list \
-                        -o --options \
-                        -N \
-                        -j --jail \
-                        -c --chroot \
-                        -r --rootdir \
-                        -C --config \
-                        -4 \
-                        -6 \
+                    COMPREPLY=($(compgen -W '
+                        -4
+                        -6
+                        -c --chroot
+                        -C --config
+                        -d --debug
+                        -j --jail
+                        -l --list
+                        -N
+                        -o --options
+                        -r --rootdir
+                        -v --version
                         ' -- "$cur"))
                 else
                     COMPREPLY=($(compgen -W "${command_list[*]}" -- "$cur"))
@@ -147,15 +147,13 @@ _pkg()
         esac
     else
         case "$selected_command" in
-            # help) ;;
-
             add)
-                COMPREPLY=($(compgen -W '\
-                    -A --automatic \
-                    -f --force \
-                    -I --no-scripts \
-                    -M --accept-missing \
-                    -q --quiet \
+                COMPREPLY=($(compgen -W '
+                    -A --automatic
+                    -f --force
+                    -I --no-scripts
+                    -M --accept-missing
+                    -q --quiet
                     ' -- "$cur"))
                 COMPREPLY+=($(compgen -f -- "$cur"))
                 # "-" is for stdin.
@@ -212,45 +210,47 @@ _pkg()
                 # TODO
                 ;;
 
+            help) ;;
+
             info)
                 # TODO: Some options are mutually exclusive. It might be nice
                 # to make this completion logic aware of this fact. At the
                 # moment it just completes all the options.
                 case "$prev" in
-                    --raw-format)
-                        COMPREPLY=($(compgen -W "${raw_output_formats[*]}" -- "$cur"))
-                        ;;
                     -F|--file)
                         compopt -o default
                         ;;
+                    --raw-format)
+                        COMPREPLY=($(compgen -W "${raw_output_formats[*]}" -- "$cur"))
+                        ;;
                     *)
                         if [[ $cur == -* ]]; then
-                            COMPREPLY=($(compgen -W '\
-                                -a --all \
-                                -A --annotations \
-                                -C --case-sensitive \
-                                -f --full \
-                                -R --raw \
-                                --raw-format \
-                                -e --exists \
-                                -D --pkg-message \
-                                -g --glob \
-                                -i --case-insensitive \
-                                -I --comment \
-                                -x --regex \
-                                -d --dependencies \
-                                -r --required-by \
-                                -k --locked \
-                                -l --list-files \
-                                -b --provided-shlibs \
-                                -B --required-shlibs \
-                                -s --size \
-                                -q --quiet \
-                                -O --by-origin \
-                                -E --show-name-only \
-                                -o --origin \
-                                -p --prefix \
-                                -F --file \
+                            COMPREPLY=($(compgen -W '
+                                -a --all
+                                -A --annotations
+                                -b --provided-shlibs
+                                -B --required-shlibs
+                                -C --case-sensitive
+                                -d --dependencies
+                                -D --pkg-message
+                                -e --exists
+                                -E --show-name-only
+                                -f --full
+                                -F --file
+                                -g --glob
+                                -i --case-insensitive
+                                -I --comment
+                                -k --locked
+                                -l --list-files
+                                -o --origin
+                                -O --by-origin
+                                -p --prefix
+                                -q --quiet
+                                -r --required-by
+                                --raw-format
+                                -R --raw
+                                -s --size
+                                -x --regex
                                 ' -- "$cur"))
                         else
                             _pkg_complete_installed_package
@@ -266,22 +266,22 @@ _pkg()
                         ;;
                     *)
                         if [[ $cur == -* ]]; then
-                            COMPREPLY=($(compgen -W '\
-                                -A --automatic \
-                                -C --case-sensitive \
-                                -f --force \
-                                -g --globe \
-                                -I --no-install-scripts \
-                                -i --case-insensitive \
-                                -M --ignore-missing \
-                                -n --dry-run \
-                                -F --fetch-only \
-                                -q --quiet \
-                                -R --recursive \
-                                -r --repository \
-                                -U --no-repo-update \
-                                -x --regex \
-                                -y --yes \
+                            COMPREPLY=($(compgen -W '
+                                -A --automatic
+                                -C --case-sensitive
+                                -f --force
+                                -F --fetch-only
+                                -g --globe
+                                -i --case-insensitive
+                                -I --no-install-scripts
+                                -M --ignore-missing
+                                -n --dry-run
+                                -q --quiet
+                                -r --repository
+                                -R --recursive
+                                -U --no-repo-update
+                                -x --regex
+                                -y --yes
                                 ' -- "$cur"))
                         else
                             _pkg_complete_any_package
@@ -322,43 +322,43 @@ _pkg()
                         # See "Search and Label Options" in pkg-search(8).
                         COMPREPLY=($(compgen -W 'comment description name origin pkg-name' -- "$cur"))
                         ;;
-                    -Q|--query-modifier)
-                        # See "Output Modifier Options" in pkg-search(8).
-                        COMPREPLY=($(compgen -W 'annotations arch categories \
-                        comment description full licenses maintainer name \
-                        options pkg-size prefix repository required-by \
-                        shared-libs-required shared-libs-provided size url \
-                        version www' -- "$cur"))
-                        ;;
-                    --raw-format)
-                        COMPREPLY=($(compgen -W "${raw_output_formats[*]}" -- "$cur"))
-                        ;;
                     -r|--repository)
                         # TODO: Could it be completed better?
                         compopt -o default
                         ;;
+                    --raw-format)
+                        COMPREPLY=($(compgen -W "${raw_output_formats[*]}" -- "$cur"))
+                        ;;
+                    -Q|--query-modifier)
+                        # See "Output Modifier Options" in pkg-search(8).
+                        COMPREPLY=($(compgen -W 'annotations arch categories
+                            comment description full licenses maintainer name
+                            options pkg-size prefix repository required-by
+                            shared-libs-required shared-libs-provided size url
+                            version www' -- "$cur"))
+                        ;;
                     *)
-                        COMPREPLY=($(compgen -W '\
-                            -C --case-sensitive \
-                            -c --comment \
-                            -D --description \
-                            -d --depends-on \
-                            -e --exact \
-                            -f --full   \
-                            -g --glob \
-                            -i --case-insensitive \
-                            -L --label \
-                            -o --origins \
-                            -p --prefix \
-                            -q --quiet \
-                            -Q --query-modifier \
-                            -r --repository \
-                            -R --raw \
-                            -S --search \
-                            --raw-format \
-                            -s --size \
-                            -U --no-repo-update \
-                            -x --regex \
+                        COMPREPLY=($(compgen -W '
+                            -c --comment
+                            -C --case-sensitive
+                            -d --depends-on
+                            -D --description
+                            -e --exact
+                            -f --full
+                            -g --glob
+                            -i --case-insensitive
+                            -L --label
+                            -o --origins
+                            -p --prefix
+                            -q --quiet
+                            -Q --query-modifier
+                            -r --repository
+                            --raw-format
+                            -R --raw
+                            -s --size
+                            -S --search
+                            -U --no-repo-update
+                            -x --regex
                             ' -- "$cur"))
                         ;;
                 esac
@@ -428,10 +428,10 @@ _pkg()
                         ;;
                     *)
                         if [[ $cur == -* ]]; then
-                            COMPREPLY=($(compgen -W '\
-                                -i --case-insensitive \
-                                -d --date \
-                                -f --file \
+                            COMPREPLY=($(compgen -W '
+                                -d --date
+                                -f --file
+                                -i --case-insensitive
                                 ' -- "$cur"))
                         else
                             _pkg_complete_any_package
@@ -448,17 +448,17 @@ _pkg()
                         ;;
                     *)
                         if [[ $cur == -* ]]; then
-                            COMPREPLY=($(compgen -W '\
-                                -C --case-sensitive \
-                                -F --fetch-only \
-                                -f --force \
-                                -g --glob \
-                                -i --case-insensitive \
-                                -n --dry-run \
-                                -q --quiet \
-                                -r --repository \
-                                -U --no-repo-update \
-                                -y --yes    \
+                            COMPREPLY=($(compgen -W '
+                                -C --case-sensitive
+                                -f --force
+                                -F --fetch-only
+                                -g --glob
+                                -i --case-insensitive
+                                -n --dry-run
+                                -q --quiet
+                                -r --repository
+                                -U --no-repo-update
+                                -y --yes
                                 ' -- "$cur"))
                         else
                             _pkg_complete_installed_package
@@ -473,12 +473,12 @@ _pkg()
 
             which)
                 if [[ $cur == -* ]]; then
-                    COMPREPLY=($(compgen -W '\
-                        -g --glob \
-                        -m --show-match \
-                        -o --origin \
-                        -p --path-search \
-                        -q --quiet \
+                    COMPREPLY=($(compgen -W '
+                        -g --glob
+                        -m --show-match
+                        -o --origin
+                        -p --path-search
+                        -q --quiet
                         ' -- "$cur"))
                 else
                     compopt -o default
