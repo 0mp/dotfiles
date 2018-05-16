@@ -167,7 +167,11 @@ _pkg()
                 ;;
 
             alias)
-                # TODO
+                if [[ $cur =~ ^- ]]; then
+                    COMPREPLY=($(compgen -W '-l --list -q --quiet' -- "$cur"))
+                else
+                    COMPREPLY=($(compgen -W "$(pkg alias --quiet | cut -d ' ' -f 1)" -- "$cur"))
+                fi
                 ;;
 
             audit)
