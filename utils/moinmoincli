@@ -31,7 +31,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-version=4.3.0
+version=4.3.1
 
 base='https://wiki.freebsd.org'
 conffile="$HOME/.moinmoincli.conf"
@@ -58,12 +58,7 @@ take() {
 # $1 -- text to be add to $data (& between fields is added automatically)
 # $data
 add_data() {
-    if [ -z "$data" ]
-    then
-        data="$1"
-    else
-        data="$data&$1"
-    fi
+    data="$data${data:+&}$1"
 }
 
 # $oldrawfile
