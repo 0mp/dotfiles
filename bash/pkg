@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.10.0
+# Version: 0.11.0
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -179,7 +179,22 @@ _pkg()
                 ;;
 
             audit)
-                # TODO
+                case "$prev" in
+                    -f|--file)
+                        compopt -o default
+                        ;;
+                    *)
+                        if [[ $cur =~ ^- ]]; then
+                            COMPREPLY=($(compgen -W '
+                                -f --file
+                                -F --fetch
+                                -q --quiet
+                                -r --recursive
+                                ' -- "$cur"))
+                        else
+                            _pkg_complete_any_package
+                        fi
+                esac
                 ;;
 
             autoremove)
