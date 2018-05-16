@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.9.0
+# Version: 0.10.0
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -191,7 +191,19 @@ _pkg()
                 ;;
 
             backup)
-                # TODO
+                case "$prev" in
+                    -d|--dump) ;&
+                    -r|--restore)
+                        compopt -o default
+                        ;;
+                    *)
+                        COMPREPLY=($(compgen -W '
+                            -d --dump
+                            -r --restore
+                            -q --quiet
+                            ' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             bootstrap)
