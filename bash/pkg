@@ -289,9 +289,7 @@ _pkg()
                 esac
                 ;;
 
-            bootstrap)
-                # TODO
-                ;;
+            bootstrap) ;;
 
             check)
                 # TODO
