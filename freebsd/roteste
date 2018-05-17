@@ -8,14 +8,14 @@
 clean_ports_modules() {
     for conf in /etc/src.conf /etc/make.conf
     do
-        for module in $(sysrc -f "$conf" PORTS_MODULES)
+        for module in $(sysrc -q -f "$conf" PORTS_MODULES)
         do
             cd "/usr/src/$module" && make clean
         done
     done
 }
 
-version=0.5.0
+version=0.5.1
 
 if [ $# -eq 0 ]
 then
