@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.11.0
+# Version: 0.12.0
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -167,7 +167,75 @@ _pkg()
                 ;;
 
             annotate)
-                # TODO
+                # Leave only pkg-annotate(8) options.
+                for (( i=0 ; i < "${#words[@]}" ; i++ )); do
+                    case ${words[$i]} in
+                        *) words[$i]="" ;;&
+                        annotate) break ;;
+                    esac
+                done
+
+                case $cur in
+                    *\ -A\ *|*\ --add\ *) ;&
+                    *\ -D\ *|*\ --delete\ *) ;&
+                    *\ -M\ *|*\ --modify\ *) ;&
+                    *\ -S\ *|*\ --show\ *)
+                        COMPREPLY+=($(compgen -W '
+                            -a --all
+                            -A --add
+                            -D --delete
+                            -M --modify
+                            -S --show
+                            ' -- "$cur"))
+                        ;;
+                esac
+                case ${words[*]} in
+                    *\ -A\ *|*\ --add\ *) ;&
+                    *\ -D\ *|*\ --delete\ *) ;&
+                    *\ -M\ *|*\ --modify\ *) ;&
+                    *\ -S\ *|*\ --show\ *)
+                        case ${words[*]} in
+                            *\ -a\ *|*\ --all\ *)
+                                COMPREPLY+=($(compgen -W "$(pkg query %At | sort --unique)" -- "$cur"))
+                                ;;
+                            *)
+                                case $prev in
+                                    -*)
+                                        COMPREPLY+=($(compgen -W '
+                                            -a --all
+                                            -C --case-sensitive
+                                            -g --glob
+                                            -i --case-insensitive
+                                            -q --quiet
+                                            -x --regex
+                                            -y --yes
+                                            ' -- "$cur"))
+                                        COMPREPLY+=($(compgen -W "$(pkg query %n)" -- "$cur"))
+                                        ;;
+                                    *)
+                                        COMPREPLY+=($(compgen -W "$(pkg query %At | sort --unique)" -- "$cur"))
+                                        ;;
+                                esac
+                                ;;
+                        esac
+                        ;;
+                    *)
+                        # Postpone presenting all the flags to the user.
+                        if [[ $cur == -* ]]; then
+                            COMPREPLY+=($(compgen -W '
+                                -q --quiet
+                                -y --yes
+                                ' -- "$cur"))
+                        fi
+                        COMPREPLY+=($(compgen -W '
+                            -a --all
+                            -A --add
+                            -D --delete
+                            -M --modify
+                            -S --show
+                            ' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             alias)
