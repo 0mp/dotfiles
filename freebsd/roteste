@@ -2,7 +2,20 @@
 #
 # Scripting helping to automate the FreeBSD CURRENT branch maintenance.
 
-version=0.4.0
+# I've found out that the PORTS_MODULES mechanism does not work well if it is
+# not cleaned before running `buildkernel`. The port does not get rebuiled
+# resulting in an installation of a port too old for the newly built kernel.
+clean_ports_modules() {
+    for conf in /etc/src.conf /etc/make.conf
+    do
+        for module in $(sysrc -f "$conf" PORTS_MODULES)
+        do
+            cd "/usr/src/$module" && make clean
+        done
+    done
+}
+
+version=0.5.0
 
 if [ $# -eq 0 ]
 then
@@ -43,6 +56,8 @@ esac
 
 case "$*" in
     *--build-kernel)
+        clean_ports_modules
+
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
         make -j$ncpu buildkernel
@@ -53,6 +68,8 @@ case "$*" in
         make -j$ncpu buildworld
         ;;
     *--build*)
+        clean_ports_modules
+
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
         make -j$ncpu buildkernel
