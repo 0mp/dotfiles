@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.12.0
+# Version: 0.12.1
 # Upstream: https://github.com/0mp/dotfiles
 # ---
 # TODO: Respect "--".
@@ -36,7 +36,7 @@ _pkg_complete_any_package()
 
     # Complete empty "$cur" with categories instead of all the packages.
     if [[ -z $cur ]]; then
-        COMPREPLY=($(compgen -S '/' -W "${category_list[*]}" -- "$cur"))
+        COMPREPLY=($(compgen -S '/' -W "$(pkg query %C | sort --unique)" -- "$cur"))
         return 0
     fi
 
@@ -49,7 +49,7 @@ _pkg_complete_any_package()
         # to "py36-pgsanity".
         COMPREPLY=($(pkg rquery --case-insensitive --glob --no-repo-update %n -- "$cur*"))
         # Add categories.
-        COMPREPLY+=($(compgen -S '/' -W "${category_list[*]}" -- "$cur"))
+        COMPREPLY+=($(compgen -S '/' -W "$(pkg query %C | sort --unique)" -- "$cur"))
     fi
 
     # Complete by origin.
@@ -82,15 +82,6 @@ _pkg()
         bootstrap check clean convert create delete fetch info install lock
         plugins query register repo rquery search set shell shlib stats
         unlock update updating upgrade version which)
-
-    local category_list=( accessibility arabic archivers astro audio base
-        benchmarks biology cad chinese comms converters databases deskutils
-        devel distfiles dns editors emulators finance french ftp games german
-        graphics hebrew hungarian irc japanese java korean lang mail math misc
-        multimedia net net-im net-mgmt net-p2p news palm polish ports-mgmt
-        portuguese print russian science security shells sysutils textproc
-        ukrainian vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts
-        x11-servers x11-themes x11-toolkits x11-wm)
 
     local raw_output_formats=(json json-compact yaml)
 
