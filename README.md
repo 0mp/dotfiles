@@ -55,6 +55,26 @@ The modules are as follows:
 > **--install**
 > causes dwm to be recompiled and reinstalled.
 
+**freebsd-yoga314** \[*option ...*]
+
+> Configure
+> FreeBSD
+> desktop experience for Lenovo Yoga 3 14.
+> The options are as follows:
+
+> **--fonts**
+
+> > Install additional fonts.
+
+> **--intel**
+
+> > Install Intel graphics kernel modules.
+
+> **--powerdxx**
+
+> > Install powerd++ for a better power management than the one offered by
+> > powerd(8)
+
 **git** \[*option ...*]
 
 > Configure Git.
@@ -121,26 +141,6 @@ The modules are as follows:
 > Make sure that
 > *username*
 > is set to your username.
-
-**root-freebsd-yoga314** \[*option ...*]
-
-> Configure
-> FreeBSD
-> desktop experience for Lenovo Yoga 3 14.
-> The options are as follows:
-
-> **--fonts**
-
-> > Install additional fonts.
-
-> **--intel**
-
-> > Install Intel graphics kernel modules.
-
-> **--powerdxx**
-
-> > Install powerd++ for a better power management than the one offered by
-> > powerd(8)
 
 # EXAMPLES
 

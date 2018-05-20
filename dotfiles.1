@@ -70,6 +70,21 @@ Configuration of a desktop environment running the dwm window manager.
 Using
 .Fl -install
 causes dwm to be recompiled and reinstalled.
+.It Cm freebsd-yoga314 Op Ar option ...
+Configure
+.Fx
+desktop experience for Lenovo Yoga 3 14.
+The options are as follows:
+.Bl -tag -width ".Fl -powerdxx"
+.It Fl -fonts
+Install additional fonts.
+.It Fl -intel
+Install Intel graphics kernel modules.
+.It Fl -powerdxx
+Install powerd++ for a better power management than the one offered by
+.Xr powerd 8
+.
+.El
 .It Cm git Op Ar option ...
 Configure Git.
 The options are as follows:
@@ -115,21 +130,6 @@ is required.
 Make sure that
 .Ar username
 is set to your username.
-.It Cm root-freebsd-yoga314 Op Ar option ...
-Configure
-.Fx
-desktop experience for Lenovo Yoga 3 14.
-The options are as follows:
-.Bl -tag -width ".Fl -powerdxx"
-.It Fl -fonts
-Install additional fonts.
-.It Fl -intel
-Install Intel graphics kernel modules.
-.It Fl -powerdxx
-Install powerd++ for a better power management than the one offered by
-.Xr powerd 8
-.
-.El
 .El
 .Sh EXAMPLES
 Install
