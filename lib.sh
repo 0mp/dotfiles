@@ -120,7 +120,7 @@ lib_run_as_root() {
         lib_info 'sudo is missing; using su'
         command='su root -c'
     fi
-    : "${CALLINGUSER:="$USER")}"
+    : "${CALLINGUSER:="$USER"}"
 
     $command env MODULE_NAME="$MODULE_NAME" CALLINGUSER="$CALLINGUSER" sh setup.root "$@"
 }
