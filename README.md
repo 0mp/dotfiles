@@ -12,12 +12,6 @@
 **dotfiles**
 is a framework to manage configuration scripts, dotfiles and utilities.
 
-Administrative rights are required for the
-**--root-\*&zwnj;**
-options and the
-**root-\*&zwnj;**
-modules.
-
 The modules are as follows:
 
 **bash**
@@ -54,6 +48,10 @@ The modules are as follows:
 > Using
 > **--install**
 > causes dwm to be recompiled and reinstalled.
+
+**freebsd-st**
+
+> Recompile and reinstall st terminals.
 
 **freebsd-yoga314** \[*option ...*]
 
@@ -132,15 +130,6 @@ The modules are as follows:
 **xpdf**
 
 > Install Xpdf configuration files.
-
-**root-freebsd-st** **--user** *username*
-
-> Recompile and reinstall st terminals.
-> **--user**
-> is required.
-> Make sure that
-> *username*
-> is set to your username.
 
 # EXAMPLES
 

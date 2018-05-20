@@ -1,0 +1,25 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+cd sterm-0mp
+for flavor in shine charcoal data
+do
+    make fetch
+    if pkg info -e sterm-0mp-$flavor
+    then
+        make deinstall FLAVOR=$flavor
+    fi
+    su -m "$CALLINGUSER" -c make clean FLAVOR=$flavor
+    su -m "$CALLINGUSER" -c make BATCH=YES FLAVOR=$flavor
+    make install FLAVOR=$flavor
+done
+
+ln -s -f /usr/local/bin/st-charcoal /usr/local/bin/st
+ln -s -f /usr/local/bin/st-shine /usr/local/bin/st2
+
+lib_info 'setup.root done'

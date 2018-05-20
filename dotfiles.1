@@ -37,12 +37,6 @@
 .Nm
 is a framework to manage configuration scripts, dotfiles and utilities.
 .Pp
-Administrative rights are required for the
-.Fl -root-*
-options and the
-.Cm root-*
-modules.
-.Pp
 The modules are as follows:
 .Bl -tag -width ".Cm freebsd-desktop" -compact
 .It Cm bash
@@ -70,6 +64,8 @@ Configuration of a desktop environment running the dwm window manager.
 Using
 .Fl -install
 causes dwm to be recompiled and reinstalled.
+.It Cm freebsd-st
+Recompile and reinstall st terminals.
 .It Cm freebsd-yoga314 Op Ar option ...
 Configure
 .Fx
@@ -123,13 +119,6 @@ Configure Vim and install related configuration files.
 Install Xorg-related configuration files.
 .It Cm xpdf
 Install Xpdf configuration files.
-.It Cm root-freebsd-st Fl -user Ar username
-Recompile and reinstall st terminals.
-.Fl -user
-is required.
-Make sure that
-.Ar username
-is set to your username.
 .El
 .Sh EXAMPLES
 Install
