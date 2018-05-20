@@ -1,0 +1,25 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+case "$*" in
+    *--install*)
+        case $(pkg info --locked dwm 2>/dev/null) in
+            *yes) pkg unlock -y dwm ;;
+        esac
+        cp -f files/patch-fakefullscreen-0mp.diff /usr/ports/x11-wm/dwm/files/
+        export DWM_CONF="$PWD/config.h"
+        cd /usr/ports/x11-wm/dwm
+        make deinstall
+        make clean
+        make reinstall
+        rm -f /usr/ports/x11-wm/dwm/files/patch-fakefullscreen-0mp.diff
+        pkg lock -y dwm
+        ;;
+esac
+
+lib_info 'setup.root done'

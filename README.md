@@ -37,11 +37,11 @@ The modules are as follows:
 > FreeBSD
 > desktop.
 
-**freebsd-dwm** \[**--root-install**]
+**freebsd-dwm** \[**--install**]
 
 > Configuration of a desktop environment running the dwm window manager.
 > Using
-> **--root-install**
+> **--install**
 > causes dwm to be recompiled and reinstalled.
 
 **git** \[*option ...*]
