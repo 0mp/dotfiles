@@ -15,10 +15,6 @@ PREFIX=
 CUSTOMFILES=
 CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 lib_custom_install() {
-    case "$CUSTOMOPTS" in ?*)
-        pkg update
-    esac
-
     # Fix the headphones jack.
     sysrc -f /boot/loader.conf 'hint.hdaa.1.nid22.config="as=1 seq=15"'
 
