@@ -108,3 +108,19 @@ lib_create_prefix_if_missing() {
         mkdir -p -- "${PREFIX%/*}"
     fi
 }
+
+# CALLINGUSER - The username using this library. It is handy when root wants to
+#               chown some files it created or even run a command as the
+#               dotfiles user. Defaults to $USER.
+lib_run_as_root() {
+    if which sudo > /dev/null 2>&1
+    then
+        command='sudo'
+    else
+        lib_info 'sudo is missing; using su'
+        command='su root -c'
+    fi
+    : "${CALLINGUSER:="$USER")}"
+
+    $command env MODULE_NAME="$MODULE_NAME" CALLINGUSER="$CALLINGUSER" sh setup.root "$@"
+}
