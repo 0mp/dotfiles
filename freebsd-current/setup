@@ -1,0 +1,11 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+lib_run_as_root
+
+lib_info 'setup done'

@@ -31,6 +31,17 @@ The modules are as follows:
 > FreeBSD
 > utilities of general purpose.
 
+**freebsd-current**
+
+> Configure a
+> FreeBSD
+> machine running CURRENT.
+> This module sets some development-specific variables in
+> make.conf(5),
+> src.conf(5),
+> and
+> src-env.conf(5).
+
 **freebsd-desktop**
 
 > Configuration files for a
@@ -101,17 +112,6 @@ The modules are as follows:
 **xpdf**
 
 > Install Xpdf configuration files.
-
-**root-freebsd-current**
-
-> Configure a
-> FreeBSD
-> machine running CURRENT.
-> This module sets some development-specific variables in
-> make.conf(5),
-> src.conf(5),
-> and
-> src-env.conf(5).
 
 **root-freebsd-st** **--user** *username*
 

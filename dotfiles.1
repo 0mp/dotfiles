@@ -52,6 +52,15 @@ configuration files.
 Install some
 .Fx
 utilities of general purpose.
+.It Cm freebsd-current
+Configure a
+.Fx
+machine running CURRENT.
+This module sets some development-specific variables in
+.Xr make.conf 5 ,
+.Xr src.conf 5 ,
+and
+.Xr src-env.conf 5 .
 .It Cm freebsd-desktop
 Configuration files for a
 .Fx
@@ -99,15 +108,6 @@ Configure Vim and install related configuration files.
 Install Xorg-related configuration files.
 .It Cm xpdf
 Install Xpdf configuration files.
-.It Cm root-freebsd-current
-Configure a
-.Fx
-machine running CURRENT.
-This module sets some development-specific variables in
-.Xr make.conf 5 ,
-.Xr src.conf 5 ,
-and
-.Xr src-env.conf 5 .
 .It Cm root-freebsd-st Fl -user Ar username
 Recompile and reinstall st terminals.
 .Fl -user

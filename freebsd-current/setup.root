@@ -1,0 +1,29 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+case "$*" in
+    *)
+        # Turn on additional checks for ports.
+        sysrc -f /etc/make.conf DEVELOPER=YES
+
+        # Disable the delay after a warning. For example there will be no delay
+        # after a warning about a missing LICENSE variable when building a port.
+        sysrc -f /etc/make.conf DEV_WARNING_WAIT=0
+
+        # Use ccache(1).
+        sysrc -f /etc/src.conf WITH_CCACHE_BUILD=YES
+
+        # Use meta mode. See src-env.conf(5) for details.
+        sysrc -f /etc/src-env.conf WITH_META_MODE=YES
+
+        # Ignore /etc/motd when running mergemaster(8) after installworld.
+        sysrc -f /etc/mergemaster.rc  IGNORE_FILES+='/etc/motd /boot'
+        ;;
+esac
+
+lib_info 'setup.root done'
