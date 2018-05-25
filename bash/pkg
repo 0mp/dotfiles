@@ -198,8 +198,8 @@ _pkg()
                             *)
                                 case $prev in
                                     -*)
+                                        COMPREPLY+=($(compgen -W '-a --all' -- "$cur"))
                                         COMPREPLY+=($(compgen -W '
-                                            -a --all
                                             -C --case-sensitive
                                             -g --glob
                                             -i --case-insensitive
