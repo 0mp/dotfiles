@@ -328,7 +328,17 @@ _pkg()
                 ;;
 
             convert)
-                # TODO
+                case $prev in
+                    -d|--pkg-dbdir)
+                        compopt -o default
+                        ;;
+                    *)
+                        COMPREPLY=($(compgen -W '
+                            -d --pkg-dbdir
+                            -n --dry-run
+                            ' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             create)
