@@ -48,8 +48,12 @@ _pkg_complete_any_package()
     # should look at the origin instead.
     if ! [[ $cur =~ / ]]; then
         # Firstly, try to complete by name. For example this completes "py36-"
-        # to "py36-pgsanity".
-        COMPREPLY=($(pkg rquery --case-insensitive --glob --no-repo-update %n -- "$cur*"))
+        # to "py36-pgsanity". We don't use "--regex" here because if the we
+        # look for "py36-pgsanity" the completion mechnism is going to complete
+        # "sanity" by replacing it with "py" and trying to complete from there,
+        # which is not very helpful due to an enormous number of package names
+        # starting with "py".
+        COMPREPLY=($(pkg rquery --case-insensitive --regex --no-repo-update %n -- "$cur"))
         # Add categories.
         COMPREPLY+=($(compgen -S '/' -W "$(pkg query %C | sort --unique)" -- "$cur"))
     fi
