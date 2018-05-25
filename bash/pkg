@@ -172,20 +172,6 @@ _pkg()
                     esac
                 done
 
-                case $cur in
-                    *\ -A\ *|*\ --add\ *) ;&
-                    *\ -D\ *|*\ --delete\ *) ;&
-                    *\ -M\ *|*\ --modify\ *) ;&
-                    *\ -S\ *|*\ --show\ *)
-                        COMPREPLY+=($(compgen -W '
-                            -a --all
-                            -A --add
-                            -D --delete
-                            -M --modify
-                            -S --show
-                            ' -- "$cur"))
-                        ;;
-                esac
                 case ${words[*]} in
                     *\ -A\ *|*\ --add\ *) ;&
                     *\ -D\ *|*\ --delete\ *) ;&
