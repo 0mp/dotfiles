@@ -319,7 +319,12 @@ _pkg()
                 ;;
 
             clean)
-                # TODO
+                COMPREPLY=($(compgen -W '
+                    -a --all
+                    -n --dry-run
+                    -q --quiet
+                    -y --yes
+                    ' -- "$cur"))
                 ;;
 
             convert)
