@@ -31,6 +31,8 @@
 # ---
 # TODO: Respect "--".
 
+# TODO: Make this function offer "py36-asciinema" (or "textproc/py-asciinema")
+# as one of the possible completions of "ascii".
 _pkg_complete_any_package()
 {
 
