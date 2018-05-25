@@ -289,7 +289,47 @@ _pkg()
             bootstrap) ;;
 
             check)
-                # TODO
+                # Leave only pkg-check(8) options.
+                for (( i=0 ; i < "${#words[@]}" ; i++ )); do
+                    case ${words[$i]} in
+                        *) words[$i]="" ;;&
+                        check) break ;;
+                    esac
+                done
+
+                case ${words[*]} in
+                    *\ -B\ *|*\ --shlibs\ *) ;&
+                    *\ -d\ *|*\ --dependencies\ *) ;&
+                    *\ -s\ *|*\ --checksums\ *) ;&
+                    *\ -r\ *|*\ --recompute\ *)
+                        case ${words[*]} in
+                            *\ -a\ *|*\ --all\ *) ;;
+                            *)
+                                COMPREPLY+=($(compgen -W '-a --all' -- "$cur"))
+                                COMPREPLY+=($(compgen -W '
+                                        -C --case-sensitive
+                                        -g --glob
+                                        -i --case-insensitive
+                                        -x --regex
+                                        ' -- "$cur"))
+                                ;;
+                        esac
+                        COMPREPLY+=($(compgen -W '
+                            -n --dry-run
+                            -q --quiet
+                            -v --verbose
+                            -y --yes
+                            ' -- "$cur"))
+                        ;;
+                    *)
+                        COMPREPLY+=($(compgen -W '
+                            -B --shlibs
+                            -d --dependencies
+                            -s --checksums
+                            -r --recompute
+                            ' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             clean)
