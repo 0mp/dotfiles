@@ -19,7 +19,7 @@ do
     make install FLAVOR=$flavor
 done
 
-ln -s -f /usr/local/bin/st-charcoal /usr/local/bin/st
-ln -s -f /usr/local/bin/st-shine /usr/local/bin/st2
+ln -s -f /usr/local/bin/st-shine /usr/local/bin/st
+ln -s -f /usr/local/bin/st-charcoal /usr/local/bin/st2
 
 lib_info 'setup.root done'
