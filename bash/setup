@@ -7,7 +7,7 @@ set -eu
 lib_info 'setup'
 
 # Install Bash completion files.
-FILES='pkg'
+FILES='pkg service'
 PREFIX="$HOME/.bash_completion.d/"
 lib_create_prefix_if_missing
 lib_custom_install() { :; }
