@@ -26,7 +26,7 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.1.0
+# Version: 0.2.0
 # Upstream: https://github.com/0mp/dotfiles
 
 _service_complete_service() {
@@ -34,14 +34,20 @@ _service_complete_service() {
 }
 
 _service_complete_command() {
+    # Do not try to complete commands if the service is invalid.
+    service -l | grep --quiet --only-matching "$prev" || return 1
+
     # Not every command is listed here for convenience.
     local commands=(start stop restart status)
     local completions
     local prefix
+
+    # Prepend 'one' to the available commands if the service is not enabled.
     if ! service "$prev" enabled >/dev/null 2>&1; then
         prefix='one'
     fi
 
+    local o
     for o in "${commands[@]}" $(service "$prev" oneextracommands 2>/dev/null); do
         completions+=("$prefix$o")
     done
@@ -81,6 +87,10 @@ _service() {
                     ;;
                 *)
                     # Check if the word before the previous one is "-j".
+                    # For example ("_" is a cursor):
+                    #
+                    #     # service -v -j 1 postg_
+                    #
                     if [[ ${words[((cwords - 3))]} = '-j' ]]; then
                         _service_complete_service
                     else
