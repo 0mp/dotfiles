@@ -14,8 +14,8 @@ do
     then
         make deinstall FLAVOR=$flavor
     fi
-    su -m "$CALLINGUSER" -c make clean FLAVOR=$flavor
-    su -m "$CALLINGUSER" -c make BATCH=YES FLAVOR=$flavor
+    make clean FLAVOR=$flavor
+    su "$CALLINGUSER" -c "make BATCH=YES FLAVOR=$flavor"
     make install FLAVOR=$flavor
 done
 
