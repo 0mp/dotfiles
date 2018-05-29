@@ -50,7 +50,7 @@ case $PS1 in
     *) PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] ' ;;
 esac
 
-if [[ $OSTYPE =~ freebsd.* ]] && \
+if [[ $PS1 ]] && [[ $OSTYPE =~ freebsd.* ]] && \
     [[ -f /usr/local/share/bash-completion/bash_completion.sh ]]
 then
     source /usr/local/share/bash-completion/bash_completion.sh
