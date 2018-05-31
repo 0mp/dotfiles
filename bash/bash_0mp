@@ -28,6 +28,7 @@ ddg() {
 }
 
 man() {
+    # Make manpages fit the screen even if it's very small.
     MANWIDTH="$((COLUMNS < 80 ? (COLUMNS - 2) : 78))" command man "$@"
 }
 
