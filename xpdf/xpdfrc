@@ -7,3 +7,6 @@ bind j any scrollDown(50)
 bind k any scrollUp(50)
 bind h any scrollLeft(50)
 bind l any scrollRight(50)
+
+bind d any scrollDown(500)
+bind u any scrollUp(500)
