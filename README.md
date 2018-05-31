@@ -19,12 +19,6 @@ The modules are as follows:
 > Install Bash
 > configuration files.
 
-**freebsd**
-
-> Install some
-> FreeBSD
-> utilities of general purpose.
-
 **freebsd-current**
 
 > Configure a
@@ -48,6 +42,12 @@ The modules are as follows:
 > Using
 > **--install**
 > causes dwm to be recompiled and reinstalled.
+
+**freebsd-general**
+
+> Install some
+> FreeBSD
+> general purpose utilities and configuration files.
 
 **freebsd-st**
 
