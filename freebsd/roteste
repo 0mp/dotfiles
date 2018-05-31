@@ -47,7 +47,7 @@ if [ $# -eq 0 ]
 then
     cat <<__end_of_usage
 Usage: roteste [--update]
-               [--build-kernel | --build-world | --build | --complete]
+               [--build-world | --build-kernel | --build | --complete]
                [--install-kernel]
 Version: $version
 __end_of_usage
@@ -98,8 +98,8 @@ case "$*" in
 
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
-        make -j$ncpu buildkernel
         make -j$ncpu buildworld
+        make -j$ncpu buildkernel
         ;;
     *--complete*)
         cd /usr/src
