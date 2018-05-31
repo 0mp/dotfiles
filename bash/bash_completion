@@ -1,7 +1,8 @@
 # Hints on how to manage user-defined Bash completions:
 # https://serverfault.com/q/506612/291898
 
-if ! find ~/.bash_completion.d/. ! -name . -prune -exec false {} +
+if [ -r ~/.bash_completion ] && \
+    ! find ~/.bash_completion.d/. ! -name . -prune -exec false {} +
 then
     for f in ~/.bash_completion.d/*
     do
