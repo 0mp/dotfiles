@@ -41,7 +41,7 @@ clean_ports_modules() {
     done
 }
 
-version=0.5.1
+version=0.5.2
 
 if [ $# -eq 0 ]
 then
