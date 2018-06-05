@@ -49,6 +49,22 @@ The modules are as follows:
 > FreeBSD
 > general purpose utilities and configuration files.
 
+**freebsd-haseeq540s** \[*option ...*]
+
+> Configure
+> FreeBSD
+> desktop experience for Hasee Q540S.
+> The options are as follows:
+
+> **--fonts**
+
+> > Install additional fonts.
+
+> **--powerdxx**
+
+> > Install powerd++ for a better power management than the one offered by
+> > powerd(8)
+
 **freebsd-st**
 
 > Recompile and reinstall st terminals.
