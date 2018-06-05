@@ -1,11 +1,10 @@
 # Hints on how to manage user-defined Bash completions:
 # https://serverfault.com/q/506612/291898
 
-if [[ -r ~/.bash_completion.d ]] && \
-    ! find ~/.bash_completion.d/. ! -name . -prune -exec false {} +
+if [[ -d ~/.bash_completion.d ]]
 then
     for f in ~/.bash_completion.d/*
     do
-        source "$f"
+        [[ -f $f ]] && source "$f"
     done
 fi
