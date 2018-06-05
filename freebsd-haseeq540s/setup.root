@@ -24,6 +24,10 @@ set_once() {
     fi
 }
 
+# Add some device hints. The machine is not going to boot without those.
+set_once /boot/device.hints 'hint.ata.0.disabled="1"'
+set_once /boot/device.hints 'hint.ata.1.disabled="1"'
+
 # Fix regression on FreeBSD 11. It wasn't necessery on 10.3.
 set_once /boot/loader.conf 'hw.vga.textmode=1'
 
