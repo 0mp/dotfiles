@@ -1,0 +1,30 @@
+#! /bin/sh -
+#
+# Listen to Internet radios.
+#
+# Usage: ./radio STATION
+
+set -eu
+
+for p in cvlc
+do
+    if which -s -- "$p"
+    then
+        player="$p"
+        break
+    fi
+done
+
+case "$1" in
+    anon*)
+        exec "$player" 'http://anonradio.net:8000/anonradio'
+        ;;
+    df*)
+        exec "$player" 'http://dfm.nu/DFM_RTV_INT_1.m3u'
+        ;;
+    *)
+        printf '%s %s\n' "$player" 'does not match any preset radio station' 1>&2
+        printf '%s\n' 'Pick one of those: anon, dfm' 1>&2
+        exit 1
+        ;;
+esac
