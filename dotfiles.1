@@ -55,11 +55,17 @@ and
 Configuration files for a
 .Fx
 desktop.
-.It Cm freebsd-dwm Op Fl -install
+.It Cm freebsd-dwm Op Ar option ...
 Configuration of a desktop environment running the dwm window manager.
 Using
-.Fl -install
-causes dwm to be recompiled and reinstalled.
+The options are as follows:
+.Bl -tag -width ".Fl -wallpaper"
+.It Fl -install
+Recompile and reinstall dwm.
+.It Fl -wallpaper
+Set up a wallpaper using feh.
+This option succeeds only when Xorg is running.
+.El
 .It Cm freebsd-general
 Install some
 .Fx

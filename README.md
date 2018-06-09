@@ -36,12 +36,20 @@ The modules are as follows:
 > FreeBSD
 > desktop.
 
-**freebsd-dwm** \[**--install**]
+**freebsd-dwm** \[*option ...*]
 
 > Configuration of a desktop environment running the dwm window manager.
 > Using
+> The options are as follows:
+
 > **--install**
-> causes dwm to be recompiled and reinstalled.
+
+> > Recompile and reinstall dwm.
+
+> **--wallpaper**
+
+> > Set up a wallpaper using feh.
+> > This option succeeds only when Xorg is running.
 
 **freebsd-general**
 
