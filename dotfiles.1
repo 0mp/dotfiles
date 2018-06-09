@@ -29,7 +29,7 @@
 .Os
 .Sh NAME
 .Nm dotfiles
-.Nd "various configuration scripts, dotfiles and utilities by 0mp"
+.Nd "various configuration scripts, dotfiles and utilities"
 .Sh SYNOPSIS
 .Cm ./setup
 .Op Ar module Oo Oo Ar option ... Oc Cm -- Oc Ar ...
@@ -55,9 +55,16 @@ and
 Configuration files for a
 .Fx
 desktop.
+.Bl -tag -width ".Fl -powerdxx"
+.It Fl -fonts
+Install additional fonts.
+.It Fl -powerdxx
+Install powerd++ for a better power management than the one offered by
+.Xr powerd 8
+.
+.El
 .It Cm freebsd-dwm Op Ar option ...
 Configuration of a desktop environment running the dwm window manager.
-Using
 The options are as follows:
 .Bl -tag -width ".Fl -wallpaper"
 .It Fl -install
@@ -70,19 +77,11 @@ This option succeeds only when Xorg is running.
 Install some
 .Fx
 general purpose utilities and configuration files.
-.It Cm freebsd-haseeq540s Op Ar option ...
+The options are as follows:
+.It Cm freebsd-haseeq540s
 Configure
 .Fx
 desktop experience for Hasee Q540S.
-The options are as follows:
-.Bl -tag -width ".Fl -powerdxx"
-.It Fl -fonts
-Install additional fonts.
-.It Fl -powerdxx
-Install powerd++ for a better power management than the one offered by
-.Xr powerd 8
-.
-.El
 .It Cm freebsd-st
 Recompile and reinstall st terminals.
 .It Cm freebsd-yoga314 Op Ar option ...
@@ -91,14 +90,8 @@ Configure
 desktop experience for Lenovo Yoga 3 14.
 The options are as follows:
 .Bl -tag -width ".Fl -powerdxx"
-.It Fl -fonts
-Install additional fonts.
 .It Fl -intel
 Install Intel graphics kernel modules.
-.It Fl -powerdxx
-Install powerd++ for a better power management than the one offered by
-.Xr powerd 8
-.
 .El
 .It Cm git Op Ar option ...
 Configure Git.

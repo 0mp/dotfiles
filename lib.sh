@@ -124,3 +124,19 @@ lib_run_as_root() {
 
     $command env MODULE_NAME="$MODULE_NAME" CALLINGUSER="$CALLINGUSER" sh setup.root "$@"
 }
+
+# $1 - File
+# $2 - Line
+lib_set_once() {
+    tmpfile="/tmp/${1##*/}"
+    if grep "${2%=*}" -- "$1" >/dev/null
+    then
+        awk -v regexp="^${2%=*}" -v newline="$2" \
+            '{if (match($0, regexp)) print newline; else print}' \
+            "$1" > "$tmpfile"
+        cat -- "$tmpfile" > "$1"
+        rm -- "$tmpfile"
+    else
+        printf '%s\n' "$2" >> "$1"
+    fi
+}

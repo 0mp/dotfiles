@@ -6,6 +6,18 @@ set -eu
 
 lib_info 'setup'
 
+FILES=
+PREFIX=
+CUSTOMFILES=
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
+lib_custom_install() {
+    lib_run_as_root $CUSTOMOPTS
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
 FILES='fonts.conf'
 PREFIX="$HOME/.config/fontconfig/"
 lib_create_prefix_if_missing

@@ -1,6 +1,6 @@
 # NAME
 
-**dotfiles** - various configuration scripts, dotfiles and utilities by 0mp
+**dotfiles** - various configuration scripts, dotfiles and utilities
 
 # SYNOPSIS
 
@@ -36,10 +36,18 @@ The modules are as follows:
 > FreeBSD
 > desktop.
 
+> **--fonts**
+
+> > Install additional fonts.
+
+> **--powerdxx**
+
+> > Install powerd++ for a better power management than the one offered by
+> > powerd(8)
+
 **freebsd-dwm** \[*option ...*]
 
 > Configuration of a desktop environment running the dwm window manager.
-> Using
 > The options are as follows:
 
 > **--install**
@@ -56,22 +64,13 @@ The modules are as follows:
 > Install some
 > FreeBSD
 > general purpose utilities and configuration files.
+> The options are as follows:
 
-**freebsd-haseeq540s** \[*option ...*]
+**freebsd-haseeq540s**
 
 > Configure
 > FreeBSD
 > desktop experience for Hasee Q540S.
-> The options are as follows:
-
-> **--fonts**
-
-> > Install additional fonts.
-
-> **--powerdxx**
-
-> > Install powerd++ for a better power management than the one offered by
-> > powerd(8)
 
 **freebsd-st**
 
@@ -84,18 +83,9 @@ The modules are as follows:
 > desktop experience for Lenovo Yoga 3 14.
 > The options are as follows:
 
-> **--fonts**
-
-> > Install additional fonts.
-
 > **--intel**
 
 > > Install Intel graphics kernel modules.
-
-> **--powerdxx**
-
-> > Install powerd++ for a better power management than the one offered by
-> > powerd(8)
 
 **git** \[*option ...*]
 

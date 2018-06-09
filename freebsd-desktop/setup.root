@@ -1,0 +1,37 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+# Don't waste time on probing USB at early boot time.
+# https://unrelenting.technology/kb/FreeBSDDesktop
+lib_set_once /boot/loader.conf 'hw.usb.no_boot_wait="1"'
+
+# Disable the console bell.
+lib_set_once /etc/sysctl.conf 'kern.vt.enable_bell=0'
+
+# Enable D-BUS.
+sysrc dbus_enable="YES"
+
+# Load acpi_video for backlight support.
+sysrc kld_list+=acpi_video
+
+# Configure powerdxx (and disable powerd).
+case "$*" in
+    *--powerdxx*) pkg install -y sysutils/powerdxx
+esac
+sysrc powerd_enable=NO
+sysrc powerdxx_enable=YES
+sysrc powerdxx_flags="--ac hiadaptive --batt adaptive --unknown hiadaptive"
+sysrc performance_cx_lowest="Cmax"
+sysrc economy_cx_lowest="Cmax"
+
+# Install missing fonts.
+case "$*" in
+    *--fonts*) pkg install -y x11-fonts/noto
+esac
+
+lib_info 'setup.root done'
