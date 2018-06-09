@@ -41,7 +41,7 @@ clean_ports_modules() {
     done
 }
 
-version=1.0.0
+version=1.0.1
 
 if [ $# -eq 0 ]
 then
@@ -118,6 +118,7 @@ then
 fi
 
 if [ "$complete" ]
+then
     cd /usr/src
     make -j$ncpu installworld
     mergemaster -i -v -U
