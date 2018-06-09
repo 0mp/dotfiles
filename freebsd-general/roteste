@@ -41,14 +41,12 @@ clean_ports_modules() {
     done
 }
 
-version=0.5.2
+version=1.0.0
 
 if [ $# -eq 0 ]
 then
     cat <<__end_of_usage
-Usage: roteste [--update]
-               [--build-world | --build-kernel | --build | --complete]
-               [--install-kernel]
+Usage: roteste [-kipsw | -c]
 Version: $version
 __end_of_usage
 elif [ 0 -ne "$(id -u)" ]
@@ -60,58 +58,90 @@ ncpu="$(sysctl -n hw.ncpu)"
 
 set -e
 
+args=`getopt ckipsw $*`
+set -- $args
+
+while :; do
+    case "$1" in
+        -c)
+            complete=yes
+            shift
+            ;;
+        -k)
+            kernel=yes
+            shift
+            ;;
+        -i)
+            install=yes
+            shift
+            ;;
+        -p)
+            ports=yes
+            shift
+            ;;
+        -s)
+            src=yes
+            shift
+            ;;
+        -w)
+            world=yes
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+done
+
 # Get the latest source tree.
-case "$*" in
-    *--update*)
-        if ! [ -d /usr/src/.svn ]
-        then
-            rm -rf -- /usr/src/*
-            svnlite co https://svn.freebsd.org/base/head /usr/src
-        else
-            svnlite update /usr/src
-        fi
-        if ! [ -d /usr/ports/.svn ]
-        then
-            rm -rf -- /usr/ports/*
-            svnlite co https://svn.freebsd.org/ports/head /usr/ports
-        else
-            svnlite update /usr/ports
-        fi
-        ;;
-esac
+if [ "$src" ]
+then
+    if ! [ -d /usr/src/.svn ]
+    then
+        rm -rf -- /usr/src/*
+        svnlite co https://svn.freebsd.org/base/head /usr/src
+    else
+        svnlite update /usr/src
+    fi
+fi
 
-case "$*" in
-    *--build-kernel)
+if [ "$ports" ]
+then
+    if ! [ -d /usr/ports/.svn ]
+    then
+        rm -rf -- /usr/ports/*
+        svnlite co https://svn.freebsd.org/ports/head /usr/ports
+    else
+        svnlite update /usr/ports
+    fi
+fi
+
+if [ "$complete" ]
+    cd /usr/src
+    make -j$ncpu installworld
+    mergemaster -i -v -U
+else
+    if [ "$kernel" ]
+    then
         clean_ports_modules
 
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
         make -j$ncpu buildkernel
-        ;;
-    *--build-world)
+    fi
+
+    if [ "$world" ]
+    then
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
         make -j$ncpu buildworld
-        ;;
-    *--build*)
-        clean_ports_modules
+    fi
 
-        cd /usr/src
-        kldstat -q -n filemon || kldload filemon
-        make -j$ncpu buildworld
-        make -j$ncpu buildkernel
-        ;;
-    *--complete*)
-        cd /usr/src
-        make -j$ncpu installworld
-        mergemaster -i -v -U
-        ;;
-esac
-
-# Install the kernel.
-case "$*" in
-    *--install-kernel*)
+    # Install the kernel.
+    if [ "$install" ]
+    then
         cd /usr/src
         make -j$ncpu installkernel
-        ;;
-esac
+    fi
+fi
