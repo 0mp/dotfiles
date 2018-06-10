@@ -43,7 +43,7 @@ The modules are as follows:
 > **--powerdxx**
 
 > > Install powerd++ for a better power management than the one offered by
-> > powerd(8)
+> > powerd(8).
 
 **freebsd-dwm** \[*option ...*]
 
