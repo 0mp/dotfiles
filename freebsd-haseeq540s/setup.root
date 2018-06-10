@@ -16,7 +16,7 @@ lib_set_once /boot/device.hints 'hint.ata.1.disabled="1"'
 lib_set_once /boot/loader.conf 'hw.vga.textmode=1'
 
 # Set time correctly.
-sysrc ntpdate_enable='YES' ntpdate_hosts='in.pool.ntp.org'
+sysrc ntpdate_enable='YES'
 
 # Configure the rum wireless network device.
 sysrc wlans_rum0='wlan0' ifconfig_wlan0='WPA DHCP'
