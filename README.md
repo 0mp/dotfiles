@@ -30,7 +30,7 @@ The modules are as follows:
 > and
 > src-env.conf(5).
 
-**freebsd-desktop**
+**freebsd-desktop** \[*option ...*]
 
 > Configuration files for a
 > FreeBSD
