@@ -96,15 +96,15 @@ The modules are as follows:
 
 > > The name to set in
 > > *~/.gitconfig*.
-> > Unless specified, the module interactively prompts for the name during
-> > installation.
+> > Defaults to
+> > 'Mateusz Piotrowski'.
 
 > **--email** *email*
 
 > > The email to set in
 > > *~/.gitconfig*.
-> > Unless specified, the module interactively prompts for the email during
-> > installation.
+> > Defaults to
+> > '0mp@FreeBSD.org'.
 
 > **--github-ssh**
 

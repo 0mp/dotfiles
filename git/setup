@@ -1,31 +1,26 @@
 #! /bin/sh -
-#
-# Options:
-#     --name
-#     --email
-#     --github-ssh
 
 . ../lib.sh
 
 set -eu
 
-GITCONFIG='gitconfig'
-FILES="$GITCONFIG"
-
-GITCONFIG_LOCAL="$GITCONFIG.local"
-
-lib_install() {
-    lib_install_file "$PWD/$GITCONFIG_LOCAL" "$HOME/.$GITCONFIG"
-}
-
 lib_info 'setup'
 
+FILES=
+PREFIX=
+CUSTOMFILES='gitconfig'
+lib_custom_install() {
+    touch ./gitconfig.local
+    lib_install_file ./gitconfig.local ~/.gitconfig
+}
 lib_back_up
 trap lib_roll_back EXIT
+lib_install
+trap - EXIT
 
-git_name=
-git_email=
-github_ssh=no
+gitname='Mateusz Piotrowski'
+gitemail='0mp@FreeBSD.org'
+
 while [ $# -gt 0 ]
 do
     case "$1" in
@@ -36,7 +31,7 @@ do
                 lib_err "name not provided for the --name option"
                 exit 1
             fi
-            git_name="$1"
+            gitname="$1"
             shift 1
             ;;
 
@@ -47,13 +42,13 @@ do
                 lib_err "email not provided for the --email option"
                 exit 1
             fi
-            git_email="$1"
+            gitemail="$1"
             shift 1
             ;;
 
          --github-ssh)
             shift 1
-            github_ssh=yes
+            git config --global url."ssh://git@github.com/".insteadOf https://github.com/
             ;;
 
         *)
@@ -63,35 +58,8 @@ do
     esac
 done
 
-touch "$PWD/$GITCONFIG_LOCAL"
-if [ -z "$git_name" ]
-then
-    printf 'Name: '
-    read git_name
-fi
-if [ -z "$git_email" ]
-then
-    printf 'Email: '
-    read git_email
-fi
-
-cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
-[user]
-    name = $git_name
-    email = $git_email
-
-[include]
-    path = $PWD/gitconfig
-
-EOF
-
-[ "@$github_ssh@" = "@yes@" ] && cat <<EOF >> "$PWD/$GITCONFIG_LOCAL"
-[url "ssh://git@github.com/"]
-    insteadOf = https://github.com/
-
-EOF
-
-lib_install
-trap - EXIT
+git config --global user.name "$gitname"
+git config --global user.email "$gitemail"
+git config --global include.path "$PWD/gitconfig"
 
 lib_info 'setup done'
