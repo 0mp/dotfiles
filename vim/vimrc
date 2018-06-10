@@ -82,6 +82,10 @@ set mouse=
 " One clipboard is enough for me.
 " https://stackoverflow.com/a/30691754/4694621
 set clipboard=unnamedplus
+" macOS specific hack.
+if substitute(system('uname'), "\n", "", "") == "Darwin"
+    set clipboard=unnamed
+endif
 
 " Copy the Vim registers content to the system clipboard. This way you can:
 " 1. Open Vim.
