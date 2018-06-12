@@ -19,6 +19,11 @@ The modules are as follows:
 > Install Bash
 > configuration files.
 
+**firefox**
+
+> Configure Firefox with
+> *user.js*.
+
 **freebsd-current**
 
 > Configure a
