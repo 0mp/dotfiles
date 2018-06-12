@@ -61,6 +61,7 @@ static const char *term2cmd[]  = { "st2", NULL };
 static const char *volupcmd[]  = { "mixer", "vol", "+2", NULL };
 static const char *voldowncmd[]  = { "mixer", "vol", "-2", NULL };
 static const char *volmutecmd[]  = { "mixer", "vol", "0", NULL };
+static const char *plumbselectioncmd[] = { "sh", "-c", "sh ~/.suckless/plumb.sh \"$(xclip -o)\"", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -101,6 +102,7 @@ static Key keys[] = {
 	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = volupcmd} },
 	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = voldowncmd} },
 	{ 0,         XF86XK_AudioMute,             spawn,          {.v = volmutecmd} },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = plumbselectioncmd} },
 };
 
 /* button definitions */
