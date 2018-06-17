@@ -69,7 +69,6 @@ The modules are as follows:
 > Install some
 > FreeBSD
 > general purpose utilities and configuration files.
-> The options are as follows:
 
 **freebsd-haseeq540s**
 
