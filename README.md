@@ -96,13 +96,6 @@ The modules are as follows:
 > Configure Git.
 > The options are as follows:
 
-> **--name** *name*
-
-> > The name to set in
-> > *~/.gitconfig*.
-> > Defaults to
-> > 'Mateusz Piotrowski'.
-
 > **--email** *email*
 
 > > The email to set in
@@ -117,6 +110,13 @@ The modules are as follows:
 > > with
 > > "`ssh://git@github.com/`"
 > > so that SSH is used even if a repository is configured to use HTTPS.
+
+> **--name** *name*
+
+> > The name to set in
+> > *~/.gitconfig*.
+> > Defaults to
+> > 'Mateusz Piotrowski'.
 
 **goat** \[**--defaults**]
 

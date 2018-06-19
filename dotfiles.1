@@ -97,12 +97,7 @@ Install Intel graphics kernel modules.
 .It Cm git Op Ar option ...
 Configure Git.
 The options are as follows:
-.Bl -tag -width ".Fl -github-ssh"
-.It Fl -name Ar name
-The name to set in
-.Pa ~/.gitconfig .
-Defaults to
-.Sq Mateusz Piotrowski .
+.Bl -tag -width ".Fl -email Ar email"
 .It Fl -email Ar email
 The email to set in
 .Pa ~/.gitconfig .
@@ -114,6 +109,11 @@ Configure Git to replace
 with
 .Dq Li "ssh://git@github.com/"
 so that SSH is used even if a repository is configured to use HTTPS.
+.It Fl -name Ar name
+The name to set in
+.Pa ~/.gitconfig .
+Defaults to
+.Sq Mateusz Piotrowski .
 .El
 .It Cm goat Op Fl -defaults
 Install goat.
