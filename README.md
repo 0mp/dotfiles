@@ -76,6 +76,17 @@ The modules are as follows:
 > FreeBSD
 > desktop experience for Hasee Q540S.
 
+**freebsd-l702x** \[*option ...*]
+
+> Configure
+> FreeBSD
+> desktop experience for Dell XPS L702X.
+> The options are as follows:
+
+> **--nvidia**
+
+> > Install Nvidia graphics driver.
+
 **freebsd-st**
 
 > Recompile and reinstall st terminals.

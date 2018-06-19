@@ -1,0 +1,39 @@
+#! /bin/sh -
+#
+# https://wiki.freebsd.org/Laptops/Dell_XPS_L702X
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+# Configure Nvidia drivers.
+case "$*" in
+    *--nvidia*)
+        # For some reason (which is probably a bug) the "linux"
+        # kernel module has to be loaded during the installation of
+        # a package with the Nvidia driver.
+        kldload linux
+        pkg install -y nvidia-driver
+        ;;
+esac
+sysrc kld_list+='nvidia-modeset'
+
+# Install an Nvidia configuration file for Xorg.
+FILES=
+PREFIX='/usr/local/etc/X11/xorg.conf.d/'
+CUSTOMFILES='driver-nvidia.conf'
+lib_custom_install() {
+    for f in $CUSTOMFILES
+    do
+        ln -v -f -F -n -- "$f" "$PREFIX$f"
+    done
+}
+lib_create_prefix_if_missing
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup.root done'
