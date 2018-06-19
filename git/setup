@@ -10,8 +10,8 @@ FILES=
 PREFIX=
 CUSTOMFILES='gitconfig'
 lib_custom_install() {
-    touch ./gitconfig.local
-    lib_install_file ./gitconfig.local ~/.gitconfig
+    touch "$PWD/gitconfig.local"
+    lib_install_file "$PWD/gitconfig.local" ~/.gitconfig
 }
 lib_back_up
 trap lib_roll_back EXIT
