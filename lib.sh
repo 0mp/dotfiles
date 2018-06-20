@@ -122,7 +122,7 @@ lib_run_as_root() {
     fi
     : "${CALLINGUSER:="$USER"}"
 
-    $command env MODULE_NAME="$MODULE_NAME" CALLINGUSER="$CALLINGUSER" sh setup.root "$@"
+    $command env BACKUP_DIR="$BACKUP_DIR" MODULE_NAME="$MODULE_NAME" CALLINGUSER="$CALLINGUSER" sh setup.root "$@"
 }
 
 # $1 - File
