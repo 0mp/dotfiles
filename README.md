@@ -85,7 +85,11 @@ The modules are as follows:
 
 > **--nvidia**
 
-> > Install Nvidia graphics driver.
+> > Install an Nvidia graphics driver.
+
+> **--synaptics**
+
+> > Install a Synaptics touchpad driver.
 
 **freebsd-st**
 

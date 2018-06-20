@@ -8,6 +8,31 @@ set -eu
 
 lib_info 'setup.root'
 
+# Configure the Synaptics touchpad driver.
+lib_set_once '/boot/loader.conf' 'hw.psm.synaptics_support="1"'
+sysrc moused_enabled="NO"
+case "$*" in
+    *--synaptics*)
+        pkg install -y libsynaptics xf86-input-synaptics
+        ;;
+esac
+
+FILES=
+PREFIX='/usr/local/etc/X11/'
+CUSTOMFILES='xorg.conf'
+lib_custom_install() {
+    for f in $CUSTOMFILES
+    do
+        install "$f" "$PREFIX$f"
+    done
+}
+lib_create_prefix_if_missing
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+
 # Configure Nvidia drivers.
 case "$*" in
     *--nvidia*)
@@ -20,14 +45,13 @@ case "$*" in
 esac
 sysrc kld_list+='nvidia-modeset'
 
-# Install an Nvidia configuration file for Xorg.
 FILES=
 PREFIX='/usr/local/etc/X11/xorg.conf.d/'
 CUSTOMFILES='driver-nvidia.conf'
 lib_custom_install() {
     for f in $CUSTOMFILES
     do
-        ln -v -f -F -n -- "$f" "$PREFIX$f"
+        install "$f" "$PREFIX$f"
     done
 }
 lib_create_prefix_if_missing
