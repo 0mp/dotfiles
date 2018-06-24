@@ -51,10 +51,22 @@ case $PS1 in
     *) PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] ' ;;
 esac
 
-if [[ $PS1 ]] && [[ $OSTYPE =~ freebsd.* ]] && \
-    [[ -f /usr/local/share/bash-completion/bash_completion.sh ]]
+if [[ -n $PS1 ]]
 then
-    source /usr/local/share/bash-completion/bash_completion.sh
+    case $OSTYPE in
+        darwin*)
+            if [[ -r /usr/local/etc/bash_completion ]]
+            then
+                source /usr/local/etc/bash_completion
+            fi
+            ;;
+        freebsd*)
+            if [[ -r /usr/local/share/bash-completion/bash_completion.sh ]]
+            then
+                source /usr/local/share/bash-completion/bash_completion.sh
+            fi
+            ;;
+    esac
 fi
 
 export EDITOR='vim'
