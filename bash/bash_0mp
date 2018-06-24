@@ -55,9 +55,9 @@ if [[ -n $PS1 ]]
 then
     case $OSTYPE in
         darwin*)
-            if [[ -r /usr/local/etc/bash_completion ]]
-            then
-                source /usr/local/etc/bash_completion
+            # Remember to install bash-completion@2 using brew.
+            if [[ -r /usr/local/share/bash-completion/bash_completion ]]; then
+                source /usr/local/share/bash-completion/bash_completion
             fi
             ;;
         freebsd*)
