@@ -133,6 +133,10 @@ The modules are as follows:
 > > Defaults to
 > > 'Mateusz Piotrowski'.
 
+**gnupg**
+
+> Install GnuPG configuration files.
+
 **goat** \[**--defaults**]
 
 > Install goat.
