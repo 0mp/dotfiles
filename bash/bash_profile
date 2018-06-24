@@ -1,1 +1,1 @@
-case "$-" in *i*) if [ -r ~/.bashrc ]; then . ~/.bashrc; fi;; esac
+[[ $- =~ i ]] && [[ -r ~/.bashrc ]] && source ~/.bashrc
