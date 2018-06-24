@@ -11,6 +11,11 @@ PREFIX="$HOME/.suckless/"
 lib_create_prefix_if_missing
 lib_custom_install() {
     lib_run_as_root
+
+    if [ -w ~/.0mp-switch/profile ]
+    then
+        echo Shine > ~/.0mp-switch/profile
+    fi
 }
 lib_back_up
 trap lib_roll_back EXIT
