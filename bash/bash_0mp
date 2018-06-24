@@ -23,7 +23,7 @@ shopt -s checkwinsize
 # Aliases & functions
 alias w3m="w3m -v"
 ddg() {
-    local search='/?q='"$@"
+    local search="/?q=$*"
     command w3m -X "ddg.gg${search%%/?q=}"
 }
 
