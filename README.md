@@ -144,6 +144,15 @@ The modules are as follows:
 > **--defaults**
 > populates goat with some default shortcuts.
 
+**macos** \[*option ...*]
+
+> Configure macOS.
+> The options are as follows:
+
+> **--bash**
+
+> > Install Bash 4 with Homebrew.
+
 **octave**
 
 > Instal octave-cli configuration files.

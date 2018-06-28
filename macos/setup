@@ -1,0 +1,12 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
+lib_run_as_root $CUSTOMOPTS
+
+lib_info 'setup done'

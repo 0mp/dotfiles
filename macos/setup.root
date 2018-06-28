@@ -1,0 +1,27 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+if [ -x /usr/local/bin/brew ]
+then
+    case $* in
+        *--bash*)
+            su "$CALLINGUSER" -c "brew install bash"
+            ;;
+    esac
+    brewbash="$(brew --prefix)/bin/bash"
+    if [ -x "$brewbash" ]
+    then
+        if ! grep "$brewbash" /etc/shells 1>/dev/null
+        then
+            printf '%s' "$brewbash" >> /etc/shells
+        fi
+        chsh -s "$brewbash" "$CALLINGUSER"
+    fi
+fi
+
+lib_info 'setup.root done'
