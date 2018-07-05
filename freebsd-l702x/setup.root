@@ -17,22 +17,6 @@ case "$*" in
         ;;
 esac
 
-FILES=
-PREFIX='/usr/local/etc/X11/'
-CUSTOMFILES='xorg.conf'
-lib_custom_install() {
-    for f in $CUSTOMFILES
-    do
-        install "$f" "$PREFIX$f"
-    done
-}
-lib_create_prefix_if_missing
-lib_back_up
-trap lib_roll_back EXIT
-lib_install
-trap - EXIT
-
-
 # Configure Nvidia drivers.
 case "$*" in
     *--nvidia*)
