@@ -6,6 +6,14 @@ set -eu
 
 lib_info 'setup'
 
+FILES='brightness'
+PREFIX="$HOME/.local/bin/"
+lib_custom_install() { }
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
 FILES=
 PREFIX=
 CUSTOMFILES=
