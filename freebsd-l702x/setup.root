@@ -45,4 +45,8 @@ trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
+# Recompile the following kernel modules during build-kernel and install
+# them during install-kernel.
+sysrc -f /etc/src.conf PORT_MODULES='emulators/virtualbox-ose-kmod x11/nvidia-driver'
+
 lib_info 'setup.root done'
