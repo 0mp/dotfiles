@@ -10,12 +10,13 @@ lib_info 'setup.root'
 
 # Configure the Synaptics touchpad driver.
 lib_set_once '/boot/loader.conf' 'hw.psm.synaptics_support="1"'
-sysrc moused_enable="NO"
-case "$*" in
-    *--synaptics*)
-        pkg install -y libsynaptics xf86-input-synaptics
-        ;;
-esac
+#sysrc moused_enable="NO"
+#case "$*" in
+#    *--synaptics*)
+#        pkg install -y libsynaptics xf86-input-synaptics
+#        ;;
+#esac
+sysrc moused_enable="YES" moused_flags="-A 1.65 -a 1.1"
 
 # Configure Nvidia drivers.
 case "$*" in

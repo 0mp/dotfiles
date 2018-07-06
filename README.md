@@ -87,10 +87,6 @@ The modules are as follows:
 
 > > Install an Nvidia graphics driver.
 
-> **--synaptics**
-
-> > Install a Synaptics touchpad driver.
-
 **freebsd-st**
 
 > Recompile and reinstall st terminals.
