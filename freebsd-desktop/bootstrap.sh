@@ -32,7 +32,7 @@ vim
 xclip
 xorg
 '
-pkg bootstrap
+ASSUME_ALWAYS_YES=YES pkg bootstrap
 pkg install -y -- $packages
 
 # Download dotfiles.
