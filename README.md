@@ -43,7 +43,7 @@ The modules are as follows:
 
 > **--fonts**
 
-> > Install additional fonts.
+> > Install and configure additional fonts.
 
 > **--powerdxx**
 
