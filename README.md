@@ -157,6 +157,10 @@ The modules are as follows:
 
 > Instal octave-cli configuration files.
 
+**subversion**
+
+> Install Subversion configuration files.
+
 **tmux**
 
 > Install tmux configuration files.
