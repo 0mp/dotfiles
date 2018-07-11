@@ -1,3 +1,11 @@
+# Bootstrap a FreeBSD desktop.
+#
+# After the installation run:
+#
+#     # fetch --no-verify-peer https://raw.githubusercontent.com/0mp/dotfiles/master/freebsd-desktop/bootstrap.sh
+#     # sh ./bootstrap.sh 0mp
+#
+# ---
 # SPDX-License-Identifier: BSD-2-Clause-FreeBSD
 #
 # Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
