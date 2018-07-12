@@ -31,7 +31,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 # ---
-# Version: 0.1
+# Version: 0.2.0
 set -eux
 
 user="$1"
@@ -73,7 +73,7 @@ pkg install -y -- $packages
 dotfilesurl='https://github.com/0mp/dotfiles'
 dotfilesdir="/home/$user/.dotfiles"
 if ! [ -d "$dotfilesdir" ]; then
-    su "$user" -c "git clone '$dotfilesurl' '$dotfilesdir'"
+    su "$user" -c "git clone --recurse-submodules '$dotfilesurl' '$dotfilesdir'"
 fi
 
 # Enable sudo for the wheel group.
