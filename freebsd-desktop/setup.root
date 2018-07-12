@@ -86,4 +86,13 @@ case "$*" in
     ;;
 esac
 
+# Configure ntpd(8).
+# Note: ntpdate is deprecated. Use ntpd(8) instead.
+case $* in
+    *--ntpd*)
+        sysrc ntpd_enable="YES"
+        sysrc ntpd_sync_on_start="YES"
+        ;;
+esac
+
 lib_info 'setup.root done'
