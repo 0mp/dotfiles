@@ -6,11 +6,15 @@ set -eu
 
 lib_info 'setup'
 
-FILES='plumb.sh'
-PREFIX="$HOME/.suckless/"
-lib_create_prefix_if_missing
+FILES=''
+PREFIX=""
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 lib_custom_install() {
-    lib_run_as_root
+    case $CUSTOMOPTS in
+        *--install*)
+            lib_run_as_root --install
+            ;;
+    esac
 
     if [ -w ~/.0mp-switch/profile ]
     then

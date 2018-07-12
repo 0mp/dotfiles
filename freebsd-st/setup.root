@@ -6,27 +6,27 @@ set -eu
 
 lib_info 'setup.root'
 
-for package in $(cd /usr/ports/x11/sterm/ && make all-depends-list)
-do
-    dependencies="${dependencies:-}${dependencies:+ }${package#"${package%/*/*}/"}"
-done
-echo $dependencies
-pkg install --automatic --yes -- $dependencies
+case "$*" in
+    *--install*)
+        for package in $(cd /usr/ports/x11/sterm/ && make all-depends-list)
+        do
+            dependencies="${dependencies:-}${dependencies:+ }${package#"${package%/*/*}/"}"
+        done
+        echo $dependencies
+        pkg install --automatic --yes -- $dependencies
 
-cd sterm-0mp
-for flavor in shine charcoal data
-do
-    make fetch
-    if pkg info -e sterm-0mp-$flavor
-    then
-        make deinstall FLAVOR=$flavor
-    fi
-    make clean FLAVOR=$flavor
-    su "$CALLINGUSER" -c "make BATCH=YES FLAVOR=$flavor"
-    make install FLAVOR=$flavor
-done
+        case $(pkg info --locked sterm 2>/dev/null) in
+            *yes) pkg unlock -y sterm ;;
+        esac
+        export BATCH='YES'
+        export ST_CONF="$PWD/config.h"
+        cd /usr/ports/x11/sterm
+        make deinstall
+        make clean
+        make WITH=SCROLLBACK reinstall
+        pkg lock -y sterm
+        ;;
+esac
 
-ln -s -f /usr/local/bin/st-shine /usr/local/bin/st
-ln -s -f /usr/local/bin/st-charcoal /usr/local/bin/st2
 
 lib_info 'setup.root done'

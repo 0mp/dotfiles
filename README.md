@@ -89,7 +89,12 @@ The modules are as follows:
 
 **freebsd-st**
 
-> Recompile and reinstall st terminals.
+> Configure the st terminal.
+> The options are as follows:
+
+> **--install**
+
+> > Recompile and reinstall st.
 
 **freebsd-yoga314** \[*option ...*]
 
