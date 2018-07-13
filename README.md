@@ -70,6 +70,21 @@ The modules are as follows:
 > > Set up a wallpaper using feh.
 > > This option succeeds only when Xorg is running.
 
+**freebsd-e5500**
+
+> Configure
+> FreeBSD
+> desktop experience for Dell Latitude E5500.
+> The options are as follows:
+
+> **--intel**
+
+> > Install Intel driver for Xorg.
+
+> **--wifi**
+
+> > Configure wireless networking.
+
 **freebsd-general**
 
 > Install some

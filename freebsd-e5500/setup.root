@@ -1,0 +1,26 @@
+#! /bin/sh -
+#
+# https://wiki.freebsd.org/Laptops/Dell_Latitude_E5500
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+# Configure Xorg Intel drivers.
+case $* in
+    *--intel*) pkg install -y xf86-video-intel
+esac
+
+# Configure the iwn wireless network device.
+#
+# Note: "SYNCDHCP" work much better than "DHCP"
+case $* in
+    *--wifi*)
+        sysrc wlans_iwn0='wlan0'
+        sysrc ifconfig_wlan0='WPA SYNCDHCP'
+        ;;
+esac
+
+lib_info 'setup.root done'
