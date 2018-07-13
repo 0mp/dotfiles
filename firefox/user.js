@@ -24,6 +24,11 @@ user_pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-f
 user_pref("browser.uidensity", 1);
 
 /*
+ * Set the default search engine to DuckDuckGo.
+ */
+user_pref("browser.urlbar.placeholderName", "DuckDuckGo");
+
+/*
  * Use the light theme.
  */
 user_pref("lightweightThemes.selectedThemeID", "firefox-compact-light@mozilla.org");
