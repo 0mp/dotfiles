@@ -95,4 +95,8 @@ case $* in
         ;;
 esac
 
+# Add the user to the video group. Otherwise, things like libGL do not work.
+# Note: being in the wheel group is not enough.
+pw groupmod video -m "$CALLINGUSER"
+
 lib_info 'setup.root done'
