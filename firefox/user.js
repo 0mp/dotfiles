@@ -1,4 +1,9 @@
 /*
+ * Open blank page in new tabs.
+ */
+user_pref("browser.newtabpage.enabled", false);
+
+/*
  * Hide one-click search engines.
  */
 user_pref("browser.search.hiddenOneOffs", "Google,Bing,Amazon.com,DuckDuckGo,Twitter,Wikipedia (en)");
