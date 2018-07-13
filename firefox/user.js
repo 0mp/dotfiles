@@ -14,6 +14,11 @@ user_pref("browser.search.hiddenOneOffs", "Google,Bing,Amazon.com,DuckDuckGo,Twi
 user_pref("browser.startup.homepage", "about:blank");
 
 /*
+ * Open tabs from the previous session when Firefox starts.
+ */
+user_pref("browser.startup.page", 3);
+
+/*
  * Customize the toolbar so that it is less cluttered.
  */
 user_pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"back-button\",\"forward-button\",\"urlbar-container\",\"downloads-button\",\"add-ons-button\",\"preferences-button\",\"sidebar-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"]},\"seen\":[\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"toolbar-menubar\",\"TabsToolbar\"],\"currentVersion\":14,\"newElementCount\":4}");
