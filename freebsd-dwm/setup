@@ -16,7 +16,7 @@ esac
 PREFIX="$HOME/.0mp-switch/"
 lib_create_prefix_if_missing
 
-FILES='eyes-alert.sh fehbg.freebsd-128.png battery-alert.sh status-bar.sh'
+FILES='battery-alert.sh eyes-alert.sh fehbg.freebsd-128.png plumb.sh status-bar.sh'
 PREFIX="$HOME/.suckless/"
 lib_custom_install() {
     case $CUSTOMOPTS in
