@@ -2,6 +2,12 @@
 
 set -eu
 
+if [ "$(id -u)" -eq 0 ]
+then
+    echo 'error: ./setup should not be run as root' 1>&2
+    exit 1
+fi
+
 if [ "@$(pwd -P)@" != "@$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)@" ]
 then
     echo 'usage: ./setup [target [[options...] --]]...' 1>&2
