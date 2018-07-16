@@ -8,12 +8,8 @@ lib_info 'setup.root'
 
 case "$*" in
     *--install*)
-        for package in dmenu $(cd /usr/ports/x11-wm/dwm/ && make all-depends-list)
-        do
-            dependencies="${dependencies:-}${dependencies:+ }${package#"${package%/*/*}/"}"
-        done
-        echo $dependencies
-        pkg install --automatic --yes -- $dependencies
+        lib_freebsd_install_packages --automatic -- $(cd /usr/ports/x11-wm/dwm/ && make all-depends-list)
+        lib_freebsd_install_packages dmenu
 
         case $(pkg info --locked dwm 2>/dev/null) in
             *yes) pkg unlock -y dwm ;;

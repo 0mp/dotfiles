@@ -33,7 +33,7 @@ lib_set_once /etc/sysctl.conf 'hw.psm.synaptics.min_pressure=40'
 # It is not recommended to install x11-drivers/xf86-video-intel alongside
 # graphics/drm-next-kmod.
 case "$*" in
-    *--intel*) pkg install -y graphics/drm-next-kmod
+    *--intel*) lib_freebsd_install_packages graphics/drm-next-kmod
 esac
 sysrc kld_list+="/boot/modules/i915kms.ko"
 

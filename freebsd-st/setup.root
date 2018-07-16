@@ -8,12 +8,7 @@ lib_info 'setup.root'
 
 case "$*" in
     *--install*)
-        for package in $(cd /usr/ports/x11/sterm/ && make all-depends-list)
-        do
-            dependencies="${dependencies:-}${dependencies:+ }${package#"${package%/*/*}/"}"
-        done
-        echo $dependencies
-        pkg install --automatic --yes -- $dependencies
+        lib_freebsd_install_packages --automatic -- $(cd /usr/ports/x11/sterm/ && make all-depends-list)
 
         case $(pkg info --locked sterm 2>/dev/null) in
             *yes) pkg unlock -y sterm ;;

@@ -13,7 +13,7 @@ lib_set_once '/boot/loader.conf' 'hw.psm.synaptics_support="1"'
 #sysrc moused_enable="NO"
 #case "$*" in
 #    *--synaptics*)
-#        pkg install -y libsynaptics xf86-input-synaptics
+#        lib_freebsd_install_packages libsynaptics xf86-input-synaptics
 #        ;;
 #esac
 sysrc moused_enable="YES" moused_flags="-A 1.65 -a 1.1"
@@ -25,7 +25,7 @@ case "$*" in
         # kernel module has to be loaded during the installation of
         # a package with the Nvidia driver.
         kldload linux
-        pkg install -y nvidia-driver
+        lib_freebsd_install_packages nvidia-driver
         ;;
 esac
 sysrc kld_list+='nvidia-modeset'

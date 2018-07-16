@@ -140,3 +140,21 @@ lib_set_once() {
         printf '%s\n' "$2" >> "$1"
     fi
 }
+
+# $@ - Packages to install unless they are already installed. The list of
+#      packages can be prepended by options to be passed to pkg(8). Those two
+#      lists should be separated with "--".
+lib_freebsd_install_packages() {
+        packages=
+        for p in ${*#* -- }
+        do
+            if ! pkg info --exists "$p"
+            then
+                packages="${packages}${packages:+ }${p}"
+            fi
+        done
+        if [ -n "$packages" ]
+        then
+            pkg install -y ${*% -- *} -- $packages
+        fi
+}

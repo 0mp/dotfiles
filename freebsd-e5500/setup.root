@@ -10,7 +10,9 @@ lib_info 'setup.root'
 
 # Configure Xorg Intel drivers.
 case $* in
-    *--intel*) pkg install -y xf86-video-intel
+    *--intel*)
+        lib_freebsd_install_packages xf86-video-intel
+        ;;
 esac
 
 # Configure the iwn wireless network device.
