@@ -8,10 +8,13 @@ set -eu
 
 lib_info 'setup.root'
 
-# Configure Xorg Intel drivers.
+
+# Configure Xorg Intel drivers and increase the font size in the console by
+# loading i915kms.
 case $* in
     *--intel*)
         lib_freebsd_install_packages xf86-video-intel
+        sysrc kld_list+='i915kms'
         ;;
 esac
 
