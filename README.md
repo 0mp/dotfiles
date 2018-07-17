@@ -35,7 +35,7 @@ The modules are as follows:
 > and
 > src-env.conf(5).
 
-**freebsd-desktop** \[*option ...*]
+**freebsd-desktop** \[\[*option ...*] **--**]
 
 > Configuration files for a
 > FreeBSD
@@ -56,7 +56,7 @@ The modules are as follows:
 > > Install powerd++ for a better power management than the one offered by
 > > powerd(8).
 
-**freebsd-dwm** \[*option ...*]
+**freebsd-dwm** \[\[*option ...*] **--**]
 
 > Configuration of a desktop environment running the dwm window manager.
 > The options are as follows:
@@ -70,7 +70,7 @@ The modules are as follows:
 > > Set up a wallpaper using feh.
 > > This option succeeds only when Xorg is running.
 
-**freebsd-e5500**
+**freebsd-e5500** \[\[*option ...*] **--**]
 
 > Configure
 > FreeBSD
@@ -97,7 +97,7 @@ The modules are as follows:
 > FreeBSD
 > desktop experience for Hasee Q540S.
 
-**freebsd-l702x** \[*option ...*]
+**freebsd-l702x** \[\[*option ...*] **--**]
 
 > Configure
 > FreeBSD
@@ -108,7 +108,7 @@ The modules are as follows:
 
 > > Install an Nvidia graphics driver.
 
-**freebsd-st**
+**freebsd-st** \[\[*option ...*] **--**]
 
 > Configure the st terminal.
 > The options are as follows:
@@ -117,7 +117,7 @@ The modules are as follows:
 
 > > Recompile and reinstall st.
 
-**freebsd-yoga314** \[*option ...*]
+**freebsd-yoga314** \[\[*option ...*] **--**]
 
 > Configure
 > FreeBSD
@@ -128,7 +128,7 @@ The modules are as follows:
 
 > > Install Intel graphics kernel modules.
 
-**git** \[*option ...*]
+**git** \[\[*option ...*] **--**]
 
 > Configure Git.
 > The options are as follows:
@@ -159,14 +159,16 @@ The modules are as follows:
 
 > Install GnuPG configuration files.
 
-**goat** \[**--defaults**]
+**goat** \[\[*option ...*] **--**]
 
 > Install goat.
-> Using
-> **--defaults**
-> populates goat with some default shortcuts.
+> The options are as follows:
 
-**macos** \[*option ...*]
+> **--defaults**
+
+> > Populate goat with some default shortcuts.
+
+**macos** \[\[*option ...*] **--**]
 
 > Configure macOS.
 > The options are as follows:
@@ -183,7 +185,7 @@ The modules are as follows:
 
 > Install Subversion configuration files.
 
-**tmux**
+**tmux** \[\[*option ...*] **--**]
 
 > Install tmux configuration files.
 > The options are as follows:

@@ -38,7 +38,7 @@
 is a framework to manage configuration scripts, dotfiles and utilities.
 .Pp
 The modules are as follows:
-.Bl -tag -width ".Cm freebsd-desktop" -compact
+.Bl -tag -width "Cm freebsd-desktop"
 .It Cm bash
 Install Bash
 configuration files.
@@ -54,11 +54,11 @@ This module sets some development-specific variables in
 .Xr src.conf 5 ,
 and
 .Xr src-env.conf 5 .
-.It Cm freebsd-desktop Op Ar option ...
+.It Cm freebsd-desktop Oo Oo Ar option ... Oc Cm -- Oc
 Configuration files for a
 .Fx
 desktop.
-.Bl -tag -width ".Fl -powerdxx"
+.Bl -tag -width "Fl -powerdxx"
 .It Fl -fonts
 Install and configure additional fonts.
 .It Fl -ntpd
@@ -69,22 +69,22 @@ to set correct time at system startup.
 Install powerd++ for a better power management than the one offered by
 .Xr powerd 8 .
 .El
-.It Cm freebsd-dwm Op Ar option ...
+.It Cm freebsd-dwm Oo Oo Ar option ... Oc Cm -- Oc
 Configuration of a desktop environment running the dwm window manager.
 The options are as follows:
-.Bl -tag -width ".Fl -wallpaper"
+.Bl -tag -width "Fl -wallpaper"
 .It Fl -install
 Recompile and reinstall dwm.
 .It Fl -wallpaper
 Set up a wallpaper using feh.
 This option succeeds only when Xorg is running.
 .El
-.It Cm freebsd-e5500
+.It Cm freebsd-e5500 Oo Oo Ar option ... Oc Cm -- Oc
 Configure
 .Fx
 desktop experience for Dell Latitude E5500.
 The options are as follows:
-.Bl -tag -width ".Fl -intel"
+.Bl -tag -width "Fl -intel"
 .It Fl -intel
 Install Intel driver for Xorg.
 .It Fl -wifi
@@ -98,35 +98,35 @@ general purpose utilities and configuration files.
 Configure
 .Fx
 desktop experience for Hasee Q540S.
-.It Cm freebsd-l702x Op Ar option ...
+.It Cm freebsd-l702x Oo Oo Ar option ... Oc Cm -- Oc
 Configure
 .Fx
 desktop experience for Dell XPS L702X.
 The options are as follows:
-.Bl -tag -width ".Fl -nvidia"
+.Bl -tag -width "Fl -nvidia"
 .It Fl -nvidia
 Install an Nvidia graphics driver.
 .El
-.It Cm freebsd-st
+.It Cm freebsd-st Oo Oo Ar option ... Oc Cm -- Oc
 Configure the st terminal.
 The options are as follows:
-.Bl -tag -width ".Fl -install"
+.Bl -tag -width "Fl -install"
 .It Fl -install
 Recompile and reinstall st.
 .El
-.It Cm freebsd-yoga314 Op Ar option ...
+.It Cm freebsd-yoga314 Oo Oo Ar option ... Oc Cm -- Oc
 Configure
 .Fx
 desktop experience for Lenovo Yoga 3 14.
 The options are as follows:
-.Bl -tag -width ".Fl -powerdxx"
+.Bl -tag -width "Fl -intel"
 .It Fl -intel
 Install Intel graphics kernel modules.
 .El
-.It Cm git Op Ar option ...
+.It Cm git Oo Oo Ar option ... Oc Cm -- Oc
 Configure Git.
 The options are as follows:
-.Bl -tag -width ".Fl -email Ar email"
+.Bl -tag -width "Fl -email Ar email"
 .It Fl -email Ar email
 The email to set in
 .Pa ~/.gitconfig .
@@ -146,15 +146,17 @@ Defaults to
 .El
 .It Cm gnupg
 Install GnuPG configuration files.
-.It Cm goat Op Fl -defaults
+.It Cm goat Oo Oo Ar option ... Oc Cm -- Oc
 Install goat.
-Using
-.Fl -defaults
-populates goat with some default shortcuts.
-.It Cm macos Op Ar option ...
+The options are as follows:
+.Bl -tag -width "Fl -defaults"
+.It Fl -defaults
+Populate goat with some default shortcuts.
+.El
+.It Cm macos Oo Oo Ar option ... Oc Cm -- Oc
 Configure macOS.
 The options are as follows:
-.Bl -tag -width ".Fl -bash"
+.Bl -tag -width "Fl -bash"
 .It Fl -bash
 Install Bash 4 with Homebrew.
 .El
@@ -162,10 +164,10 @@ Install Bash 4 with Homebrew.
 Instal octave-cli configuration files.
 .It Cm subversion
 Install Subversion configuration files.
-.It Cm tmux
+.It Cm tmux Oo Oo Ar option ... Oc Cm -- Oc
 Install tmux configuration files.
 The options are as follows:
-.Bl -tag -width ".Fl -freebsd"
+.Bl -tag -width "Fl -freebsd"
 .It Fl -freebsd
 Make
 .Li pane_current_path
