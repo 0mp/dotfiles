@@ -186,6 +186,14 @@ The modules are as follows:
 **tmux**
 
 > Install tmux configuration files.
+> The options are as follows:
+
+> **--freebsd**
+
+> > Make
+> > `pane_current_path`
+> > work for unprivileged users on
+> > FreeBSD.
 
 **utils**
 

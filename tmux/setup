@@ -41,4 +41,21 @@ trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
+FILES=
+PREFIX=
+CUSTOMFILES=
+CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
+lib_custom_install() {
+    case $CUSTOMOPTS in
+        *--freebsd*)
+            lib_run_as_root $CUSTOMOPTS
+            ;;
+    esac
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+
 lib_info 'setup done'

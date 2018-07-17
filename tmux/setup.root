@@ -1,0 +1,18 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup.root'
+
+# Make #{pane_current_path} work when using tmux on a non-root account.
+# https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=229567
+case $* in
+    *--freebsd*)
+        sysctl security.bsd.unprivileged_proc_debug=1
+        lib_set_once /etc/sysctl.conf security.bsd.unprivileged_proc_debug=1
+        ;;
+esac
+
+lib_info 'setup.root done'
