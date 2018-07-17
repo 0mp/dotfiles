@@ -8,6 +8,8 @@ lib_info 'setup'
 
 PREFIX="$HOME/.gnupg/"
 FILES='gpg.conf'
+lib_create_prefix_if_missing
+chmod 0700 "$PREFIX"
 lib_back_up
 trap lib_roll_back EXIT
 lib_install
