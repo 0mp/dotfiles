@@ -23,5 +23,5 @@ else
     printf '%s' 'D.E.A.D'
 fi
 printf -- ' | '
-date +'%A, %d.%m | %H:%M'
+date +'%A, %d.%m (%B) | %H:%M '
 )"
