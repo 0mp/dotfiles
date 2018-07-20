@@ -12,6 +12,16 @@ acpiconf -i 0 | awk '
     /Remaining capacity*/{printf "%s", $3}
     /State:[[:space:]]+charging/{printf "+"}
     /Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}'
+printf %s ' | '
+if wpa_cli ping >/dev/null 2>&1
+then
+    wpa_cli status | awk '
+    /^ssid=/{printf "%s, ", substr($0, 6)}
+    /^ip_address=/{printf "%s", substr($0, 12)}
+    '
+else
+    printf '%s' 'D.E.A.D'
+fi
 printf -- ' | '
 date +'%A, %d.%m | %H:%M'
 )"
