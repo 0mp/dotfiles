@@ -8,6 +8,13 @@ lib_info 'setup.root'
 
 case "$*" in
     *)
+        # Use sudo(8) instead of su(1) when available.
+        cat <<- EOF >> /etc/make.conf
+.if exists(/usr/local/bin/sudo)
+SU_CMD=/usr/local/bin/sudo -E sh -c
+.endif
+EOF
+
         # Turn on additional checks for ports.
         sysrc -f /etc/make.conf DEVELOPER=YES
 
