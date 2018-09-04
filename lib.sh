@@ -148,6 +148,8 @@ lib_freebsd_install_packages() {
         packages=
         for p in ${*#* -- }
         do
+            # $p is a full path to the port. Let's extract the origin.
+            p="${p##${p%/*/*}/}"
             if ! pkg info --exists "$p"
             then
                 packages="${packages}${packages:+ }${p}"
