@@ -9,6 +9,7 @@ lib_info 'setup'
 FILES="$(cat <<-EOF
 0mp-explore
 cflowfilter
+committer-bootstrap
 disable-yoga-3-14-touchscreen
 faf
 fitqemu
