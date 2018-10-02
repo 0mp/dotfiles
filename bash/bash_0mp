@@ -9,7 +9,7 @@ case "$MANPATH" in
 esac
 
 # Configure history.
-HISTCONTROL=ignoredups:ignorespace:erasedups
+HISTCONTROL=ignoredups:erasedups
 HISTSIZE=20000
 
 # C-s and C-q key bindings for the flow control should be off by default.
