@@ -8,6 +8,13 @@ set -eu
 
 lib_info 'setup.root'
 
+# Configure Firefox.
+case $* in
+    *--firefox*)
+        firefoxfix='net.local.stream.recvspace=16384'
+        lib_set_once '/etc/sysctl.conf' "$firefoxfix"
+        ;;
+esac
 
 # Configure Xorg Intel drivers and increase the font size in the console by
 # loading i915kms.
