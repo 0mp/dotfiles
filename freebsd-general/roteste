@@ -120,6 +120,7 @@ fi
 if [ "$complete" ]
 then
     cd /usr/src
+    mergemaster -F -p
     make -j$ncpu installworld
     mergemaster -i -v -U
 else
