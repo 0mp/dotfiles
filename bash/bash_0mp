@@ -47,8 +47,8 @@ ssh_agent_activate() {
 # use a different color by setting PS1 before source this file. For example,
 # setting it to '41' results in a red prompt.
 case $PS1 in
-    [0-9][0-9]) PS1='  \u@\h $PWD\n'"\[\e[0;${PS1}m"'\] \[\e[0m\] ' ;;
-    *) PS1='  \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] ' ;;
+    [0-9][0-9]) PS1=' $? \u@\h $PWD\n'"\[\e[0;${PS1}m"'\] \[\e[0m\] ' ;;
+    *) PS1=' $? \u@\h $PWD\n\[\e[0;44m\] \[\e[0m\] ' ;;
 esac
 
 if [[ -n $PS1 ]]
