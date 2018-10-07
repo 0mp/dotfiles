@@ -20,7 +20,7 @@ trap lib_roll_back EXIT
 lib_install
 trap - EXIT
 
-FILES='fr justmount roteste unitek-init wifi-init'
+FILES='fr justmount nycbug-dmesgd roteste unitek-init wifi-init'
 PREFIX="$HOME/.local/bin/"
 lib_custom_install() { :; }
 lib_create_prefix_if_missing
