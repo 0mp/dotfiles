@@ -41,7 +41,7 @@ clean_ports_modules() {
     done
 }
 
-version=1.1.0
+version=1.2.0
 
 if [ $# -eq 0 ]
 then
@@ -124,6 +124,13 @@ then
     make -j$ncpu installworld
     mergemaster -F -i -v -U
 else
+    if [ "$world" ]
+    then
+        cd /usr/src
+        kldstat -q -n filemon || kldload filemon
+        make -j$ncpu buildworld
+    fi
+
     if [ "$kernel" ]
     then
         clean_ports_modules
@@ -131,13 +138,6 @@ else
         cd /usr/src
         kldstat -q -n filemon || kldload filemon
         make -j$ncpu buildkernel
-    fi
-
-    if [ "$world" ]
-    then
-        cd /usr/src
-        kldstat -q -n filemon || kldload filemon
-        make -j$ncpu buildworld
     fi
 
     # Install the kernel.
