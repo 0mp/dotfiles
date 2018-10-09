@@ -21,4 +21,8 @@ sysrc ntpdate_enable='YES'
 # Configure the rum wireless network device.
 sysrc wlans_rum0='wlan0' ifconfig_wlan0='WPA DHCP'
 
+# Improve the console resolution.
+vidcontrol MODE_286
+sysrc allscreens_flags=MODE_286
+
 lib_info 'setup.root done'
