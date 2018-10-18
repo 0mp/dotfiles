@@ -44,4 +44,13 @@ PREFIX=
 # 4. Install Vundle plugins.
 vim +PluginInstall +PluginUpdate +qall
 
+# 5. Install templates.
+FILES='Makefile'
+PREFIX="/home/0mp/.vim/templates/"
+lib_create_prefix_if_missing
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
 lib_info 'setup done'

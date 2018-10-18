@@ -239,6 +239,13 @@ au FileType gitcommit setlocal colorcolumn=51
 
 au FileType make set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 
+" Makefile template.
+if has("autocmd")
+  augroup templates
+    autocmd BufNewFile Makefile 0r ~/.vim/templates/Makefile
+  augroup END
+endif
+
 au BufReadPost svn-commit*.tmp setlocal spell tw=75
 " }}}
 " Section: Visuals {{{
