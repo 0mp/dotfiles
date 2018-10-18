@@ -238,6 +238,8 @@ au FileType gitcommit set spell
 au FileType gitcommit setlocal colorcolumn=51
 
 au FileType make set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
+
+au BufReadPost svn-commit*.tmp setlocal spell tw=75
 " }}}
 " Section: Visuals {{{
 "
