@@ -41,12 +41,12 @@ clean_ports_modules() {
     done
 }
 
-version=1.2.0
+version=1.3.0
 
 if [ $# -eq 0 ]
 then
     cat <<__end_of_usage
-Usage: roteste [-kipsw | -c]
+Usage: roteste [-ekipsw | -c [-b]]
 Version: $version
 __end_of_usage
 elif [ 0 -ne "$(id -u)" ]
@@ -58,13 +58,21 @@ ncpu="$(sysctl -n hw.ncpu)"
 
 set -e
 
-args=`getopt ckipsw $*`
+args=`getopt bcekipsw $*`
 set -- $args
 
 while :; do
     case "$1" in
+        -b)
+            bectl=yes
+            shift
+            ;;
         -c)
             complete=yes
+            shift
+            ;;
+        -e)
+            etcupdate=yes
             shift
             ;;
         -k)
@@ -94,6 +102,11 @@ while :; do
     esac
 done
 
+if [ "$etcupdate" ]
+then
+    etcupdate extract
+fi
+
 # Get the latest source tree.
 if [ "$src" ]
 then
@@ -120,9 +133,14 @@ fi
 if [ "$complete" ]
 then
     cd /usr/src
-    mergemaster -F -p
+    if [ "$bectl" ]
+    then
+        bectl create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
+    fi
     make -j$ncpu installworld
-    mergemaster -F -i -v -U
+    etcupdate diff
+    etcupdate
+    etcupdate resolve
 else
     if [ "$world" ]
     then
