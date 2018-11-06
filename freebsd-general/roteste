@@ -26,7 +26,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # ---
-# Scripting helping to automate the FreeBSD CURRENT branch maintenance.
+# Automate FreeBSD CURRENT branch updates.
 
 # I've found out that the PORTS_MODULES mechanism does not work well if it is
 # not cleaned before running `buildkernel`. The port does not get rebuiled
@@ -41,7 +41,7 @@ clean_ports_modules() {
     done
 }
 
-version=1.3.0
+version=1.4.0
 
 if [ $# -eq 0 ]
 then
@@ -135,7 +135,17 @@ then
     cd /usr/src
     if [ "$bectl" ]
     then
-        bectl create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
+        if [ -x /sbin/bectl ]
+        then
+            becmd=bectl
+        elif [ -x /usr/loca/sbin/beadm ]
+        then
+            becmd=beadm
+        else
+            printf 'Neither bectl(8) nor beadm(8) is available; aborting\n' >&2
+            exit 1
+        fi
+        "$becmd" create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
     fi
     make -j$ncpu installworld
     etcupdate diff
