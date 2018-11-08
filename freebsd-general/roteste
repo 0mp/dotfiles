@@ -41,7 +41,45 @@ clean_ports_modules() {
     done
 }
 
-version=1.4.0
+get_current_date() {
+    date +%Y-%m-%d_%Hh%Mm%Ss || echo 'YYYY-MM-DD_hhhmmmsss'
+}
+
+die() {
+    pritnf 'FATAL: %s\n' "S*" >&2
+    exit 1
+}
+
+action=
+logfile=
+register_action() {
+    action="$1"
+    logfile="$logdir/$(get_current_date)-$action.log"
+    touch -- "$logfile"
+}
+
+finish_action() {
+    touch -- "$logdir/$(get_current_date)-$action.done"
+}
+
+run() {
+    action="$1"
+    shift
+    register_action "$action"
+    "$@" 2>&1 | tee -a "$logfile"
+    finish_action
+}
+
+version=1.5.0
+rootlogdir="/var/log/roteste"
+logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
+if [ -d "$logdir" ]
+then
+    die "\"$logdir\" should not exist"
+elif mkdir -p -- "$logdir" && [ -d "$logdir" ]
+then :; else
+    die "Failed to create \"$logdir\""
+fi
 
 if [ $# -eq 0 ]
 then
@@ -51,12 +89,12 @@ Version: $version
 __end_of_usage
 elif [ 0 -ne "$(id -u)" ]
 then
-    echo 'error: roteste has to be run as root' && exit 1
+    die 'roteste has to be run as root'
 fi
 
-ncpu="$(sysctl -n hw.ncpu)"
-
 set -e
+
+ncpu="$(sysctl -n hw.ncpu)"
 
 args=`getopt bcekipsw $*`
 set -- $args
@@ -104,7 +142,7 @@ done
 
 if [ "$etcupdate" ]
 then
-    etcupdate extract
+    run 'etcupdate-extract' etcupdate extract
 fi
 
 # Get the latest source tree.
@@ -112,10 +150,10 @@ if [ "$src" ]
 then
     if ! [ -d /usr/src/.svn ]
     then
-        rm -rf -- /usr/src/*
-        svnlite co https://svn.freebsd.org/base/head /usr/src
+        run 'src-rm' rm -rf -- /usr/src/*
+        run 'src-checkout' svnlite co https://svn.freebsd.org/base/head /usr/src
     else
-        svnlite update /usr/src
+        run 'src-update' svnlite update /usr/src
     fi
 fi
 
@@ -123,10 +161,10 @@ if [ "$ports" ]
 then
     if ! [ -d /usr/ports/.svn ]
     then
-        rm -rf -- /usr/ports/*
-        svnlite co https://svn.freebsd.org/ports/head /usr/ports
+        run 'ports-rm' rm -rf -- /usr/ports/*
+        run 'ports-checkout' svnlite co https://svn.freebsd.org/ports/head /usr/ports
     else
-        svnlite update /usr/ports
+        run 'ports-update' svnlite update /usr/ports
     fi
 fi
 
@@ -142,36 +180,40 @@ then
         then
             becmd=beadm
         else
-            printf 'Neither bectl(8) nor beadm(8) is available; aborting\n' >&2
-            exit 1
+            die 'Neither bectl(8) nor beadm(8) is available; aborting'
         fi
-        "$becmd" create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
+        run 'bectl-create' "$becmd" create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
     fi
-    make -j$ncpu installworld
-    etcupdate diff
-    etcupdate
-    etcupdate resolve
+    run 'installworld' make -j$ncpu installworld
+
+    run 'etcupdate-diff' etcupdate diff
+
+    run 'etcupdate' etcupdate
+
+    run 'etcupdate-resolve' etcupdate resolve
 else
     if [ "$world" ]
     then
         cd /usr/src
+        # XXX: Track filemon loading.
         kldstat -q -n filemon || kldload filemon
-        make -j$ncpu buildworld
+        run 'buildworld' make -j$ncpu buildworld
     fi
 
     if [ "$kernel" ]
     then
-        clean_ports_modules
+        run 'clean-modules' clean_ports_modules
 
         cd /usr/src
+        # XXX: Track filemon loading.
         kldstat -q -n filemon || kldload filemon
-        make -j$ncpu buildkernel
+        run 'buildkernel' make -j$ncpu buildkernel
     fi
 
     # Install the kernel.
     if [ "$install" ]
     then
         cd /usr/src
-        make -j$ncpu installkernel
+        run 'installkernel' make -j$ncpu installkernel
     fi
 fi
