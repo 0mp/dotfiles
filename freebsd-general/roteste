@@ -46,7 +46,7 @@ get_current_date() {
 }
 
 die() {
-    pritnf 'FATAL: %s\n' "S*" >&2
+    printf 'FATAL: %s\n' "$*" >&2
     exit 1
 }
 
@@ -176,7 +176,7 @@ then
         if [ -x /sbin/bectl ]
         then
             becmd=bectl
-        elif [ -x /usr/loca/sbin/beadm ]
+        elif [ -x /usr/local/sbin/beadm ]
         then
             becmd=beadm
         else
