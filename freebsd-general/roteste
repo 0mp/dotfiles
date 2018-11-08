@@ -66,7 +66,9 @@ run() {
     action="$1"
     shift
     register_action "$action"
-    "$@" 2>&1 | tee -a "$logfile"
+    {
+        "$@" 2>&1 || die "Failed to finish \"$action\""
+    } | tee -a "$logfile"
     finish_action
 }
 
