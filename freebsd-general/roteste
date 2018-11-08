@@ -72,7 +72,7 @@ run() {
     finish_action
 }
 
-version=1.5.0
+version=1.6.0
 rootlogdir="/var/log/roteste"
 logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
 if [ -d "$logdir" ]
@@ -186,6 +186,9 @@ then
         fi
         run 'bectl-create' "$becmd" create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
     fi
+
+    run 'mergemaster-p' mergemaster -p
+
     run 'installworld' make -j$ncpu installworld
 
     run 'etcupdate-diff' etcupdate diff
