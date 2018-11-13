@@ -43,3 +43,9 @@ user_pref("lightweightThemes.selectedThemeID", "firefox-compact-light@mozilla.or
  * switching to full screen.
  */
 user_pref("toolkit.cosmeticAnimations.enabled", false);
+
+/*
+ * Bring back Ctrl-Tab and Ctrl-Shift-Tab old behavior. The new one that
+ * switches to first to the recently used tab is frustrating.
+ */
+user_pref("browser.ctrlTab.recentlyUsedOrder", false);
