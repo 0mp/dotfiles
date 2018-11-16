@@ -1,0 +1,14 @@
+#! /bin/sh -
+
+url="$(svn info | awk '/^URL/{print $2}')"
+committer='svn+ssh://0mp@repo'
+anonymous='https://svn'
+
+case $url in
+    $committer*)
+        svn relocate "$committer" "$anonymous"
+        ;;
+    $anonymous*)
+        svn relocate "$anonymous" "$committer"
+        ;;
+esac
