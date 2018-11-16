@@ -24,17 +24,6 @@ The modules are as follows:
 > Configure Firefox with
 > *user.js*.
 
-**freebsd-current**
-
-> Configure a
-> FreeBSD
-> machine running CURRENT.
-> This module sets some development-specific variables in
-> make.conf(5),
-> src.conf(5),
-> and
-> src-env.conf(5).
-
 **freebsd-desktop** \[\[*option ...*] **--**]
 
 > Configuration files for a
@@ -69,6 +58,17 @@ The modules are as follows:
 
 > > Set up a wallpaper using feh.
 > > This option succeeds only when Xorg is running.
+
+**freebsd-current**
+
+> Configure a
+> FreeBSD
+> machine running CURRENT.
+> This module sets some development-specific variables in
+> make.conf(5),
+> src.conf(5),
+> and
+> src-env.conf(5).
 
 **freebsd-e5500** \[\[*option ...*] **--**]
 

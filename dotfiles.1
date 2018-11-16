@@ -45,15 +45,6 @@ configuration files.
 .It Cm firefox
 Configure Firefox with
 .Pa user.js .
-.It Cm freebsd-current
-Configure a
-.Fx
-machine running CURRENT.
-This module sets some development-specific variables in
-.Xr make.conf 5 ,
-.Xr src.conf 5 ,
-and
-.Xr src-env.conf 5 .
 .It Cm freebsd-desktop Oo Oo Ar option ... Oc Cm -- Oc
 Configuration files for a
 .Fx
@@ -79,6 +70,15 @@ Recompile and reinstall dwm.
 Set up a wallpaper using feh.
 This option succeeds only when Xorg is running.
 .El
+.It Cm freebsd-current
+Configure a
+.Fx
+machine running CURRENT.
+This module sets some development-specific variables in
+.Xr make.conf 5 ,
+.Xr src.conf 5 ,
+and
+.Xr src-env.conf 5 .
 .It Cm freebsd-e5500 Oo Oo Ar option ... Oc Cm -- Oc
 Configure
 .Fx
