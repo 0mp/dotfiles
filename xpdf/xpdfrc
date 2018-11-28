@@ -11,4 +11,6 @@ bind l any scrollRight(50)
 bind d any scrollDown(500)
 bind u any scrollUp(500)
 
+bind shift-space any pageUp
+
 initialSidebarState no
