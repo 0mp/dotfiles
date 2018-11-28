@@ -12,6 +12,7 @@ PREFIX="$HOME/.subversion/"
 lib_custom_install() { :; }
 lib_back_up
 trap lib_roll_back EXIT
+lib_create_prefix_if_missing
 lib_install
 trap - EXIT
 
