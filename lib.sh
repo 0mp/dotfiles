@@ -144,20 +144,34 @@ lib_set_once() {
 
 # $@ - Packages to install unless they are already installed. The list of
 #      packages can be prepended by options to be passed to pkg(8). Those two
-#      lists should be separated with "--".
+#      lists must be separated with "--". Do not use "--" if not providing any
+#      flags to pkg(8). For example: "xorg", "-A -- llvm60".
 lib_freebsd_install_packages() {
-        packages=
-        for p in ${*#* -- }
+	set -x
+	packages=
+	options=
+        case $* in
+        *\ --\ *)
+            options=${*% -- *}
+            packages=${*#* -- }
+            ;;
+        *)
+            packages=$*
+            ;;
+        esac
+
+        missing=
+        for p in $packages
         do
             # $p is a full path to the port. Let's extract the origin.
             p="${p##${p%/*/*}/}"
             if ! pkg info --exists "$p"
             then
-                packages="${packages}${packages:+ }${p}"
+                missing="${missing}${missing:+ }${p}"
             fi
         done
-        if [ -n "$packages" ]
+        if [ -n "$missing" ]
         then
-            pkg install -y ${*% -- *} -- $packages
+            pkg install -y $options -- $missing
         fi
 }
