@@ -72,7 +72,7 @@ run() {
     finish_action
 }
 
-version=1.6.0
+version=2.0.0
 rootlogdir="/var/log/roteste"
 logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
 if [ -d "$logdir" ]
@@ -86,7 +86,7 @@ fi
 if [ $# -eq 0 ]
 then
     cat <<__end_of_usage
-Usage: roteste [-ekipsw | -c [-b]]
+Usage: roteste [-b | -ekipsw | -c]
 Version: $version
 __end_of_usage
 elif [ 0 -ne "$(id -u)" ]
@@ -104,7 +104,7 @@ set -- $args
 while :; do
     case "$1" in
         -b)
-            bectl=yes
+            be=yes
             shift
             ;;
         -c)
@@ -142,6 +142,22 @@ while :; do
     esac
 done
 
+if [ "$be" ]
+then
+    if [ -x /sbin/bectl ]
+    then
+        becmd=bectl
+    elif [ -x /usr/local/sbin/beadm ]
+    then
+        becmd=beadm
+    else
+        die 'Neither bectl(8) nor beadm(8) is available; aborting'
+    fi
+    snapshot="$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
+    run 'be-create' "$becmd" create "$snapshot"
+    run 'be-activate' "$becmd" activate "$snapshot"
+fi
+
 if [ "$etcupdate" ]
 then
     run 'etcupdate-extract' etcupdate extract
@@ -173,19 +189,6 @@ fi
 if [ "$complete" ]
 then
     cd /usr/src
-    if [ "$bectl" ]
-    then
-        if [ -x /sbin/bectl ]
-        then
-            becmd=bectl
-        elif [ -x /usr/local/sbin/beadm ]
-        then
-            becmd=beadm
-        else
-            die 'Neither bectl(8) nor beadm(8) is available; aborting'
-        fi
-        run 'bectl-create' "$becmd" create "$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
-    fi
 
     run 'mergemaster-p' mergemaster -p
 
