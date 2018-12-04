@@ -13,4 +13,7 @@ bind u any scrollUp(500)
 
 bind shift-space any pageUp
 
+bind n any nextPage
+bind p any prevPage
+
 initialSidebarState no
