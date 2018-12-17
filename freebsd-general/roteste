@@ -72,8 +72,7 @@ run() {
     finish_action
 }
 
-version=2.0.0
-rootlogdir="/var/log/roteste"
+version=2.0.1
 logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
 if [ -d "$logdir" ]
 then
@@ -98,8 +97,7 @@ set -e
 
 ncpu="$(sysctl -n hw.ncpu)"
 
-args=`getopt bcekipsw $*`
-set -- $args
+set -- $(getopt bcekipsw $*)
 
 while :; do
     case "$1" in
