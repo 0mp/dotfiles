@@ -65,14 +65,24 @@ finish_action() {
 run() {
     action="$1"
     shift
-    register_action "$action"
-    {
-        "$@" 2>&1 || die "Failed to finish \"$action\""
-    } | tee -a "$logfile"
+    if register_action "$action"
+    then :; else
+        return
+    fi
+    (
+        (
+            (
+                (
+                    { "$@" 2>&1 || die "Failed to finish \"$action\""; } 3>&- 4>&-
+                    echo $? >&3
+                ) | tee -a "$logfile" >&4
+            ) 3>&1
+        ) | (read -r xs; exit "$xs")
+    ) 4>&1
     finish_action
 }
 
-version=2.0.1
+version=2.0.2
 logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
 if [ -d "$logdir" ]
 then
