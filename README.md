@@ -112,6 +112,24 @@ The modules are as follows:
 
 > > Install an Nvidia graphics driver.
 
+**freebsd-laptop** \[\[*option ...*] **--**]
+
+> Configure
+> FreeBSD
+> on a laptop.
+
+> Supported models are:
+
+> **--t480**
+
+> > Lenovo ThinkPad T480
+
+> The options are as follows:
+
+> **--intel**
+
+> > Configure Intel graphics and install the DRM kernel module.
+
 **freebsd-st** \[\[*option ...*] **--**]
 
 > Configure the st terminal.

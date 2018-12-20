@@ -109,6 +109,22 @@ The options are as follows:
 .It Fl -nvidia
 Install an Nvidia graphics driver.
 .El
+.It Cm freebsd-laptop Oo Oo Ar option ... Oc Cm -- Oc
+Configure
+.Fx
+on a laptop.
+.Pp
+Supported models are:
+.Bl -tag -width "--t480"
+.It Fl -t480
+Lenovo ThinkPad T480
+.El
+.Pp
+The options are as follows:
+.Bl -tag -width "--intel"
+.It Fl -intel
+Configure Intel graphics and install the DRM kernel module.
+.El
 .It Cm freebsd-st Oo Oo Ar option ... Oc Cm -- Oc
 Configure the st terminal.
 The options are as follows:
