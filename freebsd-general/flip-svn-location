@@ -2,13 +2,17 @@
 
 url="$(svn info | awk '/^URL/{print $2}')"
 committer='svn+ssh://0mp@repo'
-anonymous='https://svn'
+anonymous_https='https://svn'
+anonymous_svn='svn://svn'
 
 case $url in
     $committer*)
-        svn relocate "$committer" "$anonymous"
+        svn relocate "$committer" "$anonymous_svn"
         ;;
-    $anonymous*)
-        svn relocate "$anonymous" "$committer"
+    $anonymous_https*)
+        svn relocate "$anonymous_https" "$committer"
+        ;;
+    $anonymous_svn*)
+        svn relocate "$anonymous_svn" "$committer"
         ;;
 esac
