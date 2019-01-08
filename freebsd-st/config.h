@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Inconsolata:pixelsize=12:antialias=true:autohint=true";
+static char *font = "Inconsolata:pixelsize=17:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -86,31 +86,29 @@ unsigned int tabspaces = 8;
 static const char *colorname[] = {
 	/* 8 normal colors */
 	"black",
-	"red3",
-	"green3",
-	"yellow3",
+        "red3",
+        "DarkGreen",
+        "DarkGoldenrod3",
 	"blue2",
 	"magenta3",
-	"cyan3",
+        "turquoise4",
 	"gray60",
 
 	/* 8 bright colors */
 	"gray50",
 	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
+	"green3",
+        "gold2",
+	"DodgerBlue3",
 	"magenta",
-	"cyan",
+	"cyan3",
 	"white",
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
-	"#000000",
-	"#ffffff"
+	"gray80",
+	"azure4"
 };
 
 
@@ -118,8 +116,8 @@ static const char *colorname[] = {
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 258;
-unsigned int defaultbg = 259;
+unsigned int defaultfg = 0;
+unsigned int defaultbg = 15;
 static unsigned int defaultcs = 257;
 static unsigned int defaultrcs = 256;
 
