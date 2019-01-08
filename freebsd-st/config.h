@@ -87,7 +87,7 @@ static const char *colorname[] = {
 	/* 8 normal colors */
 	"black",
         "red3",
-        "DarkGreen",
+        "SpringGreen4",
         "DarkGoldenrod3",
 	"blue2",
 	"magenta3",
