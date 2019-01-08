@@ -107,8 +107,8 @@ static const char *colorname[] = {
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"gray80",
-	"azure4"
+	"orchid1",
+	"SlateGray4"
 };
 
 
