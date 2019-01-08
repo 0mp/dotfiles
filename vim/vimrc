@@ -154,23 +154,6 @@ set completeopt=longest,menuone
 " Do not look up tags when asked to perform autocompletion.
 set complete-=t
 
-" Ensure private editing.
-" Setup: ln -s `which vim` /symlink/name/preferably/in/your/$PATH
-" Usage: Just run `vimp`.
-if v:progname == "vimp"
-    echo "Private mode is on!"
-    colorscheme slate
-    set history=0
-    set nobackup
-    set nomodeline
-    set noshelltemp
-    set noswapfile
-    set noundofile
-    set nowritebackup
-    set secure
-    set viminfo=""
-endif
-
 " Fuzzy file opener.
 " Usage: :find *.cpp
 set path+=**
