@@ -5,7 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Inconsolata:pixelsize=17:antialias=true:autohint=true";
+%%LOW_RESOLUTION%%static char *font = "Inconsolata:pixelsize=12:antialias=true:autohint=true";
+%%HIGH_RESOLUTION%%static char *font = "Inconsolata:pixelsize=17:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*

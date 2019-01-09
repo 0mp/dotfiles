@@ -139,6 +139,10 @@ The modules are as follows:
 
 > > Recompile and reinstall st.
 
+> **--low-resolution**
+
+> > Use smaller default font.
+
 **freebsd-yoga314** \[\[*option ...*] **--**]
 
 > Configure

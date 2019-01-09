@@ -14,6 +14,14 @@ case "$*" in
             *yes) pkg unlock -y sterm ;;
         esac
         export BATCH='YES'
+        case $* in
+            *--low-resolution*)
+                sed 's|^%%LOW_RESOLUTION%%||' ./config.h.in | sed '/%%HIGH_RESOLUTION%%/d' > ./config.h
+                ;;
+            *)
+                sed 's|^%%HIGH_RESOLUTION%%||' ./config.h.in | sed '/%%LOW_RESOLUTION%%/d' > ./config.h
+                ;;
+        esac
         export ST_CONF="$PWD/config.h"
         cd /usr/ports/x11/sterm
         make deinstall

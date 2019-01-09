@@ -12,7 +12,7 @@ CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
 lib_custom_install() {
     case $CUSTOMOPTS in
         *--install*)
-            lib_run_as_root --install
+            lib_run_as_root $CUSTOMOPTS
             ;;
     esac
 
