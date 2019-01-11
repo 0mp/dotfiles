@@ -53,6 +53,16 @@ _configure_current() {
     lib_set_once /etc/src.conf 'PORT_MODULES=	graphics/drm-next-kmod emulators/virtualbox-ose-kmod'
 }
 
+_configure_fonts() {
+    case $* in
+        *${model_t480}*) ;;
+        *) return
+    esac
+
+    # Japanese & Chinese characters: droid-fonts-ttf
+    lib_freebsd_install_packages droid-fonts-ttf
+}
+
 _configure_intel() {
     case $* in
         *${model_t480}*) ;;
@@ -128,6 +138,7 @@ _configure_acpi "$@"
 _configure_boot "$@"
 _configure_brightness "$@"
 _configure_current "$@"
+_configure_fonts "$@"
 _configure_intel "$@"
 _configure_mouse "$@"
 _configure_power_management "$@"
