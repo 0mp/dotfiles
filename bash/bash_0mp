@@ -73,5 +73,5 @@ fi
 export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
-export LESS='--ignore-case --RAW-CONTROL-CHARS'
+export LESS='--ignore-case --jump-target=3 --RAW-CONTROL-CHARS'
 export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
