@@ -229,7 +229,7 @@ if has("autocmd")
   augroup END
 endif
 
-au BufReadPost svn-commit*.tmp setlocal spell tw=75
+au BufReadPost svn-commit*.tmp setlocal spell tw=75 noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 " }}}
 " Section: Visuals {{{
 "
