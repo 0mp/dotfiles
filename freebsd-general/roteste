@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 #
-# Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+# Copyright (c) 2018-2019 Mateusz Piotrowski <0mp@FreeBSD.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -26,7 +26,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # ---
-# Automate FreeBSD CURRENT branch updates.
+# Automate source-based FreeBSD updates.
 
 # I've found out that the PORTS_MODULES mechanism does not work well if it is
 # not cleaned before running `buildkernel`. The port does not get rebuiled
@@ -82,7 +82,19 @@ run() {
     finish_action
 }
 
-version=2.0.2
+version=3.0.0
+
+if [ $# -eq 0 ]
+then
+    cat <<__end_of_usage
+Usage: roteste [-kipsw]
+Version: $version
+__end_of_usage
+elif [ 0 -ne "$(id -u)" ]
+then
+    die 'roteste has to be run as root'
+fi
+
 logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
 if [ -d "$logdir" ]
 then
@@ -92,37 +104,14 @@ then :; else
     die "Failed to create \"$logdir\""
 fi
 
-if [ $# -eq 0 ]
-then
-    cat <<__end_of_usage
-Usage: roteste [-b | -ekipsw | -c]
-Version: $version
-__end_of_usage
-elif [ 0 -ne "$(id -u)" ]
-then
-    die 'roteste has to be run as root'
-fi
-
 set -e
 
 ncpu="$(sysctl -n hw.ncpu)"
 
-set -- $(getopt bcekipsw $*)
+set -- $(getopt kipsw $*)
 
 while :; do
     case "$1" in
-        -b)
-            be=yes
-            shift
-            ;;
-        -c)
-            complete=yes
-            shift
-            ;;
-        -e)
-            etcupdate=yes
-            shift
-            ;;
         -k)
             kernel=yes
             shift
@@ -150,27 +139,6 @@ while :; do
     esac
 done
 
-if [ "$be" ]
-then
-    if [ -x /sbin/bectl ]
-    then
-        becmd=bectl
-    elif [ -x /usr/local/sbin/beadm ]
-    then
-        becmd=beadm
-    else
-        die 'Neither bectl(8) nor beadm(8) is available; aborting'
-    fi
-    snapshot="$(uname -v | awk -v OFS=_ '{$1 = $1; print}')_$(date +%Y-%m-%d_%Hh%Mm%Ss)"
-    run 'be-create' "$becmd" create "$snapshot"
-    run 'be-activate' "$becmd" activate "$snapshot"
-fi
-
-if [ "$etcupdate" ]
-then
-    run 'etcupdate-extract' etcupdate extract
-fi
-
 # Get the latest source tree.
 if [ "$src" ]
 then
@@ -194,42 +162,26 @@ then
     fi
 fi
 
-if [ "$complete" ]
+if [ "$world" ]
 then
     cd /usr/src
+    # XXX: Track filemon loading.
+    kldstat -q -n filemon || kldload filemon
+    run 'buildworld' make -j$ncpu buildworld
+fi
 
-    run 'mergemaster-p' mergemaster -p
+if [ "$kernel" ]
+then
+    run 'clean-modules' clean_ports_modules
 
-    run 'installworld' make -j$ncpu installworld
+    cd /usr/src
+    # XXX: Track filemon loading.
+    kldstat -q -n filemon || kldload filemon
+    run 'buildkernel' make -j$ncpu buildkernel
+fi
 
-    run 'etcupdate-diff' etcupdate diff
-
-    run 'etcupdate' etcupdate
-
-    run 'etcupdate-resolve' etcupdate resolve
-else
-    if [ "$world" ]
-    then
-        cd /usr/src
-        # XXX: Track filemon loading.
-        kldstat -q -n filemon || kldload filemon
-        run 'buildworld' make -j$ncpu buildworld
-    fi
-
-    if [ "$kernel" ]
-    then
-        run 'clean-modules' clean_ports_modules
-
-        cd /usr/src
-        # XXX: Track filemon loading.
-        kldstat -q -n filemon || kldload filemon
-        run 'buildkernel' make -j$ncpu buildkernel
-    fi
-
-    # Install the kernel.
-    if [ "$install" ]
-    then
-        cd /usr/src
-        run 'installkernel' make -j$ncpu installkernel
-    fi
+if [ "$install" ]
+then
+    cd /usr/src
+    run 'beinstall' ./tools/build/beinstall.sh -j"$ncpu"
 fi
