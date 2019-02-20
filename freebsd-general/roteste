@@ -82,14 +82,15 @@ run() {
     finish_action
 }
 
-version=3.0.0
+version=3.1.0
 
-if [ $# -eq 0 ]
+if [ $# -eq 0 ] || [ "$1" = -h ]
 then
     cat <<__end_of_usage
-Usage: roteste [-kipsw]
+Usage: roteste [-h] [-kipsw]
 Version: $version
 __end_of_usage
+    exit 0
 elif [ 0 -ne "$(id -u)" ]
 then
     die 'roteste has to be run as root'
