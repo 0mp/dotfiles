@@ -30,6 +30,9 @@ _configure_boot() {
     # Faster booting.
     sysrc background_dhclient='YES'
     lib_set_once /boot/loader.conf 'hw.usb.no_boot_wait="1"'
+
+    # Configure touchpad.
+    lib_set_once /boot/loader.conf 'hw.psm.synaptics_support="1"'
 }
 
 # Lower the screen brightness to a reasonable level.
