@@ -70,6 +70,7 @@ then
     esac
 fi
 
+export CLICOLOR='YES'
 export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
