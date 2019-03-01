@@ -1,4 +1,9 @@
 /*
+ * Resources:
+ * http://kb.mozillazine.org/About:config_entries
+ */
+
+/*
  * Open blank page in new tabs.
  */
 user_pref("browser.newtabpage.enabled", false);
