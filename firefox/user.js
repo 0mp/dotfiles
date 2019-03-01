@@ -54,3 +54,8 @@ user_pref("toolkit.cosmeticAnimations.enabled", false);
  * switches to first to the recently used tab is frustrating.
  */
 user_pref("browser.ctrlTab.recentlyUsedOrder", false);
+
+/*
+ * Disable the Password Manager.
+ */
+user_pref("signon.rememberSignons", false)
