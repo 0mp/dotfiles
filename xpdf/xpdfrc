@@ -3,11 +3,6 @@ bind c any toggleContinuousMode
 bind f any toggleFullScreenMode
 bind t any toggleSidebar
 
-bind j any scrollDown(50)
-bind k any scrollUp(50)
-bind h any scrollLeft(50)
-bind l any scrollRight(50)
-
 bind d any scrollDown(500)
 bind u any scrollUp(500)
 
@@ -15,5 +10,16 @@ bind shift-space any pageUp
 
 bind n any nextPage
 bind p any prevPage
+
+
+bind j continuous scrollDown(50)
+bind k continuous scrollUp(50)
+bind h continuous scrollLeft(50)
+bind l continuous scrollRight(50)
+
+
+bind j fullScreen nextPage
+bind k fullScreen prevPage
+
 
 initialSidebarState no
