@@ -24,9 +24,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
-# ---
-# Automate source-based FreeBSD updates.
 
 # I've found out that the PORTS_MODULES mechanism does not work well if it is
 # not cleaned before running `buildkernel`. The port does not get rebuiled
@@ -87,16 +84,16 @@ version=3.1.0
 if [ $# -eq 0 ] || [ "$1" = -h ]
 then
     cat <<__end_of_usage
-Usage: roteste [-h] [-kipsw]
+Usage: rotezukunft [-h] [-kipsw]
 Version: $version
 __end_of_usage
     exit 0
 elif [ 0 -ne "$(id -u)" ]
 then
-    die 'roteste has to be run as root'
+    die 'rotezukunft has to be run as root'
 fi
 
-logdir="/var/log/roteste/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
+logdir="/var/log/rotezukunft/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
 if [ -d "$logdir" ]
 then
     die "\"$logdir\" should not exist"
