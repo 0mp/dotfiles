@@ -130,6 +130,15 @@ _configure_rc_conf() {
     sysrc ntpd_sync_on_start='YES'
 }
 
+_configure_vt() {
+    case $* in
+        *${model_t480}*) ;;
+        *) return
+    esac
+
+    lib_set_once /etc/sysctl.conf 'kern.vt.enable_bell=0'
+}
+
 _configure_wireless() {
     case $* in
         *${model_t480}*) ;;
@@ -150,6 +159,7 @@ _configure_intel "$@"
 _configure_mouse "$@"
 _configure_power_management "$@"
 _configure_rc_conf "$@"
+_configure_vt "$@"
 _configure_wireless "$@"
 
 lib_info 'setup.root done'
