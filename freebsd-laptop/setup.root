@@ -19,8 +19,8 @@ _configure_acpi() {
     # Suspend when the lid is closed.
     lib_set_once /etc/sysctl.conf 'hw.acpi.lid_switch_state=S3'
 
+    # Only load acpi_ibm(4) on ThinkPads.  Do not load acpi_video(4).
     sysrc kld_list+='acpi_ibm'
-    sysrc kld_list+='acpi_video'
 }
 
 _configure_boot() {
