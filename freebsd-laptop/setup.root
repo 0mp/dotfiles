@@ -37,16 +37,6 @@ _configure_boot() {
     lib_set_once /boot/loader.conf 'hw.psm.synaptics_support="1"'
 }
 
-# Lower the screen brightness to a reasonable level.
-_configure_brightness() {
-    case $* in
-        *${model_t480}*) ;;
-        *) return ;;
-    esac
-
-    lib_set_once /etc/sysctl.conf 'hw.acpi.video.lcd0.brightness=15'
-}
-
 _configure_current() {
     case $* in
         *${model_t480}*) ;;
@@ -66,16 +56,6 @@ _configure_fonts() {
 
     # Japanese & Chinese characters: droid-fonts-ttf
     lib_freebsd_install_packages droid-fonts-ttf
-}
-
-_configure_intel() {
-    case $* in
-        *${model_t480}*) ;;
-        *) return
-    esac
-
-    lib_freebsd_install_packages drm-kmod
-    sysrc kld_list+="i915kms"
 }
 
 _configure_mouse() {
@@ -130,6 +110,23 @@ _configure_rc_conf() {
     sysrc ntpd_sync_on_start='YES'
 }
 
+_configure_video() {
+    case $* in
+        *${model_t480}*) ;;
+        *) return
+    esac
+
+    # Add the user to the video group. Otherwise, things like libGL do not work.
+    # Note: being in the wheel group is not enough.
+    pw groupmod video -m "$CALLINGUSER"
+
+    lib_freebsd_install_packages drm-kmod
+    sysrc kld_list+="i915kms"
+
+    # Lower the screen brightness to a reasonable level.
+    lib_set_once /etc/sysctl.conf 'hw.acpi.video.lcd0.brightness=15'
+}
+
 _configure_vt() {
     case $* in
         *${model_t480}*) ;;
@@ -152,13 +149,12 @@ _configure_wireless() {
 
 _configure_acpi "$@"
 _configure_boot "$@"
-_configure_brightness "$@"
 _configure_current "$@"
 _configure_fonts "$@"
-_configure_intel "$@"
 _configure_mouse "$@"
 _configure_power_management "$@"
 _configure_rc_conf "$@"
+_configure_video "$@"
 _configure_vt "$@"
 _configure_wireless "$@"
 
