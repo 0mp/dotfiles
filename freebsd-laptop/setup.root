@@ -121,6 +121,8 @@ _configure_rc_conf() {
         *) return
     esac
 
+    sysrc dbus_enable='YES'
+
     sysrc syslogd_flags='-ss'
     sysrc sendmail_enable='NONE'
 
