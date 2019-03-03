@@ -1,4 +1,6 @@
 #! /bin/sh -
+#
+# https://unrelenting.technology/kb/FreeBSDDesktop
 
 . ../lib.sh
 
