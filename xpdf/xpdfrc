@@ -6,6 +6,7 @@ bind t any toggleSidebar
 bind d any scrollDown(500)
 bind u any scrollUp(500)
 
+bind b any pageUp
 bind shift-space any pageUp
 
 bind n any nextPage
