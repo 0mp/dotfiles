@@ -49,4 +49,8 @@ CPP_MAKE_ARGS+=	WITH_CPP="1"
 
 # The targets
 
+post-install-DOCS-on:
+	@${MKDIR} ${STAGEDIR}${DOCSDIR}
+	${INSTALL_DATA} ${WRKSRC}/README ${STAGEDIR}${DOCSDIR}
+
 .include <bsd.port.mk>
