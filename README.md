@@ -34,17 +34,6 @@ The modules are as follows:
 
 > > Install and configure additional fonts.
 
-> **--ntpd**
-
-> > Configure
-> > ntpd(8)
-> > to set correct time at system startup.
-
-> **--powerdxx**
-
-> > Install powerd++ for a better power management than the one offered by
-> > powerd(8).
-
 **freebsd-dwm** \[\[*option ...*] **--**]
 
 > Configuration of a desktop environment running the dwm window manager.
