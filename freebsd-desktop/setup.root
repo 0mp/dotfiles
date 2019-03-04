@@ -6,33 +6,6 @@ set -eu
 
 lib_info 'setup.root'
 
-# Don't waste time on probing USB at early boot time.
-# https://unrelenting.technology/kb/FreeBSDDesktop
-lib_set_once /boot/loader.conf 'hw.usb.no_boot_wait="1"'
-
-# Disable the console bell.
-lib_set_once /etc/sysctl.conf 'kern.vt.enable_bell=0'
-
-# Enable D-BUS.
-sysrc dbus_enable="YES"
-
-# Load acpi_video for backlight support.
-sysrc kld_list+=acpi_video
-
-# Configure powerdxx (and disable powerd).
-case "$*" in
-    *--powerdxx*)
-        lib_freebsd_install_packages sysutils/powerdxx
-        sysrc powerd_enable=NO
-        sysrc powerdxx_enable=YES
-        sysrc powerdxx_flags="--ac hiadaptive --batt adaptive --unknown hiadaptive"
-        ;;
-esac
-
-# Improve power management.
-sysrc economy_cx_lowest="Cmax"
-sysrc performance_cx_lowest="Cmax"
-
 # Install missing fonts.
 #
 # Source: https://www.c0ffee.net/blog/freebsd-on-a-laptop
@@ -85,18 +58,5 @@ case "$*" in
         trap - EXIT
     ;;
 esac
-
-# Configure ntpd(8).
-# Note: ntpdate is deprecated. Use ntpd(8) instead.
-case $* in
-    *--ntpd*)
-        sysrc ntpd_enable="YES"
-        sysrc ntpd_sync_on_start="YES"
-        ;;
-esac
-
-# Add the user to the video group. Otherwise, things like libGL do not work.
-# Note: being in the wheel group is not enough.
-pw groupmod video -m "$CALLINGUSER"
 
 lib_info 'setup.root done'
