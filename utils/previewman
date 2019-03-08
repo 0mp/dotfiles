@@ -25,11 +25,11 @@
 # SUCH DAMAGE.
 
 usage() {
-	printf -- '%s\n' "Usage: previewman [-h] manpage [pattern] [match-number]"
+	printf -- '%s\n' "Usage: previewman [-h] manpage [pattern commands]"
 	printf -- '%s\n' "Version: ${version}"
 }
 
-version='0.1.3'
+version='1.0.0'
 
 manpager='timeout 0.1s less --no-init --quit-on-intr'
 
@@ -62,15 +62,16 @@ shift
 
 if [ $# -ge 1 ]
 then
-	manpager="${manpager} --pattern \"$(printf -- %s "${1}" | sed -E 's|\([[:space:]]\)|\\\\1|g')\""
+	cat > /tmp/previewman <<HEREDOC
+.less-history-file:
+.search
+"$1
+HEREDOC
 	shift
 fi
 
-if [ $# -ge 1 ]
-then
-	manpager="${manpager} +g${1}n"
-	shift
-fi
+manpager="${manpager} +n${1:-}"
+shift
 
 printf '%s\n' "${filename}" | \
-    entr -c env MANPAGER="${manpager}" sh -c "man \"./${filename}\" " 2>/dev/null
+    entr -c env LESSHISTFILE="/tmp/previewman" MANPAGER="${manpager}" sh -c "man \"./${filename}\" " 2>/dev/null
