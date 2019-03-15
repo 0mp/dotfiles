@@ -17,6 +17,7 @@ previewman
 radio
 samsung2043nw
 superdrive
+test-true-color-support
 EOF
 )"
 PREFIX="$HOME/.local/bin/"
