@@ -3,6 +3,8 @@ if [ -s ~/.suckless/current-task.txt ]
 then
     awk 'NR > 1{printf " -> "} {printf "%s", $0} END{printf " | "}' \
         ~/.suckless/current-task.txt
+else
+    printf ' '
 fi
 mixer -s vol | sed 's/\(.*\):[0-9][0-9]*$/\1/'
 [ -f ~/.0mp-switch/eyes-alert-off ] && printf -- ' | !👓'
