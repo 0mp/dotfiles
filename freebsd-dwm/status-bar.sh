@@ -21,9 +21,11 @@ do
     fi
     printf %s ' | '
 done
+printf -- %s 'wlan0: '
 if wpa_cli ping >/dev/null 2>&1
 then
     wpa_cli status | awk '
+    /^wpa_state=SCANNING$/{printf "..."}
     /^ssid=/{printf "%s, ", substr($0, 6)}
     /^ip_address=/{printf "%s", substr($0, 12)}
     '
