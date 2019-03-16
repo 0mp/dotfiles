@@ -29,7 +29,7 @@ usage() {
 	printf -- '%s\n' "Version: ${version}"
 }
 
-version='1.0.0'
+version='1.1.0'
 
 manpager='timeout 0.1s less --no-init --quit-on-intr'
 
@@ -59,6 +59,14 @@ fi
 
 filename="${1}"
 shift
+if [ ! -f "${filename}" ]
+then
+	filename=$(find . -mindepth 1 -maxdepth 1 -name "*${filename}*\.[0-9]" -print -quit)
+	if [ ! -f "${filename}" ]
+	then
+		printf -- '%s: %s\n' "Invalid filename" "${filename}" >&2
+	fi
+fi
 
 if [ $# -ge 1 ]
 then
@@ -68,10 +76,9 @@ then
 "$1
 HEREDOC
 	shift
+	manpager="${manpager} +n${1:-}"
+	shift
 fi
-
-manpager="${manpager} +n${1:-}"
-shift
 
 printf '%s\n' "${filename}" | \
     entr -c env LESSHISTFILE="/tmp/previewman" MANPAGER="${manpager}" sh -c "man \"./${filename}\" " 2>/dev/null
