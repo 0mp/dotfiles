@@ -10,14 +10,17 @@ mixer -s vol | sed 's/\(.*\):[0-9][0-9]*$/\1/'
 [ -f ~/.0mp-switch/eyes-alert-off ] && printf -- ' | !👓'
 printf -- ' | '
 [ -f ~/.0mp-switch/battery-alert-off ] && printf -- '! '
-if ! acpiconf -i 0 | awk '
-    /Remaining capacity*/{printf "%s", $3}
-    /State:[[:space:]]+charging/{printf "+"}
-    /Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}'
-then
-    printf '%s' '?%'
-fi
-printf %s ' | '
+for battery in $( seq 0 "$(( $( sysctl -n hw.acpi.battery.units ) - 1 ))" )
+do
+    if ! acpiconf -i "$battery" | awk '
+        /Remaining capacity*/{printf "%s", $3}
+        /State:[[:space:]]+charging/{printf "+"}
+        /Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}'
+    then
+        printf '%s' '?%'
+    fi
+    printf %s ' | '
+done
 if wpa_cli ping >/dev/null 2>&1
 then
     wpa_cli status | awk '
