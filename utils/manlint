@@ -1,0 +1,14 @@
+#! /bin/sh -
+
+set -u
+
+manpage="${1}"
+
+if [ -r "${manpage}" ]
+then
+    igor "${manpage}"
+    mandoc -Tlint "${manpage}"
+else
+    igor -- *"${manpage}"*[0-9]
+    mandoc -Tlint -- *"${manpage}"*[0-9]
+fi
