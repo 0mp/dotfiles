@@ -31,5 +31,5 @@ else
     printf '%s' '-'
 fi
 printf -- ' | '
-date +'%A, %d.%m (%B) | %H:%M '
+date +'%A, %Y-%m-%d (%B) | %H:%M '
 )"
