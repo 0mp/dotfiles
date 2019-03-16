@@ -33,5 +33,14 @@ else
     printf '%s' '-'
 fi
 printf -- ' | '
+printf -- %s 'em0: '
+if ifconfig em0 >/dev/null 2>&1
+then
+    ifconfig em0 | awk '
+    /[[:space:]]*inet /{printf "%s", $2; exit 0}
+    {printf "%s", "..."; exit 0}
+    '
+fi
+printf -- ' | '
 date +'%A, %Y-%m-%d (%B) | %H:%M '
 )"
