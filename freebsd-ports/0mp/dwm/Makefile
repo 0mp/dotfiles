@@ -1,4 +1,5 @@
 PKGNAMESUFFIX=	-0mp
+PORTREVISION=	4
 
 CONFLICTS_INSTALL=	dwm
 
@@ -8,3 +9,5 @@ MASTERDIR=	${PORTSDIR}/x11-wm/dwm
 DWM_CONF=	${.CURDIR}/files/config.h
 
 .include "${MASTERDIR}/Makefile"
+
+RUN_DEPENDS+=	find-cursor:x11/find-cursor
