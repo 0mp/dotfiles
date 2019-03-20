@@ -52,7 +52,8 @@ _configure_fonts() {
     esac
 
     # Japanese & Chinese characters: droid-fonts-ttf
-    lib_freebsd_install_packages droid-fonts-ttf
+    # Various extra symbols like "⧉".
+    lib_freebsd_install_packages droid-fonts-ttf symbola
 }
 
 _configure_mouse() {
