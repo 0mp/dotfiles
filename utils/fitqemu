@@ -1,17 +1,17 @@
 #! /bin/sh -
 #
-# Fit your QEMU console running in a tmux session.
+# Resize your bhyve or QEMU console running in a tmux pane.
 #
-# The idea is to focus on a pane running QEMU and adjust its stty size.  It is
-# achived by prompting tmux for information about the current pane size and
-# sending a command adjusting the stty size in QEMU accordingly.
+# The idea is to focus on a pane running a console and adjust its stty size.
+# It is achived by prompting tmux for information about the current pane size
+# and sending a command adjusting the stty size in the console accordingly.
 #
 # Usage:
-# 1. Switch to the pane running QEMU.
-# 2. Make sure that you're in a shell (and not Vim or less) as you will be
+# 1. Switch to the pane running bhyve (or QEMU).
+# 2. Make sure that you're in a shell (and not vim(1) or less(1)) as you will be
 #    sending keystrokes directly into the shell running inside the pane in a
 #    while.
-# 3. Hit your tmux prefix and call ':run fitqemu' (assuming that fitqemu is
+# 3. Hit your tmux prefix and call ':run resizetty' (assuming that resizetty is
 #    present in your current path).
 
 # version=0.1.1
@@ -27,5 +27,4 @@ index="$(printf '%s' "$info" | awk '{print $1}')"
 height="$(printf '%s' "$info" | awk '{print $2}')"
 width="$(printf '%s' "$info" | awk '{print $3}')"
 
-tmux send-keys -t "$index" "stty rows $height cols $width"
-
+tmux send-keys -t "$index" "stty rows $height cols $width$(printf '\r')"
