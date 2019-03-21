@@ -12,10 +12,10 @@ cflowfilter
 committer-bootstrap
 disable-yoga-3-14-touchscreen
 faf
-fitqemu
 manlint
 previewman
 radio
+resizetty
 samsung2043nw
 superdrive
 test-true-color-support
