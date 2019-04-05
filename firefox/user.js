@@ -39,6 +39,12 @@ user_pref("browser.uidensity", 1);
 user_pref("browser.urlbar.placeholderName", "DuckDuckGo");
 
 /*
+ * Enable WebRenderer for better performance on FreeBSD.
+ * https://twitter.com/debdrup/status/1113920881812754432
+ */
+user_pref("gfx.webrender.enabled", true);
+
+/*
  * Use the light theme.
  */
 user_pref("lightweightThemes.selectedThemeID", "firefox-compact-light@mozilla.org");
