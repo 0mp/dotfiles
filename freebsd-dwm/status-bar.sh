@@ -52,6 +52,13 @@ then
     '
 fi
 printf -- ' | '
+if drill >/dev/null 2>&1
+then
+    printf -- '___'
+else
+    printf -- '_/_'
+fi
+printf -- ' | '
 
 # Date
 date +'%A, %Y-%m-%d (%B) | %H:%M '
