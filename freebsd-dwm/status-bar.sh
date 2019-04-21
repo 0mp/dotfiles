@@ -1,4 +1,6 @@
 xsetroot -name "$(
+
+# Current task
 if [ -s ~/.suckless/current-task.txt ]
 then
     awk 'NR > 1{printf " -> "} {printf "%s", $0} END{printf " | "}' \
@@ -6,9 +8,15 @@ then
 else
     printf ' '
 fi
+
+# Mixer
 mixer -s vol | sed 's/\(.*\):[0-9][0-9]*$/\1/'
+
+# Eyes alert
 [ -f ~/.0mp-switch/eyes-alert-off ] && printf -- ' | !👓'
 printf -- ' | '
+
+# Battery
 [ -f ~/.0mp-switch/battery-alert-off ] && printf -- '! '
 for battery in $( seq 0 "$(( $( sysctl -n hw.acpi.battery.units ) - 1 ))" )
 do
@@ -21,6 +29,8 @@ do
     fi
     printf %s ' | '
 done
+
+# Networking
 printf -- %s 'wlan0: '
 if wpa_cli ping >/dev/null 2>&1
 then
@@ -42,5 +52,7 @@ then
     '
 fi
 printf -- ' | '
+
+# Date
 date +'%A, %Y-%m-%d (%B) | %H:%M '
 )"
