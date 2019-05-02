@@ -31,26 +31,9 @@ do
 done
 
 # Networking
-printf -- %s 'wlan0: '
-if wpa_cli ping >/dev/null 2>&1
-then
-    wpa_cli status | awk '
-    /^wpa_state=SCANNING$/{printf "..."}
-    /^ssid=/{printf "%s, ", substr($0, 6)}
-    /^ip_address=/{printf "%s", substr($0, 12)}
-    '
-else
-    printf '%s' '-'
-fi
-printf -- ' | '
-printf -- %s 'em0: '
-if ifconfig em0 >/dev/null 2>&1
-then
-    ifconfig em0 | awk '
-    /[[:space:]]*inet /{printf "%s", $2; exit 0}
-    {printf "%s", "..."; exit 0}
-    '
-fi
+active_interface="$(ifconfig lagg0 | awk '/laggport:.*ACTIVE/{print $2}')"
+ip_address="$(ifconfig lagg0 | awk '/inet/{print $2}')"
+printf -- '%s%s%s' "${active_interface:-...}" "${active_interface:+: }" "${ip_address}"
 printf -- ' | '
 if drill >/dev/null 2>&1
 then
