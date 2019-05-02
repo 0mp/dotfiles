@@ -68,6 +68,21 @@ _configure_mouse() {
     lib_set_once /boot/loader.conf 'hw.psm.synaptics_support="1"'
 }
 
+_configure_networking() {
+    case $* in
+        *${model_t480}*) ;;
+        *) return
+    esac
+
+    sysrc ifconfig_em0="up"
+    sysrc wlans_iwm0="wlan0"
+    sysrc ifconfig_wlan0="WPA powersave"
+    sysrc create_args_wlan0="wlanaddr \$(ifconfig em0 ether | awk '/ether/{print \$2}') country de"
+    sysrc cloned_interfaces="lagg0"
+    sysrc ifconfig_lagg0="up laggproto failover laggport em0 laggport wlan0 DHCP"
+    sysrc background_dhclient="YES"
+}
+
 # https://vermaden.wordpress.com/2018/11/28/the-power-to-serve-freebsd-power-management/
 _configure_power_management() {
     case $* in
@@ -152,6 +167,7 @@ _configure_boot "$@"
 _configure_current "$@"
 _configure_fonts "$@"
 _configure_mouse "$@"
+_configure_networking "$@"
 _configure_power_management "$@"
 _configure_rc_conf "$@"
 _configure_video "$@"
