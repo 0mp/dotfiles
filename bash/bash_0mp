@@ -1,3 +1,4 @@
+# vim: ft=bash
 # Add some directories to the *PATH unless they are already there.
 case "$PATH" in
     *$HOME/.local/bin*) ;;
