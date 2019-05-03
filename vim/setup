@@ -8,15 +8,9 @@ vim_dir="$HOME/.vim"
 
 lib_info setup
 
-# 1. Install Vundle.
-vundle_dir="$vim_dir/bundle"
-vundle_plugin_dir="$vundle_dir/Vundle.vim"
-vundle_repo='https://github.com/VundleVim/Vundle.vim.git'
-mkdir -p "$vundle_dir"
-if [ ! -d "$vundle_plugin_dir" ]
-then
-    git clone "$vundle_repo" "$vundle_plugin_dir"
-fi
+# 1. Install vim-plug.
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # 2. Install vimrc.
 FILES='vimrc'

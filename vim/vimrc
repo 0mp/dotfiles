@@ -1,28 +1,60 @@
-" Section: Vundle {{{
+" Section: Plugins {{{
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" Set the runtime path to include Vundle and initialize.
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" Alternatively, pass a path where Vundle should install plugins.
-"call vundle#begin('~/some/path/here')
+call plug#begin('~/.vim/plugged')
 
-" Let Vundle manage Vundle, required.
-Plugin 'VundleVim/Vundle.vim'
+" {{{ Commenting
+Plug 'scrooloose/nerdcommenter'
+" }}}
+" {{{ Color schemes
+Plug 'vim-scripts/CycleColor' " Cycles through available colorschemes.
+" }}}
+" {{{ Languages
+" {{{ C++
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'rhysd/vim-clang-format'
+let g:clang_format#command='clang-format60'
+let g:clang_format#auto_format=1
+" }}}
+" {{{ Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_build_constraints = 1
+" Make it possible to jump to definitions in other files.
+let g:go_def_mode='godef'
+" }}}
+" {{{ Markdown
+Plug 'moorereason/vim-markdownfmt'
+let g:markdownfmt_command = $HOME.'/go/bin/markdownfmt'
+let g:markdownfmt_autosave = 1
+" }}}
+" }}}
+" {{{ Navigation
+Plug 'ctrlpvim/ctrlp.vim'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-repeat'
-Plugin 'dahu/vim-fanfingtastic'
-Plugin 'CycleColor' " Cycles through available colorschemes.
-"Plugin 'neovimhaskell/haskell-vim'
-Plugin 'vim-syntastic/syntastic'
-"Plugin 'alx741/vim-hindent'
+Plug 'tpope/vim-repeat'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" Put your non-Plugin stuff after this line
+" Find a char across lines.
+Plug 'dahu/vim-fanfingtastic'
+" }}}
+" {{{ Syntax checking
+Plug 'vim-syntastic/syntastic'
+" }}}
+" {{{ Fuzzy finder
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+" Complete lines.
+imap <c-x><c-l> <plug>(fzf-complete-line)
+" }}}
+
+call plug#end()
+filetype plugin indent on
 
 filetype on           " Enable filetype detection
 filetype plugin on    " Enable filetype-specific plugins
