@@ -19,8 +19,10 @@ _configure_acpi() {
     # Suspend when the lid is closed.
     lib_set_once /etc/sysctl.conf 'hw.acpi.lid_switch_state=S3'
 
-    # Only load acpi_ibm(4) on ThinkPads.  Do not load acpi_video(4).
-    sysrc kld_list+='acpi_ibm'
+    # In general, it is advised to only load acpi_ibm(4) on ThinkPads.  In case
+    # of ThinkPad T480 it is still required to load load acpi_video(4), though,
+    # as it enables the media keys for brightness control.
+    sysrc kld_list+='acpi_ibm acpi_video'
 }
 
 _configure_boot() {
@@ -139,6 +141,7 @@ _configure_video() {
     sysrc kld_list+="i915kms"
 
     # Lower the screen brightness to a reasonable level.
+    # Make sure that acpi_video(4) is loaded.
     lib_set_once /etc/sysctl.conf 'hw.acpi.video.lcd0.brightness=15'
 }
 
