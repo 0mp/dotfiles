@@ -35,8 +35,8 @@ lib_install
 trap - EXIT
 PREFIX=
 
-# 4. Install Vundle plugins.
-vim +PluginInstall +PluginUpdate +qall
+# 4. Install vim-plug plugins.
+vim +PlugInstall +PlugUpdate +qall
 
 # 5. Install templates.
 FILES='Makefile'
