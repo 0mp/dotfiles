@@ -1,0 +1,10 @@
+#! /bin/sh -
+
+fetch -q -o - 'https://portscout.freebsd.org/0mp@freebsd.org.html' | \
+    pup 'tr[class="resultsrow"] json{}' | \
+    jq '.[] | {url: .children[0].children[0].href, name: .children[0].children[0].text, category: .children[1].text}' | \
+    jq '[{category: .category, name: .name}| join("/")][], .url' | \
+    paste - - | \
+    tr -d '"' | \
+    awk '{printf " 1. [[ %s | %s ]]\n", $2, $1}' | \
+    xclip -sel clip
