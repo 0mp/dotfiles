@@ -18,17 +18,22 @@ printf -- ' | '
 
 # Battery
 [ -f ~/.0mp-switch/battery-alert-off ] && printf -- '! '
-for battery in $( seq 0 "$(( $( sysctl -n hw.acpi.battery.units ) - 1 ))" )
-do
-    if ! acpiconf -i "$battery" | awk '
-        /Remaining capacity*/{printf "%s", $3}
-        /State:[[:space:]]+charging/{printf "+"}
-        /Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}'
-    then
-        printf '%s' '?%'
-    fi
-    printf %s ' | '
-done
+num_of_batteries="$(sysctl -n hw.acpi.battery.units)"
+printf %s "${num_of_batteries}"
+if [ -n "${num_of_batteries}" ]
+then
+    for battery in $( seq 0 "$(( num_of_batteries - 1 ))" )
+    do
+        if ! acpiconf -i "$battery" | awk '
+            /Remaining capacity*/{printf "%s", $3}
+            /State:[[:space:]]+charging/{printf "+"}
+            /Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}'
+        then
+            printf '%s' '?%'
+        fi
+        printf %s ' | '
+    done
+fi
 
 # Networking
 active_interface="$(ifconfig lagg0 | awk '/laggport:.*ACTIVE/{print $2}')"
