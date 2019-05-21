@@ -19,7 +19,6 @@ printf -- ' | '
 # Battery
 [ -f ~/.0mp-switch/battery-alert-off ] && printf -- '! '
 num_of_batteries="$(sysctl -n hw.acpi.battery.units)"
-printf %s "${num_of_batteries}"
 if [ -n "${num_of_batteries}" ]
 then
     for battery in $( seq 0 "$(( num_of_batteries - 1 ))" )
