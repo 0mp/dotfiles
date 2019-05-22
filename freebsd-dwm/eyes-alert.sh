@@ -1,8 +1,8 @@
 #! /bin/sh -
 #
-# Version 0.2
+# Version 0.3
 
-augenpolizei="$(cat << 'EOF'
+message="$(cat << 'EOF'
                                 ,_-=(!7(7/zs_.                                       ,_-=(!7(7/zs_.
                              .='  ' .`/,/!(=)Zm.                                  .='  ' .`/,/!(=)Zm.
                .._,,._..  ,-`- `,\ ` -` -`\\7//WW.                  .._,,._..  ,-`- `,\ ` -` -`\\7//WW.
@@ -42,10 +42,10 @@ EOF
 
 pause="$((60 * 15))"
 timeout='15'
-button='GENAU'
+button='ACK'
 
 while :; do
     sleep "$pause"
     [ -f ~/.0mp-switch/eyes-alert-off ] && continue
-    xmessage -buttons "$button" -default "$button" -timeout "$timeout" "$augenpolizei"
+    xmessage -buttons "$button" -default "$button" -timeout "$timeout" "$message"
 done
