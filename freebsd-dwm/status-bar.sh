@@ -13,7 +13,9 @@ fi
 mixer -s vol | sed 's/\(.*\):[0-9][0-9]*$/\1/'
 
 # Eyes alert
-[ -f ~/.0mp-switch/eyes-alert-off ] && printf -- ' | !👓'
+printf -- ' | '
+[ -f ~/.0mp-switch/eyes-alert-off ] && printf -- '!'
+sysctl -n hw.acpi.video.lcd0.brightness | tr -d '\n'
 printf -- ' | '
 
 # Battery
