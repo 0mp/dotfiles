@@ -229,22 +229,6 @@ au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
         \| exe "normal! g'\"" | endif
 
-" Remove trailing whitespace on file save.
-" https://stackoverflow.com/a/10410590/4694621
-function! StripTrailingWhitespace()
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    let @/=_s
-    call cursor(l, c)
-endfun
-
-" Avoid stripping whitespace from FreeBSD UPDATING files
-au BufReadPost UPDATING set filetype=markdown
-au BufWritePre * if index(['diff', 'markdown'], &ft) < 0 |
-            \ call StripTrailingWhitespace()
-
 " Autorefresh files.
 set autoread
 
