@@ -30,8 +30,11 @@ let g:go_def_mode='godef'
 " }}}
 " {{{ Markdown
 Plug 'moorereason/vim-markdownfmt'
-let g:markdownfmt_command = $HOME.'/go/bin/markdownfmt'
 let g:markdownfmt_autosave = 1
+" }}}
+" {{{ Python
+Plug 'davidhalter/jedi-vim'
+Plug 'python/black'
 " }}}
 " }}}
 " {{{ Navigation
@@ -45,6 +48,7 @@ Plug 'dahu/vim-fanfingtastic'
 " }}}
 " {{{ Syntax checking
 Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
 " }}}
 " {{{ Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
