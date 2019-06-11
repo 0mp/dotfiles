@@ -15,4 +15,8 @@ setxkbmap pl
 # Wallpaper.
 /bin/sh ~/.fehbg
 
-exec dwm
+eval $(ssh-agent)
+
+"${@:-dwm}"
+
+kill "$SSH_AGENT_PID"
