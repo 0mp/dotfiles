@@ -16,12 +16,12 @@ esac
 PREFIX="$HOME/.0mp-switch/"
 lib_create_prefix_if_missing
 
-FILES='battery-alert.sh eyes-alert.sh fehbg.freebsd-128.png plumb.sh status-bar.sh'
+FILES='battery-alert.sh eyes-alert.sh freebsd-logo-by-claudiom.png plumb.sh status-bar.sh'
 PREFIX="$HOME/.suckless/"
 lib_custom_install() {
     case $CUSTOMOPTS in
         *--wallpaper*)
-            feh -B white --bg-tile ~/.suckless/fehbg.freebsd-128.png
+            feh -B white --bg-tile ~/.suckless/freebsd-logo-by-claudiom.png
             ;;
     esac
 }
