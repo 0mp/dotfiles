@@ -73,6 +73,9 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 " {{{ Linting
 Plug 'ntpeters/vim-better-whitespace'
 " }}}
+" {{{ Git
+Plug 'airblade/vim-gitgutter'
+" }}}
 
 call plug#end()
 filetype plugin indent on
