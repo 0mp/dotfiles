@@ -13,7 +13,7 @@ then
     exit 1
 fi
 
-# Make sure that Firefox has already create a profile directory.
+# Make sure that Firefox has already created a profile directory.
 profiledir="$(find ~/.mozilla/firefox/ -maxdepth 1 -mindepth 1 -name '*.default' -type d)"
 if ! [ -d "$profiledir" ]
 then
