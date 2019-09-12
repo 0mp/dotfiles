@@ -43,6 +43,7 @@ Plug 'python/black'
 " {{{ Navigation
 Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ctrlp_working_path_mode = '0'
 
 Plug 'tpope/vim-repeat'
 
