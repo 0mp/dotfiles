@@ -84,7 +84,12 @@ case "$1" in
         exit 0
         ;;
     M*)
-        0mp-explore -- /usr/ports/Mk /usr/ports/Keywords
+        if command -V bat 1>/dev/null 2>&1
+        then
+            find /usr/ports/Mk /usr/ports/Keywords -type f -print0 | xargs -0 bat
+        else
+            0mp-explore -- /usr/ports/Mk /usr/ports/Keywords
+        fi
         exit 0
         ;;
     *)
