@@ -39,10 +39,6 @@ The modules are as follows:
 > Configuration of a desktop environment running the dwm window manager.
 > The options are as follows:
 
-> **--install**
-
-> > Recompile and reinstall dwm.
-
 > **--wallpaper**
 
 > > Set up a wallpaper using feh.

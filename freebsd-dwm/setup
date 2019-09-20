@@ -7,11 +7,6 @@ set -eu
 lib_info 'setup'
 
 CUSTOMOPTS="$(opts="${*%--}"; printf -- '%s' "${opts%% -- *}")"
-case "$CUSTOMOPTS" in
-    *--install*)
-        lib_run_as_root --install
-        ;;
-esac
 
 PREFIX="$HOME/.0mp-switch/"
 lib_create_prefix_if_missing
