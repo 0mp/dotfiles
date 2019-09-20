@@ -113,12 +113,6 @@ The modules are as follows:
 
 > > Lenovo ThinkPad T480
 
-> The options are as follows:
-
-> **--intel**
-
-> > Configure Intel graphics and install the DRM kernel module.
-
 **freebsd-st** \[\[*option ...*] **--**]
 
 > Configure the st terminal.
