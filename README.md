@@ -59,25 +59,6 @@ The modules are as follows:
 > and
 > src-env.conf(5).
 
-**freebsd-e5500** \[\[*option ...*] **--**]
-
-> Configure
-> FreeBSD
-> desktop experience for Dell Latitude E5500.
-> The options are as follows:
-
-> **--firefox**
-
-> > Apply workarounds for Firefox to run smoother.
-
-> **--intel**
-
-> > Install Intel driver for Xorg.
-
-> **--wifi**
-
-> > Configure wireless networking.
-
 **freebsd-general**
 
 > Install some
