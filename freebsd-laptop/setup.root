@@ -9,6 +9,7 @@ set -eu
 lib_info 'setup.root'
 
 model_t480='t480'
+model_haseeq540s='haseeq540s'
 
 _configure_acpi() {
     case $* in
@@ -28,6 +29,14 @@ _configure_acpi() {
 _configure_boot() {
     case $* in
         *${model_t480}*) ;;
+        *${model_haseeq540s}*)
+            # Add some device hints. The machine is not going to boot without those.
+            lib_set_once /boot/device.hints 'hint.ata.0.disabled="1"'
+            lib_set_once /boot/device.hints 'hint.ata.1.disabled="1"'
+
+            # Fix regression on FreeBSD 11. It wasn't necessery on 10.3.
+            lib_set_once /boot/loader.conf 'hw.vga.textmode=1'
+            ;;
         *) return ;;
     esac
 
@@ -50,6 +59,7 @@ _configure_current() {
 _configure_fonts() {
     case $* in
         *${model_t480}*) ;;
+        *${model_haseeq540s}*)
         *) return
     esac
 
@@ -72,23 +82,28 @@ _configure_mouse() {
 
 _configure_networking() {
     case $* in
-        *${model_t480}*) ;;
+        *${model_t480}*)
+            sysrc ifconfig_em0="up"
+            sysrc wlans_iwm0="wlan0"
+            sysrc ifconfig_wlan0="WPA powersave"
+            sysrc create_args_wlan0="wlanaddr \$(ifconfig em0 ether | awk '/ether/{print \$2}') country de"
+            sysrc cloned_interfaces="lagg0"
+            sysrc ifconfig_lagg0="up laggproto failover laggport em0 laggport wlan0 DHCP"
+            sysrc kld_list+='if_iwm iwm8265fw'
+            ;;
+        *${model_haseeq540s}*)
+            sysrc wlans_rum0='wlan0' 
+            sysrc ifconfig_wlan0='WPA DHCP powersave'
+            ;;
         *) return
     esac
-
-    sysrc ifconfig_em0="up"
-    sysrc wlans_iwm0="wlan0"
-    sysrc ifconfig_wlan0="WPA powersave"
-    sysrc create_args_wlan0="wlanaddr \$(ifconfig em0 ether | awk '/ether/{print \$2}') country de"
-    sysrc cloned_interfaces="lagg0"
-    sysrc ifconfig_lagg0="up laggproto failover laggport em0 laggport wlan0 DHCP"
-    sysrc background_dhclient="YES"
 }
 
 # https://vermaden.wordpress.com/2018/11/28/the-power-to-serve-freebsd-power-management/
 _configure_power_management() {
     case $* in
         *${model_t480}*) ;;
+        *${model_haseeq540s}*)
         *) return
     esac
 
@@ -114,7 +129,13 @@ _configure_power_management() {
 
 _configure_rc_conf() {
     case $* in
-        *${model_t480}*) ;;
+        *${model_t480}*)
+            sysrc ntpd_enable='YES'
+            sysrc ntpd_sync_on_start='YES'
+            ;;
+        *${model_haseeq540s}*)
+            sysrc ntpdate_enable='YES'
+            ;;
         *) return
     esac
 
@@ -122,9 +143,6 @@ _configure_rc_conf() {
 
     sysrc syslogd_flags='-ss'
     sysrc sendmail_enable='NONE'
-
-    sysrc ntpd_enable='YES'
-    sysrc ntpd_sync_on_start='YES'
 }
 
 _configure_video() {
@@ -145,28 +163,23 @@ _configure_video() {
     lib_set_once /etc/sysctl.conf 'hw.acpi.video.lcd0.brightness=15'
 }
 
-_configure_vt() {
+_configure_console() {
     case $* in
-        *${model_t480}*) ;;
+        *${model_t480}*)
+            lib_set_once /etc/sysctl.conf 'kern.vt.enable_bell=0'
+            ;;
+        *${model_haseeq540s}*)
+            # Improve the console resolution.
+            vidcontrol MODE_286
+            sysrc allscreens_flags=MODE_286
+            ;;
         *) return
     esac
-
-    lib_set_once /etc/sysctl.conf 'kern.vt.enable_bell=0'
-}
-
-_configure_wireless() {
-    case $* in
-        *${model_t480}*) ;;
-        *) return
-    esac
-
-    sysrc kld_list+='if_iwm iwm8265fw'
-    sysrc wlans_iwm0='wlan0'
-    sysrc ifconfig_wlan0='WPA DHCP powersave'
 }
 
 _configure_acpi "$@"
 _configure_boot "$@"
+_configure_console "$@"
 _configure_current "$@"
 _configure_fonts "$@"
 _configure_mouse "$@"
@@ -174,7 +187,7 @@ _configure_networking "$@"
 _configure_power_management "$@"
 _configure_rc_conf "$@"
 _configure_video "$@"
-_configure_vt "$@"
-_configure_wireless "$@"
 
 lib_info 'setup.root done'
+
+# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab

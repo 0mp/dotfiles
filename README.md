@@ -84,12 +84,6 @@ The modules are as follows:
 > FreeBSD
 > general purpose utilities and configuration files.
 
-**freebsd-haseeq540s**
-
-> Configure
-> FreeBSD
-> desktop experience for Hasee Q540S.
-
 **freebsd-l702x** \[\[*option ...*] **--**]
 
 > Configure
@@ -108,6 +102,10 @@ The modules are as follows:
 > on a laptop.
 
 > Supported models are:
+
+> **--haseeq540s**
+
+> > Hasee Q540S
 
 > **--t480**
 
