@@ -65,17 +65,6 @@ The modules are as follows:
 > FreeBSD
 > general purpose utilities and configuration files.
 
-**freebsd-l702x** \[\[*option ...*] **--**]
-
-> Configure
-> FreeBSD
-> desktop experience for Dell XPS L702X.
-> The options are as follows:
-
-> **--nvidia**
-
-> > Install an Nvidia graphics driver.
-
 **freebsd-laptop** \[\[*option ...*] **--**]
 
 > Configure
