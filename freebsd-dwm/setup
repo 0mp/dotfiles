@@ -16,7 +16,7 @@ PREFIX="$HOME/.suckless/"
 lib_custom_install() {
     case $CUSTOMOPTS in
         *--wallpaper*)
-            feh -B white --bg-tile ~/.suckless/freebsd-logo-by-claudiom.png
+            feh -B black --bg-center ~/.suckless/freebsd-logo-by-claudiom.png
             ;;
     esac
 }
