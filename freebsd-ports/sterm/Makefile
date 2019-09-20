@@ -7,7 +7,7 @@ MASTERDIR=	${PORTSDIR}/x11/sterm
 
 SUB_FILES+=	../../../../../../../../../../../../..${.CURDIR}/files/config.h
 
-ST_CONF=	${WRKDIR}/files/config.h
+ST_CONF=	${.CURDIR}/files/config.h
 
 OPTIONS_DEFAULT+=	SCROLLBACK
 
