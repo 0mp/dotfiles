@@ -1,5 +1,7 @@
 #! /bin/sh -
 
+trap '[ "$SSH_AGENT_PID" ] && kill "$SSH_AGENT_PID"' EXIT
+
 export LC_ALL=en_US.UTF-8
 
 while [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
@@ -17,8 +19,6 @@ setxkbmap pl
 # Wallpaper.
 /bin/sh ~/.fehbg
 
-eval $(ssh-agent)
+eval $(ssh-agent -s)
 
 "${@:-dwm}"
-
-kill "$SSH_AGENT_PID"
