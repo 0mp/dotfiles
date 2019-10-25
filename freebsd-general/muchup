@@ -79,7 +79,7 @@ run() {
     finish_action
 }
 
-version=3.1.0
+version=3.2.0
 
 if [ $# -eq 0 ] || [ "$1" = -h ]
 then
@@ -142,6 +142,7 @@ if [ "$src" ]
 then
     if ! [ -d /usr/src/.svn ]
     then
+        run 'src-snapshot' zfs snapshot "zroot/usr/src@$(get_current_date)"
         run 'src-rm' rm -rf -- /usr/src/*
         run 'src-checkout' svnlite co https://svn.freebsd.org/base/head /usr/src
     else
@@ -153,6 +154,7 @@ if [ "$ports" ]
 then
     if ! [ -d /usr/ports/.svn ]
     then
+        run 'ports-snapshot' zfs snapshot "zroot/usr/ports@$(get_current_date)"
         run 'ports-rm' rm -rf -- /usr/ports/*
         run 'ports-checkout' svnlite co https://svn.freebsd.org/ports/head /usr/ports
     else
