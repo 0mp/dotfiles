@@ -185,3 +185,5 @@ then
     cd /usr/src
     run 'beinstall' ./tools/build/beinstall.sh -j"$ncpu"
 fi
+
+# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
