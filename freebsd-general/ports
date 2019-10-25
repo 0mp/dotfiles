@@ -1,0 +1,46 @@
+#! /bin/sh -
+
+set -eu
+
+err() {
+	local rc
+	rc="$1"
+	shift
+	printf 'ERROR: %s\n' "$*" >&2
+	exit "${rc}"
+}
+
+case ${1:-} in
+test)
+	shift
+	jail="$1"
+	origin="${2:-${PWD#${PWD%/*/*}/}}"
+
+	if ports_tree="$(poudriere ports -lq | awk '/default/{print $5}')"
+	then :; else
+		err "$?" "Could not get the default poudriere ports tree"
+	fi
+	port_path="${ports_tree}/${origin}"
+	if test_dependencies="$(make -C "${port_path}" test-depends-list | cut -d / -f 8-)"
+	then :; else
+		err "$?" "Could not get test dependencies"
+	fi
+
+	if [ "${test_dependencies}" != "" ]
+	then
+		sudo poudriere bulk -j "${jail}" ${test_dependencies}
+	fi
+	printf '%s\n' "cd /usr/ports/${origin}" "make test" |
+		sudo poudriere testport -j "${jail}" -o "${origin}" -i
+	;;
+*)
+	_b=$(printf "\033[1m")
+	_0=$(printf "\033[0m")
+	_u=$(printf "\033[4m")
+	cat <<HELP
+Usage: ${_b}ports${_0} [${_u}command${_0} [${_u}args${_0} ...]]
+Commands:
+	${_b}test${_0} ${_u}jail${_0} [${_u}origin${_0}]
+HELP
+	;;
+esac
