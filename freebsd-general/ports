@@ -11,6 +11,16 @@ err() {
 }
 
 case ${1:-} in
+commitnew)
+	shift
+	origin="${PWD#${PWD%/*/*}/}"
+	cat << SVN_COMMIT | xclip -sel clipboard
+New port: ${origin}: $(make -V COMMENT)
+
+$(cat pkg-descr)
+SVN_COMMIT
+	svn commit ../Makefile .
+	;;
 test)
 	shift
 	jail="$1"
@@ -40,6 +50,7 @@ test)
 	cat <<HELP
 Usage: ${_b}ports${_0} [${_u}command${_0} [${_u}args${_0} ...]]
 Commands:
+	${_b}commitnew${_0}
 	${_b}test${_0} ${_u}jail${_0} [${_u}origin${_0}]
 HELP
 	;;
