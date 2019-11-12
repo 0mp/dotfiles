@@ -1,5 +1,7 @@
-xsetroot -name "$(
+#! /bin/sh -
 
+refresh_status_bar() {
+    xsetroot -name "$(
 # Current task
 if [ -s ~/.suckless/current-task.txt ]
 then
@@ -52,3 +54,10 @@ printf -- ' | '
 # Date
 date +'%A, %Y-%m-%d (%B) | %H:%M '
 )"
+    return 0
+}
+
+while refresh_status_bar
+do
+    sleep 2
+done

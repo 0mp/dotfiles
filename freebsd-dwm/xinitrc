@@ -1,16 +1,26 @@
 #! /bin/sh -
 
-trap '[ "$SSH_AGENT_PID" ] && kill "$SSH_AGENT_PID"' EXIT
+clean_up() {
+    if [ "$SSH_AGENT_PID" ]; then
+        kill "$SSH_AGENT_PID"
+    fi
+
+    pkill -F ~/.suckless/status-bar.pid
+    pkill -F ~/.suckless/battery-alert.pid
+    pkill -F ~/.suckless/eyes-alert.pid
+}
+
+if [ -z "$DISPLAY" ]; then
+    exec xinit
+fi
+
+trap 'clean_up' EXIT
 
 export LC_ALL=en_US.UTF-8
 
-while [ -d ~/.suckless ] && [ -f ~/.suckless/status-bar.sh ]
-do
-    /bin/sh ~/.suckless/status-bar.sh &
-    acpiconf -i0 >/dev/null && /bin/sh ~/.suckless/battery-alert.sh &
-    sleep 2
-done &
-/bin/sh ~/.suckless/eyes-alert.sh &
+/usr/sbin/daemon -p ~/.suckless/status-bar.pid /bin/sh ~/.suckless/status-bar.sh
+/usr/sbin/daemon -p ~/.suckless/battery-alert.pid /bin/sh ~/.suckless/battery-alert.sh
+/usr/sbin/daemon -p ~/.suckless/eyes-alert.pid /bin/sh ~/.suckless/eyes-alert.sh
 
 setxkbmap pl
 

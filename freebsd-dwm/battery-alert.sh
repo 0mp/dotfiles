@@ -1,5 +1,6 @@
 #! /bin/sh -
 
+run_battery_alert() {
 threshold_file="${HOME}/.0mp-switch/battery-alert-threshold"
 alert_off_file="${HOME}/.0mp-switch/battery-alert-off"
 threshold=15
@@ -90,3 +91,9 @@ xmessage -buttons "${button}" -default "${button}" -file - <<'MESSAGE'
  / ___ \| |_) | |_| | |_| | | |    | |  | |  |_|
 /_/   \_\____/ \___/ \___/  |_|   |___| |_|  (_)
 MESSAGE
+}
+
+acpiconf -i0 >/dev/null || exit 0
+while run_battery_alert; do
+    sleep 2
+done
