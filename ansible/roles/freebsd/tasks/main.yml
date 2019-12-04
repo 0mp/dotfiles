@@ -1,9 +1,9 @@
 ---
 - name: Disable console beep
+  become: yes
   sysctl:
     name: kern.vt.enable_bell
     value: "0"
-    reload: no
 
 - name: Update microcode
   become: yes
