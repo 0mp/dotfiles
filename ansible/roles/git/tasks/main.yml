@@ -7,8 +7,13 @@
   become: yes
 
 - name: Create ~/.gitconfig
+  file:
+    path: "{{ dotfiles_user_home }}/.gitconfig"
+    state: touch
+
+- name: Populate ~/.gitconfig
   blockinfile:
-    path: "{{ dotfiles_user_home}}/.gitconfig"
+    path: "{{ dotfiles_user_home }}/.gitconfig"
     block: |
       [user]
       name = Mateusz Piotrowski
@@ -16,5 +21,4 @@
 
       [include]
       path = {{ role_path }}/gitconfig
-    create: yes
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
