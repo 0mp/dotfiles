@@ -11,6 +11,7 @@
     name:
       - curl
       - markdownfmt
+      - py36-black
     state: present
   become: yes
 
