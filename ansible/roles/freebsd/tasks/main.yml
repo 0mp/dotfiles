@@ -4,3 +4,15 @@
     name: kern.vt.enable_bell
     value: "0"
     reload: no
+
+- name: Update microcode
+  become: yes
+  block:
+    - name: Install devcpu-date
+      package:
+        name: devcpu-data
+        state: latest
+    - name: Enable updating microcode
+      sysrc:
+        name: microcode_update_enable
+        value: "YES"
