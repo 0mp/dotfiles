@@ -3,8 +3,17 @@
 # Fire and forget ---  a simple way to run programs.
 
 case "$#" in
-    0) exit 0 ;;
-    1) set -- "xdg-open" "$@" ;;
+    0)
+        exit 0
+        ;;
+    1)
+        if [ -e "$1" ]
+        then
+            set -- "xdg-open" "$1"
+        else
+            set -- "xdg-open" *"$1"*
+        fi
+        ;;
 esac
 
 /usr/bin/nohup >/dev/null 2>&1 "$@" &
