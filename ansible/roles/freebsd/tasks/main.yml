@@ -1,0 +1,6 @@
+---
+- name: Disable console beep
+  sysctl:
+    name: kern.vt.enable_bell
+    value: "0"
+    reload: no
