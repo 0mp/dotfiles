@@ -1,0 +1,39 @@
+---
+- name: Use sudo(8) instead of su(1) when using ports
+  become: yes
+  blockinfile:
+    path: /etc/make.conf
+    block: |
+      if exists(/usr/local/bin/sudo)
+      SU_CMD=	/usr/local/bin/sudo -E sh -c
+      .endif
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: Use sudo(8) instead of su(1)"
+
+- name: Set developer variables in /etc/make.conf
+  become: yes
+  blockinfile:
+    path: /etc/make.conf
+    block: |
+      DEVELOPER=	YES
+      DEV_WARNING_WAIT=	0
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: Developer variables"
+
+- name: Set developer variables in /etc/src.conf
+  become: yes
+  blockinfile:
+    path: /etc/make.conf
+    block: |
+      WITH_CCACHE_BUILD=	YES
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: Developer variables"
+
+- name: Set developer variables in /etc/src-env.conf
+  become: yes
+  blockinfile:
+    path: /etc/make.conf
+    block: |
+      WITH_META_MODE=	YES
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: Developer variables"
