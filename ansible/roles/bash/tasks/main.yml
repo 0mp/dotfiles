@@ -1,6 +1,10 @@
 ---
 - name: Install Bash
-  package: name=bash state=present
+  package:
+    name:
+      - bash
+      - bash-completion
+    state: present
   become: yes
 
 - name: Symlink Bash configuration files
