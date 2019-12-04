@@ -1,0 +1,20 @@
+---
+- name: Install Git
+  package:
+    name:
+      - git
+    state: present
+  become: yes
+
+- name: Create ~/.gitconfig
+  blockinfile:
+    path: "{{ dotfiles_user_home}}/.gitconfig"
+    block: |
+      [user]
+      name = Mateusz Piotrowski
+      email = 0mp@FreeBSD.org
+
+      [include]
+      path = {{ role_path }}/gitconfig
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"

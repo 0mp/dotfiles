@@ -9,6 +9,7 @@
     - role: freebsd-dev
       tags: [ freebsd-dev ]
       when: ansible_facts['os_family'] == "FreeBSD"
+    - { role: git, tags: [ git ] }
     - role: ly
       tags: [ ly ]
       when: ansible_facts['os_family'] == "FreeBSD"
