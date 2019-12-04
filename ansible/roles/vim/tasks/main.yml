@@ -1,0 +1,15 @@
+---
+- name: Install Vim and its runtime dependencies
+  package:
+    name:
+      - vim
+      - curl
+    state: present
+  become: yes
+
+- name: Symlink .vimrc 
+  file:
+    src: "{{ role_path }}/files/.vimrc"
+    path: "{{ dotfiles_user_home }}/.vimrc"
+    state: link
+    force: yes
