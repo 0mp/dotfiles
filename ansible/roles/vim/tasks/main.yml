@@ -22,9 +22,6 @@
     state: link
     force: yes
 
-- name: Install plugins
-  command: vim +PlugInstall +qall
-
 - name: Make sure templates directory exists
   file:
     path: "{{ dotfiles_user_home }}/.vim/templates"
