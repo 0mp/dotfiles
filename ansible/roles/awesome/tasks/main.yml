@@ -15,3 +15,10 @@
     state: link
     force: yes
   loop: "{{ configuration_files }}"
+
+- name: Configure and start D-Bus
+  become: yes
+  service:
+    name: dbus
+    state: started
+    enabled: yes
