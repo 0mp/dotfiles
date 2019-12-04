@@ -1,0 +1,21 @@
+---
+- name: Install Ly
+  become: yes
+  package:
+    name: ly
+    state: latest
+
+- name: Configure /etc/ttys
+  become: yes
+  lineinfile:
+    path: /etc/ttys
+    regexp: "^ttyv1"
+    line: 'ttyv1	"/usr/libexec/getty Ly"		xterm	on	secure'
+    validate: awk '/^ttyv1/{seen++} END{if(seen != 1) exit 1}' %s
+
+- name: Configure /etc/gettytab
+  become: yes
+  lineinfile:
+    path: /etc/gettytab
+    regexp: "^Ly"
+    line: "Ly:lo=/usr/local/bin/ly:al=root:"
