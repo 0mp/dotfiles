@@ -1,0 +1,12 @@
+# Use vi mode.
+set editing-mode vi
+
+# Use C-l in insert mode to clear the screen (it only works in normal mode
+# otherwise).
+"\C-l":clear-screen
+
+"\C-x\C-f":complete-filename
+
+set show-mode-in-prompt on
+set vi-ins-mode-string " "
+set vi-cmd-mode-string "\1\e[101m\2 \1\e[0m\2"

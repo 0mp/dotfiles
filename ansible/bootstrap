@@ -1,0 +1,3 @@
+#! /bin/sh -
+
+ASSUME_ALWAYS_YES=YES pkg install -y py36-ansible py36-ansible-sysrc python3
