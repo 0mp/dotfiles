@@ -2,5 +2,4 @@ configuration_files:
   - .bash_0mp
   - .bash_profile
   - .bash_completion
-  - .bash_profile
   - .inputrc
