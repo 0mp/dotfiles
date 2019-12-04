@@ -4,3 +4,4 @@
     - { role: awesome, tags: [ awesome ] }
     - { role: bash, tags: [ bash ] }
     - { role: freebsd, tags: [ freebsd ] }
+    - { role: tmux, tags: [ tmux ] }
