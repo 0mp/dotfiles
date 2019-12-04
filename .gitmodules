@@ -1,6 +1,3 @@
 [submodule "goat/goat"]
 	path = goat/goat
 	url = https://github.com/0mp/goat.git
-[submodule "vim/vim-robpike"]
-	path = vim/vim-robpike
-	url = https://github.com/0mp/vim-robpike.git

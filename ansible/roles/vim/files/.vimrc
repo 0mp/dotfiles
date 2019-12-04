@@ -2,6 +2,13 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged')
 
 " {{{ Commenting
@@ -9,6 +16,7 @@ Plug 'scrooloose/nerdcommenter'
 " }}}
 " {{{ Color schemes
 Plug 'vim-scripts/CycleColor' " Cycles through available colorschemes.
+Plug '0mp/vim-robpike'
 " }}}
 " {{{ Languages
 " {{{ C++
@@ -37,7 +45,8 @@ Plug 'lervag/vimtex'
 " }}}
 " {{{ Python
 Plug 'davidhalter/jedi-vim'
-Plug 'python/black'
+Plug 'psf/black'
+let g:black_virtualenv = "/usr/local"
 " }}}
 " }}}
 " {{{ Navigation
@@ -300,7 +309,7 @@ set breakindent
 set showbreak=\\_
 
 syntax enable
-colorscheme robpike
+silent! colorscheme robpike
 " }}}
 " Section: Style {{{
 set shiftwidth=4
