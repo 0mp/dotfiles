@@ -1,6 +1,5 @@
 - name: Set up local workstation
   hosts: local
   roles:
-    - role: bash
-      tags:
-        - bash
+    - { role: awesome, tags: [ awesome ] }
+    - { role: bash, tags: [ bash ] }

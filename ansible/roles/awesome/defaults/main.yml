@@ -1,0 +1,5 @@
+configuration_files:
+  - rc.lua
+
+configuration_dir:
+  - "{{ dotfiles_user_home }}/.config/awesome"
