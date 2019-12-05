@@ -5,6 +5,8 @@ bind t any toggleSidebar
 
 bind - any zoomOut
 bind = any zoomIn
+# zoomFitPage can be achieved by going into full-screen mode.
+bind w any zoomFitWidth
 
 bind d any scrollDown(500)
 bind u any scrollUp(500)
@@ -15,15 +17,31 @@ bind shift-space any pageUp
 bind n any nextPage
 bind p any prevPage
 
-
-bind j continuous scrollDown(50)
-bind k continuous scrollUp(50)
+bind j continuous scrollDownNextPage(50)
+bind k continuous scrollUpPrevPage(50)
 bind h continuous scrollLeft(50)
 bind l continuous scrollRight(50)
 
+unbind down any
+bind down fullScreen nextPage
+bind down any scrollDown(20)
+
+unbind right
+bind right fullScreen nextPage
+bind right any scrollRight(20)
+
+unbind up
+bind up fullScreen prevPage
+bind up any scrollUp(20)
+
+unbind left
+bind left fullScreen prevPage
+bind left any scrollLeft(20)
 
 bind j fullScreen nextPage
 bind k fullScreen prevPage
 
+bind . any nextPageNoScroll
+bind , any prevPageNoScroll
 
 initialSidebarState no
