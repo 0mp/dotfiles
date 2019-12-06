@@ -1,0 +1,14 @@
+---
+- name: Install Xpdf
+  package:
+    name:
+      - xpdf
+    state: present
+  become: yes
+
+- name: Symlink configuration files
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "{{ dotfiles_user_home }}/{{ item }}"
+    state: link
+  with_items: .xpdfrc
