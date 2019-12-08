@@ -12,6 +12,7 @@ cflowfilter
 committer-bootstrap
 disable-yoga-3-14-touchscreen
 faf
+flip-git-remote-url
 get-list-of-ports-for-moinmoin
 manlint
 previewman

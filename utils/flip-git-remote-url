@@ -1,0 +1,18 @@
+#! /bin/sh -
+
+set -eu
+
+url="$(git remote get-url origin)"
+
+case $url in
+https://github.com/*)
+    url="${url%.git}"
+    new_url="git@github.com:${url#https://github.com/}.git"
+    ;;
+git@github.com:*)
+    url="${url%.git}"
+    new_url="https://github.com/${url#git@github.com:}"
+    ;;
+esac
+
+git remote set-url origin "$new_url"
