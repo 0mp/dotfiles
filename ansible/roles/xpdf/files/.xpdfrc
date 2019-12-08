@@ -26,15 +26,15 @@ unbind down any
 bind down fullScreen nextPage
 bind down any scrollDown(20)
 
-unbind right
+unbind right any
 bind right fullScreen nextPage
 bind right any scrollRight(20)
 
-unbind up
+unbind up any
 bind up fullScreen prevPage
 bind up any scrollUp(20)
 
-unbind left
+unbind left any
 bind left fullScreen prevPage
 bind left any scrollLeft(20)
 
