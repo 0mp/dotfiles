@@ -16,3 +16,11 @@
       sysrc:
         name: microcode_update_enable
         value: "YES"
+
+- name: Install login_conf
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "{{ dotfiles_user_home }}/{{ item }}"
+    state: hard
+    force: yes
+  loop: [ .login_conf ]
