@@ -13,7 +13,7 @@
     src: "{{ role_path }}/files/{{ item }}"
     path: "{{ configuration_dir }}/{{ item }}"
     state: link
-    force: yes
+    follow: no
   loop: "{{ configuration_files }}"
 
 - name: Configure and start D-Bus
