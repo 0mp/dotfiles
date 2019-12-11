@@ -15,4 +15,5 @@
       when: ansible_facts['os_family'] == "FreeBSD"
     - { role: tmux, tags: [ tmux ] }
     - { role: vim, tags: [ vim ] }
+    - { role: xmonad, tags: [ xmonad ] }
     - { role: xpdf, tags: [ xpdf ] }

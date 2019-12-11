@@ -1,0 +1,37 @@
+---
+- name: Install packages
+  package: name={{item}} state=present
+  become: yes
+  with_items:
+    - hs-xmonad
+    - hs-xmonad-contrib
+    - hs-xmobar
+
+- name: Ensure existence configuration directory
+  file:
+    path: "{{ configuration_dir }}"
+    state: directory
+
+- name: Symlink XMonad configuration files
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "{{ configuration_dir }}/{{ item }}"
+    state: link
+    follow: no
+  with_items: xmonad.hs
+
+- name: Symlink xmobar configuration files
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "{{ dotfiles_user_home }}/{{ item }}"
+    state: link
+    follow: no
+  with_items: .xmobarrc
+
+
+- name: Configure and start D-Bus
+  become: yes
+  service:
+    name: dbus
+    state: started
+    enabled: yes
