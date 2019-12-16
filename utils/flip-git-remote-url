@@ -3,15 +3,21 @@
 set -eu
 
 url="$(git remote get-url origin)"
+url_without_protocol="${url#*//}"
+url_without_protocol_and_userinfo="${url_without_protocol#*@}"
 
-case $url in
-https://github.com/*)
-    url="${url%.git}"
-    new_url="git@github.com:${url#https://github.com/}.git"
+protocol="${url%${url_without_protocol}}"
+
+domain="${url_without_protocol_and_userinfo%%[:/]*}"
+path_with_dot_git="${url_without_protocol_and_userinfo#${domain}[:/]}"
+path="${path_with_dot_git%.git}"
+
+case $protocol in
+http*)
+    new_url="ssh://git@${domain}/${path}.git"
     ;;
-git@github.com:*)
-    url="${url%.git}"
-    new_url="https://github.com/${url#git@github.com:}"
+ssh*)
+    new_url="https://${domain}/${path}.git"
     ;;
 esac
 
