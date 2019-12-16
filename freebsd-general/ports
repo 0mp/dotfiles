@@ -11,6 +11,9 @@ err() {
 }
 
 case ${1:-} in
+new13)
+	sudo poudriere jail -c -j "130a-$(date +%Y-%m-%d)" -a amd64 -v 13.0-CURRENT
+	;;
 commitnew)
 	shift
 	origin="${PWD#${PWD%/*/*}/}"
@@ -83,6 +86,7 @@ test)
 Usage: ${_b}ports${_0} [${_u}command${_0} [${_u}args${_0} ...]]
 Commands:
 	${_b}commitnew${_0}
+	${_b}new13${_0}
 	${_b}test${_0} ${_u}jail${_0} [${_u}origin${_0}]
 HELP
 	;;
