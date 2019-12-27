@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: octave utils xpdf .PHONY
+dotfiles: octave utils xmodmap xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -38,6 +38,10 @@ utils: .PHONY
 	ln -f -s ${.CURDIR}/home/.local/bin/superdrive ${HOME}/.local/bin/superdrive
 	ln -f -s ${.CURDIR}/home/.local/bin/test-true-color-support ${HOME}/.local/bin/test-true-color-support
 
+##############################################################################
+
+xmodmap: .PHONY
+	ln -f -s ${.CURDIR}/home/.xmodmap ${HOME}/.xmodmap
 
 ##############################################################################
 
