@@ -6,6 +6,7 @@ import XMonad.Actions.DwmPromote
 import XMonad.Layout.NoBorders
 import XMonad.Hooks.DynamicLog
 import qualified Data.Map as M
+import XMonad.Actions.CycleWS
 
 main = xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 
@@ -19,7 +20,8 @@ myConfig = def {
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             [ ((modm, xK_Return), dwmpromote)
-            , ((modm .|. shiftMask,xK_l), spawn "slock")
+            , ((modm .|. shiftMask, xK_l), spawn "slock")
+            , ((modm, xK_Tab), toggleWS)
             ]
 
 myLayout = smartBorders $ layoutHook defaultConfig
