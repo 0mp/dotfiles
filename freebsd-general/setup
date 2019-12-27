@@ -6,20 +6,6 @@ set -eu
 
 lib_info 'setup'
 
-FILES=
-PREFIX=
-CUSTOMFILES='login_conf'
-lib_custom_install() {
-    for f in $CUSTOMFILES
-    do
-        ln -v -f -F -n -- "$f" "$PREFIX$f"
-    done
-}
-lib_back_up
-trap lib_roll_back EXIT
-lib_install
-trap - EXIT
-
 FILES='flip-svn-location fr justmount nycbug-dmesgd muchup ports unitek-init wifi-init'
 PREFIX="$HOME/.local/bin/"
 lib_custom_install() { :; }
