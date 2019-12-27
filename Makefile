@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: octave utils xmodmap xpdf .PHONY
+dotfiles: octave subversion utils xmodmap xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -13,6 +13,12 @@ freebsd-user: .PHONY
 
 octave: .PHONY
 	ln -f -s ${.CURDIR}/home/.octaverc ${HOME}/.octaverc
+
+##############################################################################
+
+subversion: .PHONY
+	mkdir -p ${HOME}/.subversion
+	ln -f -s ${.CURDIR}/home/.subversion/config ${HOME}/.subversion/config
 
 ##############################################################################
 
