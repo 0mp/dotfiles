@@ -3,19 +3,6 @@
   package: name=awesome state=present
   become: yes
 
-- name: Ensure existence configuration directory
-  file:
-    path: "{{ configuration_dir }}"
-    state: directory
-
-- name: Symlink awesome configuration files
-  file:
-    src: "{{ role_path }}/files/{{ item }}"
-    path: "{{ configuration_dir }}/{{ item }}"
-    state: link
-    follow: no
-  loop: "{{ configuration_files }}"
-
 - name: Configure and start D-Bus
   become: yes
   service:

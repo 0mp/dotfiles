@@ -1,8 +1,14 @@
 .MAIN: dotfiles
 
-dotfiles: octave subversion tmux utils xmodmap xpdf .PHONY
+dotfiles: awesome octave subversion tmux utils xmodmap xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
+
+##############################################################################
+
+awesome: .PHONY
+	mkdir -p ${HOME}/.config/awesome
+	ln -f -s ${.CURDIR}/home/.config/awesome/rc.lua ${HOME}/.config/awesome/rc.lua
 
 ##############################################################################
 
