@@ -38,6 +38,16 @@ utils: .PHONY
 	ln -f -s ${.CURDIR}/home/.local/bin/superdrive ${HOME}/.local/bin/superdrive
 	ln -f -s ${.CURDIR}/home/.local/bin/test-true-color-support ${HOME}/.local/bin/test-true-color-support
 
+	ln -f -s ${.CURDIR}/home/.local/bin/flip-svn-location ${HOME}/.local/bin/flip-svn-location
+	ln -f -s ${.CURDIR}/home/.local/bin/fr ${HOME}/.local/bin/fr
+	ln -f -s ${.CURDIR}/home/.local/bin/justmount ${HOME}/.local/bin/justmount
+	ln -f -s ${.CURDIR}/home/.local/share/man/man8/muchup.8 ${HOME}/.local/share/man/man8/muchup.8
+	ln -f -s ${.CURDIR}/home/.local/bin/muchup ${HOME}/.local/bin/muchup
+	ln -f -s ${.CURDIR}/home/.local/bin/nycbug-dmesgd ${HOME}/.local/bin/nycbug-dmesgd
+	ln -f -s ${.CURDIR}/home/.local/bin/ports ${HOME}/.local/bin/ports
+	ln -f -s ${.CURDIR}/home/.local/bin/unitek-init ${HOME}/.local/bin/unitek-init
+	ln -f -s ${.CURDIR}/home/.local/bin/wifi-init ${HOME}/.local/bin/wifi-init
+
 ##############################################################################
 
 xmodmap: .PHONY
