@@ -12,7 +12,7 @@ freebsd-user: .PHONY
 ##############################################################################
 
 octave: .PHONY
-	ln -f ${.CURDIR}/home/.octaverc ${HOME}/.octaverc
+	ln -f -s ${.CURDIR}/home/.octaverc ${HOME}/.octaverc
 
 ##############################################################################
 
