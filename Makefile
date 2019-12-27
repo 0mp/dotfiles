@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: awesome bash octave subversion tmux utils vim xmodmap xpdf .PHONY
+dotfiles: awesome bash octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -87,6 +87,13 @@ vim: .PHONY
 
 xmodmap: .PHONY
 	ln -f -s ${.CURDIR}/home/.xmodmap ${HOME}/.xmodmap
+
+##############################################################################
+
+xmonad: .PHONY
+	mkdir -p ${HOME}/.xmonad
+	ln -f -s ${.CURDIR}/home/.xmonad/xmonad.hs ${HOME}/.xmonad/xmonad.hs
+	ln -f -s ${.CURDIR}/home/.xmobarrc ${HOME}/.xmobarrc
 
 ##############################################################################
 
