@@ -8,11 +8,3 @@
   sysctl:
     name: security.bsd.unprivileged_proc_debug
     value: "1"
-
-- name: Symlink tmux configuration files
-  file:
-    src: "{{ role_path }}/files/{{ item }}"
-    path: "{{ dotfiles_user_home }}/{{ item }}"
-    state: link
-    force: yes
-  loop: "{{ configuration_files }}"

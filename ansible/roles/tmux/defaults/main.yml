@@ -1,4 +1,0 @@
-configuration_files:
-  - .tmux.conf
-  - .tmux-freebsd.conf
-  - .tmux-macos.conf

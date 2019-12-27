@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: octave subversion utils xmodmap xpdf .PHONY
+dotfiles: octave subversion tmux utils xmodmap xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -19,6 +19,13 @@ octave: .PHONY
 subversion: .PHONY
 	mkdir -p ${HOME}/.subversion
 	ln -f -s ${.CURDIR}/home/.subversion/config ${HOME}/.subversion/config
+
+##############################################################################
+
+tmux: .PHONY
+	ln -f -s ${.CURDIR}/home/.tmux.conf ${HOME}/.tmux.conf
+	ln -f -s ${.CURDIR}/home/.tmux-freebsd.conf ${HOME}/.tmux-freebsd.conf
+	ln -f -s ${.CURDIR}/home/.tmux-macos.conf ${HOME}/.tmux-macos.conf
 
 ##############################################################################
 
