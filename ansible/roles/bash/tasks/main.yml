@@ -7,20 +7,6 @@
     state: present
   become: yes
 
-- name: Symlink Bash configuration files
-  file:
-    src: "{{ role_path }}/files/{{ item }}"
-    path: "{{ dotfiles_user_home }}/{{ item }}"
-    state: link
-    force: yes
-  loop: "{{ configuration_files }}"
-
-- name: Source ~/.bash_0mp from ~/.bashrc
-  blockinfile:
-    block: "[[ -r ~/.bash_0mp ]] && source ~/.bash_0mp"
-    path: ~/.bashrc
-    create: yes
-
 - name: Change the default login shell to Bash on FreeBSD
   become: yes
   user: name={{ ansible_user }} shell="/usr/local/bin/bash"
