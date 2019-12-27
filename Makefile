@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: utils xpdf .PHONY
+dotfiles: octave utils xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -8,6 +8,11 @@ freebsd: dotfiles freebsd-user .PHONY
 
 freebsd-user: .PHONY
 	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
+
+##############################################################################
+
+octave: .PHONY
+	ln -f ${.CURDIR}/home/.octaverc ${HOME}/.octaverc
 
 ##############################################################################
 
