@@ -1,15 +1,18 @@
 #! /bin/sh -
 #
-# Version: 0.2.0
+# Version: 0.3.0
 
 file="$HOME/.suckless/current-task.txt"
 
 if [ -z "$*" ]; then
-    printf '' > "$file"
+    echo "Usage: current-task -c|-|-<number>|<text>"
     exit 0
 fi
 
 case "$1" in
+    -c)
+        printf '' > "$file"
+        ;;
     -)
         sed -i '' -e '$ d' "$file"
         ;;
@@ -17,13 +20,8 @@ case "$1" in
         awk -v ln="${1#-}" 'NR != ln{print $0}' "$file" > "$file.tmp"
         mv "$file.tmp" "$file"
         ;;
-    --)
-        shift
-        cat >> "$file" <<EOF
-[$(date +%H:%M)] $*
-EOF
-        ;;
-    *)
+    --|*)
+        [ "$1" = "--" ] && shift
         cat >> "$file" <<EOF
 [$(date +%H:%M)] $*
 EOF
