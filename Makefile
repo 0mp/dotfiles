@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: awesome bash octave subversion tmux utils xmodmap xpdf .PHONY
+dotfiles: awesome bash octave subversion tmux utils vim xmodmap xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -74,6 +74,14 @@ utils: .PHONY
 	ln -f -s ${.CURDIR}/home/.local/bin/ports ${HOME}/.local/bin/ports
 	ln -f -s ${.CURDIR}/home/.local/bin/unitek-init ${HOME}/.local/bin/unitek-init
 	ln -f -s ${.CURDIR}/home/.local/bin/wifi-init ${HOME}/.local/bin/wifi-init
+
+##############################################################################
+
+vim: .PHONY
+	ln -f -s ${.CURDIR}/home/.vimrc ${HOME}/.vimrc
+
+	mkdir -p ${HOME}/.vim/templates
+	ln -f -s ${.CURDIR}/home/.vim/templates/Makefile ${HOME}/.vim/templates/Makefile
 
 ##############################################################################
 

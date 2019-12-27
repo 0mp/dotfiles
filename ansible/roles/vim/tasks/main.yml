@@ -14,23 +14,3 @@
       - py36-black
     state: present
   become: yes
-
-- name: Symlink .vimrc
-  file:
-    src: "{{ role_path }}/files/.vimrc"
-    path: "{{ dotfiles_user_home }}/.vimrc"
-    state: link
-    force: yes
-
-- name: Make sure templates directory exists
-  file:
-    path: "{{ dotfiles_user_home }}/.vim/templates"
-    state: directory
-
-- name: Symlink templates
-  file:
-    src: "{{ role_path }}/files/templates/{{ item }}"
-    path: "{{ dotfiles_user_home }}/.vim/templates/{{ item }}"
-    state: link
-    force: yes
-  loop: "{{ templates }}"

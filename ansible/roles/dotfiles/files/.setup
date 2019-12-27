@@ -1,0 +1,37 @@
+#! /bin/sh -
+
+. ../lib.sh
+
+set -eu
+
+lib_info 'setup'
+
+# Standard module setup.
+FILES='bash_0mp bash_completion inputrc bash_profile'
+PREFIX=
+lib_custom_install() { :; }
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+# Make bashrc source bash_0mp.
+FILES=''
+PREFIX=
+CUSTOMFILES='bashrc'
+lib_custom_install() {
+    sourcecmd='[[ -r ~/.bash_0mp ]] && source ~/.bash_0mp'
+    if ! [ -r ~/.bashrc ]
+    then
+        printf '%s\n' "$sourcecmd" >> ~/.bashrc
+    elif ! grep "$sourcecmd" ~/.bashrc 2>/dev/null 1>&2
+    then
+        printf '\n%s\n' "$sourcecmd" >> ~/.bashrc
+    fi
+}
+lib_back_up
+trap lib_roll_back EXIT
+lib_install
+trap - EXIT
+
+lib_info 'setup done'
