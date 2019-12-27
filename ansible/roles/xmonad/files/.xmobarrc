@@ -36,7 +36,7 @@ Config {
    --   color can be set by enclosing in <fc></fc> tags. For more details
    --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
    , commands =
-        [ Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
+        [ Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 600
         , Run Com "mixer" ["-s", "vol"] "random" 10
         , Run StdinReader
         ]
