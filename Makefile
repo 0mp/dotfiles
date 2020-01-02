@@ -64,6 +64,7 @@ utils: .PHONY
 	ln -f -s ${.CURDIR}/home/.local/bin/samsung2043nw ${HOME}/.local/bin/samsung2043nw
 	ln -f -s ${.CURDIR}/home/.local/bin/superdrive ${HOME}/.local/bin/superdrive
 	ln -f -s ${.CURDIR}/home/.local/bin/test-true-color-support ${HOME}/.local/bin/test-true-color-support
+	ln -f -s ${.CURDIR}/home/.local/bin/current-task ${HOME}/.local/bin/current-task
 
 	ln -f -s ${.CURDIR}/home/.local/bin/flip-svn-location ${HOME}/.local/bin/flip-svn-location
 	ln -f -s ${.CURDIR}/home/.local/bin/fr ${HOME}/.local/bin/fr
