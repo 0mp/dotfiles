@@ -74,4 +74,4 @@ user_pref("layout.css.devPixelsPerPx", "1.5");
 /*
  * Disable the Password Manager.
  */
-user_pref('signon.rememberSignons', false)
+user_pref('signon.rememberSignons', false);
