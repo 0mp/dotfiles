@@ -26,7 +26,7 @@ ${HOME}/h/dwm:
 	mkdir -p ${HOME}/h
 	git clone http://github.com/0mp/dwm ${.TARGET}
 
-dwm: .PHONY
+dwm: ${HOME}/h/dwm .PHONY
 	pkg info -q libX11 libXft libXinerama fontconfig || \
 		sudo pkg install -Ay libX11 libXft libXinerama fontconfig
 	make -C ${HOME}/h/dwm clean dwm install
