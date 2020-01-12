@@ -39,7 +39,7 @@ freebsd-user: .PHONY
 ##############################################################################
 
 git: .PHONY
-	ln -f ${.CURDIR}/home/.gitconfig ${HOME}/.gitconfig
+	ln -f -s ${.CURDIR}/home/.gitconfig ${HOME}/.gitconfig
 
 ##############################################################################
 
