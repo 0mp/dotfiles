@@ -38,6 +38,7 @@ dwm: ${HOME}/h/dwm .PHONY
 	ln -f -s ${.CURDIR}/home/.local/bin/status-bar ${HOME}/.local/bin/status-bar
 	mkdir -p ${HOME}/.config/dwm
 	ln -f -s ${.CURDIR}/home/.config/dwm/freebsd-logo-by-claudiom.png ${HOME}/.config/dwm/freebsd-logo-by-claudiom.png
+	ln -f -s ${.CURDIR}/home/.config/dwm/plumb.sh ${HOME}/.config/dwm/plumb.sh
 
 ##############################################################################
 
