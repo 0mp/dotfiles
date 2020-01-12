@@ -27,9 +27,17 @@ ${HOME}/h/dwm:
 	git clone http://github.com/0mp/dwm ${.TARGET}
 
 dwm: .PHONY
-	pkg info -q libX11 libXft libXinerama fontconfig | \
+	pkg info -q libX11 libXft libXinerama fontconfig || \
 		sudo pkg install -Ay libX11 libXft libXinerama fontconfig
 	make -C ${HOME}/h/dwm clean dwm install
+
+	ln -f -s ${.CURDIR}/home/.xinitrc ${HOME}/.xinitrc
+	mkdir -p ${HOME}/.local/bin
+	ln -f -s ${.CURDIR}/home/.local/bin/battery-alert ${HOME}/.local/bin/battery-alert
+	ln -f -s ${.CURDIR}/home/.local/bin/eyes-alert ${HOME}/.local/bin/eyes-alert
+	ln -f -s ${.CURDIR}/home/.local/bin/status-bar ${HOME}/.local/bin/status-bar
+	mkdir -p ${HOME}/.config/dwm
+	ln -f -s ${.CURDIR}/home/.config/dwm/freebsd-logo-by-claudiom.png ${HOME}/.config/dwm/freebsd-logo-by-claudiom.png
 
 ##############################################################################
 

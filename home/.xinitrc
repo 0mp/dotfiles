@@ -5,25 +5,26 @@ clean_up() {
         kill "$SSH_AGENT_PID"
     fi
 
-    pkill -F ~/.suckless/status-bar.pid
-    pkill -F ~/.suckless/battery-alert.pid
-    pkill -F ~/.suckless/eyes-alert.pid
+    pkill -F ~/.cache/status-bar.pid
+    pkill -F ~/.cache/battery-alert.pid
+    pkill -F ~/.cache/eyes-alert.pid
 }
 
 trap 'clean_up' EXIT
 
 export LC_ALL=en_US.UTF-8
 
-daemon -p ~/.suckless/status-bar.pid /bin/sh ~/.suckless/status-bar.sh
-daemon -p ~/.suckless/battery-alert.pid /bin/sh ~/.suckless/battery-alert.sh
-daemon -p ~/.suckless/eyes-alert.pid /bin/sh ~/.suckless/eyes-alert.sh
+mkdir -p ~/.cache
+daemon -p ~/.cache/status-bar.pid status-bar
+daemon -p ~/.cache/battery-alert.pid battery-alert
+daemon -p ~/.cache/eyes-alert.pid eyes-alert
 
 setxkbmap -option ctrl:nocaps
 setxkbmap pl
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
-sh ~/.fehbg
+feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/dwm/freebsd-logo-by-claudiom.png"
 
 eval $(ssh-agent -s)
 
