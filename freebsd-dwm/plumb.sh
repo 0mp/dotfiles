@@ -20,12 +20,7 @@ is_link() {
 }
 
 open_link() {
-    if [ "${TESTING:-}" = YES ]
-    then
-        exec ${NOHUP} ${BROWSER} "${1}"
-    else
-        exec ${NOHUP} ${BROWSER} "${1}" >/dev/null 2>&1
-    fi
+    exec ${NOHUP} ${BROWSER} "${1}" >/dev/null 2>&1
 }
 
 if is_link "${str}"
