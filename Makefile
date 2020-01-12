@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: awesome bash octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
+dotfiles: awesome bash git octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
 
 freebsd: dotfiles freebsd-user .PHONY
 
@@ -22,6 +22,11 @@ bash: .PHONY
 
 freebsd-user: .PHONY
 	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
+
+##############################################################################
+
+git: .PHONY
+	ln -f ${.CURDIR}/home/.gitconfig ${HOME}/.gitconfig
 
 ##############################################################################
 
