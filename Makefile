@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: awesome bash git octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
+dotfiles: awesome bash goat git octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
 
 desktop: dwm .PHONY
 
@@ -43,6 +43,15 @@ dwm: .PHONY
 
 freebsd-user: .PHONY
 	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
+
+##############################################################################
+
+${HOME}/h/goat:
+	mkdir -p ${HOME}/h
+	git clone http://github.com/0mp/goat ${.TARGET}
+
+goat: ${HOME}/h/goat .PHONY
+	make -C ${HOME}/h/goat clean install
 
 ##############################################################################
 
