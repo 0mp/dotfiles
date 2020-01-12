@@ -10,25 +10,20 @@ clean_up() {
     pkill -F ~/.suckless/eyes-alert.pid
 }
 
-if [ -z "$DISPLAY" ]; then
-    exec xinit
-fi
-
 trap 'clean_up' EXIT
 
 export LC_ALL=en_US.UTF-8
 
-/usr/sbin/daemon -p ~/.suckless/status-bar.pid /bin/sh ~/.suckless/status-bar.sh
-/usr/sbin/daemon -p ~/.suckless/battery-alert.pid /bin/sh ~/.suckless/battery-alert.sh
-/usr/sbin/daemon -p ~/.suckless/eyes-alert.pid /bin/sh ~/.suckless/eyes-alert.sh
+daemon -p ~/.suckless/status-bar.pid /bin/sh ~/.suckless/status-bar.sh
+daemon -p ~/.suckless/battery-alert.pid /bin/sh ~/.suckless/battery-alert.sh
+daemon -p ~/.suckless/eyes-alert.pid /bin/sh ~/.suckless/eyes-alert.sh
 
 setxkbmap -option ctrl:nocaps
 setxkbmap pl
 
-[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+[ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
-# Wallpaper.
-/bin/sh ~/.fehbg
+sh ~/.fehbg
 
 eval $(ssh-agent -s)
 
