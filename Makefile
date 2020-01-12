@@ -2,6 +2,8 @@
 
 dotfiles: awesome bash git octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
 
+desktop: dwm .PHONY
+
 freebsd: dotfiles freebsd-user .PHONY
 
 ##############################################################################
@@ -17,6 +19,17 @@ bash: .PHONY
 	ln -f -s ${.CURDIR}/home/.bash_profile ${HOME}/.bash_profile
 	ln -f -s ${.CURDIR}/home/.bash_completion ${HOME}/.bash_completion
 	ln -f -s ${.CURDIR}/home/.inputrc ${HOME}/.inputrc
+
+##############################################################################
+
+${HOME}/h/dwm:
+	mkdir -p ${HOME}/h
+	git clone http://github.com/0mp/dwm ${.TARGET}
+
+dwm: .PHONY
+	pkg info -q libX11 libXft libXinerama fontconfig | \
+		sudo pkg install -Ay libX11 libXft libXinerama fontconfig
+	make -C ${HOME}/h/dwm clean dwm install
 
 ##############################################################################
 
