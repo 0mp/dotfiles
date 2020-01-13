@@ -1,5 +1,0 @@
-#! /bin/sh
-
-colors_py="$(readlink -f ./colors.py)"
-
-printf %s\\n * | entr -c -s "cd .. && ./setup freebsd-st --install && st sh -c 'python3.6 \"${colors_py}\"; bash'"
