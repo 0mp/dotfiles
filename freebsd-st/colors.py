@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 # https://www.color-hex.com/color-names.html
 def print_format_table():
     """
