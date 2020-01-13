@@ -5,6 +5,7 @@ clean_up() {
         kill "$SSH_AGENT_PID"
     fi
 
+    pkill -F ~/.cache/sxhkd.pid
     pkill -F ~/.cache/status-bar.pid
     pkill -F ~/.cache/battery-alert.pid
     pkill -F ~/.cache/eyes-alert.pid
@@ -15,6 +16,7 @@ trap 'clean_up' EXIT
 export LC_ALL=en_US.UTF-8
 
 mkdir -p ~/.cache
+daemon -p ~/.cache/sxhkd.pid sxhkd
 daemon -p ~/.cache/status-bar.pid status-bar
 daemon -p ~/.cache/battery-alert.pid battery-alert
 daemon -p ~/.cache/eyes-alert.pid eyes-alert

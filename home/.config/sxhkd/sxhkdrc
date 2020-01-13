@@ -1,0 +1,2 @@
+super + shift + t
+    xclip -o | trans | xmessage -file - -default okay

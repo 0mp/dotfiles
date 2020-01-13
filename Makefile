@@ -1,6 +1,6 @@
 .MAIN: dotfiles
 
-dotfiles: awesome bash goat git octave subversion tmux utils vim xmodmap xmonad xpdf .PHONY
+dotfiles: awesome bash goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf .PHONY
 
 desktop: dwm .PHONY
 
@@ -69,6 +69,12 @@ octave: .PHONY
 subversion: .PHONY
 	mkdir -p ${HOME}/.subversion
 	ln -f -s ${.CURDIR}/home/.subversion/config ${HOME}/.subversion/config
+
+##############################################################################
+
+sxhkd: .PHONY
+	mkdir -p ${HOME}/.config/sxhkd
+	ln -f -s ${.CURDIR}/home/.config/sxhkd/sxhkdrc ${HOME}/.config/sxhkd/sxhkdrc
 
 ##############################################################################
 
