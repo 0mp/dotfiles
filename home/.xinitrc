@@ -1,4 +1,6 @@
 #! /bin/sh -
+#
+# NB: In Vim, execute selection with ":terminal sh".
 
 clean_up() {
     if [ "$SSH_AGENT_PID" ]; then
