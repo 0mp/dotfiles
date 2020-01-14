@@ -2,9 +2,7 @@
 
 dotfiles: awesome bash goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf .PHONY
 
-desktop: dwm .PHONY
-
-freebsd: dotfiles freebsd-user .PHONY
+freebsd: dotfiles dwm freebsd-user .PHONY
 
 ##############################################################################
 
