@@ -4,7 +4,7 @@ dotfiles: .PHONY
 	${MAKE} awesome bash goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
-	${MAKE} desktop dwm freebsd-user ${.TARGETS:Mpackages}
+	${MAKE} desktop dwm freebsd-user freebsd-t480 ${.TARGETS:Mpackages}
 
 ##############################################################################
 
