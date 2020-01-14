@@ -1,8 +1,10 @@
 .MAIN: dotfiles
 
-dotfiles: awesome bash goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf .PHONY
+dotfiles: .PHONY
+	${MAKE} awesome bash goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
-freebsd: dotfiles dwm freebsd-user .PHONY
+freebsd: dotfiles .PHONY
+	${MAKE} desktop dwm freebsd-user ${.TARGETS:Mpackages}
 
 ##############################################################################
 
@@ -12,6 +14,8 @@ awesome: .PHONY
 
 ##############################################################################
 
+bash_PACKAGES=	bash bash-completion
+
 bash: .PHONY
 	${__symlink_home} .bashrc
 	${__symlink_home} .bash_profile
@@ -20,13 +24,22 @@ bash: .PHONY
 
 ##############################################################################
 
+desktop_PACKAGES=	mosh entr git subversion firefox moinmoincli xpdf sxhkd \
+			sct feh find-cursor intel-backlight
+
+desktop: .PHONY
+	# nothing
+
+##############################################################################
+
+dwm_PACKAGES=	git libX11 libXft libXinerama fontconfig \
+		alacritty dmenu
+
 ${HOME}/h/dwm:
 	mkdir -p ${HOME}/h
 	git clone http://github.com/0mp/dwm ${.TARGET}
 
-dwm: ${HOME}/h/dwm .PHONY
-	pkg info -q libX11 libXft libXinerama fontconfig || \
-		sudo pkg install -Ay libX11 libXft libXinerama fontconfig
+dwm: packages .WAIT ${HOME}/h/dwm .PHONY
 	make -C ${HOME}/h/dwm clean dwm install
 
 	${__symlink_home} .xinitrc
@@ -45,6 +58,8 @@ freebsd-user: .PHONY
 
 ##############################################################################
 
+goat_PACKAGES=	git
+
 ${HOME}/h/goat:
 	mkdir -p ${HOME}/h
 	git clone http://github.com/0mp/goat ${.TARGET}
@@ -53,6 +68,8 @@ goat: ${HOME}/h/goat .PHONY
 	make -C ${HOME}/h/goat clean install
 
 ##############################################################################
+
+git_PACKAGES=	git
 
 git: .PHONY
 	${__symlink_home} .gitconfig
@@ -64,9 +81,19 @@ octave: .PHONY
 
 ##############################################################################
 
+subversion_PACKAGES=	subversion
+
 subversion: .PHONY
 	mkdir -p ${HOME}/.subversion
 	${__symlink_home} .subversion/config
+
+##############################################################################
+
+sudo: .PHONY
+.if "${:!command -v sudo!}" == ""
+	su root -c "env ASSUME_ALWAYS_YES=yes pkg install -y sudo"
+	su root -c visudo
+.endif
 
 ##############################################################################
 
@@ -75,6 +102,8 @@ sxhkd: .PHONY
 	${__symlink_home} .config/sxhkd/sxhkdrc
 
 ##############################################################################
+
+tmux_PACKAGES=	tmux
 
 tmux: .PHONY
 	${__symlink_home} .tmux.conf
@@ -119,6 +148,8 @@ utils: .PHONY
 
 ##############################################################################
 
+vim_PACKAGES=	py37-black vim
+
 vim: .PHONY
 	${__symlink_home} .vimrc
 
@@ -147,3 +178,19 @@ xpdf: .PHONY
 ##############################################################################
 
 __symlink_home=	@sh -eu -c 'ln -fsv "${.CURDIR}/home/$${1}" $${HOME}/$${1}' __symlink_home
+
+.for _target in ${.TARGETS}
+INSTALLED_PACKAGES+=	${:!pkg query %n ${${_target}_PACKAGES} || true!}
+.endfor
+.for _target in ${.TARGETS}
+_packages=	${${_target}_PACKAGES:O:u}
+.	for _installed_package in ${INSTALLED_PACKAGES}
+_packages:= ${_packages:N${_installed_package}}
+.	endfor
+PACKAGES+=	${_packages}
+.endfor
+
+packages: sudo .PHONY
+.if make(packages)
+	sudo pkg install -y ${PACKAGES:O:u}
+.endif
