@@ -35,7 +35,7 @@ blockinfile: ${HOME}/h/blockinfile .PHONY
 # Packages:
 # - droid-fonts-ttf: Japanese & Chinese characters.
 # - symbola: Font family with various extra symbols like "⧉".
-desktop_PACKAGES=	mosh entr git subversion firefox moinmoincli xpdf sxhkd \
+desktop_PACKAGES=	mosh entr subversion firefox moinmoincli xpdf sxhkd \
 			sct feh find-cursor intel-backlight droid-fonts-ttf symbola
 
 desktop: .PHONY
@@ -43,7 +43,7 @@ desktop: .PHONY
 
 ##############################################################################
 
-dwm_PACKAGES=	git libX11 libXft libXinerama fontconfig \
+dwm_PACKAGES=	libX11 libXft libXinerama fontconfig \
 		alacritty dmenu
 
 ${HOME}/h/dwm:
@@ -139,8 +139,6 @@ freebsd-t480: blockinfile sudo .PHONY
 
 ##############################################################################
 
-goat_PACKAGES=	git
-
 ${HOME}/h/goat:
 	mkdir -p ${HOME}/h
 	git clone http://github.com/0mp/goat ${.TARGET}
@@ -149,8 +147,6 @@ goat: ${HOME}/h/goat .PHONY
 	make -C ${HOME}/h/goat clean install
 
 ##############################################################################
-
-git_PACKAGES=	git
 
 git: .PHONY
 	${__symlink_home} .gitconfig
