@@ -24,8 +24,19 @@ bash: .PHONY
 
 ##############################################################################
 
+${HOME}/h/blockinfile:
+	mkdir -p ${HOME}
+	git clone --recursive https://github.com/0mp/blockinfile ${.TARGET}
+
+blockinfile: ${HOME}/h/blockinfile .PHONY
+
+##############################################################################
+
+# Packages:
+# - droid-fonts-ttf: Japanese & Chinese characters.
+# - symbola: Font family with various extra symbols like "⧉".
 desktop_PACKAGES=	mosh entr git subversion firefox moinmoincli xpdf sxhkd \
-			sct feh find-cursor intel-backlight
+			sct feh find-cursor intel-backlight droid-fonts-ttf symbola
 
 desktop: .PHONY
 	# nothing
@@ -55,6 +66,76 @@ dwm: packages .WAIT ${HOME}/h/dwm .PHONY
 
 freebsd-user: .PHONY
 	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
+
+##############################################################################
+
+freebsd-t480_PACKAGES=	powerdxx drm-kmod
+
+freebsd-t480: blockinfile sudo .PHONY
+	# Faster booting
+	sudo ${__blockinfile} -d "Put dhclient into background to boot faster" \
+		-p /etc/rc.conf -c 'background_dhclient="YES"'
+	sudo ${__blockinfile} -d "Do not wait for synchronous USB device probing at boot" \
+		-p /boot/loader.conf -c 'hw.usb.no_boot_wait="1"'
+
+	# Suspend & resume
+	sudo ${__blockinfile} -d "Suspend the system when the lid is closed" \
+		-p /etc/sysctl.conf -c "hw.acpi.lid_switch_state=S3"
+	sudo sysctl hw.acpi.lid_switch_state=S3
+
+	# ACPI kernel modules
+	#
+	# In general, it is advised to only load acpi_ibm(4) on ThinkPads.  In
+	# case of ThinkPad T480 it is still required to load load
+	# acpi_video(4), though, as it enables the media keys for brightness
+	# control.
+	sudo sysrc kld_list+="acpi_ibm acpi_video"
+	sudo kldload -n acpi_ibm acpi_video
+	sudo ${__blockinfile} -d "Lower the screen brightness to a reasonable level" \
+		-p /etc/sysctl.conf -c 'hw.acpi.video.lcd0.brightness=15'
+
+	# Graphics
+	#
+	# Add the user to the video group. Otherwise, things like libGL do not work.
+	# Note: being in the wheel group is not enough.
+	sudo pw groupmod video -m ${USER}
+	sudo sysrc kld_list+="i915kms"
+
+	# Trackpoint & touchpad
+	sudo sysrc moused_enable="YES"
+	sudo sysrc moused_flags="-A 1.3 -V -H"
+	sudo service moused restart
+	sudo ${__blockinfile} -d "Enable Synaptics support" \
+		-p /boot/loader.conf -c 'hw.psm.synaptics_support="1"'
+
+	# Power management
+	# https://vermaden.wordpress.com/2018/11/28/the-power-to-serve-freebsd-power-management/
+	sudo sysrc economy_cx_lowest="Cmax"
+	sudo sysrc performance_cx_lowest="Cmax"
+	sudo sysrc powerd_enable="NO"
+	sudo sysrc powerdxx_enable="YES"
+	sudo sysrc powerdxx_flags="--ac hiadaptive --batt min --unknown min"
+	sudo ${__blockinfile} -d "Power down all PCI devices without a device driver" \
+		-p /boot/loader.conf -c 'hw.pci.do_power_nodriver="3"'
+	sudo ${__blockinfile} -d "Tell ZFS to commit transactions every 10 seconds instead of 5" \
+		-p /boot/loader.conf -c 'vfs.zfs.txg.timeout="10"'
+	sudo ${__blockinfile} -d "Reduce the number of sound-generated interrupts for longer battery life" \
+		-p /boot/loader.conf -c 'hw.snd.latency="7"'
+
+	# D-Bus (required by GUI applications such as Firefox)
+	sudo sysrc dbus_enable="YES"
+	sudo service dbus restart
+
+	# Disable Sendmail and syslogd
+	sudo sysrc syslogd_flags="-ss"
+	sudo sysrc sendmail_enable="NONE"
+
+	# Console configuration
+	sudo ${__blockinfile} -d "Disable console bell" \
+		-p /etc/sysctl.conf -c 'kern.vt.enable_bell=0'
+	sudo sysctl kern.vt.enable_bell=0
+
+	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
 
 ##############################################################################
 
@@ -178,6 +259,7 @@ xpdf: .PHONY
 ##############################################################################
 
 __symlink_home=	@sh -eu -c 'ln -fsv "${.CURDIR}/home/$${1}" $${HOME}/$${1}' __symlink_home
+__blockinfile=	${HOME}/h/blockinfile/blockinfile
 
 .for _target in ${.TARGETS}
 INSTALLED_PACKAGES+=	${:!pkg query %n ${${_target}_PACKAGES} || true!}
@@ -191,6 +273,6 @@ PACKAGES+=	${_packages}
 .endfor
 
 packages: sudo .PHONY
-.if make(packages)
+.if make(packages) && ! empty(PACKAGES)
 	sudo pkg install -y ${PACKAGES:O:u}
 .endif
