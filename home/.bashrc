@@ -67,6 +67,11 @@ then
             then
                 source /usr/local/share/bash-completion/bash_completion.sh
             fi
+            if type -P fzf >/dev/null
+            then
+                source /usr/local/share/examples/fzf/shell/completion.bash
+                source /usr/local/share/examples/fzf/shell/key-bindings.bash
+            fi
             ;;
     esac
 fi

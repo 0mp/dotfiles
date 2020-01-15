@@ -75,7 +75,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'w0rp/ale'
 " }}}
 " {{{ Fuzzy finder
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 " Complete lines.
 imap <c-x><c-l> <plug>(fzf-complete-line)
