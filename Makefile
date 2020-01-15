@@ -257,16 +257,26 @@ xpdf: .PHONY
 __symlink_home=	@sh -eu -c 'ln -fsv "${.CURDIR}/home/$${1}" $${HOME}/$${1}' __symlink_home
 __blockinfile=	${HOME}/h/blockinfile/blockinfile
 
-.for _target in ${.TARGETS}
-INSTALLED_PACKAGES+=	${:!pkg query %n ${${_target}_PACKAGES} || true!}
-.endfor
-.for _target in ${.TARGETS}
-_packages=	${${_target}_PACKAGES:O:u}
-.	for _installed_package in ${INSTALLED_PACKAGES}
-_packages:= ${_packages:N${_installed_package}}
+.if make(packages)
+# From the lists of desired packages pick those that are already installed.
+.	for _target in ${.TARGETS}
+# Ignore empty lists to avoid confusing pkg-query(8).
+.		if ! empty(${_target}_PACKAGES)
+_installed_packages+=	${:!pkg query %n ${${_target}_PACKAGES}!}
+.		endif
 .	endfor
-PACKAGES+=	${_packages}
-.endfor
+.	for _target in ${.TARGETS}
+# Sort the package list of a target and remove potenial duplicates.
+_${_target}_packages:=	${${_target}_PACKAGES:O:u}
+# Iterate over installed packages and remove them from the list of packages to
+# be installed.
+.		for _installed_package in ${_installed_packages}
+_${_target}_packages:= ${_${_target}_packages:N${_installed_package}}
+.		endfor
+PACKAGES+=	${_${_target}_packages}
+.	endfor
+.endif
+
 
 packages: sudo .PHONY
 .if make(packages) && ! empty(PACKAGES)
