@@ -268,6 +268,7 @@ au FileType gitcommit set spell
 au FileType gitcommit setlocal colorcolumn=51
 
 au FileType make set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
+au FileType sh set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 
 " Makefile template.
 if has("autocmd")
