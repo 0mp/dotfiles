@@ -83,4 +83,4 @@ export PAGER='less'
 export LESS='--ignore-case --jump-target=3 --RAW-CONTROL-CHARS'
 export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
 
-. "/home/0mp/.local/share/goat/libgoat.sh"
+[[ -x ~/.local/bin/goat ]] && . "/home/0mp/.local/share/goat/libgoat.sh"
