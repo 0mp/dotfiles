@@ -1,4 +1,4 @@
-# vim: ft=bash
+# vim: filetype=bash softtabstop=4 shiftwidth=4 tabstop=4 expandtab
 # Add some directories to the *PATH unless they are already there.
 case "$PATH" in
     *$HOME/.local/bin*) ;;
