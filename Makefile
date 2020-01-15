@@ -14,7 +14,7 @@ awesome: .PHONY
 
 ##############################################################################
 
-bash_PACKAGES=	bash bash-completion
+bash_PACKAGES=	bash bash-completion fzf
 
 bash: .PHONY
 	${__symlink_home} .bashrc
@@ -32,7 +32,7 @@ blockinfile: ${HOME}/h/blockinfile .PHONY
 
 ##############################################################################
 
-commandline_PACKAGES=	bat entr fd-find fzf moinmoincli mosh subversion \
+commandline_PACKAGES=	bat entr fd-find moinmoincli mosh subversion \
 			the_silver_searcher with ydiff
 
 commandline: .PHONY
