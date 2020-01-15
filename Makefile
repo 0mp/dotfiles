@@ -32,7 +32,7 @@ blockinfile: ${HOME}/h/blockinfile .PHONY
 
 ##############################################################################
 
-commandline_PACKAGES=	moinmoincli mosh entr subversion
+commandline_PACKAGES=	entr fd-find moinmoincli mosh subversion the_silver_searcher with
 
 commandline: .PHONY
 	# nothing
