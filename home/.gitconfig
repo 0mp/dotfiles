@@ -19,3 +19,6 @@
 [user]
       name = Mateusz Piotrowski
       email = 0mp@FreeBSD.org
+
+[include]
+      path = ~/.gitconfig.local
