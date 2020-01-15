@@ -50,7 +50,7 @@ ${HOME}/h/dwm:
 	mkdir -p ${HOME}/h
 	git clone http://github.com/0mp/dwm ${.TARGET}
 
-dwm: packages .WAIT ${HOME}/h/dwm .PHONY
+dwm: packages ${HOME}/h/dwm .PHONY
 	make -C ${HOME}/h/dwm clean dwm install
 
 	${__symlink_home} .xinitrc
