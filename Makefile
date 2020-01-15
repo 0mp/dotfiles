@@ -1,7 +1,7 @@
 .MAIN: dotfiles
 
 dotfiles: .PHONY
-	${MAKE} awesome bash goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
+	${MAKE} awesome bash commandline goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
 	${MAKE} desktop dwm freebsd-user freebsd-t480 ${.TARGETS:Mpackages}
@@ -32,11 +32,18 @@ blockinfile: ${HOME}/h/blockinfile .PHONY
 
 ##############################################################################
 
+commandline_PACKAGES=	moinmoincli mosh entr subversion
+
+commandline: .PHONY
+	# nothing
+
+##############################################################################
+
 # Packages:
 # - droid-fonts-ttf: Japanese & Chinese characters.
 # - symbola: Font family with various extra symbols like "⧉".
-desktop_PACKAGES=	mosh entr subversion firefox moinmoincli xpdf sxhkd \
-			sct feh find-cursor intel-backlight droid-fonts-ttf symbola
+desktop_PACKAGES=	firefox xpdf sxhkd \
+			sct feh find-cursor droid-fonts-ttf symbola
 
 desktop: .PHONY
 	# nothing
@@ -69,7 +76,7 @@ freebsd-user: .PHONY
 
 ##############################################################################
 
-freebsd-t480_PACKAGES=	powerdxx drm-kmod
+freebsd-t480_PACKAGES=	powerdxx drm-kmod intel-backlight
 
 freebsd-t480: blockinfile sudo .PHONY
 	# Faster booting
