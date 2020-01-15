@@ -282,10 +282,12 @@ _${_target}_packages:= ${_${_target}_packages:N${_installed_package}}
 .		endfor
 PACKAGES+=	${_${_target}_packages}
 .	endfor
+# Sort the packages and remove duplicates.
+PACKAGES:=	${PACKAGES:O:u}
 .endif
 
 
 packages: sudo .PHONY
 .if make(packages) && ! empty(PACKAGES)
-	sudo pkg install -y ${PACKAGES:O:u}
+	sudo pkg install -y ${PACKAGES}
 .endif
