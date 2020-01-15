@@ -72,6 +72,16 @@ dwm: packages ${HOME}/h/dwm .PHONY
 
 ##############################################################################
 
+firefox: .PHONY
+.if ! exists(${HOME}/.mozilla/firefox/profiles.ini)
+.	warning Target firefox is a no-op, run Firefox at least once to create a profile
+.elif make(firefox)
+	ln -f -s ${.CURDIR}/firefox/user.js \
+		"${HOME}/.mozilla/firefox/$$(awk -F = '/^Default/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)"
+.endif
+
+##############################################################################
+
 freebsd-user: .PHONY
 	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
 
