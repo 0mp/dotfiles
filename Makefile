@@ -88,7 +88,7 @@ freebsd-user: .PHONY
 
 ##############################################################################
 
-freebsd-t480_PACKAGES=	powerdxx drm-kmod intel-backlight
+freebsd-t480_PACKAGES=	devcpu-data powerdxx drm-kmod intel-backlight
 
 freebsd-t480: blockinfile sudo .PHONY
 	# Faster booting
@@ -153,6 +153,10 @@ freebsd-t480: blockinfile sudo .PHONY
 	sudo ${__blockinfile} -d "Disable console bell" \
 		-p /etc/sysctl.conf -c 'kern.vt.enable_bell=0'
 	sudo sysctl kern.vt.enable_bell=0
+
+	# Update microcode
+	sudo sysrc microcode_update_enable="YES"
+	sudo service microcode_update start
 
 	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
 
