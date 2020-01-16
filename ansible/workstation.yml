@@ -3,9 +3,6 @@
   roles:
     - { role: awesome, tags: [ awesome ] }
     - { role: bash, tags: [ bash ] }
-    - role: freebsd
-      tags: [ freebsd ]
-      when: ansible_facts['os_family'] == "FreeBSD"
     - role: freebsd-dev
       tags: [ freebsd-dev ]
       when: ansible_facts['os_family'] == "FreeBSD"
