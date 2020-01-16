@@ -1,14 +1,9 @@
 - name: Set up local workstation
   hosts: local
   roles:
-    - { role: awesome, tags: [ awesome ] }
-    - { role: bash, tags: [ bash ] }
     - role: freebsd-dev
       tags: [ freebsd-dev ]
       when: ansible_facts['os_family'] == "FreeBSD"
     - role: ly
       tags: [ ly ]
       when: ansible_facts['os_family'] == "FreeBSD"
-    - { role: tmux, tags: [ tmux ] }
-    - { role: vim, tags: [ vim ] }
-    - { role: xmonad, tags: [ xmonad ] }

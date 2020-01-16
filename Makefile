@@ -158,6 +158,10 @@ freebsd-t480: blockinfile sudo .PHONY
 	sudo sysrc microcode_update_enable="YES"
 	sudo service microcode_update start
 
+	# Sysctls for tmux
+	sudo ${__blockinfile} -d "Make \#{pane_current_path} work when using tmux on a non-root account (see 229567)" \
+		-p /etc/sysctl.conf -c 'security.bsd.unprivileged_proc_debug=1'
+
 	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
 
 ##############################################################################
