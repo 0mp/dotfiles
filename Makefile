@@ -1,7 +1,8 @@
 .MAIN: dotfiles
 
 dotfiles: .PHONY
-	${MAKE} awesome bash commandline goat git octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
+	${MAKE} awesome bash commandline goat git gnupg octave subversion \
+		sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
 	${MAKE} desktop dwm freebsd-user freebsd-t480 ${.TARGETS:Mpackages}
@@ -168,6 +169,14 @@ goat: ${HOME}/h/goat .PHONY
 
 git: .PHONY
 	${__symlink_home} .gitconfig
+
+##############################################################################
+
+gnupg_PACKAGES=	gnupg
+
+gnupg: .PHONY
+	install -d -m 0700 ${HOME}/.gnupg
+	${__symlink_home} .gnupg/gpg.conf
 
 ##############################################################################
 
