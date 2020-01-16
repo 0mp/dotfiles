@@ -289,7 +289,8 @@ __blockinfile=	${HOME}/h/blockinfile/blockinfile
 .	for _target in ${.TARGETS}
 # Ignore empty lists to avoid confusing pkg-query(8).
 .		if ! empty(${_target}_PACKAGES)
-_installed_packages+=	${:!pkg query %n ${${_target}_PACKAGES}!}
+# Check if the packages are installed. If all of them are not, then ignore the error.
+_installed_packages+=	${:!pkg query %n ${${_target}_PACKAGES} || true!}
 .		endif
 .	endfor
 .	for _target in ${.TARGETS}
