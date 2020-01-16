@@ -256,7 +256,7 @@ utils: .PHONY
 
 ##############################################################################
 
-vim_PACKAGES=	py37-black vim
+vim_PACKAGES=	markdownfmt py37-black vim
 
 vim: .PHONY
 	${__symlink_home} .vimrc
