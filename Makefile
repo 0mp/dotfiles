@@ -33,7 +33,7 @@ blockinfile: ${HOME}/h/blockinfile .PHONY
 
 ##############################################################################
 
-commandline_PACKAGES=	bat entr fd-find moinmoincli mosh subversion \
+commandline_PACKAGES=	bat entr fd-find htop moinmoincli mosh subversion \
 			the_silver_searcher with ydiff
 
 commandline: .PHONY
