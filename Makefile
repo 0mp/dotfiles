@@ -83,11 +83,6 @@ firefox: .PHONY
 
 ##############################################################################
 
-freebsd-user: .PHONY
-	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
-
-##############################################################################
-
 freebsd-t480_PACKAGES=	devcpu-data powerdxx drm-kmod intel-backlight
 
 freebsd-t480: blockinfile sudo .PHONY
@@ -163,6 +158,11 @@ freebsd-t480: blockinfile sudo .PHONY
 		-p /etc/sysctl.conf -c 'security.bsd.unprivileged_proc_debug=1'
 
 	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
+
+##############################################################################
+
+freebsd-user: .PHONY
+	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
 
 ##############################################################################
 
