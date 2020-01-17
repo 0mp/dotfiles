@@ -1,11 +1,13 @@
 .MAIN: dotfiles
 
 dotfiles: .PHONY
-	${MAKE} alacritty awesome bash commandline freebsd-user goat git gnupg octave subversion \
-		sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
+	${MAKE} alacritty awesome bash commandline freebsd-user goat git gnupg \
+		octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf \
+		${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
-	${MAKE} desktop dwm firefox freebsd-development freebsd-t480 ${.TARGETS:Mpackages}
+	${MAKE} desktop dwm firefox freebsd-development freebsd-t480 \
+		${.TARGETS:Mpackages}
 
 ##############################################################################
 
