@@ -5,7 +5,7 @@ dotfiles: .PHONY
 		sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
-	${MAKE} desktop dwm freebsd-user freebsd-t480 ${.TARGETS:Mpackages}
+	${MAKE} desktop dwm freebsd-development freebsd-user freebsd-t480 ${.TARGETS:Mpackages}
 
 ##############################################################################
 
@@ -87,6 +87,23 @@ firefox: .PHONY
 	ln -f -s ${.CURDIR}/firefox/user.js \
 		"${HOME}/.mozilla/firefox/$$(awk -F = '/^Default/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)"
 .endif
+
+##############################################################################
+
+freebsd-development_PACKAGES=	igor \
+				portfmt poudriere
+
+_checkout_immediates=	sh -u -c '[ -d ${HOME}/f/$$1 ] || svnlite checkout --depth immediates https://svn.freebsd.org/$$1 ${HOME}/f/$$1' _checkout_immediates
+_update_immediates=	sh -u -c 'cd ${HOME}/f/$$1 && { ! ls -A | xargs false || svnlite update --set-depth immediates . ;}' _update_immediates
+_update_infinity=	sh -u -c 'cd ${HOME}/f/$$1 && { ! ls -A | xargs false || svnlite update --set-depth infinity . ;}' _update_infinity
+
+freebsd-development: .PHONY
+	mkdir -p ${HOME}/f
+	${_checkout_immediates} base
+	${_update_infinity} base/head
+	${_checkout_immediates} doc
+	${_checkout_immediates} ports
+	${_update_infinity} ports/head
 
 ##############################################################################
 
