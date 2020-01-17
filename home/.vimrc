@@ -270,10 +270,11 @@ au FileType gitcommit setlocal colorcolumn=51
 au FileType make set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 au FileType sh set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 
-" Makefile template.
+" Templates.
 if has("autocmd")
   augroup templates
     autocmd BufNewFile Makefile 0r ~/.vim/templates/Makefile
+    autocmd BufNewFile makefile 0r ~/.vim/templates/makefile
   augroup END
 endif
 
