@@ -1,11 +1,17 @@
 .MAIN: dotfiles
 
 dotfiles: .PHONY
-	${MAKE} awesome bash commandline goat git gnupg octave subversion \
+	${MAKE} alacritty awesome bash commandline goat git gnupg octave subversion \
 		sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
 	${MAKE} desktop dwm freebsd-user freebsd-t480 ${.TARGETS:Mpackages}
+
+##############################################################################
+
+alacritty: .PHONY
+	mkdir -p ${HOME}/.config/alacritty
+	${__symlink_home} .config/alacritty/alacritty.yml
 
 ##############################################################################
 

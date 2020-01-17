@@ -1,0 +1,8 @@
+font:
+  normal:
+    family: JetBrains Mono
+  bold:
+    family: JetBrains Mono
+  italic:
+    family: JetBrains Mono
+  size: 7.0
