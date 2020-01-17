@@ -267,6 +267,7 @@ vim: .PHONY
 
 	mkdir -p ${HOME}/.vim/templates
 	${__symlink_home} .vim/templates/Makefile
+	${__symlink_home} .vim/templates/makefile
 
 ##############################################################################
 
