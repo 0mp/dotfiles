@@ -5,7 +5,7 @@ dotfiles: .PHONY
 		sxhkd tmux utils vim xmodmap xmonad xpdf ${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
-	${MAKE} desktop dwm freebsd-development freebsd-t480 ${.TARGETS:Mpackages}
+	${MAKE} desktop dwm firefox freebsd-development freebsd-t480 ${.TARGETS:Mpackages}
 
 ##############################################################################
 
