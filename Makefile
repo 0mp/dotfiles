@@ -52,9 +52,11 @@ commandline: .PHONY
 # Packages:
 # - droid-fonts-ttf: Japanese & Chinese characters.
 # - symbola: Font family with various extra symbols like "⧉".
-desktop_PACKAGES=	firefox xpdf sxhkd vlc \
+desktop_PACKAGES=	firefox xpdf vlc \
+			sxhkd google-translate-cli \
 			sct feh find-cursor \
-			droid-fonts-ttf symbola slock jetbrains-mono
+			droid-fonts-ttf symbola jetbrains-mono \
+			slock
 
 desktop: .PHONY
 	# nothing
