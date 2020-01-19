@@ -45,7 +45,7 @@ ssh_agent_activate() {
 }
 
 # Although the default color is blue, it is possible to configure the prompt to
-# use a different color by setting PS1 before source this file. For example,
+# use a different color by setting PS1 before sourcing this file. For example,
 # setting it to '41' results in a red prompt.
 case $PS1 in
     [0-9][0-9]) ;;
