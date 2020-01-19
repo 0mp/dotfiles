@@ -183,6 +183,12 @@ freebsd-t480: makaron sudo .PHONY
 	sudo ${__makaron} --marker "# {mark} Make \#{pane_current_path} work when using tmux on a non-root account (see 229567)" \
 		--path /etc/sysctl.conf --block 'security.bsd.unprivileged_proc_debug=1'
 
+	# Developer variables
+	sudo touch /etc/make.conf
+	sudo chmod 0640 /etc/make.conf
+	sudo ${__makaron} --marker "# {mark} Use sudo(8) instead of su(1) for ports" \
+		--path /etc/make.conf --block "$$(cat ${@}/make.conf)"
+
 	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
 
 ##############################################################################
