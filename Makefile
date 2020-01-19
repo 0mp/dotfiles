@@ -33,11 +33,11 @@ bash: .PHONY
 
 ##############################################################################
 
-${HOME}/h/blockinfile:
+${HOME}/h/makaron:
 	mkdir -p ${HOME}
-	git clone --recursive https://github.com/0mp/blockinfile ${.TARGET}
+	git clone --recursive https://github.com/0mp/makaron ${.TARGET}
 
-blockinfile: ${HOME}/h/blockinfile .PHONY
+makaron: ${HOME}/h/makaron .PHONY
 
 ##############################################################################
 
@@ -111,16 +111,16 @@ freebsd-development: .PHONY
 
 freebsd-t480_PACKAGES=	devcpu-data powerdxx drm-kmod intel-backlight
 
-freebsd-t480: blockinfile sudo .PHONY
+freebsd-t480: makaron sudo .PHONY
 	# Faster booting
-	sudo ${__blockinfile} -d "Put dhclient into background to boot faster" \
-		-p /etc/rc.conf -c 'background_dhclient="YES"'
-	sudo ${__blockinfile} -d "Do not wait for synchronous USB device probing at boot" \
-		-p /boot/loader.conf -c 'hw.usb.no_boot_wait="1"'
+	sudo ${__makaron} --marker "# {mark} Put dhclient into background to boot faster" \
+		--path /etc/rc.conf --block 'background_dhclient="YES"'
+	sudo ${__makaron} --marker "# {mark} Do not wait for synchronous USB device probing at boot" \
+		--path /boot/loader.conf --block 'hw.usb.no_boot_wait="1"'
 
 	# Suspend & resume
-	sudo ${__blockinfile} -d "Suspend the system when the lid is closed" \
-		-p /etc/sysctl.conf -c "hw.acpi.lid_switch_state=S3"
+	sudo ${__makaron} --marker "Suspend the system when the lid is closed" \
+		--path /etc/sysctl.conf -block "hw.acpi.lid_switch_state=S3"
 	sudo sysctl hw.acpi.lid_switch_state=S3
 
 	# ACPI kernel modules
@@ -131,8 +131,8 @@ freebsd-t480: blockinfile sudo .PHONY
 	# control.
 	sudo sysrc kld_list+="acpi_ibm acpi_video"
 	sudo kldload -n acpi_ibm acpi_video
-	sudo ${__blockinfile} -d "Lower the screen brightness to a reasonable level" \
-		-p /etc/sysctl.conf -c 'hw.acpi.video.lcd0.brightness=15'
+	sudo ${__makaron} --marker "# {mark} Lower the screen brightness to a reasonable level" \
+		--path /etc/sysctl.conf --block 'hw.acpi.video.lcd0.brightness=15'
 
 	# Graphics
 	#
@@ -145,8 +145,8 @@ freebsd-t480: blockinfile sudo .PHONY
 	sudo sysrc moused_enable="YES"
 	sudo sysrc moused_flags="-A 1.3 -V -H"
 	sudo service moused restart
-	sudo ${__blockinfile} -d "Enable Synaptics support" \
-		-p /boot/loader.conf -c 'hw.psm.synaptics_support="1"'
+	sudo ${__makaron} --marker "# {mark} Enable Synaptics support" \
+		--path /boot/loader.conf --block 'hw.psm.synaptics_support="1"'
 
 	# Power management
 	# https://vermaden.wordpress.com/2018/11/28/the-power-to-serve-freebsd-power-management/
@@ -155,12 +155,12 @@ freebsd-t480: blockinfile sudo .PHONY
 	sudo sysrc powerd_enable="NO"
 	sudo sysrc powerdxx_enable="YES"
 	sudo sysrc powerdxx_flags="--ac hiadaptive --batt min --unknown min"
-	sudo ${__blockinfile} -d "Power down all PCI devices without a device driver" \
-		-p /boot/loader.conf -c 'hw.pci.do_power_nodriver="3"'
-	sudo ${__blockinfile} -d "Tell ZFS to commit transactions every 10 seconds instead of 5" \
-		-p /boot/loader.conf -c 'vfs.zfs.txg.timeout="10"'
-	sudo ${__blockinfile} -d "Reduce the number of sound-generated interrupts for longer battery life" \
-		-p /boot/loader.conf -c 'hw.snd.latency="7"'
+	sudo ${__makaron} --marker "# {mark} Power down all PCI devices without a device driver" \
+		--path /boot/loader.conf --block 'hw.pci.do_power_nodriver="3"'
+	sudo ${__makaron} --marker "# {mark} Tell ZFS to commit transactions every 10 seconds instead of 5" \
+		--path /boot/loader.conf --block 'vfs.zfs.txg.timeout="10"'
+	sudo ${__makaron} --marker "# {mark} Reduce the number of sound-generated interrupts for longer battery life" \
+		--path /boot/loader.conf --block 'hw.snd.latency="7"'
 
 	# D-Bus (required by GUI applications such as Firefox)
 	sudo sysrc dbus_enable="YES"
@@ -171,8 +171,8 @@ freebsd-t480: blockinfile sudo .PHONY
 	sudo sysrc sendmail_enable="NONE"
 
 	# Console configuration
-	sudo ${__blockinfile} -d "Disable console bell" \
-		-p /etc/sysctl.conf -c 'kern.vt.enable_bell=0'
+	sudo ${__makaron} --marker "# {mark} Disable console bell" \
+		--path /etc/sysctl.conf --block 'kern.vt.enable_bell=0'
 	sudo sysctl kern.vt.enable_bell=0
 
 	# Update microcode
@@ -180,8 +180,8 @@ freebsd-t480: blockinfile sudo .PHONY
 	sudo service microcode_update start
 
 	# Sysctls for tmux
-	sudo ${__blockinfile} -d "Make \#{pane_current_path} work when using tmux on a non-root account (see 229567)" \
-		-p /etc/sysctl.conf -c 'security.bsd.unprivileged_proc_debug=1'
+	sudo ${__makaron} --marker "# {mark} Make \#{pane_current_path} work when using tmux on a non-root account (see 229567)" \
+		--path /etc/sysctl.conf --block 'security.bsd.unprivileged_proc_debug=1'
 
 	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
 
@@ -317,7 +317,7 @@ xpdf: .PHONY
 ##############################################################################
 
 __symlink_home=	@sh -eu -c 'ln -fsv "${.CURDIR}/home/$${1}" $${HOME}/$${1}' __symlink_home
-__blockinfile=	${HOME}/h/blockinfile/blockinfile
+__makaron=	${HOME}/h/makaron/makaron
 
 .if make(packages)
 # From the lists of desired packages pick those that are already installed.
