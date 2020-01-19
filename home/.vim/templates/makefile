@@ -8,4 +8,4 @@ entr_ENTR=	entr -c -d -s
 entr_UTIL=	"echo change /_"
 
 entr: .PHONY
-	while :; do ${entr_LIST} | ${entr_ENTR} || [ $$? -ne 2 ]] && break; done
+	while :; do ${entr_LIST} | ${entr_ENTR} ${entr_UTIL} || [ $$? -ne 2 ] && break; done
