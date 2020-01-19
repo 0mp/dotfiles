@@ -22,9 +22,12 @@ case "$1" in
     df*)
         exec "$player" 'http://dfm.nu/DFM_RTV_INT_1.m3u'
         ;;
+    luz)
+        exec "$player" "http://radioluz.pwr.edu.pl:8000/luzlofi.ogg"
+        ;;
     *)
-        printf '%s %s\n' "$player" 'does not match any preset radio station' 1>&2
-        printf '%s\n' 'Pick one of those: anon, dfm' 1>&2
+        printf '"%s" %s\n' "$1" 'does not match any known radio stations' 1>&2
+        printf '%s\n' 'Pick one of those: anon dfm luz' 1>&2
         exit 1
         ;;
 esac
