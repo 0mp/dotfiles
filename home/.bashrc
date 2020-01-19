@@ -53,7 +53,7 @@ case $PS1 in
 esac
 PS1="\[\e[1;37;${PS1}m"'\] $? \[\e[0m\] \u@\h $PWD\n'
 
-if [[ -n $PS1 ]] && [[ $- == *i* ]]
+if [[ $- == *i* ]]
 then
     case $OSTYPE in
         darwin*)
