@@ -41,7 +41,7 @@ makaron: ${HOME}/h/makaron .PHONY
 
 ##############################################################################
 
-commandline_PACKAGES=	bat entr fd-find htop moinmoincli mosh subversion \
+commandline_PACKAGES=	bat entr fd-find htop hs-ShellCheck moinmoincli mosh subversion \
 			the_silver_searcher with ydiff
 
 commandline: .PHONY
@@ -52,7 +52,7 @@ commandline: .PHONY
 # Packages:
 # - droid-fonts-ttf: Japanese & Chinese characters.
 # - symbola: Font family with various extra symbols like "⧉".
-desktop_PACKAGES=	firefox xpdf sxhkd \
+desktop_PACKAGES=	firefox xpdf sxhkd vlc \
 			sct feh find-cursor \
 			droid-fonts-ttf symbola slock jetbrains-mono
 
