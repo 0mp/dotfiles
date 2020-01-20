@@ -56,7 +56,7 @@ desktop_PACKAGES=	firefox xpdf vlc \
 			sxhkd google-translate-cli xclip \
 			sct feh find-cursor \
 			droid-fonts-ttf symbola jetbrains-mono \
-			slock
+			slock arandr
 
 desktop: .PHONY
 	# nothing
