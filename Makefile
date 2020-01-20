@@ -1,8 +1,9 @@
 .MAIN: dotfiles
 
 dotfiles: .PHONY
-	${MAKE} alacritty awesome bash commandline freebsd-user goat git gnupg \
-		octave subversion sxhkd tmux utils vim xmodmap xmonad xpdf \
+	${MAKE} alacritty awesome bash commandline fontconfig freebsd-user \
+		goat git gnupg octave subversion sxhkd tmux utils vim \
+		xmodmap xmonad xpdf \
 		${.TARGETS:Mpackages}
 
 freebsd: dotfiles .PHONY
@@ -91,6 +92,12 @@ firefox: .PHONY
 	ln -f -s ${.CURDIR}/firefox/user.js \
 		"${HOME}/.mozilla/firefox/$$(awk -F = '/^Default/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)"
 .endif
+
+##############################################################################
+
+fontconfig: .PHONY
+	mkdir -p ${HOME}/.config/fontconfig
+	${__symlink_home} .config/fontconfig/fonts.conf
 
 ##############################################################################
 
