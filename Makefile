@@ -60,7 +60,14 @@ desktop_PACKAGES=	firefox xpdf vlc \
 			slock arandr
 
 desktop: .PHONY
-	# nothing
+	${__symlink_home} .xinitrc
+	mkdir -p ${HOME}/.local/bin
+	${__symlink_home} .local/bin/battery-alert
+	${__symlink_home} .local/bin/eyes-alert
+	${__symlink_home} .local/bin/status-bar
+	mkdir -p ${HOME}/.config/desktop
+	${__symlink_home} .config/desktop/freebsd-logo-by-claudiom.png
+	${__symlink_home} .config/desktop/plumb.sh
 
 ##############################################################################
 
@@ -73,15 +80,6 @@ ${HOME}/h/dwm:
 
 dwm: packages ${HOME}/h/dwm .PHONY
 	make -C ${HOME}/h/dwm clean dwm install
-
-	${__symlink_home} .xinitrc
-	mkdir -p ${HOME}/.local/bin
-	${__symlink_home} .local/bin/battery-alert
-	${__symlink_home} .local/bin/eyes-alert
-	${__symlink_home} .local/bin/status-bar
-	mkdir -p ${HOME}/.config/dwm
-	${__symlink_home} .config/dwm/freebsd-logo-by-claudiom.png
-	${__symlink_home} .config/dwm/plumb.sh
 
 ##############################################################################
 
