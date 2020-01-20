@@ -6,8 +6,10 @@ dotfiles: .PHONY
 		xmodmap xmonad xpdf \
 		${.TARGETS:Mpackages}
 
-freebsd: dotfiles .PHONY
-	${MAKE} desktop dwm firefox freebsd-development freebsd-t480 \
+freebsd-t480: dotfiles .PHONY
+	${MAKE} desktop dwm firefox \
+		freebsd-development freebsd-workstation-t480 \
+		freebsd-workstation-any \
 		${.TARGETS:Mpackages}
 
 ##############################################################################
@@ -116,9 +118,14 @@ freebsd-development: .PHONY
 
 ##############################################################################
 
-freebsd-t480_PACKAGES=	devcpu-data powerdxx drm-kmod intel-backlight
+freebsd-user: .PHONY
+	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
 
-freebsd-t480: makaron sudo .PHONY
+##############################################################################
+
+freebsd-workstation-any_PACKAGES=	devcpu-data powerdxx
+
+freebsd-workstation-any: makaron sudo .PHONY
 	# Faster booting
 	sudo ${__makaron} --marker "# {mark} Put dhclient into background to boot faster" \
 		--path /etc/rc.conf --block 'background_dhclient="YES"'
@@ -130,23 +137,11 @@ freebsd-t480: makaron sudo .PHONY
 		--path /etc/sysctl.conf -block "hw.acpi.lid_switch_state=S3"
 	sudo sysctl hw.acpi.lid_switch_state=S3
 
-	# ACPI kernel modules
-	#
-	# In general, it is advised to only load acpi_ibm(4) on ThinkPads.  In
-	# case of ThinkPad T480 it is still required to load load
-	# acpi_video(4), though, as it enables the media keys for brightness
-	# control.
-	sudo sysrc kld_list+="acpi_ibm acpi_video"
-	sudo kldload -n acpi_ibm acpi_video
-	sudo ${__makaron} --marker "# {mark} Lower the screen brightness to a reasonable level" \
-		--path /etc/sysctl.conf --block 'hw.acpi.video.lcd0.brightness=15'
-
 	# Graphics
 	#
 	# Add the user to the video group. Otherwise, things like libGL do not work.
 	# Note: being in the wheel group is not enough.
 	sudo pw groupmod video -m ${USER}
-	sudo sysrc kld_list+="i915kms"
 
 	# Trackpoint & touchpad
 	sudo sysrc moused_enable="YES"
@@ -196,12 +191,26 @@ freebsd-t480: makaron sudo .PHONY
 	sudo ${__makaron} --marker "# {mark} Use sudo(8) instead of su(1) for ports" \
 		--path /etc/make.conf --block "$$(cat ${@}/make.conf)"
 
-	@echo Review files: /boot/loader.conf /etc/rc.conf /etc/sysctl.conf
+	@echo Review files: /boot/loader.conf /etc/make.conf /etc/rc.conf /etc/sysctl.conf
+
 
 ##############################################################################
 
-freebsd-user: .PHONY
-	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
+freebsd-workstation-t480_PACKAGES=	drm-kmod intel-backlight
+
+freebsd-workstation-t480: makaron sudo .PHONY
+	# ACPI kernel modules
+	#
+	# In general, it is advised to only load acpi_ibm(4) on ThinkPads.  In
+	# case of ThinkPad T480 it is still required to load load
+	# acpi_video(4), though, as it enables the media keys for brightness
+	# control.
+	sudo sysrc kld_list+="acpi_ibm acpi_video"
+	sudo kldload -n acpi_ibm acpi_video
+	sudo ${__makaron} --marker "# {mark} Lower the screen brightness to a reasonable level" \
+		--path /etc/sysctl.conf --block 'hw.acpi.video.lcd0.brightness=15'
+
+	sudo sysrc kld_list+="i915kms"
 
 ##############################################################################
 
