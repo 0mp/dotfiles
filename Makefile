@@ -97,7 +97,7 @@ firefox: .PHONY
 .	warning Target firefox is a no-op, run Firefox at least once to create a profile
 .elif make(firefox)
 	ln -f -s ${.CURDIR}/firefox/user.js \
-		"${HOME}/.mozilla/firefox/$$(awk -F = '/^Default/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)"
+		"${HOME}/.mozilla/firefox/$$(awk -F = '/^Default=.*[.].*/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)/user.js"
 .endif
 
 ##############################################################################
