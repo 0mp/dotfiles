@@ -5,7 +5,9 @@ help: .PHONY
 		"make dotfiles [packages]" \
 		"Install only dotfiles and command-line tools" \
 		"make freebsd-t480 [packages]" \
-		"Configure FreeBSD on T480"
+		"Configure FreeBSD on T480" \
+		"make freebsd-workstation [packages]" \
+		"Configure FreeBSD on a generic workstation"
 
 dotfiles: .PHONY
 	${MAKE} alacritty awesome bash commandline fontconfig freebsd-user \
@@ -13,9 +15,12 @@ dotfiles: .PHONY
 		xmodmap xmonad xpdf \
 		${.TARGETS:Mpackages}
 
-freebsd-t480: dotfiles .PHONY
+freebsd-t480: dotfiles freebsd-workstation .PHONY
+	${MAKE} freebsd-development freebsd-workstation-t480 \
+		${.TARGETS:Mpackages}
+
+freebsd-workstation: dotfiles .PHONY
 	${MAKE} desktop dwm firefox \
-		freebsd-development freebsd-workstation-t480 \
 		freebsd-workstation-any \
 		${.TARGETS:Mpackages}
 
