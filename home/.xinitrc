@@ -31,5 +31,6 @@ setxkbmap pl
 feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/dwm/freebsd-logo-by-claudiom.png"
 
 eval $(ssh-agent -s)
+gpg-connect-agent reloadagent /bye
 
 "${@:-dwm}"
