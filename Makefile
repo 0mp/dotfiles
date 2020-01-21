@@ -196,7 +196,7 @@ freebsd-workstation-any: makaron sudo .PHONY
 	sudo touch /etc/make.conf
 	sudo chmod 0640 /etc/make.conf
 	sudo ${__makaron} --marker "# {mark} Use sudo(8) instead of su(1) for ports" \
-		--path /etc/make.conf --block "$$(cat ${@}/make.conf)"
+		--path /etc/make.conf --block "$$(cat freebsd/make.conf)"
 
 	@echo Review files: /boot/loader.conf /etc/make.conf /etc/rc.conf /etc/sysctl.conf
 
