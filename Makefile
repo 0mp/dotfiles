@@ -4,10 +4,12 @@ help: .PHONY
 	@printf "%s\n      %s\n" \
 		"make dotfiles [packages]" \
 		"-- Install only dotfiles and command-line tools" \
-		"make freebsd-t480 [packages]" \
+		"make get-freebsd-on-3620 [packages]" \
+		"-- Configure FreeBSD on 3620" \
+		"make get-freebsd-on-e5450 [packages]" \
+		"-- Configure FreeBSD on E5450" \
+		"make get-freebsd-on-t480 [packages]" \
 		"-- Configure FreeBSD on T480" \
-		"make freebsd-workstation [packages]" \
-		"-- Configure FreeBSD on a generic workstation"
 
 dotfiles: .PHONY
 	${MAKE} alacritty awesome bash commandline fontconfig freebsd-user \
@@ -15,15 +17,23 @@ dotfiles: .PHONY
 		xmodmap xmonad xpdf \
 		${.TARGETS:Mpackages}
 
-freebsd-t480: dotfiles freebsd-workstation .PHONY
-	${MAKE} freebsd-development freebsd-workstation-t480 \
-		${.TARGETS:Mpackages}
-
-freebsd-workstation: dotfiles .PHONY
+get-freebsd-on-3620: dotfiles .PHONY
 	${MAKE} desktop dwm firefox \
-		freebsd-workstation-any \
+		freebsd-on-anything \
 		${.TARGETS:Mpackages}
 
+get-freebsd-on-e5450: dotfiles .PHONY
+	${MAKE} desktop dwm firefox \
+		freebsd-on-anything freebsd-on-laptop\
+		${.TARGETS:Mpackages}
+
+get-freebsd-on-t480: dotfiles .PHONY
+	${MAKE} desktop dwm firefox \
+		freebsd-development freebsd-on-anything freebsd-on-laptop freebsd-on-t480 \
+		${.TARGETS:Mpackages}
+
+##############################################################################
+##############################################################################
 ##############################################################################
 
 alacritty: .PHONY
@@ -130,51 +140,18 @@ freebsd-development: .PHONY
 
 ##############################################################################
 
-freebsd-user: .PHONY
-	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
+freebsd-on-anything_PACKAGES=	devcpu-data
 
-##############################################################################
-
-freebsd-workstation-any_PACKAGES=	devcpu-data powerdxx
-
-freebsd-workstation-any: makaron sudo .PHONY
-	# Faster booting
-	sudo ${__makaron} --marker "# {mark} Put dhclient into background to boot faster" \
-		--path /etc/rc.conf --block 'background_dhclient="YES"'
-	sudo ${__makaron} --marker "# {mark} Do not wait for synchronous USB device probing at boot" \
-		--path /boot/loader.conf --block 'hw.usb.no_boot_wait="1"'
-
-	# Suspend & resume
-	sudo ${__makaron} --marker "Suspend the system when the lid is closed" \
-		--path /etc/sysctl.conf -block "hw.acpi.lid_switch_state=S3"
-	sudo sysctl hw.acpi.lid_switch_state=S3
-
+freebsd-on-anything: makaron sudo .PHONY
 	# Graphics
 	#
 	# Add the user to the video group. Otherwise, things like libGL do not work.
 	# Note: being in the wheel group is not enough.
 	sudo pw groupmod video -m ${USER}
 
-	# Trackpoint & touchpad
+	# moused(8)
 	sudo sysrc moused_enable="YES"
-	sudo sysrc moused_flags="-A 1.3 -V -H"
 	sudo service moused restart
-	sudo ${__makaron} --marker "# {mark} Enable Synaptics support" \
-		--path /boot/loader.conf --block 'hw.psm.synaptics_support="1"'
-
-	# Power management
-	# https://vermaden.wordpress.com/2018/11/28/the-power-to-serve-freebsd-power-management/
-	sudo sysrc economy_cx_lowest="Cmax"
-	sudo sysrc performance_cx_lowest="Cmax"
-	sudo sysrc powerd_enable="NO"
-	sudo sysrc powerdxx_enable="YES"
-	sudo sysrc powerdxx_flags="--ac hiadaptive --batt min --unknown min"
-	sudo ${__makaron} --marker "# {mark} Power down all PCI devices without a device driver" \
-		--path /boot/loader.conf --block 'hw.pci.do_power_nodriver="3"'
-	sudo ${__makaron} --marker "# {mark} Tell ZFS to commit transactions every 10 seconds instead of 5" \
-		--path /boot/loader.conf --block 'vfs.zfs.txg.timeout="10"'
-	sudo ${__makaron} --marker "# {mark} Reduce the number of sound-generated interrupts for longer battery life" \
-		--path /boot/loader.conf --block 'hw.snd.latency="7"'
 
 	# D-Bus (required by GUI applications such as Firefox)
 	sudo sysrc dbus_enable="YES"
@@ -203,14 +180,59 @@ freebsd-workstation-any: makaron sudo .PHONY
 	sudo ${__makaron} --marker "# {mark} Use sudo(8) instead of su(1) for ports" \
 		--path /etc/make.conf --block "$$(cat freebsd/make.conf)"
 
-	@echo Review files: /boot/loader.conf /etc/make.conf /etc/rc.conf /etc/sysctl.conf
+##############################################################################
 
+freebsd-on-3600_PACKAGES=	nvidia-driver-390
+
+freebsd-on-3620: makaron sudo .PHONY
+	mkdir -p /usr/local/etc/X11/xorg.conf.d
+	sudo install ${.CURDIR}/freebsd/nvidia-driver.conf /usr/local/etc/X11/xorg.conf.d/
+	sudo sysrc kld_list+=nvidia-modeset
 
 ##############################################################################
 
-freebsd-workstation-t480_PACKAGES=	drm-kmod intel-backlight
+freebsd-on-laptop_PACKAGES=	powerdxx
 
-freebsd-workstation-t480: makaron sudo .PHONY
+freebsd-on-laptop: makaron sudo .PHONY
+	# Faster booting
+	sudo ${__makaron} --marker "# {mark} Put dhclient into background to boot faster" \
+		--path /etc/rc.conf --block 'background_dhclient="YES"'
+	sudo ${__makaron} --marker "# {mark} Do not wait for synchronous USB device probing at boot" \
+		--path /boot/loader.conf --block 'hw.usb.no_boot_wait="1"'
+
+	# Suspend & resume
+	sudo ${__makaron} --marker "Suspend the system when the lid is closed" \
+		--path /etc/sysctl.conf -block "hw.acpi.lid_switch_state=S3"
+	sudo sysctl hw.acpi.lid_switch_state=S3
+
+	# Synaptics support
+	sudo ${__makaron} --marker "# {mark} Enable Synaptics support" \
+		--path /boot/loader.conf --block 'hw.psm.synaptics_support="1"'
+
+	# moused(8)
+	sudo sysrc moused_enable="YES"
+	sudo sysrc moused_flags="-A 1.3 -V -H"
+	sudo service moused restart
+
+	# Power management
+	# https://vermaden.wordpress.com/2018/11/28/the-power-to-serve-freebsd-power-management/
+	sudo sysrc economy_cx_lowest="Cmax"
+	sudo sysrc performance_cx_lowest="Cmax"
+	sudo sysrc powerd_enable="NO"
+	sudo sysrc powerdxx_enable="YES"
+	sudo sysrc powerdxx_flags="--ac hiadaptive --batt min --unknown min"
+	sudo ${__makaron} --marker "# {mark} Power down all PCI devices without a device driver" \
+		--path /boot/loader.conf --block 'hw.pci.do_power_nodriver="3"'
+	sudo ${__makaron} --marker "# {mark} Tell ZFS to commit transactions every 10 seconds instead of 5" \
+		--path /boot/loader.conf --block 'vfs.zfs.txg.timeout="10"'
+	sudo ${__makaron} --marker "# {mark} Reduce the number of sound-generated interrupts for longer battery life" \
+		--path /boot/loader.conf --block 'hw.snd.latency="7"'
+
+##############################################################################
+
+freebsd-on-t480_PACKAGES=	drm-kmod intel-backlight
+
+freebsd-on-t480: makaron sudo .PHONY
 	# ACPI kernel modules
 	#
 	# In general, it is advised to only load acpi_ibm(4) on ThinkPads.  In
@@ -223,6 +245,11 @@ freebsd-workstation-t480: makaron sudo .PHONY
 		--path /etc/sysctl.conf --block 'hw.acpi.video.lcd0.brightness=15'
 
 	sudo sysrc kld_list+="i915kms"
+
+##############################################################################
+
+freebsd-user: .PHONY
+	ln -f ${.CURDIR}/home/.login_conf ${HOME}/.login_conf
 
 ##############################################################################
 
