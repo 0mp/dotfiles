@@ -1,13 +1,13 @@
 .MAIN: help
 
 help: .PHONY
-	@printf "%s\n      -- %s\n" \
+	@printf "%s\n      %s\n" \
 		"make dotfiles [packages]" \
-		"Install only dotfiles and command-line tools" \
+		"-- Install only dotfiles and command-line tools" \
 		"make freebsd-t480 [packages]" \
-		"Configure FreeBSD on T480" \
+		"-- Configure FreeBSD on T480" \
 		"make freebsd-workstation [packages]" \
-		"Configure FreeBSD on a generic workstation"
+		"-- Configure FreeBSD on a generic workstation"
 
 dotfiles: .PHONY
 	${MAKE} alacritty awesome bash commandline fontconfig freebsd-user \
