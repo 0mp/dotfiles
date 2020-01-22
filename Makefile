@@ -253,15 +253,6 @@ freebsd-user: .PHONY
 
 ##############################################################################
 
-${HOME}/h/goat:
-	mkdir -p ${HOME}/h
-	git clone http://github.com/0mp/goat ${.TARGET}
-
-goat: ${HOME}/h/goat .PHONY
-	make -C ${HOME}/h/goat clean install
-
-##############################################################################
-
 git: .PHONY
 	${__symlink_home} .gitconfig
 
@@ -272,6 +263,15 @@ gnupg_PACKAGES=	gnupg
 gnupg: .PHONY
 	install -d -m 0700 ${HOME}/.gnupg
 	${__symlink_home} .gnupg/gpg.conf
+
+##############################################################################
+
+${HOME}/h/goat:
+	mkdir -p ${HOME}/h
+	git clone http://github.com/0mp/goat ${.TARGET}
+
+goat: ${HOME}/h/goat .PHONY
+	make -C ${HOME}/h/goat clean install
 
 ##############################################################################
 
