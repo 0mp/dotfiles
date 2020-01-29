@@ -69,7 +69,7 @@ user_pref('browser.ctrlTab.recentlyUsedOrder', false);
 /*
  * https://fedoramagazine.org/how-to-get-firefox-looking-right-on-a-high-dpi-display-and-fedora/
  */
-user_pref("layout.css.devPixelsPerPx", "1.5");
+user_pref("layout.css.devPixelsPerPx", "1.3");
 
 /*
  * Disable the Password Manager.
