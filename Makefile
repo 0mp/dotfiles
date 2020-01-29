@@ -236,9 +236,8 @@ freebsd-on-t480: makaron sudo .PHONY
 	# ACPI kernel modules
 	#
 	# In general, it is advised to only load acpi_ibm(4) on ThinkPads.  In
-	# case of ThinkPad T480 it is still required to load load
-	# acpi_video(4), though, as it enables the media keys for brightness
-	# control.
+	# case of ThinkPad T480 it is still required to load acpi_video(4),
+	# though, as it enables the media keys for brightness control.
 	sudo sysrc kld_list+="acpi_ibm acpi_video"
 	sudo kldload -n acpi_ibm acpi_video
 	sudo ${__makaron} --marker "# {mark} Lower the screen brightness to a reasonable level" \
