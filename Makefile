@@ -201,7 +201,7 @@ freebsd-on-anything: makaron sudo .PHONY
 	sudo chmod 0640 /etc/src-env.conf
 	sudo ${__makaron} \
 		--marker "# {mark} Build configuration" \
-		--path /etc/src.conf --block "WITH_META_MODE=	YES"
+		--path /etc/src-env.conf --block "WITH_META_MODE=	YES"
 
 ##############################################################################
 
