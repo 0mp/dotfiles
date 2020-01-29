@@ -225,7 +225,7 @@ freebsd-on-laptop: makaron sudo .PHONY
 
 	# Suspend & resume
 	sudo ${__makaron} --marker "Suspend the system when the lid is closed" \
-		--path /etc/sysctl.conf -block "hw.acpi.lid_switch_state=S3"
+		--path /etc/sysctl.conf --block "hw.acpi.lid_switch_state=S3"
 	sudo sysctl hw.acpi.lid_switch_state=S3
 
 	# Synaptics support
