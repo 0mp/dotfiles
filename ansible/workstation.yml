@@ -1,9 +1,6 @@
 - name: Set up local workstation
   hosts: local
   roles:
-    - role: freebsd-dev
-      tags: [ freebsd-dev ]
-      when: ansible_facts['os_family'] == "FreeBSD"
     - role: ly
       tags: [ ly ]
       when: ansible_facts['os_family'] == "FreeBSD"

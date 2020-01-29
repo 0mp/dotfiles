@@ -140,7 +140,7 @@ freebsd-development: .PHONY
 
 ##############################################################################
 
-freebsd-on-anything_PACKAGES=	devcpu-data
+freebsd-on-anything_PACKAGES=	ccache devcpu-data
 
 freebsd-on-anything: makaron sudo .PHONY
 	# Graphics
@@ -177,8 +177,31 @@ freebsd-on-anything: makaron sudo .PHONY
 	# Developer variables
 	sudo touch /etc/make.conf
 	sudo chmod 0640 /etc/make.conf
-	sudo ${__makaron} --marker "# {mark} Use sudo(8) instead of su(1) for ports" \
-		--path /etc/make.conf --block "$$(cat freebsd/make.conf)"
+	printf '%s\n' \
+		".if exists(/usr/local/bin/sudo)" \
+		"SU_CMD=	/usr/local/bin/sudo -E sh -c" \
+		".endif" \
+		| sudo ${__makaron} \
+		--marker "# {mark} Use sudo(8) instead of su(1) for ports" \
+		--path /etc/make.conf --in
+	printf '%s\n' \
+		"DEVELOPER=	YES" \
+		"DEV_WARNING_WAIT=	0" \
+		| sudo ${__makaron} \
+		--marker "# {mark} Developer variables" \
+		--path /etc/make.conf --in
+
+	sudo touch /etc/src.conf
+	sudo chmod 0640 /etc/src.conf
+	sudo ${__makaron} \
+		--marker "# {mark} Build configuration" \
+		--path /etc/src.conf --block "WITH_CCACHE_BUILD=	YES"
+
+	sudo touch /etc/src-env.conf
+	sudo chmod 0640 /etc/src-env.conf
+	sudo ${__makaron} \
+		--marker "# {mark} Build configuration" \
+		--path /etc/src.conf --block "WITH_META_MODE=	YES"
 
 ##############################################################################
 
