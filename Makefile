@@ -124,7 +124,7 @@ fontconfig: .PHONY
 ##############################################################################
 
 freebsd-development_PACKAGES=	igor \
-				portfmt poudriere-devel
+				portfmt portlint poudriere-devel
 
 _checkout_immediates=	sh -u -c '[ -d ${HOME}/f/$$1 ] || svnlite checkout --depth immediates https://svn.freebsd.org/$$1 ${HOME}/f/$$1' _checkout_immediates
 _update_immediates=	sh -u -c 'cd ${HOME}/f/$$1 && { ! ls -A | xargs false || svnlite update --set-depth immediates . ;}' _update_immediates
