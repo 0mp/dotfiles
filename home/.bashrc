@@ -1,13 +1,22 @@
 # vim: filetype=bash softtabstop=4 shiftwidth=4 tabstop=4 expandtab
 # Add some directories to the *PATH unless they are already there.
-case "$PATH" in
-    *$HOME/.local/bin*) ;;
-    *) PATH="$HOME/.local/bin:$PATH" ;;
-esac
-case "$MANPATH" in
-    *$HOME/.local/share/man*) ;;
-    *) MANPATH="$HOME/.local/share/man:$MANPATH" ;;
-esac
+for _p in "$HOME/.local/bin" "$HOME/.cargo/bin"
+do
+    case :${PATH}: in
+        *:${_p}:*) ;;
+        *) PATH="${_p}:$PATH" ;;
+    esac
+done
+unset _p
+
+for _mp in "$HOME/.local/share/man"
+do
+    case :${MANPATH}: in
+        *:${_mp}:*) ;;
+        *) PATH="${_mp}:${PATH}" ;;
+    esac
+done
+unset _mp
 
 # Configure history.
 HISTCONTROL=ignoredups:erasedups
