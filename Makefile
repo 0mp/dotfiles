@@ -403,19 +403,21 @@ __symlink_home=	@sh -eu -c 'ln -fsv "${.CURDIR}/home/$${1}" $${HOME}/$${1}' __sy
 __makaron=	${HOME}/h/makaron/makaron
 
 .if make(packages)
-# From the lists of desired packages pick those that are already installed.
+#	From the lists of desired packages pick those that are already
+#	installed.
 .	for _target in ${.TARGETS}
-# Ignore empty lists to avoid confusing pkg-query(8).
+#		Ignore empty lists to avoid confusing pkg-query(8).
 .		if ! empty(${_target}_PACKAGES)
-# Check if the packages are installed. If all of them are not, then ignore the error.
+# Check if the packages are installed. If all of them are not, then ignore the
+# error.
 _installed_packages+=	${:!pkg query %n ${${_target}_PACKAGES} || true!}
 .		endif
 .	endfor
 .	for _target in ${.TARGETS}
 # Sort the package list of a target and remove potenial duplicates.
 _${_target}_packages:=	${${_target}_PACKAGES:O:u}
-# Iterate over installed packages and remove them from the list of packages to
-# be installed.
+#		Iterate over installed packages and remove them from the list
+#		of packages to be installed.
 .		for _installed_package in ${_installed_packages}
 _${_target}_packages:= ${_${_target}_packages:N${_installed_package}}
 .		endfor
