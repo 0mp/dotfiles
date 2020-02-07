@@ -1,4 +1,5 @@
-## lagg(4) configuration
+lagg(4) configuration
+---------------------
 
 ```
 sysrc ifconfig_em0="up"
