@@ -43,7 +43,7 @@ commitnew)
 	shift
 	origin="${PWD#${PWD%/*/*}/}"
 	cat << SVN_COMMIT | xclip -sel clipboard
-New port: ${origin}: $(make -V COMMENT)
+New port: ${origin}
 
 $(cat pkg-descr)
 SVN_COMMIT
