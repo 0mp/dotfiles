@@ -15,7 +15,7 @@ clean_up() {
 
 trap 'clean_up' EXIT
 
-export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 mkdir -p ~/.cache
 daemon -p ~/.cache/sxhkd.pid sxhkd
