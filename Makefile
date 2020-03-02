@@ -176,7 +176,7 @@ freebsd-on-anything: makaron sudo .PHONY
 
 	# Developer variables
 	sudo touch /etc/make.conf
-	sudo chmod 0640 /etc/make.conf
+	sudo chmod 0644 /etc/make.conf
 	printf '%s\n' \
 		".if exists(/usr/local/bin/sudo)" \
 		"SU_CMD=	/usr/local/bin/sudo -E sh -c" \
@@ -192,13 +192,13 @@ freebsd-on-anything: makaron sudo .PHONY
 		--path /etc/make.conf --in
 
 	sudo touch /etc/src.conf
-	sudo chmod 0640 /etc/src.conf
+	sudo chmod 0644 /etc/src.conf
 	sudo ${__makaron} \
 		--marker "# {mark} Build configuration" \
 		--path /etc/src.conf --block "WITH_CCACHE_BUILD=	YES"
 
 	sudo touch /etc/src-env.conf
-	sudo chmod 0640 /etc/src-env.conf
+	sudo chmod 0644 /etc/src-env.conf
 	sudo ${__makaron} \
 		--marker "# {mark} Build configuration" \
 		--path /etc/src-env.conf --block "WITH_META_MODE=	YES"
