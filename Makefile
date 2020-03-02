@@ -203,6 +203,10 @@ freebsd-on-anything: makaron sudo .PHONY
 		--marker "# {mark} Build configuration" \
 		--path /etc/src-env.conf --block "WITH_META_MODE=	YES"
 
+	sudo ${__makaron} --marker "# {mark} Give less memory to ARC" \
+		--path /etc/sysctl.conf \
+		--block "vfs.zfs.arc_max=$$(expr $$(sysctl -n hw.physmem) / 2)"
+
 ##############################################################################
 
 freebsd-on-3600_PACKAGES=	nvidia-driver-390
