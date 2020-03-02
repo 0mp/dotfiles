@@ -224,7 +224,7 @@ freebsd-on-laptop: makaron sudo .PHONY
 		--path /boot/loader.conf --block 'hw.usb.no_boot_wait="1"'
 
 	# Suspend & resume
-	sudo ${__makaron} --marker "Suspend the system when the lid is closed" \
+	sudo ${__makaron} --marker "# {make} Suspend the system when the lid is closed" \
 		--path /etc/sysctl.conf --block "hw.acpi.lid_switch_state=S3"
 	sudo sysctl hw.acpi.lid_switch_state=S3
 
