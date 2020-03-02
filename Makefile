@@ -67,7 +67,7 @@ makaron: ${HOME}/h/makaron .PHONY
 ##############################################################################
 
 commandline_PACKAGES=	bat entr fd-find htop hs-ShellCheck moinmoincli mosh subversion \
-			the_silver_searcher with ydiff
+			the_silver_searcher w3m-img with ydiff
 
 commandline: .PHONY
 	# nothing
