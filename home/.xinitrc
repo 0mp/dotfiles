@@ -28,7 +28,7 @@ setxkbmap pl
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
-feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/dwm/freebsd-logo-by-claudiom.png"
+feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/desktop/freebsd-logo-by-claudiom.png"
 
 eval $(ssh-agent -s)
 gpg-connect-agent reloadagent /bye
