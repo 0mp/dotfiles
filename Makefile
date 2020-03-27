@@ -347,7 +347,6 @@ utils: .PHONY
 	${__symlink_home} .local/bin/0mp-explore
 	${__symlink_home} .local/bin/cflowfilter
 	${__symlink_home} .local/bin/colors
-	${__symlink_home} .local/bin/committer-bootstrap
 	${__symlink_home} .local/bin/disable-yoga-3-14-touchscreen
 	${__symlink_home} .local/bin/faf
 	${__symlink_home} .local/bin/flip-git-remote-url
