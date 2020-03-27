@@ -359,6 +359,7 @@ utils: .PHONY
 	${__symlink_home} .local/bin/superdrive
 	${__symlink_home} .local/bin/test-true-color-support
 	${__symlink_home} .local/bin/current-task
+	${__symlink_home} .local/bin/svncompanion
 
 	${__symlink_home} .local/bin/flip-svn-location
 	${__symlink_home} .local/bin/fr

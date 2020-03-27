@@ -1,0 +1,36 @@
+#! /bin/sh -
+
+usage() {
+	cat <<-USAGE
+Usage: ${0##*/} [subcommands]
+Subcommands:
+emp  Set depth to "empty".
+im   Set depth to "immediates".
+inf  Set depth to "infinity".
+USAGE
+}
+
+set_depth() {
+	local _depth="$1"
+	shift
+	svn update --set-depth "$_depth" "$@"
+}
+
+case $1 in
+emp)
+	shift
+	set_depth empty "$@"
+	;;
+im|imm)
+	shift
+	set_depth immediates "$@"
+	;;
+inf)
+	shift
+	set_depth infinity "$@"
+	;;
+*)
+	usage
+	exit 64
+	;;
+esac
