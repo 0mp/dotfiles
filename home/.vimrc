@@ -69,6 +69,9 @@ set statusline+=%{gutentags#statusline()}
 if executable('exctags')
     let g:gutentags_ctags_executable = "exctags"
 endif
+if executable('uctags')
+    let g:gutentags_ctags_executable = "uctags"
+endif
 " }}}
 " {{{ Syntax checking
 Plug 'vim-syntastic/syntastic'
