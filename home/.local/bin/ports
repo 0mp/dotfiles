@@ -36,6 +36,10 @@ err() {
 }
 
 case ${1:-} in
+clippy)
+	shift
+	echo Makefile | entr -c -s "portclippy Makefile | awk -v on=0 '/^[+-]/{on=1} on'"
+	;;
 depends)
 	shift
 	pkg rquery -ix "%n>=0:%o" "$1"
@@ -114,6 +118,7 @@ test)
 	cat <<HELP
 Usage: ${_b}ports${_0} [${_u}command${_0} [${_u}args${_0} ...]]
 Commands:
+	${_b}clippy${_0}
 	${_b}commitnew${_0}
 	${_b}depends${_0} ${_u}pattern${_0}
 	${_b}new13${_0}
