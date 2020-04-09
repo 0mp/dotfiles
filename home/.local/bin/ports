@@ -42,7 +42,14 @@ clippy)
 	;;
 depends)
 	shift
-	pkg rquery -ix "%n>=0:%o" "$1"
+	pkg rquery -ix "%n>=0:%o" "$1" | awk '
+		/^py[0-9][0-9]-/ {
+			sub("^py..-", "\${PYTHON_PKGNAMEPREFIX}")
+			printf "%s@${PY_FLAVOR}\n", $0
+			next
+		}
+		{ print }
+	'
 	;;
 new13)
 	sudo poudriere jail -c -j "130a-$(date +%Y-%m-%d)" -a amd64 -v 13.0-CURRENT
