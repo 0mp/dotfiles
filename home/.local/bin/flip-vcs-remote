@@ -1,0 +1,111 @@
+#! /bin/sh -
+
+set -e
+set -u
+
+SUCCESS=0
+FAILURE=1
+
+usage() {
+	cat <<USAGE
+Usage: ${0##*/}
+
+Environment: USER
+USAGE
+}
+
+errx() {
+	printf '%s\n' "$*" 2>&1
+	exit "$FAILURE"
+}
+
+taste() {
+	if svn info > /dev/null 2>&1; then
+		echo svn
+	elif git rev-parse > /dev/null 2>&1; then
+		echo git
+	else
+		errx "Unable to determine VCS present in the current directory"
+	fi
+	return "$SUCCESS"
+}
+
+flip_git() {
+	local _url
+	local _url_without_protocol
+	local _url_without_protocol_and_userinfo
+	local _protocol
+	local _domain
+	local _path_with_dot_git
+	local _path
+
+	if ! url="$(git remote get-url origin)"; then
+		errx "git: Failed to get URL of origin"
+	fi
+	_url_without_protocol="${url#*//}"
+	_url_without_protocol_and_userinfo="${_url_without_protocol#*@}"
+
+	_protocol="${url%${_url_without_protocol}}"
+
+	_domain="${_url_without_protocol_and_userinfo%%[:/]*}"
+	_path_with_dot_git="${_url_without_protocol_and_userinfo#${_domain}[:/]}"
+	_path="${_path_with_dot_git%.git}"
+
+	case $_protocol in
+		http*)
+			new_url="ssh://git@${_domain}/${_path}.git"
+			;;
+		ssh*)
+			new_url="https://${_domain}/${_path}.git"
+			;;
+	esac
+
+	if ! git remote set-url origin "$new_url"; then
+		errx "Failed to set origin to \"$new_url\""
+	fi
+}
+
+flip_svn() {
+	local _url
+	_url="$(svn info | awk '/^URL/{print $2}')"
+	_committer='svn+ssh://${USER}@repo'
+	_anonymous_https='https://svn'
+	_anonymous_svn='svn://svn'
+
+	case $_url in
+	$_committer*)
+		svn relocate "$_committer" "$_anonymous_svn"
+		;;
+	$_anonymous_https*)
+		svn relocate "$_anonymous_https" "$_committer"
+		;;
+	$_anonymous_svn*)
+		svn relocate "$_anonymous_svn" "$_committer"
+		;;
+	esac
+}
+
+main() {
+	local _vcs
+
+	if [ "${1:-}" = "-h" ]; then
+		usage
+		exit "$SUCCESS"
+	fi
+
+	_vcs=$(taste)
+
+	case $_vcs in
+		git)
+			flip_git
+			;;
+		svn)
+			flip_svn
+			;;
+		default)
+			errx "\"$_vcs\" is unsupported; you have reached unreachable code"
+			;;
+	esac
+}
+
+main "$@"

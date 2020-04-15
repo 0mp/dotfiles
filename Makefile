@@ -349,7 +349,7 @@ utils: .PHONY
 	${__symlink_home} .local/bin/colors
 	${__symlink_home} .local/bin/disable-yoga-3-14-touchscreen
 	${__symlink_home} .local/bin/faf
-	${__symlink_home} .local/bin/flip-git-remote-url
+	${__symlink_home} .local/bin/flip-vcs-remote
 	${__symlink_home} .local/bin/get-list-of-ports-for-moinmoin
 	${__symlink_home} .local/bin/manlint
 	${__symlink_home} .local/bin/previewman
@@ -361,7 +361,6 @@ utils: .PHONY
 	${__symlink_home} .local/bin/current-task
 	${__symlink_home} .local/bin/svncompanion
 
-	${__symlink_home} .local/bin/flip-svn-location
 	${__symlink_home} .local/bin/fr
 	${__symlink_home} .local/bin/justmount
 	${__symlink_home} .local/share/man/man8/muchup.8
