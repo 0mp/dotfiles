@@ -343,7 +343,7 @@ utils: .PHONY
 	mkdir -p ${HOME}/.local/bin
 	mkdir -p ${HOME}/.local/share/man/man1
 	mkdir -p ${HOME}/.local/share/man/man8
-	${__symlink_home} bin
+	ln -Ffsv "${HOME}/.local/bin" "${HOME}/bin"
 
 	${__symlink_home} .local/share/man/man1/0mp-explore.1
 	${__symlink_home} .local/bin/0mp-explore
@@ -404,7 +404,7 @@ develop-status-bar: .PHONY
 ##############################################################################
 ##############################################################################
 
-__symlink_home=	@sh -eu -c 'ln -fsv "${.CURDIR}/home/$${1}" $${HOME}/$${1}' __symlink_home
+__symlink_home=	@sh -eu -c 'ln -Ffsv "${.CURDIR}/home/$${1}" "$${HOME}/$${1}"' __symlink_home
 __makaron=	${HOME}/h/makaron/makaron
 
 .if make(packages)
