@@ -14,7 +14,7 @@ help: .PHONY
 dotfiles: .PHONY
 	${MAKE} alacritty awesome bash commandline fontconfig freebsd-user \
 		goat git gnupg octave subversion sxhkd tmux utils vim \
-		xmodmap xmonad xpdf \
+		xmodmap xpdf \
 		${.TARGETS:Mpackages}
 
 get-freebsd-on-3620: dotfiles .PHONY
@@ -385,13 +385,6 @@ vim: .PHONY
 
 xmodmap: .PHONY
 	${__symlink_home} .xmodmap
-
-##############################################################################
-
-xmonad: .PHONY
-	mkdir -p ${HOME}/.xmonad
-	${__symlink_home} .xmonad/xmonad.hs
-	${__symlink_home} .xmobarrc
 
 ##############################################################################
 
