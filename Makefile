@@ -103,7 +103,7 @@ ${HOME}/h/dwm:
 	git clone http://github.com/0mp/dwm ${.TARGET}
 
 dwm: packages ${HOME}/h/dwm .PHONY
-	make -C ${HOME}/h/dwm clean dwm install
+	${MAKE} -C ${HOME}/h/dwm clean dwm install
 
 ##############################################################################
 
@@ -297,7 +297,7 @@ ${HOME}/h/goat:
 	git clone http://github.com/0mp/goat ${.TARGET}
 
 goat: ${HOME}/h/goat .PHONY
-	make -C ${HOME}/h/goat clean install
+	${MAKE} -C ${HOME}/h/goat clean install
 
 ##############################################################################
 
