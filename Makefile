@@ -108,11 +108,13 @@ dwm: packages ${HOME}/h/dwm .PHONY
 ##############################################################################
 
 firefox: .PHONY
-.if ! exists(${HOME}/.mozilla/firefox/profiles.ini)
-.	warning Target firefox is a no-op, run Firefox at least once to create a profile
-.elif make(firefox)
-	ln -f -s ${.CURDIR}/firefox/user.js \
-		"${HOME}/.mozilla/firefox/$$(awk -F = '/^Default=.*[.].*/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)/user.js"
+.if make(firefox)
+.	if exists(${HOME}/.mozilla/firefox/profiles.ini)
+	profile="$$(awk -F = '/^Default=.*[.].*/{print $$2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)"; \
+	ln -f -s ${.CURDIR}/firefox/user.js "${HOME}/.mozilla/firefox/${profile}/user.js"
+.	else
+.		warning Target firefox is a no-op, run Firefox at least once to create a profile
+.	endif
 .endif
 
 ##############################################################################
