@@ -24,11 +24,13 @@ schemes:
 
 colors: *pencil_light
 
+_my_font: &_my_font
+    # family: JetBrains Mono
+    # family: Fira Mono
+    family: Iosevka Curly Slab
+
 font:
-  normal:
-    family: JetBrains Mono
-  bold:
-    family: JetBrains Mono
-  italic:
-    family: JetBrains Mono
-  size: 7.0
+  normal: *_my_font
+  bold: *_my_font
+  italic: *_my_font
+  size: 8.0
