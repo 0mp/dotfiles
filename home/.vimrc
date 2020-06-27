@@ -45,7 +45,7 @@ Plug 'lervag/vimtex'
 " }}}
 " {{{ Python
 Plug 'davidhalter/jedi-vim'
-Plug 'psf/black'
+Plug 'psf/black', { 'tag': '19.10b0' }
 let g:black_virtualenv = "/usr/local"
 " }}}
 " }}}
