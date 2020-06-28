@@ -25,6 +25,9 @@ case "$1" in
     luz)
         exec "$player" "http://radioluz.pwr.edu.pl:8000/luzlofi.ogg"
         ;;
+    soma)
+        exec "$player" "http://somafm.com/m3u/defcon256.m3u"
+        ;;
     *)
         printf '"%s" %s\n' "$1" 'does not match any known radio stations' 1>&2
         printf '%s\n' 'Pick one of those: anon dfm luz' 1>&2
