@@ -91,6 +91,10 @@ export VISUAL='vim'
 export PAGER='less'
 export LESS='--ignore-case --jump-target=3 --RAW-CONTROL-CHARS'
 export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
+# The default bat theme is only suitable for dark color themes, so an
+# alternative theme has to be specified if the a user wants to use bat in
+# light-themed terminals.
+export BAT_THEME="GitHub"
 export GPG_TTY="$(tty)"
 
 [[ -x ~/.local/bin/goat ]] && . "$HOME/.local/share/goat/libgoat.sh"
