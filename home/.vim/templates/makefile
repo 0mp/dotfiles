@@ -5,7 +5,10 @@ entr_LIST=	${entr_LIST_CMD} ${entr_FILE_LIST}
 
 entr_ENTR=	entr -c -d -s
 
-entr_UTIL=	"echo change /_"
+entr_UTIL=	"echo 'changed $$0'" /_
 
-entr: .PHONY
-	while :; do ${entr_LIST} | ${entr_ENTR} ${entr_UTIL} || [ $$? -eq 0 ] && break; done
+.PHONY: entr
+entr:
+	while :; do \
+		${entr_LIST} | ${entr_ENTR} ${entr_UTIL} && break; \
+	done
