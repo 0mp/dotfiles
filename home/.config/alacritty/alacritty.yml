@@ -1,5 +1,5 @@
-schemes:
-  pencil_light: &pencil_light
+x_schemes:
+  x_pencil_light: &x_pencil_light
     primary:
       background: '#f1f1f1'
       foreground: '#424242'
@@ -22,15 +22,17 @@ schemes:
       cyan:    '#4fb8cc'
       white:   '#f1f1f1'
 
-colors: *pencil_light
-
-_my_font: &_my_font
+x_fonts:
+  x_my_font: &x_my_font
     # family: JetBrains Mono
     # family: Fira Mono
     family: Iosevka Curly Slab
 
+
+colors: *x_pencil_light
+
 font:
-  normal: *_my_font
-  bold: *_my_font
-  italic: *_my_font
+  normal: *x_my_font
+  bold: *x_my_font
+  italic: *x_my_font
   size: 8.0
