@@ -6,6 +6,50 @@ reload() {
 
 trap reload SIGUSR1
 
+batteries() {
+	local _num_of_batteries
+	local _battery
+
+	if [ -f ~/.0mp-switch/battery-alert-off ]; then
+		printf -- '! '
+	fi
+
+	_num_of_batteries="$(sysctl -n hw.acpi.battery.units)"
+
+	if [ -z "${_num_of_batteries}" ]
+	then
+		return 0
+	fi
+
+	for _battery in $( seq 0 "$(( _num_of_batteries - 1 ))" )
+	do
+		if ! acpiconf -i "$_battery" | awk '
+			BEGIN {
+				recognized = 0
+			}
+			/Remaining capacity*/ {
+				printf "%s", $3
+				recognized = 1
+			}
+			/State:[[:space:]]+charging/ {
+				printf "+"
+				recognized = 1
+			}
+			/Remaining time:[[:space:]]+.*:.*/ {
+				printf " (%s)", $3
+				recognized = 1
+			}
+			END {
+				exit recognized == 0
+			}
+			'
+		then
+			printf '%s' '?%'
+		fi
+		printf %s ' | '
+	done
+}
+
 network_interface() {
 	local _if
 	local _ssid
@@ -37,23 +81,7 @@ status_bar() {
 	printf ' | '
 
 	# Battery
-	[ -f ~/.0mp-switch/battery-alert-off ] && printf -- '! '
-	num_of_batteries="$(sysctl -n hw.acpi.battery.units)"
-	if [ -n "${num_of_batteries}" ]
-	then
-		for battery in $( seq 0 "$(( num_of_batteries - 1 ))" )
-		do
-			if ! acpiconf -i "$battery" | awk '
-				/Remaining capacity*/{printf "%s", $3}
-				/State:[[:space:]]+charging/{printf "+"}
-				/Remaining time:[[:space:]]+.*:.*/{printf " (%s)", $3}
-			'
-			then
-				printf '%s' '?%'
-			fi
-			printf %s ' | '
-		done
-	fi
+	batteries
 
 	# Networking
 	if ! drill >/dev/null 2>&1
