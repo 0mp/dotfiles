@@ -13,7 +13,7 @@ for _mp in "$HOME/.local/share/man"
 do
     case :${MANPATH}: in
         *:${_mp}:*) ;;
-        *) PATH="${_mp}:${PATH}" ;;
+        *) MANPATH="${_mp}:${MANPATH}" ;;
     esac
 done
 unset _mp
