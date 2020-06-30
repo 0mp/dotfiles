@@ -1,0 +1,196 @@
+#! /bin/sh -
+#
+# SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+#
+# Copyright (c) 2020 Mateusz Piotrowski <0mp@FreeBSD.org>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+usage() {
+	cat <<USAGE >&2
+Usage:	${0##*/} merge [-c] [-D differential_rev] branch rev ...
+	${0##*/} --help
+
+Options:
+
+--help	Show usage.
+
+Commands:
+
+merge	Merge specified revisions with "svn merge", so the repository is ready
+	for a commit.
+
+	Supported options and arguments are:
+
+	-c	Generate a commit message. If xclip is available, the commit
+		message will be put into clipboard.
+	 -D differential_rev
+		Specify differential revision (e.g., 22228) for the MFC commit.
+	 -M	Do not actually merge any commits into the branch.
+	 branch
+		Specify the branch to merge to (it has to be a valid
+		directory).
+	 rev ...
+		Specify revisions to merge.
+
+Files:
+
+/tmp/svn-commit.tmp	The temporary file storing the commit message.
+
+Examples:
+
+Here is an example of how to MFC revisions 336481, 336585, and 359126
+into 12-STABLE:
+
+	# Check out the branch you want to MFC to.
+	svn co svn+ssh://\${USER}@repo.freebsd.org/base/stable/12 stable-12
+	# Merge desired revisions and generate a commit message.
+	mfc -c stable-12 336481 336585 359126
+	# Review the changes for the last time.
+	svn diff stable-12 | less
+	# Commit!
+	svn commit stable-12
+USAGE
+}
+
+generate_commit_message() {
+	local _differential_revision
+	local _rev
+	local _revisions
+
+	_differential_revision="$1"
+	shift
+
+	{
+		printf 'MFC %s' "$1"
+		shift
+		for _rev in "$@"; do
+			printf ', %s' "$_rev"
+		done
+		set -- $_revisions
+		printf ':\n'
+
+		if [ "$_differential_revision" != none ]; then
+			printf 'Differential Revision:\thttps://reviews.freebsd.org/%s\n' \
+				"$_differential_revision"
+		fi
+
+		for _rev in "$@"; do
+			printf '\n'
+			svn log -c "$_rev" |
+				sed '1d;2d;3d;$d' |
+				sed -e '/MFC after:/d' -e '/X-MFC-With:/d'
+
+		done
+	} | tee /tmp/svn-commit.tmp
+
+	if command -v xclip >/dev/null; then
+		xclip -in /tmp/svn-commit.tmp -sel clip
+	fi
+}
+
+# Merge specified revisions.
+#
+# SYNOPSIS
+# merge_revisions branch rev ...
+#
+# CAVEATS
+# The branch must be up to date.
+merge_revisions() {
+	local _rev
+	local _branch
+
+	_branch="$1"
+	shift
+
+	for _rev in "$@"; do
+		svn merge -c "$_rev" ^/head "$_branch" || exit
+	done
+}
+
+command_marge() {
+	local _should_generate_comments="no"
+	local _should_merge="yes"
+	local _branch
+	local _revisions
+	local _differential_revision="none"
+
+	OPTIND=1
+	while getopts cD:M _o; do
+		case $_o in
+		D)
+			_differential_revision="D${OPTARG#D}"
+			;;
+		c)
+			_should_generate_comments="yes"
+			;;
+		M)
+			_should_merge="no"
+			;;
+		?)
+			usage
+			exit 1
+			;;
+		esac
+	done
+	if [ "$OPTIND" -ne 0 ]; then
+		shift "$(( OPTIND - 1 ))"
+	fi
+
+	_branch="$1"
+	shift
+	if [ ! -d "$_branch" ]; then
+		echo "Branch is not checked out locally" 1>&2
+		exit 1
+	fi
+	_revisions="$*"
+	set --
+	for _rev in $_revisions; do
+		set -- "$@" "${_rev#r}"
+	done
+	_revisions="$*"
+
+	svn up "$_branch" || exit
+	if [ "$_should_merge" = yes ]; then
+		merge_revisions "$_branch" "$@"
+	fi
+
+	generate_commit_message "$_differential_revision" "$@"
+}
+
+main() {
+	case $1 in
+		--help | "")
+			usage
+			;;
+		merge)
+			shift
+			command_marge "$@"
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
+}
+
+main "$@"

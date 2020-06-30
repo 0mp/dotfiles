@@ -365,6 +365,7 @@ utils: .PHONY
 
 	${__symlink_home} .local/bin/fr
 	${__symlink_home} .local/bin/justmount
+	${__symlink_home} .local/bin/mfc
 	${__symlink_home} .local/share/man/man8/muchup.8
 	${__symlink_home} .local/bin/muchup
 	${__symlink_home} .local/bin/nycbug-dmesgd
