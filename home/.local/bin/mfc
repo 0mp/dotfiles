@@ -27,7 +27,7 @@
 
 usage() {
 	cat <<USAGE >&2
-Usage:	${0##*/} merge [-c] [-D differential_rev] branch rev ...
+Usage:	${0##*/} merge [-cM] [-D differential_rev] branch rev ...
 	${0##*/} --help
 
 Options:
