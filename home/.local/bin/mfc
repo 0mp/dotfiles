@@ -169,6 +169,7 @@ command_marge() {
 	done
 	_revisions="$*"
 
+	svn revert --recursive "$_branch" || exit
 	svn up "$_branch" || exit
 	if [ "$_should_merge" = yes ]; then
 		merge_revisions "$_branch" "$@"
