@@ -101,7 +101,6 @@ generate_commit_message() {
 			svn log -c "$_rev" |
 				sed '1d;2d;3d;$d' |
 				sed -e '/MFC after:/d' -e '/X-MFC-With:/d'
-
 		done
 	} | tee "$_commit_message"
 
