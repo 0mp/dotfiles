@@ -27,31 +27,23 @@
 
 usage() {
 	cat <<USAGE >&2
-Usage:	${0##*/} merge [-c] [-D differential_rev] branch rev ...
+Usage:	${0##*/} [-c] [-D differential_rev] branch rev ...
 	${0##*/} --help
 
-Options:
+Supported options and arguments are:
 
+-c	Commit after merging specified revisions, reviewing the
+	resulting patch and editing the commit message.  If the editor
+	exits with a non-zero status when closing the commit message
+	file, then the changes are not going to be committed.
+-D differential_rev
+	Specify differential revision (e.g., 22228) for the MFC commit.
 --help	Show usage.
-
-Commands:
-
-merge	Merge specified revisions with "svn merge", so the repository is ready
-	for a commit.
-
-	Supported options and arguments are:
-
-	-c	Commit after merging specified revisions, reviewing the
-		resulting patch and editing the commit message.  If the editor
-		exits with a non-zero status when closing the commit message
-		file, then the changes are not going to be committed.
-	-D differential_rev
-		Specify differential revision (e.g., 22228) for the MFC commit.
-	branch
-		Specify the branch to merge to (it has to be a valid
-		directory).
-	rev ...
-		Specify revisions to merge.
+branch
+	Specify the branch to merge to (it has to be a valid
+	directory).
+rev ...
+	Specify revisions to merge.
 
 Files:
 
@@ -201,13 +193,8 @@ main() {
 		--help | "")
 			usage
 			;;
-		merge)
-			shift
-			command_marge "$@"
-			;;
 		*)
-			usage
-			exit 1
+			command_marge "$@"
 			;;
 	esac
 }
