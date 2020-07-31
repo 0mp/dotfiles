@@ -27,7 +27,7 @@
 
 usage() {
 	cat <<USAGE >&2
-Usage:	${0##*/} merge [-cM] [-D differential_rev] branch rev ...
+Usage:	${0##*/} merge [-c] [-D differential_rev] branch rev ...
 	${0##*/} --help
 
 Options:
@@ -47,7 +47,6 @@ merge	Merge specified revisions with "svn merge", so the repository is ready
 		file, then the changes are not going to be committed.
 	-D differential_rev
 		Specify differential revision (e.g., 22228) for the MFC commit.
-	-M	Do not actually merge any commits into the branch.
 	branch
 		Specify the branch to merge to (it has to be a valid
 		directory).
@@ -149,7 +148,6 @@ edit_commit_message() {
 command_marge() {
 	local _commit_message="/tmp/svn-commit.tmp"
 	local _should_attempt_to_commit="no"
-	local _should_merge="yes"
 	local _branch
 	local _revisions
 	local _differential_revision="none"
@@ -162,9 +160,6 @@ command_marge() {
 			;;
 		c)
 			_should_attempt_to_commit="yes"
-			;;
-		M)
-			_should_merge="no"
 			;;
 		?)
 			usage
@@ -191,9 +186,7 @@ command_marge() {
 
 	svn revert --recursive "$_branch" || exit
 	svn up "$_branch" || exit
-	if [ "$_should_merge" = yes ]; then
-		merge_revisions "$_branch" "$@"
-	fi
+	merge_revisions "$_branch" "$@"
 
 	generate_commit_message "$_commit_message" "$_differential_revision" "$@"
 	show_diff "$_branch"
