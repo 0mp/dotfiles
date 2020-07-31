@@ -63,12 +63,11 @@ into 12-STABLE:
 
 	# Check out the branch you want to MFC to.
 	svn co svn+ssh://\${USER}@repo.freebsd.org/base/stable/12 stable-12
-	# Merge desired revisions and generate a commit message.
-	mfc -c stable-12 336481 336585 359126
-	# Review the changes for the last time.
-	svn diff stable-12 | less
+	# Merge desired revisions, review the resulting patch,
+	# and prepare the commit message.
+	mfc merge -c -- stable-12 336481 336585 359126
 	# Commit!
-	svn commit stable-12
+	svn commit -F /tmp/svn-commit.tmp stable-12
 USAGE
 }
 
@@ -128,6 +127,24 @@ merge_revisions() {
 	done
 }
 
+show_diff() {
+	local _branch="$1"
+
+	if command -v ydiff >/dev/null; then
+		ydiff "$_branch"
+	else
+		svn diff "$_branch" | less
+	fi
+}
+
+edit_commit_message() {
+	local _commit_message="$1"
+
+	# The editor is supposed to exit with a non-zero status if it would be
+	# undesired to commit the changes.
+	${VISUAL:-${EDITOR:-vi}} "$_commit_message"
+}
+
 command_marge() {
 	local _commit_message="/tmp/svn-commit.tmp"
 	local _should_generate_comments="no"
@@ -178,6 +195,8 @@ command_marge() {
 	fi
 
 	generate_commit_message "$_commit_message" "$_differential_revision" "$@"
+	show_diff "$_branch"
+	edit_commit_message "$_commit_message"
 }
 
 main() {
