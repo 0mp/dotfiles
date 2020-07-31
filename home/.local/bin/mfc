@@ -43,13 +43,13 @@ merge	Merge specified revisions with "svn merge", so the repository is ready
 
 	-c	Generate a commit message. If xclip is available, the commit
 		message will be put into clipboard.
-	 -D differential_rev
+	-D differential_rev
 		Specify differential revision (e.g., 22228) for the MFC commit.
-	 -M	Do not actually merge any commits into the branch.
-	 branch
+	-M	Do not actually merge any commits into the branch.
+	branch
 		Specify the branch to merge to (it has to be a valid
 		directory).
-	 rev ...
+	rev ...
 		Specify revisions to merge.
 
 Files:
