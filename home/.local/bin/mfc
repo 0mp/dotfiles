@@ -41,8 +41,10 @@ merge	Merge specified revisions with "svn merge", so the repository is ready
 
 	Supported options and arguments are:
 
-	-c	Generate a commit message. If xclip is available, the commit
-		message will be put into clipboard.
+	-c	Commit after merging specified revisions, reviewing the
+		resulting patch and editing the commit message.  If the editor
+		exits with a non-zero status when closing the commit message
+		file, then the changes are not going to be committed.
 	-D differential_rev
 		Specify differential revision (e.g., 22228) for the MFC commit.
 	-M	Do not actually merge any commits into the branch.
@@ -64,10 +66,9 @@ into 12-STABLE:
 	# Check out the branch you want to MFC to.
 	svn co svn+ssh://\${USER}@repo.freebsd.org/base/stable/12 stable-12
 	# Merge desired revisions, review the resulting patch,
-	# and prepare the commit message.
-	mfc merge -c -- stable-12 336481 336585 359126
-	# Commit!
-	svn commit -F /tmp/svn-commit.tmp stable-12
+	# and prepare the commit message. Subsequently, the changes are going
+	# to be committed.
+	mfc merge -c stable-12 336481 336585 359126
 USAGE
 }
 
@@ -147,7 +148,7 @@ edit_commit_message() {
 
 command_marge() {
 	local _commit_message="/tmp/svn-commit.tmp"
-	local _should_generate_comments="no"
+	local _should_attempt_to_commit="no"
 	local _should_merge="yes"
 	local _branch
 	local _revisions
@@ -160,7 +161,7 @@ command_marge() {
 			_differential_revision="D${OPTARG#D}"
 			;;
 		c)
-			_should_generate_comments="yes"
+			_should_attempt_to_commit="yes"
 			;;
 		M)
 			_should_merge="no"
@@ -196,7 +197,10 @@ command_marge() {
 
 	generate_commit_message "$_commit_message" "$_differential_revision" "$@"
 	show_diff "$_branch"
-	edit_commit_message "$_commit_message"
+	if edit_commit_message "$_commit_message" &&
+		[ "$_should_attempt_to_commit" = yes ]; then
+		svn commit -F "$_commit_message" "$_branch"
+	fi
 }
 
 main() {
