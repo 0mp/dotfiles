@@ -73,12 +73,14 @@ USAGE
 }
 
 generate_commit_message() {
+	local _commit_message
 	local _differential_revision
 	local _rev
 	local _revisions
 
-	_differential_revision="$1"
-	shift
+	_commit_message="$1"
+	_differential_revision="$2"
+	shift 2
 
 	{
 		printf 'MFC %s' "$1"
@@ -101,10 +103,10 @@ generate_commit_message() {
 				sed -e '/MFC after:/d' -e '/X-MFC-With:/d'
 
 		done
-	} | tee /tmp/svn-commit.tmp
+	} | tee "$_commit_message"
 
 	if command -v xclip >/dev/null; then
-		xclip -in /tmp/svn-commit.tmp -sel clip
+		xclip -in "$_commit_message" -sel clip
 	fi
 }
 
@@ -128,6 +130,7 @@ merge_revisions() {
 }
 
 command_marge() {
+	local _commit_message="/tmp/svn-commit.tmp"
 	local _should_generate_comments="no"
 	local _should_merge="yes"
 	local _branch
@@ -175,7 +178,7 @@ command_marge() {
 		merge_revisions "$_branch" "$@"
 	fi
 
-	generate_commit_message "$_differential_revision" "$@"
+	generate_commit_message "$_commit_message" "$_differential_revision" "$@"
 }
 
 main() {
