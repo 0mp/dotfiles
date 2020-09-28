@@ -68,7 +68,7 @@ flip_git() {
 flip_svn() {
 	local _url
 	_url="$(svn info | awk '/^URL/{print $2}')"
-	_committer='svn+ssh://${USER}@repo'
+	_committer="svn+ssh://${USER}@repo"
 	_anonymous_https='https://svn'
 	_anonymous_svn='svn://svn'
 
