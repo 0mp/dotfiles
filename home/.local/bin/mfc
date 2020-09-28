@@ -145,7 +145,7 @@ command_marge() {
 	local _differential_revision="none"
 
 	OPTIND=1
-	while getopts cD:M _o; do
+	while getopts cD: _o; do
 		case $_o in
 		D)
 			_differential_revision="D${OPTARG#D}"
