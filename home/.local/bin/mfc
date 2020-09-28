@@ -74,10 +74,10 @@ generate_commit_message() {
 	shift 2
 
 	{
-		printf 'MFC %s' "$1"
+		printf 'MFC r%s' "$1"
 		shift
 		for _rev in "$@"; do
-			printf ', %s' "$_rev"
+			printf ', r%s' "$_rev"
 		done
 		set -- $_revisions
 		printf ':\n'
