@@ -26,7 +26,7 @@ x_fonts:
   x_my_font: &x_my_font
     # family: JetBrains Mono
     # family: Fira Mono
-    family: Iosevka Curly Slab
+    family: Iosevka Term Curly Slab
 
 
 colors: *x_pencil_light
