@@ -10,6 +10,7 @@ clean_up() {
     pkill -F ~/.cache/sxhkd.pid
     pkill -F ~/.cache/status-bar.pid
     pkill -F ~/.cache/battery-alert.pid
+    rm -f -- ~/.cache/battery-alert-off
     pkill -F ~/.cache/eyes-alert.pid
 }
 

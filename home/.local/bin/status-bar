@@ -10,7 +10,7 @@ batteries() {
 	local _num_of_batteries
 	local _battery
 
-	if [ -f ~/.0mp-switch/battery-alert-off ]; then
+	if [ -f ~/.cache/battery-alert-off ]; then
 		printf -- '! '
 	fi
 
