@@ -97,6 +97,9 @@ test)
 		err "$?" "Could not get the default poudriere ports tree"
 	fi
 	port_path="${ports_tree}/${origin}"
+	if [ ! -d "$port_path" ]; then
+		err 1 "${port_path}: Invalid port path"
+	fi
 	if test_dependencies="$(make -C "${port_path}" test-depends-list | awk -F / '{printf "%s/%s ", $(NF - 1), $NF}')"
 	then :; else
 		err "$?" "Could not get test dependencies"
