@@ -33,4 +33,4 @@ feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/desktop/freebsd-l
 eval $(ssh-agent -s)
 gpg-connect-agent reloadagent /bye
 
-"${@:-dwm}"
+$(which dbus-run-session) "${@:-dwm}"
