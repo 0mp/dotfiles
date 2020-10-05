@@ -273,6 +273,17 @@ freebsd-on-t480: makaron sudo .PHONY
 		--path /etc/sysctl.conf --block 'hw.acpi.video.lcd0.brightness=15'
 
 	sudo sysrc kld_list+="i915kms"
+	printf '%s\n' \
+		'Section "Device"' \
+		'    Identifier     "Card0"' \
+		'    Driver    "intel"' \
+		'    Option    "DRI" "3"' \
+		'    Option    "AccelMethod" "SNA"' \
+		'    Option    "TearFree" "true"' \
+		'EndSection' \
+		| sudo ${__makaron} \
+		--marker "# {mark} Fix tearing" \
+		--path /usr/local/etc/X11/xorg.conf.d/98-tearfree.conf --in
 
 ##############################################################################
 
