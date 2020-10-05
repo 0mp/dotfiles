@@ -1,2 +1,2 @@
 super + shift + t
-    xclip -o | trans | xmessage -file - -default okay
+    alacritty -e sh -c "xclip -o | trans; printf '\n\n%s' 'Hit enter to close the window: '; read x"
