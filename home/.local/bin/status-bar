@@ -76,7 +76,7 @@ status_bar() {
 	printf ' | '
 
 	# Eyes alert
-	[ -f ~/.0mp-switch/eyes-alert-off ] && printf -- '!'
+	[ -f ~/.cache/eyes-alert-off ] && printf -- '!'
 	sysctl -n hw.acpi.video.lcd0.brightness
 	printf ' | '
 
