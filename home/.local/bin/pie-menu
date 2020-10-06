@@ -1,0 +1,15 @@
+#! /bin/sh -
+
+loop() {
+	items="
+IMG:/usr/local/share/pixmaps/firefox.png		firefox
+IMG:/usr/local/share/pixmaps/thunderbird.png		thunderbird
+"
+	printf '%s\t%s\n' $items | pmenu | nohup sh >/dev/null 3>&1
+}
+
+if [ "$1" = "loop" ]; then
+	loop
+else
+	xclickroot -r "${0}" loop
+fi

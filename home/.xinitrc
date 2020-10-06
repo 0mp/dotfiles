@@ -12,6 +12,7 @@ clean_up() {
     pkill -F ~/.cache/battery-alert.pid
     rm -f -- ~/.cache/battery-alert-off
     pkill -F ~/.cache/eyes-alert.pid
+    pkill -F ~/.cache/pie-menu.pid
 }
 
 trap 'clean_up' EXIT
@@ -23,6 +24,7 @@ daemon -p ~/.cache/sxhkd.pid sxhkd
 daemon -p ~/.cache/status-bar.pid status-bar
 daemon -p ~/.cache/battery-alert.pid battery-alert
 daemon -p ~/.cache/eyes-alert.pid eyes-alert
+daemon -p ~/.cache/pie-menu.pid pie-menu
 
 setxkbmap -option ctrl:nocaps
 setxkbmap pl
