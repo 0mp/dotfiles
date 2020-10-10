@@ -81,15 +81,17 @@ desktop_PACKAGES=	firefox xpdf vlc \
 			sxhkd google-translate-cli xclip \
 			sct feh find-cursor \
 			droid-fonts-ttf symbola jetbrains-mono \
-			slock arandr xclickroot pmenu
+			slock arandr xclickroot pmenu \
+			inputplug
 
 desktop: .PHONY
 	${__symlink_home} .xinitrc
 	mkdir -p ${HOME}/.local/bin
 	${__symlink_home} .local/bin/battery-alert
 	${__symlink_home} .local/bin/eyes-alert
-	${__symlink_home} .local/bin/status-bar
+	${__symlink_home} .local/bin/justctrlnocaps
 	${__symlink_home} .local/bin/pie-menu
+	${__symlink_home} .local/bin/status-bar
 	mkdir -p ${HOME}/.config/desktop
 	${__symlink_home} .config/desktop/freebsd-logo-by-claudiom.png
 	${__symlink_home} .config/desktop/plumb.sh

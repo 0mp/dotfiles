@@ -13,6 +13,7 @@ clean_up() {
     rm -f -- ~/.cache/battery-alert-off
     pkill -F ~/.cache/eyes-alert.pid
     pkill -F ~/.cache/pie-menu.pid
+    pkill -F ~/.cache/inputplug.pid
 }
 
 trap 'clean_up' EXIT
@@ -25,8 +26,8 @@ daemon -p ~/.cache/status-bar.pid status-bar
 daemon -p ~/.cache/battery-alert.pid battery-alert
 daemon -p ~/.cache/eyes-alert.pid eyes-alert
 daemon -p ~/.cache/pie-menu.pid pie-menu
+inputplug -0 -p ~/.cache/inputplug.pid -c ~/bin/justctrlnocaps
 
-setxkbmap -option ctrl:nocaps
 setxkbmap pl
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
