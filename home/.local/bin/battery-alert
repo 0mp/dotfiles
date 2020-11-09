@@ -3,6 +3,7 @@
 threshold_file="${HOME}/.cache/battery-alert-threshold"
 alert_off_file="${HOME}/.cache/battery-alert-off"
 threshold="15"
+sleeptime="30"
 
 printinfo() {
     printf 'INFO: %s\n' "$*" >&2
@@ -99,20 +100,19 @@ if [ -e "${threshold_file}" ]; then
     esac
 fi
 
-if ! battery_units="$(( $( sysctl -n hw.acpi.battery.units ) - 1 ))"; then
-    printerr "Failed to obtain number of battery units"
-    exit 1
-fi
-
 while :; do
-    sleep 10
+    if ! battery_units="$(( $( sysctl -n hw.acpi.battery.units ) - 1 ))"; then
+        printerr "Failed to obtain number of battery units"
+        exit 1
+    fi
     for battery in $(seq 0 "$battery_units")
     do
         if battery_charged "${battery}"
         then
-            continue 2
+            break
         fi
         set_alarm_off
         exit 0
     done
+    sleep "$sleeptime"
 done
