@@ -368,6 +368,7 @@ utils: .PHONY
 	${__symlink_home} .local/bin/flip-vcs-remote
 	${__symlink_home} .local/bin/get-list-of-ports-for-moinmoin
 	${__symlink_home} .local/bin/manlint
+	${__symlink_home} .local/bin/m3u8-get
 	${__symlink_home} .local/bin/previewman
 	${__symlink_home} .local/bin/radio
 	${__symlink_home} .local/bin/resizetty
