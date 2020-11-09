@@ -1,36 +1,65 @@
 #! /bin/sh -
 #
 # Listen to Internet radios.
-#
-# Usage: ./radio STATION
 
 set -eu
 
-for p in cvlc
+usage() {
+    printf '%s\n' "Usage: $(basename -- "$0") [<#>|<name>]"
+    echo
+    printf '%10s\t%s\t%s\t%s\n' NAME '#' PREFIX URL
+    printf '%10s\t%s\t%s\t%s\n' $radios
+} >&2
+
+radios="
+anon        0   a   http://anonradio.net:8000/anonradio
+dfm         1   d   https://dfm.nu/DFM_RTV_INT_1.m3u
+koollondon  2   k   http://uk1-pn.mixstream.net/8698.m3u
+luz         3   l   http://radioluz.pwr.edu.pl:8000/luzlofi.ogg
+soma        4   s   http://somafm.com/m3u/defcon256.m3u
+"
+
+players="cvlc"
+
+for p in $players
 do
-    if which -s -- "$p"
-    then
+    if command -v -- "$p" >/dev/null; then
         player="$p"
         break
     fi
 done
 
-case "$1" in
-    anon*)
-        exec "$player" 'http://anonradio.net:8000/anonradio'
-        ;;
-    df*)
-        exec "$player" 'http://dfm.nu/DFM_RTV_INT_1.m3u'
-        ;;
-    luz)
-        exec "$player" "http://radioluz.pwr.edu.pl:8000/luzlofi.ogg"
-        ;;
-    soma)
-        exec "$player" "http://somafm.com/m3u/defcon256.m3u"
-        ;;
-    *)
-        printf '"%s" %s\n' "$1" 'does not match any known radio stations' 1>&2
-        printf '%s\n' 'Pick one of those: anon dfm luz' 1>&2
+if [ "$#" -ge 1 ]; then
+    arg="$1"
+else
+    arg="$(printf '%s\n' "$radios" | awk '
+        /./ {
+            a[NR]=$2
+            count++
+        }
+        END {
+            for (n in a) {
+                srand()
+                idx = rand() * count
+                sub("[.].*", "", idx)
+                print idx
+            }
+        }
+    ')"
+fi
+
+printf "%s\n" "$radios" "END" | while read -r name num prefix url; do
+    [ "$name" = "" ] && continue # Skip empty lines.
+    if [ "$name" = "END" ]; then
+        printf 'ERROR: "%s" %s\n' "$arg" 'does not match any known radio stations.' 1>&2
+        usage
         exit 1
-        ;;
-esac
+    fi
+    if expr -- "$arg" : "$num" >/dev/null || expr -- "$arg" : "$prefix.*" >/dev/null; then
+        echo "$name"
+        "$player" "$url"
+        break
+    fi
+done
+
+# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
