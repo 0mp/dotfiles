@@ -20,7 +20,7 @@ unset _mp
 
 # Configure history.
 HISTCONTROL=ignoredups:erasedups
-HISTSIZE=20000
+HISTSIZE=200000
 
 # C-s and C-q key bindings for the flow control should be off by default.
 # http://stackoverflow.com/a/6951487/4694621
