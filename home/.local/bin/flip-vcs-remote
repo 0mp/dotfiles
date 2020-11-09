@@ -56,7 +56,7 @@ flip_git() {
 			new_url="ssh://git@${_domain}/${_path}.git"
 			;;
 		ssh*)
-			new_url="https://${_domain}/${_path}.git"
+			new_url="https://${_domain}/${_path}"
 			;;
 	esac
 
