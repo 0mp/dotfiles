@@ -1,0 +1,138 @@
+#! /bin/sh -
+#
+# SPDX short identifier: BSD-2-Clause
+#
+# Copyright 2020 Mateusz Piotrowski <0mp@FreeBSD.org>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+set -x
+
+usage() {
+	cat <<EOF 2>&1
+Usage: ${0##*/} vmdkfile vboxfile
+EOF
+}
+
+err() {
+	printf "ERROR: %s\n" "$*" 2>&1
+}
+
+clean_up_mdconfig() {
+	# XXX: Is this variable even defined?
+	sudo mdconfig -du "$_disk"
+}
+
+run_fsck() {
+	local _vmdk="$1"
+	local _raw="${_vmdk}.raw"
+
+	qemu-img convert -O raw "$_vmdk" "$_raw"
+	_disk="$(sudo mdconfig "$_raw")"
+	trap 'clean_up_mdconfig' EXIT
+
+	if sudo fsck.ext4 -cy "/dev/${_disk}s1"; then :;
+	else
+		_retcode="$?"
+		case $_retcode in
+		1)
+			;;
+		*)
+			err "Fsck failed with $_retcode"
+			exit 1
+			;;
+		esac
+	fi
+	clean_up_mdconfig
+	trap - EXIT
+
+	qemu-img convert -O vmdk "$_raw" "$_vmdk"
+}
+
+recover_original_uuid() {
+	local _vmdk="$1"
+	local _vbox="$2"
+
+	xpath -e "string(/VirtualBox/Machine/MediaRegistry/HardDisks/HardDisk[@location=\"${_vmdk##*/}\"]/@uuid)" "$_vbox" 2>/dev/null | \
+		tr -d '{}'
+}
+
+check_uuid_sanity() {
+	local _uuid="$1"
+
+	[ -z "$_uuid" ] && ! echo "$_uuid" | grep -Eo '.{8}-.{4}-.{4}-.{4}-.{12}$'
+}
+
+set_disk_uuid() {
+	local _vmdk="$1"
+	local _uuid="$2"
+
+	VBoxManage internalcommands sethduuid "$_vmdk" "$_uuid"
+}
+
+restore_disk_uuid() {
+	local _vmdk="$1"
+	local _vbox="$2"
+	local _uuid
+
+	_uuid="$(recover_original_uuid "$_vmdk" "$_vbox")"
+
+	if check_uuid_sanity "$_uuid"; then
+		err "Failed to obtain the UUID"
+		exit 1
+	fi
+
+	set_disk_uuid "$_vmdk" "$_uuid"
+}
+
+main() {
+	local _vmdk
+	local _vbox
+	local _raw
+	local _disk
+	local _retcode
+
+	set -u
+	set -e
+
+	if [ $# -ne 2 ]; then
+		usage
+		exit 1
+	fi
+
+	local _util
+	for _util in xpath VBoxManage fsck.ext4 qemu-img sudo; do
+		if ! command -v "${_util}" >/dev/null; then
+			err "Missing a required utility: ${_util}"
+			exit 1
+		fi
+	done
+
+	_vmdk="$1"
+	_vbox="$2"
+
+	run_fsck "$_vmdk"
+	restore_disk_uuid "$_vmdk" "$_vbox"
+}
+
+main "$@"

@@ -385,6 +385,7 @@ utils: .PHONY
 	${__symlink_home} .local/bin/nycbug-dmesgd
 	${__symlink_home} .local/bin/ports
 	${__symlink_home} .local/bin/unitek-init
+	${__symlink_home} .local/bin/fsck-vmdk
 	${__symlink_home} .local/bin/wifi-init
 
 ##############################################################################
