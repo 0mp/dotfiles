@@ -93,7 +93,7 @@ generate_commit_message() {
 				sed '1d;2d;3d;$d' |
 				sed -e '/MFC after:/d' -e '/X-MFC-With:/d'
 		done
-	} | tee "$_commit_message"
+	} | sed '$d' | sed '$d' | tee "$_commit_message"
 
 	if command -v xclip >/dev/null; then
 		xclip -in "$_commit_message" -sel clip
