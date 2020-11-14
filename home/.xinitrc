@@ -26,7 +26,7 @@ daemon -p ~/.cache/status-bar.pid status-bar
 daemon -p ~/.cache/battery-alert.pid battery-alert
 daemon -p ~/.cache/eyes-alert.pid eyes-alert
 daemon -p ~/.cache/pie-menu.pid pie-menu
-inputplug -0 -p ~/.cache/inputplug.pid -c ~/bin/justctrlnocaps
+daemon -p ~/.cache/inputplug.pid inputplug -0 -d -c ~/bin/justctrlnocaps
 
 setxkbmap pl
 
