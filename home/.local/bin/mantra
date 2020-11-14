@@ -1,0 +1,114 @@
+#! /bin/sh -
+#
+# SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+#
+# Copyright (c) 2020 Mateusz Piotrowski <0mp@FreeBSD.org>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHORS AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+set -eu
+
+err() {
+	local rc
+	rc="$1"
+	shift
+	printf 'ERROR: %s\n' "$*"
+	exit "$rc"
+}
+
+require() {
+	local cmd
+	cmd="$1"
+
+	if ! command -v -- "$cmd" >/dev/null; then
+		err 127 "Missing a dependency: $cmd"
+	fi
+}
+
+clean_up() {
+	# Kill any children of the parent process. Specifially, we want to kill
+	# the entr background job.
+	pkill -P $$
+
+	# Clean up temporary files.
+	rm -f -- "$generatedpage"
+}
+
+trap clean_up EXIT
+
+require entr
+require mandoc
+require tmux
+
+# Refuse to run outside of a tmux session.
+if [ -z "$TMUX" ]; then
+	err 1 "TMUX environment variable is empty; refusing to run outside of a tmux session"
+fi
+
+# Try to use XDG_RUNTIME_DIR as a TMPDIR if available. Otherwise, use TMPDIR if
+# set. Default to /tmp if needed.
+TMPDIR="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}"
+if generatedpage="$(mktemp)"; then
+	chmod 600 "$generatedpage"
+else
+	err 1 "Failed to create a temporary file"
+fi
+
+# Open the manual page passed as an argument. Otherwise, find a manual page in
+# the current directory (files ending with a dot and a single digit).
+if [ $# -gt 0 ]; then
+	manpage="$1"
+elif manpage="$(find . -maxdepth 1 -type f -name '*.[0-9]' -print -quit)" \
+     && [ -z "$manpage" ]; then
+	err 1 "No manual pages in the current directory to default to"
+fi
+
+# Unmark any existing tmux pane.
+tmux select-pane -M
+# Mark the current pane.
+tmux select-pane -m
+
+# Pregenerate the manual page so that there is something to display
+# to the user.
+mandoc -- "$manpage" | tee "$generatedpage" >/dev/null
+
+# Use entr to regenerate the manual page on each source code change. The -n
+# flag makes sure that entr does not try to take over the TTY. -p makes entr
+# wait for the first change before running the command specified via -s.
+# tee(1) is used instead of a simple shell redirection in order to make
+# mandoc(1) think that it outputs into a TTY. Once the new manual page is
+# generated, tmux sends "R" (a command which causes less(1) to redraw its
+# buffer) to the tmux pane containing the pager.
+printf "%s\n" "$manpage" | \
+	entr -n -p -s "
+		mandoc -- \"$manpage\" \
+		| tee \"$generatedpage\" >/dev/null \
+		  && tmux send-keys -t \"{marked}\" R
+	" >/dev/null 2>&1 &
+
+# Open the genenerated manual page with a pager. Try to honor user's
+# environment. It is not possible to just open the manual page with man(1) here
+# because some man(1) implementations (e.g., the FreeBSD one) pipe the
+# generated manual page into a pager. As a result, the page has no way to read
+# the generated manual page again if it changes.
+${MANPAGER:-${PAGER:-less -s}} -- "$generatedpage"
