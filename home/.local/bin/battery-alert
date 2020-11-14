@@ -13,7 +13,7 @@ printerr() {
     printf 'ERROR: %s\n' "$*" >&2
 }
 
-battery_charged() {
+battery_discharged() {
     acpiconf -i "$1" | awk -v discharging=no -v threshold="${threshold}" '
         /^State:[[:space:]]+discharging$/ {
             discharging = yes
@@ -23,9 +23,9 @@ battery_charged() {
         }
         END {
             if (int(capacity) < int(threshold)) {
-                exit 1
+                exit 0
             }
-            exit 0
+            exit 1
         }'
 }
 
@@ -105,14 +105,22 @@ while :; do
         printerr "Failed to obtain number of battery units"
         exit 1
     fi
-    for battery in $(seq 0 "$battery_units")
-    do
-        if battery_charged "${battery}"
-        then
-            break
+    case ${battery_units} in
+    1)
+        if battery_discharged 1; then
+            set_alarm_off
+            exit 0
         fi
-        set_alarm_off
-        exit 0
-    done
+        ;;
+    2)
+        if battery_discharged 1 && battery_discharged 2; then
+            set_alarm_off
+            exit 0
+        fi
+        ;;
+    *)
+        printerr "Unsupported number of batteries: $battery_units"
+        ;;
+    esac
     sleep "$sleeptime"
 done
