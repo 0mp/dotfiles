@@ -90,20 +90,19 @@ tmux select-pane -m
 
 # Pregenerate the manual page so that there is something to display
 # to the user.
-mandoc -- "$manpage" | tee "$generatedpage" >/dev/null
+script -q "$generatedpage" mandoc -- "$manpage" >/dev/null
 
 # Use entr to regenerate the manual page on each source code change. The -n
 # flag makes sure that entr does not try to take over the TTY. -p makes entr
 # wait for the first change before running the command specified via -s.
-# tee(1) is used instead of a simple shell redirection in order to make
+# script(1) is used instead of a simple shell redirection in order to make
 # mandoc(1) think that it outputs into a TTY. Once the new manual page is
 # generated, tmux sends "R" (a command which causes less(1) to redraw its
 # buffer) to the tmux pane containing the pager.
 printf "%s\n" "$manpage" | \
 	entr -n -p -s "
-		mandoc -- \"$manpage\" \
-		| tee \"$generatedpage\" >/dev/null \
-		  && tmux send-keys -t \"{marked}\" R
+		script -q \"$generatedpage\" mandoc -- \"$manpage\" \
+		&& tmux send-keys -t \"{marked}\" R
 	" >/dev/null 2>&1 &
 
 # Open the genenerated manual page with a pager. Try to honor user's
