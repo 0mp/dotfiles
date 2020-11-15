@@ -54,6 +54,12 @@ clean_up() {
 	rm -f -- "$generatedpage"
 }
 
+##
+
+program="${0##*/}"
+
+##
+
 trap clean_up EXIT
 
 require entr
@@ -62,7 +68,7 @@ require tmux
 
 # Refuse to run outside of a tmux session.
 if [ -z "$TMUX" ]; then
-	err 1 "TMUX environment variable is empty; refusing to run outside of a tmux session"
+	err 1 "TMUX environment variable is empty, aborting; $program works correctly only when executed from within a tmux session"
 fi
 
 # Try to use XDG_RUNTIME_DIR as a TMPDIR if available. Otherwise, use TMPDIR if
