@@ -83,11 +83,6 @@ elif manpage="$(find . -maxdepth 1 -type f -name '*.[0-9]' -print -quit)" \
 	err 1 "No manual pages in the current directory to default to"
 fi
 
-# Unmark any existing tmux pane.
-tmux select-pane -M
-# Mark the current pane.
-tmux select-pane -m
-
 # Pregenerate the manual page so that there is something to display
 # to the user.
 script -q "$generatedpage" mandoc -- "$manpage" >/dev/null
@@ -102,7 +97,7 @@ script -q "$generatedpage" mandoc -- "$manpage" >/dev/null
 printf "%s\n" "$manpage" | \
 	entr -n -p -s "
 		script -q \"$generatedpage\" mandoc -- \"$manpage\" \
-		&& tmux send-keys -t \"{marked}\" R
+		&& tmux send-keys -t \"${TMUX_PANE}\" R
 	" >/dev/null 2>&1 &
 
 # Open the genenerated manual page with a pager. Try to honor user's
