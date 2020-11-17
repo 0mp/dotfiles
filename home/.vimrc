@@ -17,6 +17,7 @@ Plug 'scrooloose/nerdcommenter'
 " {{{ Color schemes
 Plug 'vim-scripts/CycleColor' " Cycles through available colorschemes.
 Plug '0mp/vim-robpike'
+Plug 'altercation/vim-colors-solarized'
 " }}}
 " {{{ Languages
 " {{{ C++
