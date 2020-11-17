@@ -37,6 +37,10 @@ let g:go_highlight_build_constraints = 1
 " Make it possible to jump to definitions in other files.
 let g:go_def_mode='godef'
 " }}}
+" {{{ JavaScript
+Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
+" }}}
 " {{{ Markdown
 Plug 'moorereason/vim-markdownfmt'
 let g:markdownfmt_autosave = 1
@@ -245,6 +249,33 @@ set noswapfile
 " Help Vim detect CUDA source files.
 au BufNewFile,BufFilePre,BufRead *.cu set filetype=cuda
 au BufNewFile,BufFilePre,BufRead *.cuh set filetype=cuda
+
+" VueJS
+au FileType vue setlocal ts=2 sts=2 sw=2 expandtab
+au FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
+au FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+
+" Use appropriate comment style when working with .vue files.
+" Source: https://github.com/posva/vim-vue
+let g:ft = ''
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
 
 " Python
 au! FileType python setl nosmartindent
