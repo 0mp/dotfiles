@@ -1,6 +1,0 @@
-- name: Set up local workstation
-  hosts: local
-  roles:
-    - role: ly
-      tags: [ ly ]
-      when: ansible_facts['os_family'] == "FreeBSD"

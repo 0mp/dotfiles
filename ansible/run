@@ -1,5 +1,0 @@
-#! /bin/sh -
-
-tags="$(printf '%s\n' "${*:-all}" | tr " " ',')"
-
-ansible-playbook --ask-become ./workstation.yml --tags "${tags}"
