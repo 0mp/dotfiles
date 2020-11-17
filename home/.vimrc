@@ -441,6 +441,46 @@ endfun
 
 " Set correct indendation rules for the FreeBSD Ports.
 au BufRead /usr/ports/* set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
+
+" Vim configuration for the doc tree documents.
+if has("autocmd")
+    au BufNewFile,BufRead *.sgml,*.ent,*.xsl,*.xml call Set_SGML()
+    au BufNewFile,BufRead *.[1-9] call ShowSpecial()
+endif " has(autocmd)
+
+function Set_Highlights()
+    "match ExtraWhitespace /^\s* \s*\|\s\+$/
+    highlight default link OverLength ErrorMsg
+    match OverLength /\%71v.\+/
+    return 0
+endfunction " Set_Highlights()
+
+function ShowSpecial()
+    " setlocal list listchars=tab:>>,trail:*,eol:$
+    hi def link nontext ErrorMsg
+    return 0
+endfunction " ShowSpecial()
+
+function Set_SGML()
+    setlocal number
+    syn match sgmlSpecial "&[^;]*;"
+    setlocal syntax=sgml
+    setlocal filetype=xml
+    setlocal shiftwidth=2
+    setlocal textwidth=70
+    setlocal tabstop=8
+    setlocal softtabstop=2
+    setlocal formatprg="fmt -p"
+    setlocal autoindent
+    setlocal smartindent
+    " Rewrap paragraphs
+    noremap P gqj
+    " Replace spaces with tabs
+    noremap T :s/        /\t/<CR>
+    call ShowSpecial()
+    call Set_Highlights()
+    return 0
+endfunction " Set_SGML()
 " }}}
 " Section: Homebrewed hacks {{{
 " Sign highlight lines.
