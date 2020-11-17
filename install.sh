@@ -16,6 +16,7 @@ export _DRE="echo"
 else
 export _DRE=""
 fi
+BECOME=
 
 require() {
 	if ! command -v "$1" >/dev/null; then
