@@ -47,6 +47,7 @@ let g:markdownfmt_autosave = 0
 " }}}
 " {{{ LaTeX
 Plug 'lervag/vimtex'
+let g:tex_flavor = "latex"
 " }}}
 " {{{ Python
 Plug 'davidhalter/jedi-vim'
