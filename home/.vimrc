@@ -305,6 +305,14 @@ au FileType gitcommit setlocal colorcolumn=51
 au FileType make set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 au FileType sh set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
 au FileType c set noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
+au FileType cpp set expandtab shiftwidth=4 softtabstop=4 tabstop=4
+au FileType tex set expandtab shiftwidth=1 softtabstop=1 tabstop=1
+au FileType html set expandtab shiftwidth=2 softtabstop=2 tabstop=2
+au FileType scss set expandtab shiftwidth=2 softtabstop=2 tabstop=2
+au FileType css set expandtab shiftwidth=2 softtabstop=2 tabstop=2
+" Continue comment on a new line.
+au FileType tex set formatoptions+=cro
+
 
 " Templates.
 if has("autocmd")
@@ -315,6 +323,7 @@ if has("autocmd")
 endif
 
 au BufReadPost svn-commit*.tmp setlocal spell tw=75 noexpandtab shiftwidth=8 softtabstop=8 tabstop=8
+au BufReadPost *.toml setlocal ft=toml
 " }}}
 " Section: Visuals {{{
 "
