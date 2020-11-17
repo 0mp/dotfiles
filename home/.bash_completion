@@ -9,4 +9,8 @@ do
     [[ -f $f ]] && source "$f"
 done
 
+if command -v aws >/dev/null; then
+    complete -C '/usr/local/bin/aws_completer' aws
+fi
+
 # vim: filetype=bash softtabstop=4 shiftwidth=4 tabstop=4 expandtab
