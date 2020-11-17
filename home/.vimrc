@@ -70,7 +70,7 @@ if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
 
-Plug 'ludovicchabant/vim-gutentags'
+" Plug 'ludovicchabant/vim-gutentags'
 set statusline+=%{gutentags#statusline()}
 if executable('exctags')
     let g:gutentags_ctags_executable = "exctags"
