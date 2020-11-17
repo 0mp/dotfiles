@@ -1,0 +1,23 @@
+#! /bin/sh -
+
+set -eu
+
+checkout_immediates() {
+    [ -d ${HOME}/f/$1 ] && return
+    svnlite checkout --depth immediates https://svn.freebsd.org/$1 ${HOME}/f/$1'
+}
+
+update_immediates() {
+    (cd "${HOME}/f/$1" && { ! ls -A | xargs false || svnlite update --set-depth immediates . ;})
+}
+
+update_infinity() {
+    (cd ${HOME}/f/$1 && { ! ls -A | xargs false || svnlite update --set-depth infinity . ;})
+}
+
+mkdir -p ${HOME}/f
+checkout_immediates base
+update_infinity base/head
+checkout_immediates doc
+checkout_immediates ports
+update_infinity ports/head
