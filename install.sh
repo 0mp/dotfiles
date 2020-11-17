@@ -55,6 +55,7 @@ process_() {
 			;;
 		esac
 
+		src="$PWD/$file"
 		dest="$destdir/$target"
 
 		case $spec in
@@ -62,10 +63,10 @@ process_() {
 			err "Invalid spec: $file"
 			;;
 		*b*)
-			block "$dest" "$PWD/$file"
+			block "$dest" "$src"
 			;;
 		*c*)
-			"$PWD/$file" "$dest"
+			"$src" "$dest"
 			;;
 		esac
 
@@ -82,10 +83,10 @@ process_() {
 			(cd "$file" && process_ "$dest")
 			;;
 		*l*)
-			$_DRE $BECOME ln -Ffhv -- "$file" "$dest"
+			$_DRE $BECOME ln -Ffhv -- "$src" "$dest"
 			;;
 		*s*)
-			$_DRE $BECOME ln -Ffhsv -- "$file" "$dest"
+			$_DRE $BECOME ln -Ffhsv -- "$src" "$dest"
 			;;
 		esac
 
