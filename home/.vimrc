@@ -23,8 +23,8 @@ Plug 'altercation/vim-colors-solarized'
 " {{{ C++
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'rhysd/vim-clang-format'
-let g:clang_format#command='clang-format60'
-let g:clang_format#auto_format=1
+let g:clang_format#command='/usr/local/bin/clang-format80'
+let g:clang_format#auto_format=0
 " }}}
 " {{{ Go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
