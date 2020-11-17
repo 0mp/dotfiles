@@ -43,7 +43,7 @@ Plug 'posva/vim-vue'
 " }}}
 " {{{ Markdown
 Plug 'moorereason/vim-markdownfmt'
-let g:markdownfmt_autosave = 1
+let g:markdownfmt_autosave = 0
 " }}}
 " {{{ LaTeX
 Plug 'lervag/vimtex'
