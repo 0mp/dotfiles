@@ -32,8 +32,7 @@ make -C ${HOME}/h/goat clean install
 sysctl vfs.zfs.arc_max=$(expr -- $(sysctl -n hw.physmem) / 2)
 ```
 
-lagg(4) configuration
----------------------
+### lagg(4) configuration
 
 ```
 sysrc ifconfig_em0="up"
@@ -44,6 +43,8 @@ sysrc cloned_interfaces="lagg0"
 sysrc ifconfig_lagg0="up laggproto failover laggport em0 laggport wlan0 DHCP"
 ```
 
+## Git
+
 Sample `~/.gitconfig.local`
 ---------------------------
 
@@ -52,8 +53,17 @@ Sample `~/.gitconfig.local`
     path = ~/.gitconfig-rust
 ```
 
-`status-bar` development
-------------------------
+### Specifying how to reconcile divergent branches
+
+```
+git config pull.rebase false  # merge (the default strategy)
+git config pull.rebase true   # rebase                      
+git config pull.ff only       # fast-forward only           
+```
+
+## Other
+
+### `status-bar` development
 
 ```
 echo ~/.local/bin/status-bar | entr -c -s "date && pkill -SIGUSR1 -F ~/.cache/status-bar.pid"
