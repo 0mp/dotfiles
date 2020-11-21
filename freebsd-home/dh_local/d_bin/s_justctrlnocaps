@@ -1,5 +1,5 @@
 #! /bin/sh -
 
 if [ "$1" = XIDeviceEnabled ] && [ "$3" = XISlaveKeyboard ]; then
-	setxkbmap -option ctrl:nocaps
+	setxkbmap -option ctrl:nocaps pl
 fi

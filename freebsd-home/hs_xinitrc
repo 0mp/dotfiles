@@ -28,8 +28,6 @@ daemon -p ~/.cache/eyes-alert.pid eyes-alert
 daemon -p ~/.cache/pie-menu.pid pie-menu
 daemon -p ~/.cache/inputplug.pid inputplug -0 -d -c ~/bin/justctrlnocaps
 
-setxkbmap pl
-
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
 feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/desktop/freebsd-logo-by-claudiom.png"
