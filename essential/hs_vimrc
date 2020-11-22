@@ -320,6 +320,7 @@ if has("autocmd")
   augroup templates
     autocmd BufNewFile Makefile 0r ~/.vim/templates/Makefile
     autocmd BufNewFile makefile 0r ~/.vim/templates/makefile
+    autocmd BufNewFile Vagrantfile 0r ~/.vim/templates/Vagrantfile
   augroup END
 endif
 
