@@ -4,7 +4,8 @@
 for f in \
     ~/.bash_completion.d/* \
     ~/.local/share/bash-completion/* \
-    ~/freebsd/bash-completion-freebsd/completions/*
+    ~/freebsd/bash-completion-freebsd/completions/* \
+    /usr/local/google-cloud-sdk/completion.bash.inc
 do
     [[ -f $f ]] && source "$f"
 done
