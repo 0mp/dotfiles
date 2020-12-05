@@ -30,7 +30,7 @@ block() {
 	require realpath
 
 	file="$1"
-	input="$(realpath -- $2)"
+	input="$(realpath -- "$2")"
 
 	if [ ! -e "$file" ]; then
 		$_DRE $BECOME touch -- "$file"
