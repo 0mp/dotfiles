@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # The vbguest plugin is used to synchronize VirtualBox Guest Additions
+  # version of the guest with the VirtualBox version on the host.
+  config.vagrant.plugins = [ "vagrant-vbguest" ]
+
+  config.vm.box = "ubuntu/focal64"
+  config.vm.hostname = "vm"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 1024 * 4
+    vb.cpus = 2
+    #vb.gui = true
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    export DEBIAN_FRONTEND="noninteractive"
+    apt-get update
+    apt-get upgrade -y
+
+    # Install Docker-related bits.
+    apt-get install -y docker.io
+
+    # Set an appropriate timezone.
+    timedatectl set-timezone Europe/Berlin
+
+    # Add user vagrant to the docker group so that it is possible to operate
+    # the docker command without sudo.
+    usermod -aG docker vagrant
+  SHELL
+end
