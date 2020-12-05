@@ -78,6 +78,10 @@ status_bar() {
 	# Eyes alert
 	[ -f ~/.cache/eyes-alert-off ] && printf -- '!'
 	sysctl -n hw.acpi.video.lcd0.brightness
+	if [ -e ~/.cache/sctd.log ]; then
+		printf ' '
+		awk 'END {print $NF}' ~/.cache/sctd.log
+	fi
 	printf ' | '
 
 	# Battery
