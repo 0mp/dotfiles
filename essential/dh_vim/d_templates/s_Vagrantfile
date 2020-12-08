@@ -15,16 +15,21 @@ Vagrant.configure("2") do |config|
     #vb.gui = true
   end
 
-  config.vm.provision "shell", inline: <<-SHELL
+  config.vm.provision "shell", name: "essential-setup", inline: <<-SHELL
     export DEBIAN_FRONTEND="noninteractive"
-    apt-get update
-    apt-get upgrade -y
-
-    # Install Docker-related bits.
-    apt-get install -y docker.io
+    apt-get update -q
+    apt-get upgrade -qy
 
     # Set an appropriate timezone.
     timedatectl set-timezone Europe/Berlin
+  SHELL
+
+  config.vm.provision "shell", name: "docker-setup", inline: <<-SHELL
+    if ! which docker >/dev/null; then
+      export DEBIAN_FRONTEND="noninteractive"
+      apt-get update -q
+      apt-get install -qy docker.io
+    fi
 
     # Add user vagrant to the docker group so that it is possible to operate
     # the docker command without sudo.
