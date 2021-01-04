@@ -11,13 +11,15 @@ usage() {
     printf '%10s\t%s\t%s\t%s\n' $radios
 } >&2
 
-radios="
-anon        0   a   http://anonradio.net:8000/anonradio
-dfm         1   d   https://dfm.nu/DFM_RTV_INT_1.m3u
-koollondon  2   k   http://uk1-pn.mixstream.net/8698.m3u
-luz         3   l   http://radioluz.pwr.edu.pl:8000/luzlofi.ogg
-soma        4   s   http://somafm.com/m3u/defcon256.m3u
-"
+radios="$(cat <<RADIOS | awk '{ $1 = $1 " " (NR - 1); print }'
+anon        a   http://anonradio.net:8000/anonradio
+dfm         d   https://dfm.nu/DFM_RTV_INT_1.m3u
+kampus      ka  http://193.0.98.66:8005/listen.pls
+koollondon  ko  http://uk1-pn.mixstream.net/8698.m3u
+luz         l   http://radioluz.pwr.edu.pl:8000/luzlofi.ogg
+soma        s   http://somafm.com/m3u/defcon256.m3u
+RADIOS
+)"
 
 players="cvlc"
 
