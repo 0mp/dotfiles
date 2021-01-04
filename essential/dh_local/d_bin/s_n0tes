@@ -51,10 +51,9 @@ main() {
 		die 1 "ERROR: Invalid snippet name: $_name"
 	fi
 
-	_snippet=$(eval printf '%s\\n' \"\${snippet_${_name}}\")
-	printf '%s\n' "$_snippet"
+	get_snippet_${_name}
 	if command -v xclip >/dev/null; then
-		printf '%s\n' "$_snippet" | xclip -in -sel clipboard
+		get_snippet_${_name} | xclip -in -sel clipboard
 	fi
 }
 
@@ -64,7 +63,8 @@ main() {
 snippets=""
 
 snippets="${snippets}${snippets:+ }sh_getopts"
-snippet_sh_getopts="$(cat <<'SNIPPET'
+get_snippet_sh_getopts() {
+	cat <<'SNIPPET'
 OPTIND=1
 while getopts ab: opt; do
 	case "$opt" in
@@ -83,23 +83,25 @@ if [ "$OPTIND" -ne 0 ]; then
 	shift "$(( OPTIND - 1 ))"
 fi
 SNIPPET
-)"
+}
 
 snippets="${snippets}${snippets:+ }sh_require"
-snippet_sh_require="$(cat <<'SNIPPET'
+get_snippet_sh_require() {
+	cat <<'SNIPPET'
 require() {
 	if ! command -v "$1" >/dev/null; then
 		die 1 "ERROR: Command not found: $1"
 	fi
 }
 SNIPPET
-)"
+}
 
 snippets="${snippets}${snippets:+ }sh_modeline"
-snippet_sh_modeline="$(cat <<'SNIPPET'
+get_snippet_sh_modeline() {
+	cat <<'SNIPPET'
 # vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
 SNIPPET
-)"
+}
 
 #
 # Body
