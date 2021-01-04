@@ -1,0 +1,84 @@
+#! /bin/sh -
+
+set -eu
+
+die() {
+	_rc="$1"
+	shift
+	printf "%s\n" "$*" >&2
+	exit "$_rc"
+}
+
+require() {
+	if ! command -v "$1" >/dev/null; then
+		die 1 "ERROR: Command not found: $1"
+	fi
+}
+
+main() {
+	_shall_copy_to_clipboard="no"
+
+	require fzf
+
+	_name="${1:-}"
+	if [ "$_name" = "" ]; then
+		_name=$(printf '%s\n' $snippets | fzf)
+	elif ! LC_ALL=C expr "X$_name" : "X[[:alnum:]]*$" >/dev/null; then
+		die 1 "ERROR: Invalid snippet name: $_name"
+	fi
+
+	_snippet=$(eval printf '%s\\n' \"\${snippet_${_name}}\")
+	printf '%s\n' "$_snippet"
+	if command -v xclip >/dev/null; then
+		printf '%s\n' "$_snippet" | xclip -in -sel clipboard
+	fi
+}
+
+#
+# Snippets
+#
+snippets=""
+
+snippets="${snippets}${snippets:+ }sh_getopts"
+snippet_sh_getopts="$(cat <<'SNIPPET'
+OPTIND=1
+while getopts ab: opt; do
+	case "$opt" in
+	a)
+		echo "-a"
+		;;
+	b)
+		echo "-b $OPTARG"
+		;;
+	?)
+		exit 1
+		;;
+	esac
+done
+if [ "$OPTIND" -ne 0 ]; then
+	shift "$(( OPTIND - 1 ))"
+fi
+SNIPPET
+)"
+
+snippets="${snippets}${snippets:+ }sh_require"
+snippet_sh_require="$(cat <<'SNIPPET'
+require() {
+	if ! command -v "$1" >/dev/null; then
+		die 1 "ERROR: Command not found: $1"
+	fi
+}
+SNIPPET
+)"
+
+snippets="${snippets}${snippets:+ }sh_modeline"
+snippet_sh_modeline="$(cat <<'SNIPPET'
+# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
+SNIPPET
+)"
+
+#
+# Body
+#
+
+main "$@"
