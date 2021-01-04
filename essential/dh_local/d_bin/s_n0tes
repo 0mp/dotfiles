@@ -62,6 +62,18 @@ main() {
 #
 snippets=""
 
+snippets="${snippets}${snippets:+ }sh_die"
+get_snippet_sh_die() {
+	cat <<'SNIPPET'
+die() {
+	_rc="$1"
+	shift
+	printf "%s\n" "$*" >&2
+	exit "$_rc"
+}
+SNIPPET
+}
+
 snippets="${snippets}${snippets:+ }sh_getopts"
 get_snippet_sh_getopts() {
 	cat <<'SNIPPET'
