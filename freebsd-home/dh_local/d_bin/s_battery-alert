@@ -122,3 +122,5 @@ while :; do
     esac
     sleep "$sleeptime"
 done
+
+# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
