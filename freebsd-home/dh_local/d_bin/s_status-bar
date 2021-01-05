@@ -57,7 +57,7 @@ network_interface() {
 	_if="$1"
 	_ip="$(ifconfig "$_if" | awk '/\tinet /{print $2}')"
 	_ssid="$(ifconfig "$_if" | awk '/\tssid /{print $2}')"
-	printf -- '%s%s%s%s%s' "${_if:-...}" "${_if:+ }" "${_ssid:-}" "${_ssid:+ }" "${_ip:-}"
+	printf -- '%s%s%s' "${_ssid:-}" "${_ssid:+ }" "${_ip:-}"
 	printf -- ' | '
 }
 
