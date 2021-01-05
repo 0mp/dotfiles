@@ -1082,8 +1082,7 @@ x_fonts:
     #family: Iosevka Term Curly Slab
     family: Fantasque Sans Mono
 
-#colors: *x_pencil_light
-colors: *solarized_light
+colors: *x_pencil_light
 
 font:
   normal: *x_my_font
