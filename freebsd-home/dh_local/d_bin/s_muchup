@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 #
-# Copyright (c) 2018-2019 Mateusz Piotrowski <0mp@FreeBSD.org>
+# Copyright (c) 2018-2021 Mateusz Piotrowski <0mp@FreeBSD.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -31,7 +31,7 @@
 clean_ports_modules() {
     for conf in /etc/src.conf /etc/make.conf
     do
-        for module in $(sysrc -q -f "$conf" PORTS_MODULES)
+        for module in $(make -f "$conf" -V PORTS_MODULES)
         do
             cd "/usr/src/$module" && make clean
         done
