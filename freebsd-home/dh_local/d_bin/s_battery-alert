@@ -14,18 +14,16 @@ printerr() {
 }
 
 battery_discharged() {
-    acpiconf -i "$1" | awk -v discharging=no -v threshold="${threshold}" '
-        /^State:[[:space:]]+discharging$/ {
-            discharging = yes
-        }
+    acpiconf -i "$1" | awk -v threshold="${threshold}" '
         /^Remaining capacity:/ {
             capacity = substr($3, 1, length($3) -1)
         }
         END {
             if (int(capacity) < int(threshold)) {
                 exit 0
+            } else {
+                exit 1
             }
-            exit 1
         }'
 }
 
@@ -101,19 +99,19 @@ if [ -e "${threshold_file}" ]; then
 fi
 
 while :; do
-    if ! battery_units="$(( $( sysctl -n hw.acpi.battery.units ) - 1 ))"; then
+    if ! battery_units="$(sysctl -n hw.acpi.battery.units)"; then
         printerr "Failed to obtain number of battery units"
         exit 1
     fi
     case ${battery_units} in
     1)
-        if battery_discharged 1; then
+        if battery_discharged 0; then
             set_alarm_off
             exit 0
         fi
         ;;
     2)
-        if battery_discharged 1 && battery_discharged 2; then
+        if battery_discharged 0 && battery_discharged 1; then
             set_alarm_off
             exit 0
         fi
