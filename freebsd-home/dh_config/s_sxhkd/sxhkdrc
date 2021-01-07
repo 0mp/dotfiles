@@ -1,5 +1,10 @@
 super + shift + t
-    alacritty -e sh -c "xclip -o | trans; printf '\n\n%s' 'Hit enter to close the window: '; read x"
+    alacritty -e sh -c " \
+        xclip -o \
+        | trans -show-prompt-message n -show-languages n -show-alternatives n; \
+        printf '\n\n%s' 'Hit enter to close the window: '; \
+        read x \
+    "
 
 super + alt + l
     slock
