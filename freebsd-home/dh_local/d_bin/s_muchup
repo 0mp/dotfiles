@@ -25,21 +25,14 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# I've found out that the PORTS_MODULES mechanism does not work well if it is
-# not cleaned before running `buildkernel`. The port does not get rebuiled
-# resulting in an installation of a port too old for the newly built kernel.
-clean_ports_modules() {
-    for conf in /etc/src.conf /etc/make.conf
-    do
-        for module in $(make -f "$conf" -V PORTS_MODULES)
-        do
-            cd "/usr/src/$module" && make clean
-        done
-    done
+## Functions
+
+as_user() {
+    sudo --login --user "$SUDO_USER" -- "$@"
 }
 
-get_current_date() {
-    date +%Y-%m-%d_%Hh%Mm%Ss || echo 'YYYY-MM-DD_hhhmmmsss'
+as_root() {
+    sudo --login --user "root" -- "$@"
 }
 
 die() {
@@ -47,144 +40,164 @@ die() {
     exit 1
 }
 
-action=
-logfile=
-register_action() {
-    action="$1"
-    logfile="$logdir/$(get_current_date)-$action.log"
-    touch -- "$logfile"
-}
+usage() {
+    cat << USAGE
+Usage: sudo $progname [-hikpsw]
 
-finish_action() {
-    touch -- "$logdir/$(get_current_date)-$action.done"
-}
-
-run() {
-    action="$1"
-    shift
-    if register_action "$action"
-    then :; else
-        return
-    fi
-    (
-        (
-            (
-                (
-                    { "$@" 2>&1 || die "Failed to finish \"$action\""; } 3>&- 4>&-
-                    echo $? >&3
-                ) | tee -a "$logfile" >&4
-            ) 3>&1
-        ) | (read -r xs; exit "$xs")
-    ) 4>&1
-    finish_action
-}
-
-version=3.2.0
-
-if [ $# -eq 0 ] || [ "$1" = -h ]
-then
-    cat <<__end_of_usage
-Usage: $0 [-h] [-kipsw]
 Version: $version
-__end_of_usage
-    exit 0
-elif [ 0 -ne "$(id -u)" ]
-then
-    die 'muchup has to be run as root'
-fi
 
-logdir="/var/log/muchup/$(get_current_date)_$(printf '%s' "$*" | tr ' ' '_')"
-if [ -d "$logdir" ]
-then
-    die "\"$logdir\" should not exist"
-elif mkdir -p -- "$logdir" && [ -d "$logdir" ]
-then :; else
-    die "Failed to create \"$logdir\""
-fi
+Options:
+-h  Show usage message.
+-i  Install the system with beinstall(8).
+-k  Run buildkernel.
+-p  Update the ports tree.
+-s  Update the src tree.
+-w  Run buildworld.
 
-set -e
+Environment:
+SUDO_USER  Unprivlieged user who owns trees and runs build jobs.
+USAGE
+}
 
-ncpu="$(sysctl -n hw.ncpu)"
+require() {
+	if ! command -v "$1" >/dev/null; then
+		die "Command not found: $1"
+	fi
+}
 
-set -- $(getopt kipsw $*)
+update_git() {
+    local _dir="$1"
+    local _url="$2"
+    shift 2
 
-while :; do
-    case "$1" in
-        -k)
-            kernel=yes
-            shift
-            ;;
-        -i)
-            install=yes
-            shift
-            ;;
-        -p)
-            ports=yes
-            shift
-            ;;
-        -s)
-            src=yes
-            shift
-            ;;
-        -w)
-            world=yes
-            shift
-            ;;
-        --)
-            shift
-            break
-            ;;
-    esac
-done
+    as_user mkdir -p -- "$base_dir"
 
-# Get the latest source tree.
-if [ "$src" ]
-then
-    if ! [ -d /usr/src/.svn ]
-    then
-        run 'src-snapshot' zfs snapshot "zroot/usr/src@$(get_current_date)"
-        run 'src-rm' rm -rf -- /usr/src/*
-        run 'src-checkout' svnlite co https://svn.freebsd.org/base/head /usr/src
+    if [ -d "$_dir" ]; then
+        as_user git -C "$_dir" pull --autostash
     else
-        run 'src-update' svnlite update /usr/src
+        as_user git clone "$@" "$_url" "$_dir"
     fi
-fi
+}
 
-if [ "$ports" ]
-then
-    if ! [ -d /usr/ports/.svn ]
-    then
-        run 'ports-snapshot' zfs snapshot "zroot/usr/ports@$(get_current_date)"
-        run 'ports-rm' rm -rf -- /usr/ports/*
-        run 'ports-checkout' svnlite co https://svn.freebsd.org/ports/head /usr/ports
-    else
-        run 'ports-update' svnlite update /usr/ports
+update_src() {
+    update_git "$src_dir" https://git.freebsd.org/src.git \
+        --config remote.freebsd.fetch='+refs/notes/*:refs/notes/*'
+}
+
+update_ports() {
+    update_git "$ports_dir" https://github.com/freebsd/freebsd-ports
+}
+
+parse_args() {
+    # Print usage and quit if no arguments were provided.
+    if [ $# = 0 ]; then
+        usage
+        exit 0
     fi
-fi
 
-if [ "$world" ]
-then
-    cd /usr/src
-    # XXX: Track filemon loading.
-    kldstat -q -n filemon || kldload filemon
-    run 'buildworld' make -j$ncpu buildworld
-fi
+    # Try to extract the unprivliged username from SUDO_USER.
+    user="$SUDO_USER"
+    # The directory to store source trees.
+    base_dir="/usr/home/$user/.local/share/freebsd"
+    # The directory to store the FreeBSD src tree.
+    src_dir="$base_dir/src"
+    # The directory to store the FreeBSD ports tree.
+    ports_dir="$base_dir/ports"
 
-if [ "$kernel" ]
-then
-    run 'clean-modules' clean_ports_modules
+    # Parse command-line arguments.
+    OPTIND=1
+    while getopts hkipsw _opt; do
+        case "$_opt" in
+            h) usage; exit 0 ;;
+            i) flag_i="yes" ;;
+            k) flag_k="yes" ;;
+            p) flag_p="yes" ;;
+            s) flag_s="yes" ;;
+            w) flag_w="yes" ;;
+            ?)
+                die "Unknown option: $_opt"
+                ;;
+        esac
+    done
+    if [ "$OPTIND" -ne 0 ]; then
+        shift "$(( OPTIND - 1 ))"
+    fi
 
-    cd /usr/src
-    # XXX: Track filemon loading.
-    kldstat -q -n filemon || kldload filemon
-    run 'buildkernel' make -j$ncpu buildkernel
-fi
+    # Require that variable "user" is set.
+    if [ -z "$user" ]; then
+        die "User not set"
+    fi
 
-if [ "$install" ]
-then
-    cd /usr/src
-    # XXX: Track beinstall.
-    env NO_PKG_UPGRADE=YES ./tools/build/beinstall.sh -j"$ncpu"
-fi
+    # Make sure that the value of user makes sense.
+    if [ "$user" = "root" ]; then
+        die "User must not be set to root"
+    fi
+    if ! id "$user" >/dev/null 2>&1; then
+        die "User does not exist: $user"
+    fi
+}
+
+build_world() {
+    as_user make -C "$src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir" buildworld
+}
+
+build_kernel() {
+    as_user make -C "$src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir" buildkernel
+}
+
+run_beinstall() {
+    as_root sh -c "$(cat << BEINSTALL
+cd "$src_dir" && \
+env NO_PKG_UPGRADE=YES ./tools/build/beinstall.sh -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir"
+BEINSTALL
+    )"
+}
+
+main() {
+    # Make sure that all the necessary programs are available.
+    require git
+
+    # Parse the command-line arguments.
+    parse_args "$@"
+
+    # Run the actual commands to update the system.
+    if [ "$flag_w" = "yes" ] || [ "$flag_k" = "yes" ]; then
+        as_root kldload -n filemon
+    fi
+    if [ "$flag_s" = "yes" ]; then
+        update_src
+    fi
+    if [ "$flag_p" = "yes" ]; then
+        update_ports
+    fi
+    if [ "$flag_w" = "yes" ]; then
+        build_world
+    fi
+    if [ "$flag_k" = "yes" ]; then
+        build_kernel
+    fi
+    if [ "$flag_i" = "yes" ]; then
+        run_beinstall
+    fi
+}
+
+## Globals & constants
+
+progname="${0##*/}"
+version="4.0.0"
+
+flag_i="no"
+flag_k="no"
+flag_p="no"
+flag_s="no"
+flag_w="no"
+
+## Body
+
+set -eu
+
+main "$@"
+
+exit 0
 
 # vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
