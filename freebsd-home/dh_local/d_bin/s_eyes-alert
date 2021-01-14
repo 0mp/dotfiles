@@ -11,10 +11,11 @@ require() {
 
 require notify-send
 
-pause="$((60 * 15))"
+pause="$((60 * 20))"
+duration="$(( 1000 * 20 ))"
 
 while :; do
     sleep "$pause"
     [ -f ~/.cache/eyes-alert-off ] && continue
-    notify-send --urgency=low "#.#"
+    notify-send --expire-time="$duration" --urgency=low "#.#"
 done
