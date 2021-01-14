@@ -1,5 +1,12 @@
 #! /bin/sh -
 
+require() {
+	if ! command -v "$1" >/dev/null; then
+		printf "%s\n" "ERROR: Dependency not found: $1" >&2
+		exit 1
+	fi
+}
+
 loop() {
 	items="
 IMG:/usr/local/share/pixmaps/firefox.png	firefox
@@ -8,6 +15,9 @@ IMG:/home/0mp/Downloads/lock.png			slock
 "
 	printf '%s\t%s\n' $items | pmenu | nohup sh >/dev/null 3>&1
 }
+
+require pmenu
+require xclickroot
 
 if [ "$1" = "loop" ]; then
 	loop
