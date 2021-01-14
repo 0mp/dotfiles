@@ -24,7 +24,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-set -eu
+#
+# Functions
+#
 
 die() {
 	_rc="$1"
@@ -39,44 +41,73 @@ require() {
 	fi
 }
 
-main() {
-	_shall_copy_to_clipboard="no"
+get_snippet_name() {
+	awk '
+		/^BEGIN/ {
+			print $2
+		}
+	' "$0"
+}
 
+get_snippet_content() {
+	_name="$1"
+	awk -v name="$_name" '
+		BEGIN {
+			printing = 0;
+		}
+		/^BEGIN/ && $2 == name {
+			printing = 1;
+			next
+		}
+		/^END/ {
+			printing = 0;
+			next
+		}
+		printing {
+			print
+		}
+	' "$0"
+}
+
+main() {
 	require fzf
 
 	_name="${1:-}"
 	if [ "$_name" = "" ]; then
-		_name=$(printf '%s\n' $snippets | fzf)
+		_name=$(get_snippet_name | fzf)
 	elif ! LC_ALL=C expr "X$_name" : "X[[:alnum:]]*$" >/dev/null; then
 		die 1 "ERROR: Invalid snippet name: $_name"
 	fi
 
-	get_snippet_${_name}
+	get_snippet_content "${_name}"
 	if command -v xclip >/dev/null; then
-		get_snippet_${_name} | xclip -in -sel clipboard
+		get_snippet_content "${_name}" | xclip -in -sel clipboard
 	fi
 }
 
 #
+# Body
+#
+
+set -eu
+
+main "$@"
+exit 0
+
+#
 # Snippets
 #
-snippets=""
 
-snippets="${snippets}${snippets:+ }sh_die"
-get_snippet_sh_die() {
-	cat <<'SNIPPET'
+BEGIN sh_die
 die() {
 	_rc="$1"
 	shift
 	printf "%s\n" "$*" >&2
 	exit "$_rc"
 }
-SNIPPET
-}
+END
 
-snippets="${snippets}${snippets:+ }sh_getopts"
-get_snippet_sh_getopts() {
-	cat <<'SNIPPET'
+BEGIN sh_getopts
 OPTIND=1
 while getopts ab: opt; do
 	case "$opt" in
@@ -94,30 +125,17 @@ done
 if [ "$OPTIND" -ne 0 ]; then
 	shift "$(( OPTIND - 1 ))"
 fi
-SNIPPET
-}
+END
 
-snippets="${snippets}${snippets:+ }sh_require"
-get_snippet_sh_require() {
-	cat <<'SNIPPET'
+BEGIN sh_modeline
+# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
+END
+
+BEGIN sh_require
 require() {
 	if ! command -v "$1" >/dev/null; then
-		printf "ERROR: Command not found: $1" >&2
+		printf "%s\n" "ERROR: Command not found: $1" >&2
 		exit 1
 	fi
 }
-SNIPPET
-}
-
-snippets="${snippets}${snippets:+ }sh_modeline"
-get_snippet_sh_modeline() {
-	cat <<'SNIPPET'
-# vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
-SNIPPET
-}
-
-#
-# Body
-#
-
-main "$@"
+END
