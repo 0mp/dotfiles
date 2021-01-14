@@ -102,7 +102,8 @@ get_snippet_sh_require() {
 	cat <<'SNIPPET'
 require() {
 	if ! command -v "$1" >/dev/null; then
-		die 1 "ERROR: Command not found: $1"
+		printf "ERROR: Command not found: $1" >&2
+		exit 1
 	fi
 }
 SNIPPET
