@@ -1,0 +1,28 @@
+#!/bin/sh
+
+. /etc/rc.subr
+
+name="status_bar"
+_progname="status-bar"
+_interpreter="/bin/sh"
+
+rcvar="${name}_enable"
+# Enable the service by default.
+eval ${rcvar}="yes"
+
+required_dir="$HOME/.cache"
+procname="$_interpreter"
+pidfile="$HOME/.cache/$name.pid"
+
+# This hack makes it possible to run rc(8) services as a non-root user. It is
+# unclear why "me" works and other values like "default" or "$USER" do not.
+eval ${name}_login_class="me"
+
+command="/usr/sbin/daemon"
+command_args="-l user -o $HOME/.cache/$name.log -p $pidfile -T $_progname -- $_interpreter $_progname"
+
+extra_commands="log reload"
+log_cmd="${PAGER:-cat} $HOME/.cache/$name.log"
+sig_reload="SIGUSR1"
+
+run_rc_command "$1"

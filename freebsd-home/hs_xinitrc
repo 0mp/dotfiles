@@ -7,14 +7,13 @@ clean_up() {
         kill "$SSH_AGENT_PID"
     fi
 
-    pkill -F ~/.cache/sxhkd.pid
-    pkill -F ~/.cache/status-bar.pid
-    pkill -F ~/.cache/battery-alert.pid
-    rm -f -- ~/.cache/battery-alert-off
-    pkill -F ~/.cache/eyes-alert.pid
-    pkill -F ~/.cache/pie-menu.pid
-    pkill -F ~/.cache/inputplug.pid
-    pkill -F ~/.cache/sctd.pid
+    ~/.local/etc/rc.d/sxhkd stop
+    ~/.local/etc/rc.d/status-bar stop
+    ~/.local/etc/rc.d/battery-alert stop
+    ~/.local/etc/rc.d/eyes-alert stop
+    ~/.local/etc/rc.d/pie-menu stop
+    ~/.local/etc/rc.d/inputplug stop
+    ~/.local/etc/rc.d/sctd stop
 }
 
 trap 'clean_up' EXIT
@@ -22,13 +21,13 @@ trap 'clean_up' EXIT
 export LANG=en_US.UTF-8
 
 mkdir -p ~/.cache
-daemon -o ~/.cache/sxhkd.log -p ~/.cache/sxhkd.pid sxhkd
-daemon -o ~/.cache/status-bar.log -p ~/.cache/status-bar.pid status-bar
-daemon -o ~/.cache/battery-alert.log -p ~/.cache/battery-alert.pid battery-alert
-daemon -o ~/.cache/eyes-alert.log -p ~/.cache/eyes-alert.pid eyes-alert
-daemon -o ~/.cache/pie-menu.log -p ~/.cache/pie-menu.pid pie-menu
-daemon -o ~/.cache/inputplug.log -p ~/.cache/inputplug.pid inputplug -0 -d -c ~/bin/justctrlnocaps
-daemon -o ~/.cache/sctd.log -p ~/.cache/sctd.pid sctd --latitude 52.520008 --longitude 13.404954
+~/.local/etc/rc.d/sxhkd start
+~/.local/etc/rc.d/status-bar start
+~/.local/etc/rc.d/battery-alert start
+~/.local/etc/rc.d/eyes-alert start
+~/.local/etc/rc.d/pie-menu start
+~/.local/etc/rc.d/inputplug start
+~/.local/etc/rc.d/sctd start
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
