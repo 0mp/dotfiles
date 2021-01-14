@@ -13,7 +13,7 @@ IMG:/usr/local/share/pixmaps/firefox.png	firefox
 IMG:/usr/local/share/pixmaps/thunderbird.png	thunderbird
 IMG:/home/0mp/Downloads/lock.png			slock
 "
-	printf '%s\t%s\n' $items | pmenu | nohup sh >/dev/null 3>&1
+	printf '%s\t%s\n' $items | pmenu | sh >/dev/null 3>&1
 }
 
 require pmenu
@@ -22,5 +22,5 @@ require xclickroot
 if [ "$1" = "loop" ]; then
 	loop
 else
-	xclickroot -r "${0}" loop
+	exec xclickroot -r "${0}" loop
 fi
