@@ -17,7 +17,7 @@ pidfile="$HOME/.cache/$name.pid"
 eval ${name}_login_class="me"
 
 command="/usr/sbin/daemon"
-command_args="-l user -o $HOME/.cache/$name.log -p $pidfile -T $procname $procname"
+command_args="-l user -o $HOME/.cache/$name.log -p $pidfile -T $procname -- $procname"
 
 extra_commands="log reload"
 log_cmd="${PAGER:-cat} $HOME/.cache/$name.log"
