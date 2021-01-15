@@ -10,10 +10,14 @@ super + alt + l
     slock
 
 XF86AudioLowerVolume
-    mixer vol -2
+    mixer -S vol -2
 
 XF86AudioRaiseVolume
-    mixer vol +2
+    mixer -S vol +2
 
 XF86AudioMute
-    mixer vol 0
+    if mixer -S pcm | grep -q 'pcm:0:0'; then \
+        mixer -S pcm 100; \
+    else \
+        mixer -S pcm 0; \
+    fi

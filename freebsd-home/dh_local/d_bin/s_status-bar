@@ -72,6 +72,9 @@ status_bar() {
 	fi
 
 	# Mixer
+	if mixer -S pcm | grep -q '0:0'; then
+		printf '%s' 'M '
+	fi
 	mixer -s vol | cut -d " " -f 2
 	printf ' | '
 
