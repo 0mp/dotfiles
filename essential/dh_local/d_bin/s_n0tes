@@ -54,9 +54,11 @@ get_snippet_content() {
 	awk -v name="$_name" '
 		BEGIN {
 			printing = 0;
+			found = 0;
 		}
 		/^BEGIN/ && $2 == name {
 			printing = 1;
+			found = 1;
 			next
 		}
 		/^END/ {
@@ -65,6 +67,13 @@ get_snippet_content() {
 		}
 		printing {
 			print
+		}
+		END {
+			if (found) {
+				exit 0
+			} else {
+				exit 1
+			}
 		}
 	' "$0"
 }
