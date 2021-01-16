@@ -84,7 +84,7 @@ main() {
 	_name="${1:-}"
 	if [ "$_name" = "" ]; then
 		_name=$(get_snippet_name | fzf)
-	elif ! LC_ALL=C expr "X$_name" : "X[[:alnum:]]*$" >/dev/null; then
+	elif ! LC_ALL=C expr "X$_name" : "X[[:alnum:]_]*$" >/dev/null; then
 		die 1 "ERROR: Invalid snippet name: $_name"
 	fi
 
