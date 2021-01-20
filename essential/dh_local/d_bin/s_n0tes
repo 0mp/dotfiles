@@ -107,6 +107,10 @@ exit 0
 # Snippets
 #
 
+BEGIN poudriere_testport
+sudo poudriere testport -j 114a -o "${PWD#${PWD%/*/*}}"
+END
+
 BEGIN sh_die
 die() {
 	_rc="$1"
