@@ -137,12 +137,16 @@ parse_args() {
     fi
 }
 
+build_base_component() {
+    as_user make -C "$src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir" "$1"
+}
+
 build_world() {
-    as_user make -C "$src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir" buildworld
+    build_base_component buildworld
 }
 
 build_kernel() {
-    as_user make -C "$src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir" buildkernel
+    build_base_component buildkernel
 }
 
 run_beinstall() {
