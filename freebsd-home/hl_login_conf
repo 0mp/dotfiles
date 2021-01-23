@@ -1,3 +1,4 @@
 me:\
 	:charset=UTF-8:\
-	:lang=en_US.UTF-8:
+	:lang=en_US.UTF-8:\
+        :setenv=LC_TIME=en_GB.UTF-8:
