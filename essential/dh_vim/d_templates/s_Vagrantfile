@@ -25,10 +25,11 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "shell", name: "docker-setup", inline: <<-SHELL
-    if ! which docker >/dev/null; then
+    packages="docker.io"
+    if ! dpkg -s $packages >/dev/null 2>&1; then
       export DEBIAN_FRONTEND="noninteractive"
       apt-get update -q
-      apt-get install -qy docker.io
+      apt-get install -qy $packages
     fi
 
     # Add user vagrant to the docker group so that it is possible to operate
