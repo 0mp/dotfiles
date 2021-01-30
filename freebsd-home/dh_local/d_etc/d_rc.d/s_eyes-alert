@@ -11,7 +11,6 @@ rcvar="${name}_enable"
 eval ${rcvar}="yes"
 
 required_dir="$HOME/.cache"
-procname="/usr/sbin/daemon"
 pidfile="$HOME/.cache/$name.pid"
 
 # This hack makes it possible to run rc(8) services as a non-root user. It is
