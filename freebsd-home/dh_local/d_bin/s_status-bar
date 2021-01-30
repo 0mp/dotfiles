@@ -62,14 +62,7 @@ network_interface() {
 }
 
 status_bar() {
-	# Current task
-	if [ -s ~/.suckless/current-task.txt ]
-	then
-	awk 'NR > 1{printf " -> "} {printf "%s", $0} END{printf " | "}' \
-		~/.suckless/current-task.txt
-	else
 	printf ' '
-	fi
 
 	# Mixer
 	if mixer -S pcm | grep -q '0:0'; then
