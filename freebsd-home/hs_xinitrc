@@ -22,13 +22,14 @@ export LANG=en_US.UTF-8
 export LC_TIME=en_GB.UTF-8
 
 mkdir -p ~/.cache
-~/.local/etc/rc.d/sxhkd start
 ~/.local/etc/rc.d/status-bar start
 ~/.local/etc/rc.d/battery-alert start
 ~/.local/etc/rc.d/eyes-alert start
 ~/.local/etc/rc.d/pie-menu start
 ~/.local/etc/rc.d/inputplug start
 ~/.local/etc/rc.d/sctd start
+# Some of the shortcuts are broken if sxhkd starts too early.
+sleep 5 && ~/.local/etc/rc.d/sxhkd start &
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
