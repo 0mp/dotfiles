@@ -28,10 +28,13 @@ make -C ${HOME}/h/goat clean install
 
 ### mDNS
 
-- Install `avahi-app` and `nss_mdns`
-- `sysrc avahi_daemon_enable="YES"`
-- `sysrc dbus_enable="YES"`
-- Add `mdns` to the `hosts` line in `/etc/nsswitch.conf`
+```sh
+sudo pkg install avahi-app nss_mdns
+sysrc avahi_daemon_enable="YES"
+sysrc dbus_enable="YES"
+```
+
+Finally, add `mdns` to the `hosts` line in `/etc/nsswitch.conf`.
 
 ### Give less memory to ARC
 
