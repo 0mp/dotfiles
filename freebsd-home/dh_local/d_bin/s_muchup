@@ -66,11 +66,12 @@ require() {
 }
 
 update_git() {
-    local _dir="$1"
-    local _url="$2"
-    shift 2
+    local _base_dir="$1"
+    local _dir="$2"
+    local _url="$3"
+    shift 3
 
-    as_user mkdir -p -- "$base_dir"
+    as_user mkdir -p -- "$_base_dir"
 
     if [ -d "$_dir" ]; then
         as_user git -C "$_dir" pull --autostash
@@ -80,12 +81,18 @@ update_git() {
 }
 
 update_src() {
-    update_git "$src_dir" https://git.freebsd.org/src.git \
+    local _base_dir="$1"
+    local _src_dir="$2"
+
+    update_git "$_base_dir" "$_src_dir" https://git.freebsd.org/src.git \
         --config remote.freebsd.fetch='+refs/notes/*:refs/notes/*'
 }
 
 update_ports() {
-    update_git "$ports_dir" https://github.com/freebsd/freebsd-ports
+    local _base_dir="$1"
+    local _ports_dir="$2"
+
+    update_git "$_base_dir" "$_ports_dir" https://github.com/freebsd/freebsd-ports
 }
 
 # Parse command-line arguments.
@@ -95,21 +102,6 @@ update_ports() {
 # Output:
 # A string of letters representing parsed flags.
 parse_args() {
-    # Print usage and quit if no arguments were provided.
-    if [ $# = 0 ]; then
-        usage
-        exit 0
-    fi
-
-    # Try to extract the unprivliged username from SUDO_USER.
-    user="$SUDO_USER"
-    # The directory to store source trees.
-    base_dir="/usr/home/$user/.local/share/freebsd"
-    # The directory to store the FreeBSD src tree.
-    src_dir="$base_dir/src"
-    # The directory to store the FreeBSD ports tree.
-    ports_dir="$base_dir/ports"
-
     # Parse command-line arguments.
     OPTIND=1
     while getopts hkipsw _opt; do
@@ -124,75 +116,106 @@ parse_args() {
     if [ "$OPTIND" -ne 0 ]; then
         shift "$(( OPTIND - 1 ))"
     fi
-
-    # Require that variable "user" is set.
-    if [ -z "$user" ]; then
-        die "User not set"
-    fi
-
-    # Make sure that the value of user makes sense.
-    if [ "$user" = "root" ]; then
-        die "User must not be set to root"
-    fi
-    if ! id "$user" >/dev/null 2>&1; then
-        die "User does not exist: $user"
-    fi
 }
 
-build_base_component() {
-    as_user make -C "$src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir" "$1"
+build_base_target() {
+    local _src_dir="$1"
+    local _ports_dir="$2"
+    local _target="$3"
+
+    as_user make -C "$_src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$_ports_dir" "$_target"
 }
 
 build_world() {
-    build_base_component buildworld
+    local _src_dir="$1"
+    local _ports_dir="$2"
+
+    build_base_target "$_src_dir" "$_ports_dir" buildworld
 }
 
 build_kernel() {
-    build_base_component buildkernel
+    local _src_dir="$1"
+    local _ports_dir="$2"
+
+    build_base_target "$_src_dir" "$_ports_dir" buildkernel
 }
 
 run_beinstall() {
+    local _src_dir="$1"
+    local _ports_dir="$2"
+
     as_root sh -c "$(cat << BEINSTALL
-cd "$src_dir" && \
-env NO_PKG_UPGRADE=YES ./tools/build/beinstall.sh -j "$(sysctl -n hw.ncpu)" PORTSDIR="$ports_dir"
+cd "$_src_dir" && \
+env NO_PKG_UPGRADE=YES ./tools/build/beinstall.sh -j "$(sysctl -n hw.ncpu)" PORTSDIR="$_ports_dir"
 BEINSTALL
     )"
 }
 
 main() {
-    local _flags=""
+    local _flags
+    local _user
+    local _base_dir
+    local _src_dir
 
     # Make sure that all the necessary programs are available.
     require git
 
+    # Print usage and quit if no arguments were provided.
+    if [ $# = 0 ]; then
+        usage
+        exit 0
+    fi
+
+    # Try to extract the unprivliged username from SUDO_USER.
+    _user="$SUDO_USER"
+    # The directory to store source trees.
+    _base_dir="/usr/home/$_user/.local/share/freebsd"
+    # The directory to store the FreeBSD src tree.
+    _src_dir="$_base_dir/src"
+    # The directory to store the FreeBSD ports tree.
+    _ports_dir="$_base_dir/ports"
+
     # Parse the command-line arguments.
     _flags="$(parse_args "$@")"
+
+    # Require that variable "_user" is not empty.
+    if [ -z "$_user" ]; then
+        die "User not set"
+    fi
+
+    # Make sure that the value of user makes sense.
+    if [ "$_user" = "root" ]; then
+        die "User must not be set to root"
+    fi
+    if ! id "$_user" >/dev/null 2>&1; then
+        die "User does not exist: $_user"
+    fi
 
     # Run the actual commands to update the system.
     case $_flags in
         k|w) as_root kldload -n filemon ;;
     esac
     case $_flags in
-        s) update_src ;;
+        s) update_src "$_base_dir" "$_src_dir" ;;
     esac
     case $_flags in
-        p) update_ports ;;
+        p) update_ports "$_base_dir" ;;
     esac
     case $_flags in
-        w) build_world ;;
+        w) build_world "$_src_dir" "$_ports_dir";;
     esac
     case $_flags in
-        k) build_kernel
+        k) build_kernel "$_src_dir" "$_ports_dir";;
     esac
     case $_flags in
-        i) run_beinstall ;;
+        i) run_beinstall "$_src_dir" "$_ports_dir";;
     esac
 }
 
 ## Globals & constants
 
 progname="${0##*/}"
-version="4.0.1"
+version="4.0.2"
 
 ## Body
 
