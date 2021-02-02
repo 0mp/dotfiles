@@ -7,7 +7,7 @@ super + shift + t
     "
 
 super + shift + l
-    slock
+    slock xset dpms force off
 
 XF86AudioLowerVolume
     mixer -S vol -2
