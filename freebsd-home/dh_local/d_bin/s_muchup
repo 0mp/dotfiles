@@ -126,20 +126,6 @@ build_base_target() {
     as_user make -C "$_src_dir" -j "$(sysctl -n hw.ncpu)" PORTSDIR="$_ports_dir" "$_target"
 }
 
-build_world() {
-    local _src_dir="$1"
-    local _ports_dir="$2"
-
-    build_base_target "$_src_dir" "$_ports_dir" buildworld
-}
-
-build_kernel() {
-    local _src_dir="$1"
-    local _ports_dir="$2"
-
-    build_base_target "$_src_dir" "$_ports_dir" buildkernel
-}
-
 run_beinstall() {
     local _src_dir="$1"
     local _ports_dir="$2"
@@ -202,10 +188,10 @@ main() {
         p) update_ports "$_base_dir" ;;
     esac
     case $_flags in
-        w) build_world "$_src_dir" "$_ports_dir";;
+        w) build_base_target "$_src_dir" "$_ports_dir" buildworld;;
     esac
     case $_flags in
-        k) build_kernel "$_src_dir" "$_ports_dir";;
+        k) build_base_target "$_src_dir" "$_ports_dir" buildkernel;;
     esac
     case $_flags in
         i) run_beinstall "$_src_dir" "$_ports_dir";;
