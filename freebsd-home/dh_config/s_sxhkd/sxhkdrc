@@ -6,7 +6,7 @@ super + shift + t
         read x \
     "
 
-super + alt + l
+super + shift + l
     slock
 
 XF86AudioLowerVolume
