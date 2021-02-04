@@ -108,8 +108,7 @@ exit 0
 #
 
 BEGIN kubectl_get_pod_by_name
-# Usage: $0 NAME [NAMESPACE]
-sh -eu -c "name=\$1; ns=\${2:-}; kubectl \${ns:+-n} \${ns:-} get pod -l app=\$name -o jsonpath='{.items[0].metadata.name}'" kubectl_get_pod_by_name
+sh -eu -c "name=\$1; ns=\${2:-}; kubectl \${ns:+-n} \${ns:-} get pod -l app=\$name -o jsonpath='{.items[0].metadata.name}'" kubectl_get_pod_by_name NAME NAMESPACE
 END
 
 BEGIN poudriere_testport
