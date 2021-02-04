@@ -29,7 +29,7 @@ make -C ${HOME}/h/goat clean install
 ### mDNS
 
 ```sh
-sudo pkg install avahi-app nss_mdns
+pkg install avahi-app nss_mdns
 sysrc avahi_daemon_enable="YES"
 sysrc dbus_enable="YES"
 ```
