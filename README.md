@@ -59,6 +59,10 @@ sysrc cloned_interfaces="lagg0"
 sysrc ifconfig_lagg0="up laggproto failover laggport em0 laggport wlan0 DHCP"
 ```
 
+### Firefox
+
+Microphone support: set `media.cubeb.backend` to `oss` in about:config. (https://forums.freebsd.org/threads/how-to-use-microphone-with-firefox.74292/#post-485968)
+
 ## Git
 
 Sample `~/.gitconfig.local`
