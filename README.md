@@ -32,6 +32,12 @@ make -C ${HOME}/h/goat clean install
 pkg install avahi-app nss_mdns
 sysrc avahi_daemon_enable="YES"
 sysrc dbus_enable="YES"
+if ! grep -q "hosts.*:.*mdns" /etc/nsswitch.conf; then
+    tmp="$(mktemp)" && \
+    sed '/hosts/s/$/ mdns/' /etc/nsswitch.conf > "$tmp" && \
+    cat "$tmp" > /etc/nsswitch.conf
+    rm "$tmp"
+fi
 ```
 
 Finally, add `mdns` to the `hosts` line in `/etc/nsswitch.conf`.
