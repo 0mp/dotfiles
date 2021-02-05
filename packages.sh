@@ -11,7 +11,7 @@ echo bat entr fd-find htop hs-ShellCheck moinmoincli mosh subversion the_silver_
 echo firefox xpdf vlc
 echo droid-fonts-ttf symbola jetbrains-mono
 echo sxhkd google-translate-cli xclip sct
-echo slock arandr xclickroot pmenu inputplug feh find-cursor
+echo slock arandr pmenu inputplug feh find-cursor
 
 # dwm
 echo libX11 libXft libXinerama fontconfig

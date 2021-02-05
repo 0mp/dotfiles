@@ -3,7 +3,6 @@
 . /etc/rc.subr
 
 name="pie_menu"
-_interpreter="/bin/sh"
 _progname="pie-menu"
 
 rcvar="${name}_enable"
@@ -11,7 +10,7 @@ rcvar="${name}_enable"
 eval ${rcvar}="yes"
 
 required_dir="$HOME/.cache"
-procname="xclickroot"
+procname="pmenu"
 pidfile="$HOME/.cache/$name.pid"
 
 # This hack makes it possible to run rc(8) services as a non-root user. It is
@@ -19,8 +18,7 @@ pidfile="$HOME/.cache/$name.pid"
 eval ${name}_login_class="me"
 
 command="/usr/sbin/daemon"
-command_args="-l user -o $HOME/.cache/$name.log -p $pidfile -T $_progname -- $_progname"
-
+command_args="-l user -o $HOME/.cache/$name.log -T $_progname -- $_progname $pidfile"
 
 extra_commands="log"
 log_cmd="${PAGER:-cat} $HOME/.cache/$name.log"

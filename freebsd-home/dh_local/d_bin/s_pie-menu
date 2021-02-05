@@ -7,20 +7,14 @@ require() {
 	fi
 }
 
-loop() {
-	items="
-IMG:/usr/local/share/pixmaps/firefox.png	firefox
-IMG:/usr/local/share/pixmaps/thunderbird.png	thunderbird
-IMG:/home/0mp/Downloads/lock.png			slock
-"
-	printf '%s\t%s\n' $items | pmenu | sh >/dev/null 3>&1
-}
+set -eu
 
 require pmenu
-require xclickroot
 
-if [ "$1" = "loop" ]; then
-	loop
-else
-	exec xclickroot -r "${0}" loop
-fi
+pidfile="$1"
+
+(pmenu -r 3 <<ITEMS & echo $! > "$pidfile"; wait) | sh >/dev/null 2>&1
+IMG:/usr/local/share/pixmaps/firefox.png	firefox
+IMG:/usr/local/share/pixmaps/thunderbird.png	thunderbird
+IMG:/home/0mp/Downloads/lock.png		slock
+ITEMS
