@@ -1,0 +1,91 @@
+#! /bin/sh -
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# Copyright (c) 2021 Mateusz Piotrowski <0mp@FreeBSD.org>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#     1. Redistributions of source code must retain the above copyright notice,
+#        this list of conditions and the following disclaimer.
+#     2. Redistributions in binary form must reproduce the above copyright
+#        notice, this list of conditions and the following disclaimer in the
+#        documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+msg() {
+	printf "%s: %s\n" "$0" "$*"
+}
+
+err() {
+	msg "$*"
+	exit 1
+}
+
+usage() {
+	cat <<USAGE
+Usage: $0 loader
+USAGE
+}
+
+main() {
+	local _device _loader _mnt _partition
+
+	# Make sure that loader is provided.
+	if [ $# -ne 1 ]; then
+		usage
+		exit 1
+	fi
+
+	# Make sure that the loader is fine.
+	_loader="$1"
+	if [ ! -e "$_loader" ]; then
+		err "Provided loader does not exist: $_loader"
+	fi
+	if ! file "$_loader" | grep -q EFI; then
+		err "Provided loader is not an EFI application: $_loader"
+	fi
+
+	# Get the EFI partition name.
+	_partition="$(gpart list | awk '/Name:/{ name = $3 } /type: efi/{ print name }')"
+	if expr "X$_partition" : "X.*[[:space:]][[:space:]]*.*" >/dev/null; then
+		err "Detected more than one EFI parition: $_partition"
+	fi
+	_device="/dev/$_partition"
+	if [ ! -c "$_device" ]; then
+		err "Device does not exist: $_device"
+	fi
+
+	# Create a temporary mountpoint.
+	_mnt="$(mktemp -d)"
+
+	# Set up an automatic clean-up.
+	trap "
+		set +eu
+		if mount -p | grep -q \" on $_mnt\"; then
+			sudo umount -v \"$_mnt\"
+		fi
+		rmdir -v \"$_mnt\"
+	" EXIT
+
+	# Mount the EFI parititon and copy the loader onto it.
+	sudo mount -t msdosfs -v "$_device" "$_mnt"
+	sudo cp -v "$_loader" "$_mnt/efi/freebsd/loader.efi"
+	sudo umount -v "$_mnt"
+}
+
+set -eu
+
+main "$@"
