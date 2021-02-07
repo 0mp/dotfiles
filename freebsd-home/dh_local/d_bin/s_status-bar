@@ -6,7 +6,7 @@ reload() {
 
 trap reload SIGUSR1
 
-batteries() {
+batteries_status() {
 	local _num_of_batteries
 	local _battery
 
@@ -61,17 +61,16 @@ network_interface() {
 	printf -- ' | '
 }
 
-status_bar() {
-	printf ' '
-
+mixer_status() {
 	# Mixer
 	if mixer -S pcm | grep -q '0:0'; then
 		printf '%s' 'M '
 	fi
 	mixer -S vol | cut -d : -f 3
 	printf ' | '
+}
 
-	# Eyes alert
+brightness_status() {
 	[ -f ~/.cache/eyes-alert-off ] && printf -- '!'
 	sysctl -n hw.acpi.video.lcd0.brightness
 	if [ -e ~/.cache/sctd.log ]; then
@@ -79,19 +78,27 @@ status_bar() {
 		awk 'END {print $NF}' ~/.cache/sctd.log
 	fi
 	printf ' | '
+}
 
-	# Battery
-	batteries
-
-	# Networking
+network_status() {
 	if ! drill >/dev/null 2>&1
 	then
 		printf -- '! '
 	fi
 	network_interface wlan0
+}
 
-	# Date
+time_status() {
 	date +'%A, %Y-%m-%d (%B) %H:%M '
+}
+
+status_bar() {
+	printf ' '
+	mixer_status
+	brightness_status
+	batteries_status
+	network_status
+	time_status
 }
 
 while xsetroot -name "$(status_bar | tr -d '\n')"
