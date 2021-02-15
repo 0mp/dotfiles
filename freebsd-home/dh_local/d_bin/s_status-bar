@@ -51,13 +51,33 @@ batteries_status() {
 }
 
 network_interface() {
-	local _if
-	local _ssid
-	local _ip
-	_if="$1"
-	_ip="$(ifconfig "$_if" | awk '/\tinet /{print $2}')"
-	_ssid="$(ifconfig "$_if" | awk '/\tssid /{print $2}')"
-	printf -- '%s%s%s' "${_ssid#\"%\":-}" "${_ssid:+ }" "${_ip:-}"
+	local _ssid _ip _ifconfig _active_if
+
+	_ifconfig="$(ifconfig)"
+	if printf '%s\n' "$_ifconfig" | grep -q "^lagg0"; then
+		# Get the active interface.
+		_active_if=$(printf '%s\n' "$_ifconfig" | awk '/laggport:.*ACTIVE/ { print $2 }')
+		# Try to obtain the IP address associated with the lagg device.
+		_ip="$(netstat -in4 -I lagg0 | awk 'NR > 1{print $4}')"
+		# If there is no active interface yet, change the status bar.
+		if [ "$_active_if" = "" ]; then
+			printf '%s\n' lagg
+		elif expr "X$_active_if" : "Xwlan.*" >/dev/null; then
+			_ssid=$(wpa_cli -i "$_active_if" status | grep "^ssid" | cut -c 6-)
+			printf '%s %s %s\n' "$_active_if" "$_ssid" "$_ip"
+		else
+			printf '%s %s\n' "$_active_if" "$_ip"
+		fi
+	else
+		_active_if="wlan0"
+		_ip="$(ifconfig "$_active_if" | awk '/\tinet /{print $2}')"
+		_ssid="$(ifconfig "$_active_if" | awk '/\tssid /{print $2}')"
+		printf -- '%s%s%s' "${_ssid#\"%\":-}" "${_ssid:+ }" "${_ip:-}"
+	fi
+	netstat -h -I "$_active_if" -q 1 -w 1 | awk 'NR == 3 {
+		printf " %5s↓ %5s↑", $4, $7
+	}'
+
 	printf -- ' | '
 }
 
@@ -85,7 +105,7 @@ network_status() {
 	then
 		printf -- '! '
 	fi
-	network_interface wlan0
+	network_interface
 }
 
 time_status() {
