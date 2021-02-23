@@ -103,7 +103,7 @@ brightness_status() {
 network_status() {
 	if ! drill >/dev/null 2>&1
 	then
-		printf -- '! '
+		printf -- 'X '
 	fi
 	network_interface
 }
