@@ -10,7 +10,8 @@ echo bat entr fd-find htop hs-ShellCheck moinmoincli mosh subversion the_silver_
 # - symbola: Font family with various extra symbols like "⧉".
 echo firefox xpdf vlc
 echo droid-fonts-ttf symbola jetbrains-mono
-echo sxhkd google-translate-cli xclip sct
+echo sxhkd google-translate-cli maim xwininfo
+echo xclip sct
 echo slock arandr pmenu inputplug feh find-cursor
 
 # dwm
