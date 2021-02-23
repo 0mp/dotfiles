@@ -9,6 +9,18 @@ super + shift + t
 super + shift + l
     slock xset dpms force off
 
+super + Print; f
+    maim | xclip -selection clipboard -t image/png
+
+super + Print; s
+    maim -s | xclip -selection clipboard -t image/png
+
+super + Print; w
+    id="$(xwininfo -int | grep '^xwininfo: Window id:' | cut -d ' ' -f 4)"; \
+    if [ "$id" != "" ]; then \
+        maim -i "$id" | xclip -selection clipboard -t image/png; \
+    fi
+
 XF86AudioLowerVolume
     mixer -S vol -2
 
