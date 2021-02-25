@@ -21,6 +21,11 @@ trap 'clean_up' EXIT
 export LANG=en_US.UTF-8
 export LC_TIME=en_GB.UTF-8
 
+# This is a workaround for dwm not being able to handle Java-based GUI
+# applications properly. This is an OpenJDK-specific options. See the dwm(1)
+# manual page for more details.
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 mkdir -p ~/.cache
 ~/.local/etc/rc.d/status-bar start
 ~/.local/etc/rc.d/battery-alert start
