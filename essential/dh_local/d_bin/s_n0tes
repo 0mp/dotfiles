@@ -111,6 +111,12 @@ BEGIN kubectl_get_pod_by_name
 sh -eu -c "name=\$1; ns=\${2:-}; kubectl \${ns:+-n} \${ns:-} get pod -l app=\$name -o jsonpath='{.items[0].metadata.name}'" kubectl_get_pod_by_name NAME NAMESPACE
 END
 
+BEGIN ports_python_do_test
+do-test:
+	@(cd ${TEST_WRKSRC} && \
+		${SETENV} ${TEST_ENV} ${PYTHON_CMD} ${PYDISTUTILS_SETUP} test)
+END
+
 BEGIN poudriere_testport
 sudo poudriere testport -j 114a -o "${PWD#${PWD%/*/*}}"
 END
