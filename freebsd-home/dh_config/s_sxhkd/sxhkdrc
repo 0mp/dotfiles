@@ -10,15 +10,36 @@ super + shift + l
     slock xset dpms force off
 
 super + Print; f
-    maim | xclip -selection clipboard -t image/png
+    maim | \
+        xclip -selection clipboard -t image/png
+
+super + Print; shift + f
+    maim | \
+        tee ~/Pictures/snapshot-$(date +%Y-%m-%dT%H:%M:%S).png | \
+        xclip -selection clipboard -t image/png
 
 super + Print; s
-    maim -s | xclip -selection clipboard -t image/png
+    maim -s | \
+        xclip -selection clipboard -t image/png
+
+super + Print; shift + s
+    maim -s | \
+        tee ~/Pictures/snapshot-$(date +%Y-%m-%dT%H:%M:%S).png |\
+        xclip -selection clipboard -t image/png
 
 super + Print; w
     id="$(xwininfo -int | grep '^xwininfo: Window id:' | cut -d ' ' -f 4)"; \
     if [ "$id" != "" ]; then \
-        maim -i "$id" | xclip -selection clipboard -t image/png; \
+        maim -i "$id" | \
+            xclip -selection clipboard -t image/png; \
+    fi
+
+super + Print; shift + w
+    id="$(xwininfo -int | grep '^xwininfo: Window id:' | cut -d ' ' -f 4)"; \
+    if [ "$id" != "" ]; then \
+        maim -i "$id" | \
+            tee ~/Pictures/snapshot-$(date +%Y-%m-%dT%H:%M:%S).png | \
+            xclip -selection clipboard -t image/png; \
     fi
 
 XF86AudioLowerVolume
