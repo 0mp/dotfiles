@@ -107,6 +107,13 @@ exit 0
 # Snippets
 #
 
+BEGIN kubctl_configure_cluster_context
+# Select a cluster (and its zone).
+args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
+# Pick one of the clusters and create kubectl configuration for it.
+gcloud container clusters get-credentials $args
+END
+
 BEGIN kubectl_get_pod_by_name
 sh -eu -c "name=\$1; ns=\${2:-}; kubectl \${ns:+-n} \${ns:-} get pod -l app=\$name -o jsonpath='{.items[0].metadata.name}'" kubectl_get_pod_by_name NAME NAMESPACE
 END
