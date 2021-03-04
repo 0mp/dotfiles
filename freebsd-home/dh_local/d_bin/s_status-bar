@@ -113,6 +113,9 @@ time_status() {
 }
 
 status_bar() {
+	if [ -f ~/.cache/motd ]; then
+		cat ~/.cache/motd
+	fi
 	printf ' '
 	mixer_status
 	brightness_status
