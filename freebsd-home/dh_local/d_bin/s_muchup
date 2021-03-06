@@ -186,7 +186,7 @@ main() {
         *s*) update_src "$_base_dir" "$_src_dir" ;;
     esac
     case $_flags in
-        *p*) update_ports "$_base_dir" ;;
+        *p*) update_ports "$_base_dir" "$_ports_dir" ;;
     esac
     case $_flags in
         *w*) build_base_target "$_src_dir" "$_ports_dir" buildworld;;
@@ -202,7 +202,7 @@ main() {
 ## Globals & constants
 
 progname="${0##*/}"
-version="4.1.1"
+version="4.1.2"
 
 ## Body
 
