@@ -180,29 +180,29 @@ main() {
 
     # Run the actual commands to update the system.
     case $_flags in
-        k|w) as_root kldload -n filemon ;;
+        *k*|*w*) as_root kldload -n filemon ;;
     esac
     case $_flags in
-        s) update_src "$_base_dir" "$_src_dir" ;;
+        *s*) update_src "$_base_dir" "$_src_dir" ;;
     esac
     case $_flags in
-        p) update_ports "$_base_dir" ;;
+        *p*) update_ports "$_base_dir" ;;
     esac
     case $_flags in
-        w) build_base_target "$_src_dir" "$_ports_dir" buildworld;;
+        *w*) build_base_target "$_src_dir" "$_ports_dir" buildworld;;
     esac
     case $_flags in
-        k) build_base_target "$_src_dir" "$_ports_dir" buildkernel;;
+        *k*) build_base_target "$_src_dir" "$_ports_dir" buildkernel;;
     esac
     case $_flags in
-        i) run_beinstall "$_src_dir" "$_ports_dir";;
+        *i*) run_beinstall "$_src_dir" "$_ports_dir";;
     esac
 }
 
 ## Globals & constants
 
 progname="${0##*/}"
-version="4.1.0"
+version="4.1.1"
 
 ## Body
 
