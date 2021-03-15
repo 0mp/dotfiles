@@ -15,11 +15,19 @@ printerr() {
 
 battery_discharged() {
     acpiconf -i "$1" | awk -v threshold="${threshold}" '
+        BEGIN {
+            charging = 0
+        }
         /^Remaining capacity:/ {
             capacity = substr($3, 1, length($3) -1)
         }
+        /^State:.*charging/ {
+            charging = 1
+        }
         END {
-            if (int(capacity) < int(threshold)) {
+            if (charging) {
+                exit 1
+            } else if (int(capacity) < int(threshold)) {
                 exit 0
             } else {
                 exit 1
