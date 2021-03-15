@@ -118,6 +118,11 @@ BEGIN kubectl_get_pod_by_name
 sh -eu -c "name=\$1; ns=\${2:-}; kubectl \${ns:+-n} \${ns:-} get pod -l app=\$name -o jsonpath='{.items[0].metadata.name}'" kubectl_get_pod_by_name NAME NAMESPACE
 END
 
+
+BEGIN kubectl_get_public_ips_of_nodes
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(.type=="ExternalIP")].address}'
+END
+
 BEGIN kubectl_run_adhoc_pod
 kubectl run adhocpod -i --tty --image ubuntu -- bash
 END
