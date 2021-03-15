@@ -107,7 +107,7 @@ exit 0
 # Snippets
 #
 
-BEGIN kubctl_configure_cluster_context
+BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
 # Pick one of the clusters and create kubectl configuration for it.
