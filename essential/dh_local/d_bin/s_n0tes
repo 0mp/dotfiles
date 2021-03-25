@@ -107,6 +107,29 @@ exit 0
 # Snippets
 #
 
+BEGIN ffmpeg_merge_mp4_videos
+# Usage: $0 output input...
+
+merge() {
+	set -eux
+
+	output="$1"
+	shift
+	inputs="$*"
+	num_of_inputs="$#"
+	input_args="$(printf -- '-i %s ' $inputs)"
+	filter_complex_args="$(
+		seq 0 "$(( num_of_inputs - 1 ))" | \
+			xargs -n 1 -I @ printf '[%s:v] [%s:a] ' @ @
+		echo "concat=n=${num_of_inputs}:v=1:a=1 [v] [a]"
+	)"
+
+	ffmpeg $input_args \
+		-filter_complex "$filter_complex_args" \
+		-map "[v]" -map "[a]" "$output"
+}
+END
+
 BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
