@@ -109,6 +109,18 @@ exit 0
 # Snippets
 #
 
+BEGIN ffmpeg_add_silent_audio_track
+# Usage: $0 input output
+ffmpeg_add_silent_audio_track() (
+	set -eu
+
+	input="$1"
+	output="$2"
+	ffmpeg -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 \
+		-i "$input" -c:v copy -c:a aac -shortest "$output"
+)
+END
+
 BEGIN ffmpeg_merge_mp4_videos
 # Usage: $0 output input...
 
