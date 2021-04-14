@@ -123,8 +123,7 @@ END
 
 BEGIN ffmpeg_merge_mp4_videos
 # Usage: $0 output input...
-
-merge() {
+ffmpeg_merge_mp4_videos() {
 	set -eux
 
 	output="$1"
