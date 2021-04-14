@@ -1,17 +1,18 @@
 #! /bin/sh -
 #
-# SPDX-License-Identifier: BSD-2-Clause
+# SPDX short identifier: BSD-2-Clause
 #
-# Copyright (c) 2021 Mateusz Piotrowski <0mp@FreeBSD.org>
+# Copyright 2021 Mateusz Piotrowski <0mp@FreeBSD.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-#     1. Redistributions of source code must retain the above copyright notice,
-#        this list of conditions and the following disclaimer.
-#     2. Redistributions in binary form must reproduce the above copyright
-#        notice, this list of conditions and the following disclaimer in the
-#        documentation and/or other materials provided with the distribution.
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -37,6 +38,9 @@ err() {
 usage() {
 	cat <<USAGE
 Usage: $0 loader
+
+Example:
+	$0 /boot/loader.efi
 USAGE
 }
 
@@ -59,7 +63,7 @@ main() {
 	fi
 
 	# Get the EFI partition name.
-	_partition="$(gpart list | awk '/Name:/{ name = $3 } /type: efi/{ print name }')"
+	_partition="$(gpart show -p | awk '/ efi /{print = $3}')"
 	if expr "X$_partition" : "X.*[[:space:]][[:space:]]*.*" >/dev/null; then
 		err "Detected more than one EFI parition: $_partition"
 	fi
