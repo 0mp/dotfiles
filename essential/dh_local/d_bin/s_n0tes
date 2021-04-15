@@ -169,6 +169,14 @@ do-test:
 		${SETENV} ${TEST_ENV} ${PYTHON_CMD} ${PYDISTUTILS_SETUP} test)
 END
 
+BEGIN ports_update_go_mods
+make gomod-vendor && make gomod-vendor | portedit merge -i Makefile && make makesum
+END
+
+BEGIN ports_update_rust_crates
+make cargo-crates && make cargo-crates | portedit merge -i Makefile && make makesum
+END
+
 BEGIN poudriere_testport
 sudo poudriere testport -j 114a -o "${PWD#${PWD%/*/*}}"
 END
