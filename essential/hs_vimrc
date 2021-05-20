@@ -576,6 +576,11 @@ function! SaveOrig()
 endfunction
 command! SaveOrig call SaveOrig()
 
+function! Origins()
+    r ! git status --untracked-files=no --short | awk '{print $NF}' | cut -d / -f 1-2 | sort -u
+endfunction
+command! Origins call Origins()
+
 " }}}
 " Section: Toggling and switching knobs {{{
 " Toggle between tabs and spaces.
