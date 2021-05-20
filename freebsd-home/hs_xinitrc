@@ -12,6 +12,7 @@ clean_up() {
     ~/.local/etc/rc.d/battery-alert stop
     ~/.local/etc/rc.d/eyes-alert stop
     ~/.local/etc/rc.d/pie-menu stop
+    ~/.local/etc/rc.d/srandrd stop
     ~/.local/etc/rc.d/inputplug stop
     ~/.local/etc/rc.d/sctd stop
 }
@@ -32,13 +33,12 @@ mkdir -p ~/.cache
 ~/.local/etc/rc.d/eyes-alert start
 ~/.local/etc/rc.d/pie-menu start
 ~/.local/etc/rc.d/inputplug start
+~/.local/etc/rc.d/srandrd start
 ~/.local/etc/rc.d/sctd start
 # Some of the shortcuts are broken if sxhkd starts too early.
 sleep 5 && ~/.local/etc/rc.d/sxhkd start &
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
-
-feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/desktop/freebsd-logo-by-claudiom.png"
 
 eval $(ssh-agent -s)
 gpg-connect-agent reloadagent /bye

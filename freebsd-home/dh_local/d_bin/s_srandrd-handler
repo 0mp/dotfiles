@@ -1,0 +1,3 @@
+#! /bin/sh -
+
+feh --no-fehbg --bg-center --image-bg 'black' "${HOME}/.config/desktop/freebsd-logo-by-claudiom.png"
