@@ -11,7 +11,6 @@ clean_up() {
     ~/.local/etc/rc.d/status-bar stop
     ~/.local/etc/rc.d/battery-alert stop
     ~/.local/etc/rc.d/eyes-alert stop
-    ~/.local/etc/rc.d/pie-menu stop
     ~/.local/etc/rc.d/srandrd stop
     ~/.local/etc/rc.d/inputplug stop
     ~/.local/etc/rc.d/sctd stop
@@ -31,7 +30,6 @@ mkdir -p ~/.cache
 ~/.local/etc/rc.d/status-bar start
 ~/.local/etc/rc.d/battery-alert start
 ~/.local/etc/rc.d/eyes-alert start
-~/.local/etc/rc.d/pie-menu start
 ~/.local/etc/rc.d/inputplug start
 ~/.local/etc/rc.d/srandrd start
 ~/.local/etc/rc.d/sctd start
