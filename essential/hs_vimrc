@@ -574,6 +574,7 @@ function! SaveOrig()
         write %:p.orig
     endif
 endfunction
+command! SaveOrig call SaveOrig()
 
 " }}}
 " Section: Toggling and switching knobs {{{
