@@ -84,10 +84,10 @@ process_() {
 			(cd "$file" && process_ "$dest")
 			;;
 		*l*)
-			$_DRE $BECOME ln -Ffhv -- "$src" "$dest"
+			$_DRE $BECOME ln -Ffnv -- "$src" "$dest"
 			;;
 		*s*)
-			$_DRE $BECOME ln -Ffhsv -- "$src" "$dest"
+			$_DRE $BECOME ln -Ffnsv -- "$src" "$dest"
 			;;
 		esac
 
