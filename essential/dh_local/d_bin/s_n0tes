@@ -143,6 +143,25 @@ ffmpeg_merge_mp4_videos() {
 }
 END
 
+BEGIN freebsd_format_usb
+# Usage: $0 device [label]
+freebsd_format_usb() (
+	set -eux
+
+	device="$1"
+	label="${2-USB}"
+
+	if ! expr "/$device" : "//.*" >/dev/null; then
+		device="/dev/$device"
+	fi
+
+	sudo gpart destroy -F "$device" || :
+	sudo gpart create -s MBR "$device"
+	sudo gpart add -t fat32 "$device"
+	sudo newfs_msdos -L "$label" -F 32 "${device}s1"
+)
+END
+
 BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
