@@ -12,7 +12,7 @@ echo firefox xpdf vlc
 echo droid-fonts-ttf symbola jetbrains-mono
 echo sxhkd google-translate-cli maim xwininfo
 echo xclip sct
-echo slock arandr inputplug feh find-cursor srandrd
+echo slock arandr inputplug feh find-cursor srandrd x-on-resize
 
 # dwm
 echo libX11 libXft libXinerama fontconfig
