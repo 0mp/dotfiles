@@ -162,6 +162,22 @@ freebsd_format_usb() (
 )
 END
 
+BEGIN freebsd_flash_iso
+# Usage: $0 device [label]
+freebsd_flash_iso() (
+	set -eux
+
+	device="$1"
+	iso="${2}"
+
+	sudo gpart destroy -F "$device" || :
+	sudo gpart create -s MBR "$device"
+	sudo gpart add -t fat32 "$device"
+	sudo dd if="$iso" of="$device" bs=4m conv=sync
+	sync
+)
+END
+
 BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
