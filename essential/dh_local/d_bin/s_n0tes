@@ -178,6 +178,10 @@ freebsd_flash_iso() (
 )
 END
 
+BEGIN git_config_pull_rebase
+git config pull.rebase true
+END
+
 BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
