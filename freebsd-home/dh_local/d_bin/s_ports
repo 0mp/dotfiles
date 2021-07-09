@@ -1,8 +1,8 @@
 #! /bin/sh -
 #
-# SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+# SPDX-License-Identifier: BSD-2-Clause
 #
-# Copyright (c) 2020 Mateusz Piotrowski
+# Copyright (c) 2020-2021 Mateusz Piotrowski
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -104,10 +104,15 @@ test)
 	then :; else
 		err "$?" "Could not get test dependencies"
 	fi
+	if all_dependencies="$(make -C "${port_path}" all-depends-list | awk -F / '{printf "%s/%s ", $(NF - 1), $NF}')"
+	then :; else
+		err "$?" "Could not get all non-test dependencies"
+	fi
 
-	if [ "${test_dependencies}" != "" ]
+	if [ "${test_dependencies}${all_dependencies}" != "" ]
 	then
-		sudo poudriere bulk -j "${jail}" ${test_dependencies}
+		sudo poudriere bulk -b latest -j "${jail}" ${test_dependencies} ${all_dependencies}
+
 	fi
 	if [ "$interactive" = "yes" ]
 	then
