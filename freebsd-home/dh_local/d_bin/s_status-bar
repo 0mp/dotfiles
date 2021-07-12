@@ -50,6 +50,14 @@ batteries_status() {
 	done
 }
 
+# Usage: get_ssid active_if
+get_ssid() {
+	local _active_if
+	_active_if="$1"
+
+	wpa_cli -i "$_active_if" status | awk '/^ssid/{sub("^ssid=", ""); print}'
+}
+
 network_interface() {
 	local _ssid _ip _ifconfig _active_if
 
@@ -63,7 +71,7 @@ network_interface() {
 		if [ "$_active_if" = "" ]; then
 			printf '%s\n' lagg
 		elif expr "X$_active_if" : "Xwlan.*" >/dev/null; then
-			_ssid=$(wpa_cli -i "$_active_if" status | grep "^ssid" | cut -c 6-)
+			_ssid=$(get_ssid "$_active_if")
 			printf '%s %s %s\n' "$_active_if" "$_ssid" "$_ip"
 		else
 			printf '%s %s\n' "$_active_if" "$_ip"
@@ -71,7 +79,7 @@ network_interface() {
 	else
 		_active_if="wlan0"
 		_ip="$(ifconfig "$_active_if" | awk '/\tinet /{print $2}')"
-		_ssid="$(ifconfig "$_active_if" | awk '/\tssid /{print $2}')"
+		_ssid="$(get_ssid "$_active_if")"
 		printf -- '%s%s%s' "${_ssid#\"%\":-}" "${_ssid:+ }" "${_ip:-}"
 	fi
 	netstat -h -I "$_active_if" -q 1 -w 1 | awk 'NR == 3 {
