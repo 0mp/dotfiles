@@ -11,10 +11,10 @@ err() {
 
 : "${DRYRUN="yes"}"
 
-if [ "$DRYRUN" != no ]; then
-export _DRE="echo"
-else
+if [ "$DRYRUN" != yes ]; then
 export _DRE=""
+else
+export _DRE="echo"
 fi
 BECOME=
 
