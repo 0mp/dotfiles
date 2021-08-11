@@ -1,3 +1,10 @@
+README.md
+firefox
+freebsd-laptop
+freebsd-system
+install.sh
+packages.sh
+tags
 {{ if ne .chezmoi.os "freebsd" }}
 .config/alacritty/alacritty.yml
 .config/awesome/rc.lua
