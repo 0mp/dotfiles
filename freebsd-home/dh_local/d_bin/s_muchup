@@ -48,6 +48,7 @@ Version: $version
 
 Options:
 -h  Show usage message.
+-j  Start a shell in a jail in the boot environment.
 -i  Install the system with beinstall(8).
 -k  Run buildkernel.
 -p  Update the ports tree.
@@ -104,10 +105,10 @@ update_ports() {
 parse_args() {
     # Parse command-line arguments.
     OPTIND=1
-    while getopts hkipsw _opt; do
+    while getopts hijkpsw _opt; do
         case "$_opt" in
             h) usage; exit 0 ;;
-            i|k|p|s|w) printf %s "$_opt" ;;
+            i|j|k|p|s|w) printf %s "$_opt" ;;
             ?)
                 die "Unknown option: $_opt"
                 ;;
@@ -135,6 +136,41 @@ cd "$_src_dir" && \
 env NO_PKG_UPGRADE=YES ./tools/build/beinstall.sh -j "$(sysctl -n hw.ncpu)" PORTSDIR="$_ports_dir"
 BEINSTALL
     )"
+}
+
+run_jail() {
+    local _boot_env="$(bectl list | awk '$2 == "R" {print $1}')"
+
+    if [ "$_boot_env" = "" ]; then
+		die "No boot environment active on reboot"
+    fi
+
+    local _script="/tmp/muchup-jail.sh"
+    cat <<'EOF' > "$_script"
+#! /bin/sh -
+set -eu
+be_mp=$(bectl list | awk '/ R / {print $3}')
+usr_src_mp="$be_mp/usr/src"
+logger $1
+case $1 in
+mount)
+    mount_nullfs -o ro /usr/src "$usr_src_mp"
+    ;;
+umount)
+    umount -f "$usr_src_mp"
+esac
+EOF
+    chmod +x "$_script"
+
+    bectl jail \
+        -o allow.chflags=1 \
+        -o host=inherit \
+        -o ip4=inherit \
+        -o ip6=inherit \
+        -o mount.devfs=1 \
+        -o exec.prestart="$_script mount" \
+        -o exec.poststop="$_script umount" \
+        "$_boot_env"
 }
 
 main() {
@@ -196,6 +232,9 @@ main() {
     esac
     case $_flags in
         *i*) run_beinstall "$_src_dir" "$_ports_dir";;
+    esac
+    case $_flags in
+        *j*) run_jail;;
     esac
 }
 
