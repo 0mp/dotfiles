@@ -4,7 +4,7 @@ set -eu
 
 tempdir=""
 
-if [ -d ~/bin ]; then
+if [ -d ~/bin ] && [ ! -L ~/bin ]; then
 	tempdir=$(mktemp -d)
 	test -d "$tempdir"
 	mv ~/bin "$tempdir/"
