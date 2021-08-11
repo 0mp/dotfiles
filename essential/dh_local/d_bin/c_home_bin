@@ -1,3 +1,0 @@
-#! /bin/sh -
-
-$_DRE ln -Ffnsv "${1%/*}" "$HOME/bin"
