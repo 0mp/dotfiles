@@ -4,7 +4,7 @@
 #
 # ---
 #
-# Copyright (c) 2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+# Copyright (c) 2018-2021 Mateusz Piotrowski <0mp@FreeBSD.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -84,11 +84,12 @@ case "$1" in
         exit 0
         ;;
     M*)
+        ports_dir="/usr/home/0mp/f/freebsd-ports"
         if command -V bat 1>/dev/null 2>&1
         then
-            find /usr/ports/Mk /usr/ports/Keywords -type f -print0 | xargs -0 bat
+            find $ports_dir/Mk $ports_dir/Keywords -type f -print0 | xargs -0 bat
         else
-            0mp-explore -- /usr/ports/Mk /usr/ports/Keywords
+            0mp-explore -- $ports_dir/Mk $ports_dir/Keywords
         fi
         exit 0
         ;;
