@@ -104,9 +104,6 @@ process_() {
 }
 
 case $1 in
-	essential | freebsd-home)
-		cd "$1" && process_ "$HOME"
-		;;
 	freebsd-laptop|freebsd-system)
 		require sudo
 		export BECOME=sudo
