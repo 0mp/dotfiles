@@ -11,7 +11,8 @@ if [ -d ~/bin ] && [ ! -L ~/bin ]; then
 fi
 
 mkdir -p ~/.local/bin
-ln -F -s ~/.local/bin ~/bin
+rm -f ~/bin
+ln -s ~/.local/bin ~/bin
 
 if [ -d "$tempdir" ]; then
 	find "$tempdir/bin" -mindepth 1 -maxdepth 1 -exec mv {} ~/.local/bin/ \;
