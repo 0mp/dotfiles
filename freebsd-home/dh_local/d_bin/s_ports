@@ -55,14 +55,19 @@ test)
 	shift
 	jail="$1"
 	shift
-	if args=$(getopt io: $*)
+	if args=$(getopt Bio: $*)
 	then
 		set -- $args
+		binary_packages=yes
 		interactive=no
 		origin="${PWD#${PWD%/*/*}/}"
 		while :
 		do
 			case $1 in
+			-B)
+				binary_packages=no
+				shift
+				;;
 			-i)
 				interactive=yes
 				shift
@@ -98,7 +103,11 @@ test)
 
 	if [ "${test_dependencies}${all_dependencies}" != "" ]
 	then
-		sudo poudriere bulk -b latest -j "${jail}" ${test_dependencies} ${all_dependencies}
+		if [ "$binary_packages" = yes ]; then
+			sudo poudriere bulk -b latest -j "${jail}" ${test_dependencies} ${all_dependencies}
+		else
+			sudo poudriere bulk -j "${jail}" ${test_dependencies} ${all_dependencies}
+		fi
 
 	fi
 	if [ "$interactive" = "yes" ]
@@ -122,7 +131,7 @@ Usage: ${_b}ports${_0} [${_u}command${_0} [${_u}args${_0} ...]]
 Commands:
 	${_b}clippy${_0}
 	${_b}depends${_0} ${_u}pattern${_0}
-	${_b}test${_0} ${_u}jail${_0} [${_b}-i${_0}] [${_b}-o${_0} ${_u}origin${_0}]
+	${_b}test${_0} ${_u}jail${_0} [${_b}-B${_0}] [${_b}-i${_0}] [${_b}-o${_0} ${_u}origin${_0}]
 HELP
 	;;
 esac
