@@ -54,6 +54,9 @@ Plug 'davidhalter/jedi-vim'
 Plug 'psf/black', { 'tag': '19.10b0' }
 let g:black_virtualenv = "/usr/local"
 " }}}
+" {{{ reStructuredText
+Plug 'nvie/vim-rst-tables'
+" }}}
 " }}}
 " {{{ Navigation
 Plug 'ctrlpvim/ctrlp.vim'
