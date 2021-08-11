@@ -16,6 +16,8 @@
     # http://www.lowlevelmanager.com/2016/02/how-to-run-git-interactive-rebase-non.html
     fu = ! sh -c 'git commit -a --fixup=HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash'
 
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
 [user]
       name = Mateusz Piotrowski
       email = 0mp@FreeBSD.org
