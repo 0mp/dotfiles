@@ -1,0 +1,27 @@
+#! /bin/sh -
+
+set -eu
+
+target_branches=""
+commit_hashes=""
+
+while [ "$#" != 0 ]; do
+	case "$1" in
+		??)
+			target_branches="${target_branches} ${1#stable/}"
+			;;
+		*)
+			commit_hashes="${commit_hashes} $1"
+			;;
+	esac
+	shift
+done
+
+for branch in $target_branches; do
+	git checkout "stable/$branch"
+	git pull
+	for hash in $commit_hashes; do
+		git cherry-pick -ex "$hash"
+		git log -p
+	done
+done
