@@ -51,8 +51,10 @@ let g:tex_flavor = "latex"
 " }}}
 " {{{ Python
 Plug 'davidhalter/jedi-vim'
-Plug 'psf/black', { 'tag': '19.10b0' }
-let g:black_virtualenv = "/usr/local"
+if filereadable("/usr/local/bin/black")
+    Plug 'psf/black', { 'tag': '19.10b0' }
+    let g:black_virtualenv = "/usr/local"
+endif
 " }}}
 " {{{ reStructuredText
 Plug 'nvie/vim-rst-tables'
