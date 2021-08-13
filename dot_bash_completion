@@ -5,6 +5,7 @@ for f in \
     ~/.bash_completion.d/* \
     ~/.local/share/bash-completion/* \
     ~/freebsd/bash-completion-freebsd/completions/* \
+    ~/qmk_firmware/util/qmk_tab_complete.sh \
     /usr/local/google-cloud-sdk/completion.bash.inc
 do
     [[ -f $f ]] && source "$f"
