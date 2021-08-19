@@ -109,13 +109,6 @@ case $1 in
 		export BECOME=sudo
 		cd "$1" && process_ "/"
 		;;
-	firefox)
-		if [ ! -f "$HOME/.mozilla/firefox/profiles.ini" ]; then
-			err "profiles.ini is missing; run firefox at least once"
-		fi
-		profile="$(awk -F = '/^default=.*[.].*/{print $2; exit}' ${HOME}/.mozilla/firefox/profiles.ini)"
-		$_DRE ln -f -s ./firefox/user.js "${HOME}/.mozilla/firefox/${profile}/user.js"
-		;;
 	*)
 		err "Invalid installation target: $1"
 		;;
