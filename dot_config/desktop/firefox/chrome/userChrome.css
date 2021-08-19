@@ -1,0 +1,26 @@
+/*
+ * Restore pre Firefox 91 tab style.
+ * License: CC BY-SA 4.0
+ * Based on: https://superuser.com/a/1669549
+ *
+ * Copyright (c) 2021 Dave Jarvis
+ * Copyright (c) 2021 Mateusz Piotrowski <0mp@FreeBSD.org>
+ */
+
+.tab-background {
+  border-radius: 0px 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.tabbrowser-tab:not([selected=true]):not([multiselected=true]) .tab-background {
+  background-color: color-mix(in srgb, currentColor 4%, transparent);
+}
+
+menupopup>menu,
+menupopup>menuitem {
+  padding-block: 2px !important;
+}
+
+:root {
+  --arrowpanel-menuitem-padding: 2px !important;
+}

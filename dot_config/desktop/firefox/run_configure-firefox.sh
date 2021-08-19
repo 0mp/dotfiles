@@ -31,3 +31,7 @@ profile_dir="$firefox_dir/$profile_name"
 
 # Install user.js.
 ln -f -s "$custom_config_dir/user.js" "$profile_dir/user.js"
+
+# Install userChrome.css.
+mkdir -p "$profile_dir/chrome"
+ln -f -s "$custom_config_dir/chrome/userChrome.css" "$profile_dir/chrome/userChrome.css"

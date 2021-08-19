@@ -75,3 +75,8 @@ user_pref("layout.css.devPixelsPerPx", "1.3");
  * Disable the Password Manager.
  */
 user_pref('signon.rememberSignons', false);
+
+/*
+ * Restore pre Firefox 91 tab style (see userChrome.css).
+ */
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
