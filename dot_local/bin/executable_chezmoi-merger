@@ -28,7 +28,7 @@
 set -eu
 
 modified_files=$(
-    chezmoi diff --exclude scripts --exclude symlinks | \
+    chezmoi diff --exclude scripts,symlinks | \
         grep -- "^---" | \
         grep -v -- "--- /dev/null" | \
         cut -c 7- | \
