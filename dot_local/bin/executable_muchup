@@ -158,10 +158,15 @@ mount)
     ;;
 umount)
     umount -f "$usr_src_mp"
+    ;;
 esac
 EOF
     chmod +x "$_script"
 
+    # XXX: The reason why we use exec.poststart here instead of exec.*stop to
+    # clean up mounted filesystems is that bectl does not handle jails as we
+    # would expect it to. In fact, (1) we get a shell during exec.start, (2) we
+    # never actually run any of the exec.*stop commands.
     bectl jail \
         -o allow.chflags=1 \
         -o host=inherit \
@@ -169,7 +174,7 @@ EOF
         -o ip6=inherit \
         -o mount.devfs=1 \
         -o exec.prestart="$_script mount" \
-        -o exec.poststop="$_script umount" \
+        -o exec.poststart="$_script umount" \
         "$_boot_env"
 }
 
