@@ -149,7 +149,7 @@ run_jail() {
     cat <<'EOF' > "$_script"
 #! /bin/sh -
 set -eu
-be_mp=$(bectl list | awk '/ R / {print $3}')
+be_mp="$(bectl list | awk '$2 == "R" {print $3}')"
 usr_src_mp="$be_mp/usr/src"
 logger $1
 case $1 in
