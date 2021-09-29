@@ -49,8 +49,4 @@ XF86AudioRaiseVolume
     mixer -S vol +2
 
 XF86AudioMute
-    if mixer -S pcm | grep -q 'pcm:0:0'; then \
-        mixer -S pcm 100; \
-    else \
-        mixer -S pcm 0; \
-    fi
+    mixer vol.mute=^

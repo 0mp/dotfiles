@@ -91,10 +91,10 @@ network_interface() {
 
 mixer_status() {
 	# Mixer
-	if mixer -S pcm | grep -q '0:0'; then
+	if mixer vol.mute | grep -q '1'; then
 		printf '%s' 'M '
 	fi
-	mixer -S vol | cut -d : -f 3
+	mixer vol.volume | cut -d : -f 2
 	printf ' | '
 }
 
