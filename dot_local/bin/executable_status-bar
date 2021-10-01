@@ -90,11 +90,10 @@ network_interface() {
 }
 
 mixer_status() {
-	# Mixer
 	if mixer vol.mute | grep -q '1'; then
 		printf '%s' 'M '
 	fi
-	mixer vol.volume | cut -d : -f 2
+	echo "scale=0; $(mixer vol.volume | cut -d : -f 2) * 100 / 1" | bc -l
 	printf ' | '
 }
 
