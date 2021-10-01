@@ -100,7 +100,7 @@ command -v delta &>/dev/null && export GIT_PAGER="delta --tabs 0"
 export BAT_THEME="GitHub"
 export GPG_TTY="$(tty)"
 
-# GNU ls does not enables colors automatically when LS_COLORS is set. We need
+# GNU ls does not enable colors automatically when LS_COLORS is set. We need
 # an alias.
 alias ls="ls --color=auto"
 # Generated with "vivid generate one-light".
