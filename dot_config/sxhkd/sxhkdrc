@@ -43,10 +43,10 @@ super + Print; shift + w
     fi
 
 XF86AudioLowerVolume
-    mixer -S vol -2
+    mixer vol.volume=-2
 
 XF86AudioRaiseVolume
-    mixer -S vol +2
+    mixer vol.volume=+2
 
 XF86AudioMute
     mixer vol.mute=^
