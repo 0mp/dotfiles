@@ -15,6 +15,7 @@ if [ "$DRYRUN" != yes ]; then
 export _DRE=""
 else
 export _DRE="echo"
+echo "This is a dry run..."
 fi
 BECOME=
 
