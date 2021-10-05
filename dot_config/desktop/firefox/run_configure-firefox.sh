@@ -24,6 +24,7 @@ profiles_ini="$firefox_dir/profiles.ini"
 
 if [ ! -f "$profiles_ini" ]; then
 	echo "profiles.ini is not present; Firefox will not be configured this time" >&2
+	return 0
 fi
 
 profile_name="$(get_profile "$profiles_ini")"
