@@ -4,7 +4,9 @@
 #
 # ---
 #
-# Copyright (c) 2017-2018 Mateusz Piotrowski <0mp@FreeBSD.org>
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# Copyright (c) 2017-2018,2021 Mateusz Piotrowski <0mp@FreeBSD.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -29,10 +31,11 @@
 # SUCH DAMAGE.
 
 program='0mp-explore'
-version=3.0.0
+version=3.1.0
 
 bold='\033[1m'
-nobold='\033[0m'
+invert='\033[7m'
+resetescapecodes='\033[0m'
 
 usage() {
     cat <<EOF
@@ -47,7 +50,8 @@ EOF
 # Environmental variables:
 # - command
 # - bold
-# - nobold
+# - invert
+# - resetescapecodes
 # - leftbar
 # - leftbarseparator
 # - regex
@@ -57,7 +61,8 @@ explore() {
     script="$(cat << EOF
 command="$command"
 bold="$bold"
-nobold="$nobold"
+invert="$invert"
+resetescapecodes="$resetescapecodes"
 leftbar="$leftbar"
 leftbarseparator="$leftbarseparator"
 
@@ -68,7 +73,7 @@ for file
 do
     # Skip binary files.
     grep --binary-file=without-match . "$file" 2>/dev/null 1>&2 || continue
-    printf -- '%b%s%b\n' "$bold" "$file" "$nobold"
+    printf -- '%b%s%b\n' "$bold$invert" "$file" "$resetescapecodes"
 
     if [ "@$leftbar@" = @nothing@ ]
     then
