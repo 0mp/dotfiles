@@ -34,4 +34,6 @@ modified_files=$(
         cut -c 7- | \
         xargs -n 1 printf '%s/%s\n' "$HOME")
 
-chezmoi merge $modified_files
+if [ "$modified_files" != "" ]; then
+	chezmoi merge $modified_files
+fi
