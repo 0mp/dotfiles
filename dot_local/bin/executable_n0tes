@@ -182,6 +182,26 @@ BEGIN git_config_pull_rebase
 git config pull.rebase true
 END
 
+BEGIN jail_create_dataset
+# Usage: jail_create_dataset name
+jail_create_dataset() {(
+	set -eux
+	local _name="$1"
+	sudo zfs create -p -o mountpoint="/jails/$_name/m" "zroot/jails/$_name/m"
+)}
+END
+
+BEGIN jail_install
+# Usage: jail_install name [path [version]]
+jail_install() {(
+	set -eux
+	local _name="$1"
+	local _path="${2:-/jails/$name/m}"
+	local _version="${3:-$(uname -r)}"
+	sudo env UNAME_r="$_version" bsdinstall jail "$_path"
+)}
+END
+
 BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
