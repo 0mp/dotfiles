@@ -202,6 +202,28 @@ jail_install() {(
 )}
 END
 
+BEGIN jail_jail_conf
+host.hostname="$name";
+path="/jails/$name/m";
+ip4=inherit;
+mount.devfs;
+mount.fstab="/jails/$name/fstab";
+
+exec.clean;
+exec.created+="logger jail $name has been created";
+exec.start="sh /etc/rc";
+exec.prestop+="logger shutting down jail $name";
+exec.stop="sh /etc/rc.shutdown";
+exec.poststop+="logger jail $name has shut down";
+
+tj {
+	# Set osrelease if software inside the jail complains about uname(1)
+	# returning inconclusive information about the system version, e.g.:
+	# UNAME_r (13.0-CURRENT) and OSVERSION (1202000) do not agree on major version number.
+	#osrelease="12.2-RELEASE";
+}
+END
+
 BEGIN kubectl_configure_cluster_context
 # Select a cluster (and its zone).
 args=$(gcloud container clusters list | awk 'NR>1 {printf "%s --zone %s\n", $1, $2}' | head -n 1)
