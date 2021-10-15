@@ -75,7 +75,7 @@ update_git() {
     as_user mkdir -p -- "$_base_dir"
 
     if [ -d "$_dir" ]; then
-        as_user git -C "$_dir" pull --autostash
+        as_user git -C "$_dir" pull --autostash --rebase
     else
         as_user git clone "$@" "$_url" "$_dir"
     fi
