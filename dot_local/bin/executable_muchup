@@ -151,13 +151,16 @@ run_jail() {
 set -eu
 be_mp="$(bectl list | awk '$2 == "R" {print $3}')"
 usr_src_mp="$be_mp/usr/src"
+usr_ports_mp="$be_mp/usr/ports"
 logger $1
 case $1 in
 mount)
     mount_nullfs -o ro /usr/src "$usr_src_mp"
+    mount_nullfs -o ro /usr/ports "$usr_ports_mp"
     ;;
 umount)
     umount -f "$usr_src_mp"
+    umount -f "$usr_ports_mp"
     ;;
 esac
 EOF
