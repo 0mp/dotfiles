@@ -175,7 +175,7 @@ EOF
         -o mount.devfs=1 \
         -o exec.prestart="$_script mount" \
         -o exec.poststart="$_script umount" \
-        "$_boot_env"
+        "$_boot_env" env WRKDIRPREFIX=/tmp DISTDIR=/tmp sh
 }
 
 main() {
