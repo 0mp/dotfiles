@@ -196,6 +196,13 @@ freebsd_ports_git_show_revive() {(
 )}
 END
 
+BEGIN freebsd_pkg_quarterly_to_latest
+freebsd_pkg_quarterly_to_latest() {
+	mkdir -p /usr/local/etc/pkg/repos
+	sed s.quarterly.latest.g /etc/pkg/FreeBSD.conf > /usr/local/etc/pkg/repos/FreeBSD.conf
+}
+END
+
 BEGIN git_config_pull_rebase
 git config pull.rebase true
 END
