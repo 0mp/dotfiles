@@ -211,8 +211,9 @@ END
 
 BEGIN jail_extract
 # Usage: $0 [-p path] [-v version] name
-jail_extract() {(
+jail_extract() {
 	local _name _path _reldir _version _distdir
+	local -
 	set -eux
 	_reldir="releases"
 	OPTIND=1
@@ -247,13 +248,14 @@ jail_extract() {(
                 BSDINSTALL_DISTDIR="/tmp/0mp-jail-${_name}-${_version}" \
 		BSDINSTALL_CHROOT="$_path" \
 		bsdinstall distextract
-)}
+}
 END
 
 BEGIN jail_install
 # Usage: $0 [-p path] [-v version] name
-jail_install() {(
+jail_install() {
 	local _name _path _version
+	local -
 	set -eux
 	OPTIND=1
 	while getopts p:v: opt; do
@@ -273,7 +275,7 @@ jail_install() {(
 		BSDINSTALL_DISTDIR="/tmp/0mp-jail-${_name}-${_version}" \
 		UNAME_r="$_version" \
 		bsdinstall jail "$_path"
-)}
+}
 END
 
 BEGIN jail_jail_conf
