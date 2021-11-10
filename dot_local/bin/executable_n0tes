@@ -209,6 +209,47 @@ jail_create_dataset() {(
 )}
 END
 
+BEGIN jail_extract
+# Usage: $0 [-p path] [-v version] name
+jail_extract() {(
+	local _name _path _reldir _version _distdir
+	set -eux
+	_reldir="releases"
+	OPTIND=1
+	while getopts p:v: opt; do
+		case "$opt" in
+			p) _path="$OPTARG" ;;
+			v)
+				_version="$OPTARG"
+				case $_version in
+				*-CURRENT|*-STABLE) _reldir="snapshots" ;;
+				esac
+				;;
+			?) exit 1 ;;
+		esac
+	done
+	if [ "$OPTIND" -ne 0 ]; then
+		shift "$(( OPTIND - 1 ))"
+	fi
+	_name="$1"
+	_path="${_path:-/jails/$_name/m}"
+	_version="${_version:-$(uname -r)}"
+	_distdir="/tmp/0mp-jail-${_name}-${_version}"
+
+	mkdir -p "$_distdir"
+	env \
+		DISTRIBUTIONS="base.txz" \
+                BSDINSTALL_DISTDIR="/tmp/0mp-jail-${_name}-${_version}" \
+		BSDINSTALL_DISTSITE="https://download.freebsd.org/ftp/${_reldir}/amd64/amd64/${_version}" \
+		bsdinstall distfetch
+	sudo env \
+		DISTRIBUTIONS="base.txz" \
+                BSDINSTALL_DISTDIR="/tmp/0mp-jail-${_name}-${_version}" \
+		BSDINSTALL_CHROOT="$_path" \
+		bsdinstall distextract
+)}
+END
+
 BEGIN jail_install
 # Usage: jail_install name [path [version]]
 jail_install() {(
