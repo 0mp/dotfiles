@@ -251,13 +251,28 @@ jail_extract() {(
 END
 
 BEGIN jail_install
-# Usage: jail_install name [path [version]]
+# Usage: $0 [-p path] [-v version] name
 jail_install() {(
+	local _name _path _version
 	set -eux
-	local _name="$1"
-	local _path="${2:-/jails/$name/m}"
-	local _version="${3:-$(uname -r)}"
-	sudo env UNAME_r="$_version" bsdinstall jail "$_path"
+	OPTIND=1
+	while getopts p:v: opt; do
+		case "$opt" in
+			p) _path="$OPTARG" ;;
+			v) _version="$OPTARG" ;;
+			?) exit 1 ;;
+		esac
+	done
+	if [ "$OPTIND" -ne 0 ]; then
+		shift "$(( OPTIND - 1 ))"
+	fi
+	_name="$1"
+	_path="${_path:-/jails/$_name/m}"
+	_version="${_version:-$(uname -r)}"
+	sudo env \
+		BSDINSTALL_DISTDIR="/tmp/0mp-jail-${_name}-${_version}" \
+		UNAME_r="$_version" \
+		bsdinstall jail "$_path"
 )}
 END
 
