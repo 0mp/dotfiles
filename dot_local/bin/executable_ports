@@ -83,6 +83,8 @@ test)
 			esac
 		done
 	fi
+	# Cache the password early on for convenience.
+	sudo true
 
 	if ports_tree="$(poudriere ports -lq | awk '/default/{print $5}')"
 	then :; else
