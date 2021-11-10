@@ -423,6 +423,13 @@ BEGIN sh_modeline
 # vim: filetype=sh softtabstop=4 shiftwidth=4 tabstop=4 expandtab
 END
 
+BEGIN pdf_libreoffice_calc_spreadsheet_to_pdf
+# Usage: $0 file [outdir]
+pdf_libreoffice_calc_spreadsheet_to_pdf() {
+	libreoffice --headless --convert-to pdf:calc_pdf_Export --outdir "${2:-.}" "$1"
+}
+END
+
 BEGIN sh_require
 require() {
 	if ! command -v "$1" >/dev/null; then
