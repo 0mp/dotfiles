@@ -178,6 +178,24 @@ freebsd_flash_iso() (
 )
 END
 
+BEGIN freebsd_ports_git_show_revive
+# Usage: $0 origin hash
+freebsd_ports_git_show_revive() {(
+	set -eux
+
+	_origin="$1"
+	_hash="$2"
+
+	mkdir -p "$_origin"
+	for _file in $(git ls-tree -r --name-only "$_hash:$_origin"); do
+		if expr "X$_file" : "X.*/" >/dev/null 2>&1; then
+			mkdir -p "$_origin/${_file%/*}"
+		fi
+		git show "$_hash:$_origin/$_file" > "$_origin/$_file"
+	done
+)}
+END
+
 BEGIN git_config_pull_rebase
 git config pull.rebase true
 END
