@@ -180,7 +180,10 @@ END
 
 BEGIN freebsd_ports_git_show_revive
 # Usage: $0 origin hash
-freebsd_ports_git_show_revive() {(
+freebsd_ports_git_show_revive() {
+	local _hash _orign
+	local -
+
 	set -eux
 
 	_origin="$1"
@@ -193,7 +196,7 @@ freebsd_ports_git_show_revive() {(
 		fi
 		git show "$_hash:$_origin/$_file" > "$_origin/$_file"
 	done
-)}
+}
 END
 
 BEGIN freebsd_pkg_quarterly_to_latest
@@ -209,11 +212,14 @@ END
 
 BEGIN jail_create_dataset
 # Usage: jail_create_dataset name
-jail_create_dataset() {(
+jail_create_dataset() {
+	local _name
+	local -
+
 	set -eux
-	local _name="$1"
+	_name="$1"
 	sudo zfs create -p -o mountpoint="/jails/$_name/m" "zroot/jails/$_name/m"
-)}
+}
 END
 
 BEGIN jail_extract
