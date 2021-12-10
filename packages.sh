@@ -17,6 +17,7 @@ echo slock arandr inputplug feh find-cursor srandrd x-on-resize
 # dwm
 echo libX11 libXft libXinerama fontconfig
 echo alacritty dmenu
+echo daemontools
 
 # FreeBSD development
 echo igor portfmt portlint poudriere-devel

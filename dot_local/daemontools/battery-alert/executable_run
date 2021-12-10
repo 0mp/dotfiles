@@ -1,0 +1,7 @@
+#! /bin/sh
+
+mkdir -p "$HOME/.cache"
+
+rm -f -- "${HOME}/.cache/battery-alert-off"
+
+exec battery-alert

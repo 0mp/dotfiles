@@ -1,0 +1,3 @@
+#! /bin/sh -
+mkdir -p ~/.cache/log
+exec multilog t ~/.cache/log/battery-alert 2>&1

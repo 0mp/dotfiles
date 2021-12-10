@@ -1,0 +1,4 @@
+#! /bin/sh -
+
+mkdir -p ~/.cache/log
+exec multilog t ~/.cache/log/srandrd 2>&1

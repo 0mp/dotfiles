@@ -1,0 +1,3 @@
+#! /bin/sh -
+mkdir -p ~/.cache/log
+exec multilog t ~/.cache/log/status-bar 2>&1

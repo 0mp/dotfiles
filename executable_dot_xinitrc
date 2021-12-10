@@ -7,6 +7,8 @@ clean_up() {
         kill "$SSH_AGENT_PID"
     fi
 
+    pkill -F ~/.cache/svscan.pid
+
     ~/.local/etc/rc.d/sxhkd stop
     ~/.local/etc/rc.d/status-bar stop
     ~/.local/etc/rc.d/battery-alert stop
@@ -33,15 +35,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export LIBGL_DRI3_DISABLE=yes
 
 mkdir -p ~/.cache
-~/.local/etc/rc.d/status-bar start
-~/.local/etc/rc.d/battery-alert start
-~/.local/etc/rc.d/eyes-alert start
-~/.local/etc/rc.d/inputplug start
-~/.local/etc/rc.d/x-on-resize start
-~/.local/etc/rc.d/srandrd start
-~/.local/etc/rc.d/sctd start
-# Some of the shortcuts are broken if sxhkd starts too early.
-sleep 5 && ~/.local/etc/rc.d/sxhkd start &
+daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
