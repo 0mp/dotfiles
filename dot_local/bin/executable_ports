@@ -55,12 +55,14 @@ test)
 	shift
 	jail="$1"
 	shift
-	if args=$(getopt Bio: $*)
+	if args=$(getopt Bio:q $*)
 	then
 		set -- $args
+		binary_package_branch=latest
 		binary_packages=yes
 		interactive=no
 		origin="${PWD#${PWD%/*/*}/}"
+		poudriere_ports_tree=default
 		while :
 		do
 			case $1 in
@@ -77,6 +79,11 @@ test)
 				origin="${1}"
 				shift
 				;;
+			-q)
+				shift
+				binary_package_branch=quarterly
+				poudriere_ports_tree=quarterly
+				;;
 			--)
 				break
 				;;
@@ -86,9 +93,9 @@ test)
 	# Cache the password early on for convenience.
 	sudo true
 
-	if ports_tree="$(poudriere ports -lq | awk '/default/{print $5}')"
+	if ports_tree="$(poudriere ports -lq | grep "^$poudriere_ports_tree" | awk '{print $5}')"
 	then :; else
-		err "$?" "Could not get the default poudriere ports tree"
+		err "$?" "Could not get the poudriere ports tree"
 	fi
 	port_path="${ports_tree}/${origin}"
 	if [ ! -d "$port_path" ]; then
@@ -106,22 +113,22 @@ test)
 	if [ "${test_dependencies}${all_dependencies}" != "" ]
 	then
 		if [ "$binary_packages" = yes ]; then
-			sudo poudriere bulk -b latest -j "${jail}" ${test_dependencies} ${all_dependencies}
+			sudo poudriere bulk -b "${binary_package_branch}" -j "${jail}" -p "${poudriere_ports_tree}" ${test_dependencies} ${all_dependencies}
 		else
-			sudo poudriere bulk -j "${jail}" ${test_dependencies} ${all_dependencies}
+			sudo poudriere bulk -j "${jail}" -p "${poudriere_ports_tree}" ${test_dependencies} ${all_dependencies}
 		fi
 
 	fi
 	if [ "$interactive" = "yes" ]
 	then
-		sudo poudriere testport -j "${jail}" -o "${origin}" -I
+		sudo poudriere testport -j "${jail}" -o "${origin}" -p "${poudriere_ports_tree}" -I
 		printf '%s\n' "cd /usr/ports/${origin}" "make test" | \
 			sudo jexec "${jail}-default-n" env -i TERM="$TERM" /usr/bin/login -fp root
 		sudo jexec "${jail}-default-n" env -i TERM="$TERM" /usr/bin/login -fp root
-		sudo poudriere jail -k -j "${jail}"
+		sudo poudriere jail -k -j "${jail}" -p "${poudriere_ports_tree}"
 	else
 		printf '%s\n' "cd /usr/ports/${origin}" "make test" |
-			sudo poudriere testport -j "${jail}" -o "${origin}" -i
+			sudo poudriere testport -j "${jail}" -o "${origin}" -p "${poudriere_ports_tree}" -i
 	fi
 	;;
 *)
@@ -133,7 +140,7 @@ Usage: ${_b}ports${_0} [${_u}command${_0} [${_u}args${_0} ...]]
 Commands:
 	${_b}clippy${_0}
 	${_b}depends${_0} ${_u}pattern${_0}
-	${_b}test${_0} ${_u}jail${_0} [${_b}-B${_0}] [${_b}-i${_0}] [${_b}-o${_0} ${_u}origin${_0}]
+	${_b}test${_0} ${_u}jail${_0} [${_b}-B${_0}] [${_b}-i${_0}] [${_b}-q${_0}] [${_b}-o${_0} ${_u}origin${_0}]
 HELP
 	;;
 esac
