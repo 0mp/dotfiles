@@ -8,15 +8,6 @@ clean_up() {
     fi
 
     pkill -F ~/.cache/svscan.pid
-
-    ~/.local/etc/rc.d/sxhkd stop
-    ~/.local/etc/rc.d/status-bar stop
-    ~/.local/etc/rc.d/battery-alert stop
-    ~/.local/etc/rc.d/eyes-alert stop
-    ~/.local/etc/rc.d/srandrd stop
-    ~/.local/etc/rc.d/x-on-resize stop
-    ~/.local/etc/rc.d/inputplug stop
-    ~/.local/etc/rc.d/sctd stop
 }
 
 trap 'clean_up' EXIT
