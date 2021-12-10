@@ -99,7 +99,7 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 Plug 'ntpeters/vim-better-whitespace'
 " }}}
 " {{{ Git
-Plug 'airblade/vim-gitgutter'
+Plug '0mp/vim-gitgutter', { 'branch': '0mp/group-name-missing' }
 " }}}
 
 call plug#end()
