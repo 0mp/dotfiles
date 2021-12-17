@@ -4,7 +4,7 @@ reload() {
 	exec "$0"
 }
 
-trap reload USR1
+trap reload HUP
 
 batteries_status() {
 	local _num_of_batteries

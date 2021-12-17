@@ -80,11 +80,3 @@ git config pull.rebase false  # merge (the default strategy)
 git config pull.rebase true   # rebase                      
 git config pull.ff only       # fast-forward only           
 ```
-
-## Other
-
-### `status-bar` development
-
-```
-echo ~/.local/bin/status-bar | entr -c -s "date && pkill -SIGUSR1 -F ~/.cache/status-bar.pid"
-```
