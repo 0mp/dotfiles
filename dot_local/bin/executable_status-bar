@@ -133,5 +133,5 @@ status_bar() {
 
 while xsetroot -name "$(status_bar | tr -d '\n')"
 do
-    sleep 2
+	sleep 2
 done
