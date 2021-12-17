@@ -43,10 +43,10 @@ super + Print; shift + w
     fi
 
 XF86AudioLowerVolume
-    mixer vol.volume=-2
+    mixer vol.volume=-2 && svc -h ~/.local/daemontools/status-bar
 
 XF86AudioRaiseVolume
-    mixer vol.volume=+2
+    mixer vol.volume=+2 && svc -h ~/.local/daemontools/status-bar
 
 XF86AudioMute
-    mixer vol.mute=^
+    mixer vol.mute=^ && svc -h ~/.local/daemontools/status-bar
