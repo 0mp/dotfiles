@@ -1,3 +1,4 @@
 #! /bin/sh -
 
+exec 2>&1
 exec x-on-resize -a -s -c ~/bin/x-on-resize-handler -r ~/bin/x-on-resize-handler
