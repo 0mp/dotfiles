@@ -31,6 +31,7 @@ batteries_status() {
 				printf "%s", $3
 				recognized = 1
 			}
+			/State:[[:space:]]+critical charging/ ||
 			/State:[[:space:]]+charging/ {
 				printf "+"
 				recognized = 1
