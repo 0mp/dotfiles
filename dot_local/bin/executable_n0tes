@@ -143,6 +143,12 @@ ffmpeg_merge_mp4_videos() {
 }
 END
 
+BEGIN freebsd_bectl_destroy_old_boot_environments
+freebsd_bectl_destroy_old_boot_environments() {
+	bectl list | awk 'NR > 1 && "NR" != $2 {print $1}' | xargs -n 1 sudo bectl destroy
+}
+END
+
 BEGIN freebsd_format_usb
 # Usage: $0 device [label]
 freebsd_format_usb() (
