@@ -3,9 +3,12 @@ bind c any toggleContinuousMode
 bind f any toggleFullScreenMode
 bind t any toggleSidebar
 
+bind s any sideBySideSingleMode
+
 bind - any zoomOut
 bind = any zoomIn
 # zoomFitPage can be achieved by going into full-screen mode.
+bind W any zoomFitPage
 bind w any zoomFitWidth
 
 bind d any scrollDown(500)
