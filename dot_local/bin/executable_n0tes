@@ -457,6 +457,13 @@ pdf_libreoffice_calc_spreadsheet_to_pdf() {
 }
 END
 
+BEGIN pdf_libreoffice_to_pdf
+# Usage: $0 file [outdir]
+pdf_libreoffice_to_pdf() {
+	libreoffice --headless --convert-to pdf --outdir "${2:-.}" "$1"
+}
+END
+
 BEGIN sh_require
 require() {
 	if ! command -v "$1" >/dev/null; then
