@@ -464,6 +464,15 @@ pdf_libreoffice_to_pdf() {
 }
 END
 
+BEGIN screen_shared_session_setup
+# Set up a shared session:
+#   screen -d -m -S shared
+# List existing sessions:
+#   screen -ls
+# Attach to an existing session:
+#   screen -x shared
+END
+
 BEGIN sh_require
 require() {
 	if ! command -v "$1" >/dev/null; then
