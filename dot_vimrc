@@ -101,6 +101,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " }}}
 " {{{ Git
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 " }}}
 " {{{ Writing
 Plug 'junegunn/goyo.vim'
