@@ -33,6 +33,8 @@ daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools
 eval $(ssh-agent -s)
 gpg-connect-agent reloadagent /bye
 
+xrdb -merge ~/.Xresources
+
 $(which dbus-run-session) sh -c '
 	"$@"
 	while [ -f ~/.cache/restart-dwm ]; do
