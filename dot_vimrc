@@ -19,6 +19,7 @@ Plug 'vim-scripts/CycleColor' " Cycles through available colorschemes.
 Plug '0mp/vim-robpike'
 Plug 'pbrisbin/vim-colors-off'
 Plug 'altercation/vim-colors-solarized'
+Plug 'junegunn/seoul256.vim'
 " }}}
 " {{{ Languages
 " {{{ C++
@@ -101,6 +102,10 @@ Plug 'ntpeters/vim-better-whitespace'
 " {{{ Git
 Plug 'airblade/vim-gitgutter'
 " }}}
+" {{{ Writing
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+" }}}
 
 call plug#end()
 filetype plugin indent on
@@ -117,6 +122,22 @@ let g:NERDAltDelims_haskell = 1
 let g:netrw_banner=0 " Disable a banner.
 " let g:netrw_liststyle=3 " Print as a tree.
 let g:netrw_altv=1 " Open files to the right.
+
+" Goyo
+function! s:goyo_enter()
+  set showbreak=
+  colo seoul256-light
+  Limelight
+endfunction
+
+function! s:goyo_leave()
+  set showbreak=\\_
+  " Don't bother setting the old colorscheme back on.
+  Limelight!
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " }}}
 " Section: Mappings {{{
