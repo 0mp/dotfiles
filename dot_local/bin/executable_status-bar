@@ -117,7 +117,7 @@ network_status() {
 }
 
 time_status() {
-	date +'%A, %Y-%m-%d (%B) %H:%M '
+	date +'%A, %Y-%m-%d %H:%M '
 }
 
 status_bar() {
