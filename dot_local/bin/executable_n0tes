@@ -1,6 +1,6 @@
 #! /bin/sh -
 #
-# Copyright (c) 2021 Mateusz Piotrowski <0mp@FreeBSD.org>
+# Copyright (c) 2021-2022 Mateusz Piotrowski <0mp@FreeBSD.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -214,6 +214,12 @@ END
 
 BEGIN git_config_pull_rebase
 git config pull.rebase true
+END
+
+BEGIN git_rewrite_commit_with_current_date
+git rebase -i HEAD^
+GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"
+git rebase --continue
 END
 
 BEGIN jail_create_dataset
