@@ -26,7 +26,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export LIBGL_DRI3_DISABLE=yes
 
 mkdir -p ~/.cache
-daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools
+# XXX: For some reason, sxhkd does not work correctly when started too early.
+sleep 5 && daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools &
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
