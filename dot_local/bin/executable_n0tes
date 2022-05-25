@@ -143,6 +143,13 @@ ffmpeg_merge_mp4_videos() {
 }
 END
 
+BEGIN flamegraph_linux_perf
+perf record -F 999 -g -q -- whoami >/dev/null
+perf script > out.stacks
+stackcollapse-perf.pl < out.stacks > out.folded
+flamegraph.pl out.folded > flamegraph.svg
+END
+
 BEGIN freebsd_bectl_destroy_old_boot_environments
 freebsd_bectl_destroy_old_boot_environments() {
 	bectl list | awk 'NR > 1 && "NR" != $2 {print $1}' | xargs -n 1 sudo bectl destroy
