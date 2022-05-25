@@ -223,10 +223,23 @@ BEGIN git_config_pull_rebase
 git config pull.rebase true
 END
 
+BEGIN git_fixup
+# Usage: $0 hash [git-rebase-args ...]
+git_fixup() {
+	git commit --fixup "$1"
+	shift 1
+	git rebase -i origin/master --autosquash "$@"
+}
+END
+
 BEGIN git_rewrite_commit_with_current_date
 git rebase -i HEAD^
 GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"
 git rebase --continue
+END
+
+BEGIN git_shallow_clone
+git clone --branch main --single-branch --depth 1 https://
 END
 
 BEGIN jail_create_dataset
