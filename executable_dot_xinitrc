@@ -27,7 +27,9 @@ export LIBGL_DRI3_DISABLE=yes
 
 mkdir -p ~/.cache
 # XXX: For some reason, sxhkd does not work correctly when started too early.
-sleep 5 && daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools &
+while ! xset -q >/dev/null; do
+	sleep 1
+done && daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools &
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
