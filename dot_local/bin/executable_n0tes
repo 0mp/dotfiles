@@ -506,6 +506,10 @@ BEGIN ssh_remove_outdated_fingerprint_line_from_known_hosts
 sh -c 'sed -i "" "$1d" ~/.ssh/known_hosts' -- roflfkh 0
 END
 
+BEGIN systemd_follow_service_logs
+journalctl -u name.service
+END
+
 BEGIN zfs_checkpoint
 sudo sh -c 'sudo zpool checkpoint -d $1; sudo zpool checkpoint $1' zfs-checkpoint zroot
 END
