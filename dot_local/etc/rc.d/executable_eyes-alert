@@ -1,0 +1,30 @@
+#!/bin/sh
+
+. /etc/rc.subr
+
+name="eyes_alert"
+_interpreter="/bin/sh"
+_progname="eyes-alert"
+
+rcvar="${name}_enable"
+# Enable the service by default.
+eval ${rcvar}="yes"
+
+required_dir="$HOME/.cache"
+pidfile="$HOME/.cache/$name.pid"
+
+# This hack makes it possible to run rc(8) services as a non-root user.
+limits() {
+	shift 2
+	"$@"
+}
+
+command="/usr/sbin/daemon"
+command_args="-l user -o $HOME/.cache/$name.log -P $pidfile -T $_progname -- $_progname"
+
+extra_commands="log off on"
+log_cmd="${PAGER:-cat} $HOME/.cache/$name.log"
+off_cmd=": > $HOME/.cache/eyes-alert-off"
+on_cmd="rm -f -- $HOME/.cache/eyes-alert-off"
+
+run_rc_command "$1"

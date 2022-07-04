@@ -7,7 +7,9 @@ clean_up() {
         kill "$SSH_AGENT_PID"
     fi
 
-    pkill -F ~/.cache/svscan.pid
+	for s in ~/.local/etc/rc.d/*; do
+		$s stop
+	done
 }
 
 trap 'clean_up' EXIT
@@ -26,10 +28,9 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export LIBGL_DRI3_DISABLE=yes
 
 mkdir -p ~/.cache
-# XXX: For some reason, sxhkd does not work correctly when started too early.
-while ! xset -q >/dev/null; do
-	sleep 1
-done && daemon -l user -p ~/.cache/svscan.pid -T svscan -- svscan ~/.local/daemontools &
+for s in ~/.local/etc/rc.d/*; do
+	$s start
+done
 
 [ -f ~/.xmodmap ] && xmodmap ~/.xmodmap
 
