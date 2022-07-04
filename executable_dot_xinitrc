@@ -3,9 +3,9 @@
 # NB: In Vim, execute selection with ":terminal sh".
 
 clean_up() {
-    if [ "$SSH_AGENT_PID" ]; then
-        kill "$SSH_AGENT_PID"
-    fi
+	if [ "$SSH_AGENT_PID" ]; then
+		kill "$SSH_AGENT_PID"
+	fi
 
 	for s in ~/.local/etc/rc.d/*; do
 		$s stop
