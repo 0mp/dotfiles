@@ -516,6 +516,11 @@ BEGIN systemd_follow_service_logs
 journalctl -u name.service
 END
 
+BEGIN ubuntu_enable_core_dumps
+# This is a workaround to enable core dumps and not have to deal with Appport.
+sysctl -w kernel.core_pattern=core.%u.%p.%t
+END
+
 BEGIN zfs_checkpoint
 sudo sh -c 'sudo zpool checkpoint -d $1; sudo zpool checkpoint $1' zfs-checkpoint zroot
 END
