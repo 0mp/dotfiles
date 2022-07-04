@@ -506,6 +506,12 @@ BEGIN ssh_remove_outdated_fingerprint_line_from_known_hosts
 sh -c 'sed -i "" "$1d" ~/.ssh/known_hosts' -- roflfkh 0
 END
 
+BEGIN ssh_check_public_key_length
+ssh_check_public_key_length() {
+	ssh-keygen -l -f "${1:-~/.ssh/id_rsa.pub}"
+}
+END
+
 BEGIN systemd_follow_service_logs
 journalctl -u name.service
 END
