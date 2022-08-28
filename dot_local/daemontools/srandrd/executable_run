@@ -1,4 +1,0 @@
-#! /bin/sh -
-
-exec 2>&1
-exec srandrd -e -n ~/bin/srandrd-handler

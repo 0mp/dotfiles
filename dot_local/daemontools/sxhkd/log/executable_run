@@ -1,3 +1,0 @@
-#! /bin/sh -
-mkdir -p ~/.cache/log
-exec multilog t ~/.cache/log/sxhkd 2>&1
