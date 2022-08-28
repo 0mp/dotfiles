@@ -5,11 +5,6 @@ FreeBSD
 -------
 
 ```sh
-# Add user to the video group.
-sudo pw group video -m "${USER}"
-```
-
-```sh
 # dwm
 mkdir -p ${HOME}/h
 git clone http://github.com/0mp/dwm ${HOME}/h/dwm
