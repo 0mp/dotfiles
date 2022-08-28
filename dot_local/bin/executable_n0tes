@@ -212,6 +212,38 @@ freebsd_ports_git_show_revive() {
 }
 END
 
+BEGIN freebsd_ports_makefile
+PORTNAME=
+DISTVERSIONPREFIX=	v
+DISTVERSION=	0.4.2
+CATEGORIES=
+
+MAINTAINER=	0mp@FreeBSD.org
+COMMENT=
+
+LICENSE=	MIT
+LICENSE_FILE=	${WRKSRC}/LICENSE
+
+BUILD_DEPENDS=
+RUN_DEPENDS=	libcpr.so>0:www/cpr \
+		libcivetweb.so>0:www/civetweb
+TEST_DEPENDS=	${RUN_DEPENDS} \
+		googletest>0:devel/googletest
+
+USES=
+USE_GITHUB=	yes
+GH_ACCOUNT=
+GH_PROJECT=
+
+OPTIONS_DEFINE=	DOCS
+
+post-install-DOCS-on:
+	@${MKDIR} ${STAGEDIR}${DOCSDIR}
+	${INSTALL_DATA} ${WRKSRC}/README ${STAGEDIR}${DOCSDIR}
+
+.include <bsd.port.mk>
+END
+
 BEGIN freebsd_pkg_quarterly_to_latest
 freebsd_pkg_quarterly_to_latest() {
 	mkdir -p /usr/local/etc/pkg/repos
