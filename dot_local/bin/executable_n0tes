@@ -219,6 +219,10 @@ freebsd_pkg_quarterly_to_latest() {
 }
 END
 
+BEGIN git_clean_leftovers
+git clean -xdf
+END
+
 BEGIN git_config_pull_rebase
 git config pull.rebase true
 END
