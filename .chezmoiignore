@@ -50,7 +50,6 @@ freebsd-system
 .screenlayout
 .tmux-freebsd.conf
 .tmux-macos.conf
-.tmux.conf
 .vim
 .vimrc
 .xinitrc
