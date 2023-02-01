@@ -1,16 +1,31 @@
+# The following files are not meant to be interpreted by chezmoi at all.
 README.md
-freebsd-laptop
-freebsd-system
 install.sh
 packages.sh
 tags
+
+# The following are FreeBSD-specific bits, which are not meant to be processed
+# by chezmoi.
+freebsd-laptop
+freebsd-system
+
+# FreeBSD-specific bits.
 {{ if ne .chezmoi.os "freebsd" }}
+.Xresources
+.bash_completion
+.bash_profile
+.bashrc
+.config
 .config/alacritty/alacritty.yml
 .config/awesome/rc.lua
 .config/desktop/freebsd-logo-by-claudiom.png
 .config/desktop/plumb.sh
 .config/fontconfig/fonts.conf
 .config/sxhkd/sxhkdrc
+.gitconfig
+.gnupg
+.inputrc
+.local
 .local/bin/executable_battery-alert
 .local/bin/executable_checkout-freebsd-trees
 .local/bin/executable_eyes-alert
@@ -29,16 +44,18 @@ tags
 .local/bin/executable_unitek-init
 .local/bin/executable_wifi-init
 .local/bin/executable_x-on-resize-handler
-.local/etc/rc.d/executable_battery-alert
-.local/etc/rc.d/executable_eyes-alert
-.local/etc/rc.d/executable_inputplug
-.local/etc/rc.d/executable_sctd
-.local/etc/rc.d/executable_srandrd
-.local/etc/rc.d/executable_status-bar
-.local/etc/rc.d/executable_sxhkd
-.local/etc/rc.d/executable_x-on-resize
+.local/etc/rc.d/*
 .login_conf
+.octaverc
+.screenlayout
+.tmux-freebsd.conf
+.tmux-macos.conf
+.tmux.conf
+.vim
+.vimrc
 .xinitrc
 .xmodmap
 .xpdfrc
+create-home-bin.sh
+link-to-dotfiles.sh
 {{ end }}
