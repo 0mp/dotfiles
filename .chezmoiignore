@@ -58,3 +58,7 @@ freebsd-system
 create-home-bin.sh
 link-to-dotfiles.sh
 {{ end }}
+
+{{ if ne .chezmoi.os "darwin" }}
+.local/share/chezmoi
+{{ end }}
