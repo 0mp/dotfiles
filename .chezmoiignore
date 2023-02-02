@@ -9,6 +9,11 @@ tags
 freebsd-laptop
 freebsd-system
 
+# Common settings.
+{{ if all (ne .chezmoi.os "darwin") (ne .chezmoi.os "freebsd") }}
+.tmux.conf
+{{ end }}
+
 # FreeBSD-specific bits.
 {{ if ne .chezmoi.os "freebsd" }}
 .Xresources
