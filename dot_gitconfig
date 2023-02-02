@@ -19,10 +19,11 @@
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
 [user]
-      name = Mateusz Piotrowski
-      email = 0mp@FreeBSD.org
+    name = Mateusz Piotrowski
+    email = 0mp@FreeBSD.org
 
 [include]
-      path = ~/.gitconfig.local
+    path = ~/.gitconfig.local
+
 [init]
-	defaultBranch = main
+    defaultBranch = main
