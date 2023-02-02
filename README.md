@@ -76,6 +76,12 @@ git config pull.ff only       # fast-forward only
 
 ## macOS
 
+Bootstrapping chezmoi:
+
 ```
-chezmoi --source-path /Volumes/D/dotfiles init 0mp
+configuration_file="$HOME/.config/chezmoi/chezmoi.toml"
+source_dir="/Volumes/D/dotfiles"
+mkdir -p "$(dirname "$configuration_file")"
+echo "sourceDir = \"$source_dir\"" > "$configuration_file"
+chezmoi init 0mp
 ```
