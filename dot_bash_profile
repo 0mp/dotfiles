@@ -1,1 +1,7 @@
-[[ $- =~ i ]] && [[ -r ~/.bashrc ]] && source ~/.bashrc
+# Rought overview of what files are sourced depending on the shell
+# 			login		non-login
+#	interactive	~/.bash_profile	~/.bashrc
+#	non-interactive	~/.bash_profile	~/.bashrc
+if [[ $- =~ i ]] && [[ -r ~/.bashrc ]]; then
+    source ~/.bashrc
+fi
