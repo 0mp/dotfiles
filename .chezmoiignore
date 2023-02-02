@@ -49,7 +49,6 @@ freebsd-system
 .octaverc
 .screenlayout
 .tmux-freebsd.conf
-.tmux-macos.conf
 .vim
 .vimrc
 .xinitrc
