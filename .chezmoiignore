@@ -17,6 +17,8 @@ freebsd-system
 .gitconfig
 .inputrc
 .tmux.conf
+.vim
+.vimrc
 {{ end }}
 
 # FreeBSD-specific bits.
@@ -54,8 +56,6 @@ freebsd-system
 .octaverc
 .screenlayout
 .tmux-freebsd.conf
-.vim
-.vimrc
 .xinitrc
 .xmodmap
 .xpdfrc
