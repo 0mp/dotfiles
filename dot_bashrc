@@ -1,8 +1,5 @@
 # vim: filetype=bash softtabstop=4 shiftwidth=4 tabstop=4 expandtab
 
-# Use the vi-style key bindings.
-set -o vi
-
 # Add some directories to the *PATH unless they are already there.
 for _p in "$HOME/.local/bin" "$HOME/.cargo/bin"
 do

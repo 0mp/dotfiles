@@ -15,6 +15,7 @@ freebsd-system
 .bash_profile
 .bashrc
 .gitconfig
+.inputrc
 .tmux.conf
 {{ end }}
 
@@ -29,7 +30,6 @@ freebsd-system
 .config/fontconfig/fonts.conf
 .config/sxhkd/sxhkdrc
 .gnupg
-.inputrc
 .local
 .local/bin/executable_battery-alert
 .local/bin/executable_checkout-freebsd-trees
