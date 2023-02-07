@@ -11,15 +11,16 @@ freebsd-system
 
 # Common settings.
 {{ if all (ne .chezmoi.os "darwin") (ne .chezmoi.os "freebsd") }}
+.bash_completion
+.bash_profile
+.bashrc
+.gitconfig
 .tmux.conf
 {{ end }}
 
 # FreeBSD-specific bits.
 {{ if ne .chezmoi.os "freebsd" }}
 .Xresources
-.bash_completion
-.bash_profile
-.bashrc
 .config
 .config/alacritty/alacritty.yml
 .config/awesome/rc.lua
@@ -27,7 +28,6 @@ freebsd-system
 .config/desktop/plumb.sh
 .config/fontconfig/fonts.conf
 .config/sxhkd/sxhkdrc
-.gitconfig
 .gnupg
 .inputrc
 .local
