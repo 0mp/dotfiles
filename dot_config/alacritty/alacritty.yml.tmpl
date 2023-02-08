@@ -1079,8 +1079,11 @@ x_fonts:
   x_my_font: &x_my_font
     #family: Fira Mono
     #family: JetBrains Mono
-    #family: Iosevka Term Curly Slab
+{{- if eq .chezmoi.os "darwin" }}
+    family: Iosevka Term Curly Slab
+{{- else if eq .chezmoi.os "freebsd" }}
     family: Fantasque Sans Mono
+{{- end }}
 
 {{- if eq .chezmoi.os "freebsd" }}
 colors: *x_pencil_light
