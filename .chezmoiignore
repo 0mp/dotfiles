@@ -14,6 +14,7 @@ freebsd-system
 .bash_completion
 .bash_profile
 .bashrc
+.config/alacritty
 .gitconfig
 .inputrc
 .local/bin/0mp-explore
@@ -27,13 +28,15 @@ freebsd-system
 # FreeBSD-specific bits.
 {{ if ne .chezmoi.os "freebsd" }}
 .Xresources
-.config
-.config/alacritty/alacritty.yml
-.config/awesome/rc.lua
-.config/desktop/freebsd-logo-by-claudiom.png
-.config/desktop/plumb.sh
-.config/fontconfig/fonts.conf
-.config/sxhkd/sxhkdrc
+.config/awesome
+.config/desktop
+.config/desktop/firefox/chrome/userChrome.css
+.config/desktop/firefox/configure-firefox.sh
+.config/desktop/firefox/user.js
+.config/fontconfig
+.config/sxhkd
+.config/tig
+.config/tig/config
 .gnupg
 .local/bin/archillect
 .local/bin/battery-alert
