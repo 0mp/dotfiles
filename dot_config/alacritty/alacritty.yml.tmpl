@@ -1082,10 +1082,16 @@ x_fonts:
     #family: Iosevka Term Curly Slab
     family: Fantasque Sans Mono
 
+{{- if eq .chezmoi.os "freebsd" }}
 colors: *x_pencil_light
+{{- end }}
 
 font:
   normal: *x_my_font
   bold: *x_my_font
   italic: *x_my_font
+{{- if eq .chezmoi.os "freebsd" }}
   size: 8.0
+{{- else }}
+  size: 17.0
+{{- end }}
