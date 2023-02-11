@@ -85,3 +85,9 @@ mkdir -p "$(dirname "$configuration_file")"
 echo "sourceDir = \"$source_dir\"" > "$configuration_file"
 chezmoi init 0mp
 ```
+
+### Store SSH/GPG passphrases in macOS Keychain
+
+```
+echo "UseKeychain yes" >> ~/.ssh/config
+```
