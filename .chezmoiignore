@@ -18,6 +18,7 @@ freebsd-system
 .gitconfig
 .inputrc
 .local/bin/0mp-explore
+.local/bin/chezmoi-merger
 .local/share/chezmoi
 .local/share/man/man1/0mp-explore.1
 .tmux.conf
@@ -42,7 +43,6 @@ freebsd-system
 .local/bin/battery-alert
 .local/bin/cflowfilter
 .local/bin/checkout-freebsd-trees
-.local/bin/chezmoi-merger
 .local/bin/colors
 .local/bin/disable-yoga-3-14-touchscreen
 .local/bin/eyes-alert
