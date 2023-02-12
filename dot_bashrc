@@ -97,11 +97,15 @@ export VISUAL='vim'
 export PAGER='less'
 export LESS='--ignore-case --jump-target=4 --RAW-CONTROL-CHARS --LONG-PROMPT'
 export MANPAGER="$PAGER --squeeze-blank-lines --RAW-CONTROL-CHARS"
+# Note that delta uses bat internally, so BAT_THEME impacts its color scheme.
 command -v delta &>/dev/null && export GIT_PAGER="delta --tabs 0"
 # The default bat theme is only suitable for dark color themes, so an
 # alternative theme has to be specified if the a user wants to use bat in
 # light-themed terminals.
-export BAT_THEME="GitHub"
+case $(uname) in
+FreeBSD)
+    export BAT_THEME="GitHub" ;;
+esac
 export GPG_TTY="$(tty)"
 
 # GNU ls does not enable colors automatically when LS_COLORS is set. We need
