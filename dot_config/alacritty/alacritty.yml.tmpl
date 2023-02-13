@@ -1085,7 +1085,9 @@ x_fonts:
     family: Fantasque Sans Mono
 {{- end }}
 
-{{- if eq .chezmoi.os "freebsd" }}
+{{- if eq .chezmoi.os "darwin" }}
+colors: *xterm
+{{- else if eq .chezmoi.os "freebsd" }}
 colors: *x_pencil_light
 {{- end }}
 
