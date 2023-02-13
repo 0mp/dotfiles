@@ -22,6 +22,9 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
 " }}}
 " {{{ Languages
+" {{{ bpftrace
+Plug 'mmarchini/bpftrace.vim'
+" }}}
 " {{{ C++
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'rhysd/vim-clang-format'
