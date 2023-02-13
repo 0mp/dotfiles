@@ -1074,6 +1074,25 @@ x_schemes:
       magenta: '#6855de'
       cyan:    '#4fb8cc'
       white:   '#f1f1f1'
+  windows_console: &windows_console
+    normal:
+      black:    '#0c0c0c'
+      blue:     '#0037da'
+      green:    '#13a10e'
+      cyan:     '#3a96dd'
+      red:      '#c50f1f'
+      magenta:  '#881798'
+      yellow:   '#c19c00'
+      white:    '#cccccc'
+    bright:
+      black:    '#767676'
+      blue:     '#3b78ff'
+      green:    '#16c60c'
+      cyan:     '#61d6d6'
+      red:      '#e74856'
+      magenta:  '#b4009e'
+      yellow:   '#f9f1a5'
+      white:    '#f2f2f2'
 
 x_fonts:
   x_my_font: &x_my_font
@@ -1086,7 +1105,7 @@ x_fonts:
 {{- end }}
 
 {{- if eq .chezmoi.os "darwin" }}
-colors: *xterm
+colors: *windows_console
 {{- else if eq .chezmoi.os "freebsd" }}
 colors: *x_pencil_light
 {{- end }}
