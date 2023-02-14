@@ -91,3 +91,12 @@ chezmoi init 0mp
 ```
 echo "UseKeychain yes" >> ~/.ssh/config
 ```
+
+### Always show file extensions in Finder
+
+Finder has to restart for the setting to apply.
+
+```
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+killall Finder
+```
