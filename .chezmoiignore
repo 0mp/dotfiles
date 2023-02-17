@@ -59,7 +59,6 @@ freebsd-system
 .local/bin/mantra
 .local/bin/mfc
 .local/bin/muchup
-.local/bin/n0tes
 .local/bin/nycbug-dmesgd
 .local/bin/ports
 .local/bin/previewman

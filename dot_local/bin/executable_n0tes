@@ -93,6 +93,8 @@ main() {
 	get_snippet_content "${_name}"
 	if command -v xclip >/dev/null; then
 		get_snippet_content "${_name}" | xclip -in -sel clipboard
+	elif command -v pbcopy >/dev/null; then
+		get_snippet_content "${_name}" | pbcopy
 	fi
 }
 
