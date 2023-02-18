@@ -124,7 +124,7 @@ esac
 # Vagrant
 export VAGRANT_DISABLE_VBOXSYMLINKCREATE="yes"
 # Goat
-[[ -x ~/.local/bin/goat ]] && . "$HOME/.local/share/goat/libgoat.sh"
+if command -v goat > /dev/null; then . "$(goat libgoat)"; fi
 
 #
 # Secrets
