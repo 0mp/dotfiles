@@ -4,7 +4,7 @@ export LC_ALL="en_US.UTF-8"
 export LC_TIME="en_GB.UTF-8"
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
-	eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Add some directories to the *PATH unless they are already there.
