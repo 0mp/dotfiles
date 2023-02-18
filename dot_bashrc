@@ -68,24 +68,19 @@ case $PS1 in
 esac
 PS1="\[\e[1;37;${PS1}m"'\] $? \[\e[0m\] \u@\h $PWD\n'
 
+# Initialize Bash completion.
 if [[ $- == *i* ]]
 then
     case $OSTYPE in
         darwin*)
-            # Remember to install bash-completion@2 using brew.
-            if [[ -r /usr/local/share/bash-completion/bash_completion ]]; then
-                source /usr/local/share/bash-completion/bash_completion
+            if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+                source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
             fi
             ;;
         freebsd*)
             if [[ -r /usr/local/share/bash-completion/bash_completion.sh ]]
             then
                 source /usr/local/share/bash-completion/bash_completion.sh
-            fi
-            if type -P fzf >/dev/null
-            then
-                source /usr/local/share/examples/fzf/shell/completion.bash
-                source /usr/local/share/examples/fzf/shell/key-bindings.bash
             fi
             ;;
     esac

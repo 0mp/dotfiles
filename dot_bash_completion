@@ -1,13 +1,27 @@
 # Hints on how to manage user-defined Bash completions:
 # https://serverfault.com/q/506612/291898
 
-for f in \
-    ~/.bash_completion.d/* \
-    ~/.local/share/bash-completion/* \
-    ~/freebsd/bash-completion-freebsd/completions/* \
-    ~/qmk_firmware/util/qmk_tab_complete.sh \
-    /usr/local/google-cloud-sdk/completion.bash.inc
-do
+_completion_glob=(
+    ~/.bash_completion.d/*
+    ~/.local/share/bash-completion/*
+)
+
+case $OSTYPE in
+darwin*)
+    ;;
+freebsd*)
+    _completion_glob=(
+        "${_completion_glob[@]}"
+        ~/freebsd/bash-completion-freebsd/completions/*
+        ~/qmk_firmware/util/qmk_tab_complete.sh
+        /usr/local/google-cloud-sdk/completion.bash.inc
+        /usr/local/share/examples/fzf/shell/completion.bash
+        /usr/local/share/examples/fzf/shell/key-bindings.bash
+    )
+    ;;
+esac
+
+for f in "${_completion_glob[@]}"; do
     [[ -f $f ]] && source "$f"
 done
 
