@@ -100,9 +100,10 @@ command -v delta &>/dev/null && export GIT_PAGER="delta --tabs 0"
 # The default bat theme is only suitable for dark color themes, so an
 # alternative theme has to be specified if the a user wants to use bat in
 # light-themed terminals.
-case $(uname) in
-FreeBSD)
-    export BAT_THEME="GitHub" ;;
+case $OSTYPE in
+freebsd*)
+    export BAT_THEME="GitHub"
+    ;;
 esac
 export GPG_TTY="$(tty)"
 
