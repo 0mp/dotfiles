@@ -280,6 +280,10 @@ BEGIN git_shallow_clone
 git clone --branch main --single-branch --depth 1 https://
 END
 
+BEGIN git_show_file_from_commit_hash
+sh -c 'set -eu; hash="$1"; file="$2"; git show "$hash:$file"' ---
+END
+
 BEGIN jail_create_dataset
 # Usage: jail_create_dataset name
 jail_create_dataset() {
