@@ -146,9 +146,11 @@ ffmpeg_merge_mp4_videos() {
 END
 
 BEGIN flamegraph_linux_perf
-perf record -F 999 -g -q -- whoami >/dev/null
+perf record -g -q -F 999 -- whoami >/dev/null
 perf script > out.stacks
 stackcollapse-perf.pl < out.stacks > out.folded
+# Consider removing cpu_idle from the output for readability:
+#     grep -v cpu_idle out.folded | sponge out.folder
 flamegraph.pl out.folded > flamegraph.svg
 END
 
